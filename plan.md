@@ -2,7 +2,18 @@
 
 > **For agentic workers (GPT, Claude, Codex or any other model):** read §0 and §1 in full before touching any task. Work one task at a time, in the order given in §9. Each task's steps use checkboxes (`- [ ]`). If a step depends on something marked `[VERIFY-IN-BACKEND]`, `[OPEN-QUESTION]` or `null`, **stop and report**. Do not guess.
 
-**Goal:** Build a 3D drone analysis module on top of the existing PhysiMesh platform. It imports STL assemblies, checks geometry and symmetry, predicts and verifies rotor thrust, torque and power plus whole-vehicle aerodynamic loads using a pinned OpenFOAM backend, and produces reproducible, honestly labelled engineering evidence for a multirotor that must carry a **750 kg payload**.
+**Goal:** Build a 3D drone analysis module on top of the existing PhysiMesh platform. It imports STL assemblies, checks geometry and symmetry, predicts and verifies rotor thrust, torque and power plus whole-vehicle aerodynamic loads using a pinned OpenFOAM backend, and reports the payload capacity of an approved multirotor design with reproducible, honestly labelled engineering evidence.
+
+> **Customer requirement revision, 2026-10-02 [USER]:** The customer removed the
+> fixed 750 kg payload target. The product must calculate how much payload an
+> approved design can lift. Report capacity for each supplied mission case and
+> use the lowest case capacity as the headline. A missing required case, mass
+> item, rotor performance source, motor limit, energy limit or environment
+> blocks that headline. Earlier 750 kg examples and fixed-target tests in this
+> document and the source manifest are retained as historical evidence, not
+> current acceptance criteria. `mission.payload_mass_kg` is now an optional
+> installed payload for a case; it has no default and, if supplied, must match
+> the payload category of the mass ledger. See ADR-0002 and the MVP plan.
 
 **Architecture:** A new repository whose `src/physimesh/core/` holds the platform services (artifacts, jobs, hardened containers) and whose `src/physimesh/drone/` domain package holds schema, units, geometry, symmetry, mass, atmosphere, propulsion, meshing, trim and mission logic. It sits on top of solver services that do not care about aircraft type (`solver/`, extended with 3D, rotation and source capabilities) and a postprocessing layer (`postpro/`) that integrates loads from native solver face data and chooses plots with deterministic rules. OpenFOAM computes the flow. PhysiMesh orchestrates, checks, reconciles and reports. No number reaches a report unless it traces back to an analytical calculation, a measured source or a retained solver run.
 

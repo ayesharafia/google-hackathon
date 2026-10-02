@@ -209,9 +209,10 @@ def readiness(snapshot: ProjectSnapshot,
             unknown(value, template[field.name], field.name)
 
     payload = snapshot.mission.get("payload_mass_kg")
-    # kg carried payload requirement [M§0], not a design assumption.
-    if positive(payload, "mission.payload_mass_kg") and payload != 750:
-        blocking.append("mission.payload_mass_kg (must equal 750 kg requirement)")
+    # Optional installed payload for this case; no fixed target [USER 2026-10-02].
+    if payload is not None and (isinstance(payload, bool) or not isinstance(payload, (int, float))
+                                or not math.isfinite(payload) or payload < 0):
+        blocking.append("mission.payload_mass_kg (must be finite kg >= 0 when supplied)")
     try:
         items = snapshot.masses.get("items")
         if not isinstance(items, tuple):
@@ -226,6 +227,11 @@ def readiness(snapshot: ProjectSnapshot,
             ledger.append(MassItem(**{k: v for k, v in item.items() if k in known}))
         result = summarize(ledger)
         blocking.extend(result.missing + result.errors)
+        if (payload is not None and isinstance(payload, (int, float)) and not isinstance(payload, bool)
+                and math.isfinite(payload) and result.complete
+                and not math.isclose(payload, result.payload_kg, rel_tol=0, abs_tol=1e-9)):
+            # 1e-9 kg is representation tolerance, not an engineering acceptance gate [ASSUMPTION].
+            blocking.append("mission.payload_mass_kg (must match the payload mass ledger)")
     except (ValueError, TypeError, OverflowError) as exc:
         blocking.append(f"masses.items ({exc})")
 

@@ -10,7 +10,7 @@ TEMPLATE = pathlib.Path("src/physimesh/drone/schema/drone_manifest_v1.yaml")
 def test_template_loads_and_preserves_nulls():
     snap = load_project(TEMPLATE)
     assert snap.identity["schema_version"] == "drone_manifest_v1"
-    assert snap.mission["payload_mass_kg"] == 750
+    assert snap.mission["payload_mass_kg"] is None
     assert snap.units_and_frames["source_units"] is None
 
 
@@ -51,7 +51,7 @@ def _screening_project():
     import yaml
     data = yaml.safe_load(TEMPLATE.read_text())
     data["masses"]["items"] = [
-        {"name": c, "category": c, "mass_kg": 750 if c == "payload" else 0, "cg_body_m": [0, 0, 0]}
+        {"name": c, "category": c, "mass_kg": 100 if c == "structure" else 0, "cg_body_m": [0, 0, 0]}
         for c in ("payload", "structure", "propulsion", "energy", "avionics", "other")
     ]
     data["atmosphere"].update(source="fixture", pressure_pa=101325, temperature_k=288.15,
@@ -87,6 +87,24 @@ def test_complete_screening_inputs_do_not_claim_validation(tmp_path):
     assert report.blocking == []
     assert report.ready is True
     assert report.status is None          # no screening has run; readiness never upgrades status
+
+
+def test_optional_installed_payload_must_match_ledger(tmp_path):
+    data = _screening_project()
+    data["mission"]["payload_mass_kg"] = 12.0
+    data["masses"]["items"][0]["mass_kg"] = 12.0
+    assert readiness(_load(tmp_path, data), "screening").ready
+    data["mission"]["payload_mass_kg"] = 13.0
+    report = readiness(_load(tmp_path, data), "screening")
+    assert not report.ready
+    assert any("must match the payload mass ledger" in item for item in report.blocking)
+
+
+def test_negative_installed_payload_blocks_screening(tmp_path):
+    data = _screening_project()
+    data["mission"]["payload_mass_kg"] = -1.0
+    assert "mission.payload_mass_kg (must be finite kg >= 0 when supplied)" in \
+        readiness(_load(tmp_path, data), "screening").blocking
 
 
 def test_snapshot_is_deeply_immutable(tmp_path):

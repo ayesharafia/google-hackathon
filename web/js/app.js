@@ -10,7 +10,7 @@ const stages = {
     pending: 'Assembly entry is pending implementation.', next: 'Assembly validation is built. Component assignment and the 3D viewer are pending; no assembly is defined.' },
   conditions: { label: 'Operating conditions', title: 'The environment is an input.',
     description: 'Record the mass ledger and atmosphere for each operating case. Missing values remain unknown.',
-    requirements: [['Complete mass ledger', '750 kg is payload. Add structure, propulsion, energy, avionics and other equipment.'], ['Atmosphere', 'Declare absolute pressure and temperature with units.'], ['Operating envelope', 'Supply inflow, RPM, ground clearance, mission conditions and component limits.']],
+    requirements: [['Complete mass ledger', 'Record structure, propulsion, energy, avionics, other equipment and any installed payload.'], ['Atmosphere', 'Declare absolute pressure and temperature with units.'], ['Operating envelope', 'Supply inflow, RPM, ground clearance, mission conditions and component limits.']],
     pending: 'Condition entry is pending implementation.', next: 'Schema, units, atmosphere and mass validation are built. No operating case is defined.' },
   mesh: { label: 'Fluid domain', title: 'A surface is only the beginning.',
     description: 'CFD requires a fluid volume, boundary conditions and evidence of mesh quality.',

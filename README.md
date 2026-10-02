@@ -2,7 +2,7 @@
 
 Greenfield implementation of the drone module specified in [plan.md](plan.md)
 and the retained manifest. Python 3.11; FastAPI orchestration; OpenFOAM solves
-flow equations. The 750 kg requirement is carried payload, not takeoff mass.
+flow equations. Payload lift capacity is calculated from the entered design and operating case; no aircraft capacity is assumed.
 [M§0, M§4]
 
 ## Setup

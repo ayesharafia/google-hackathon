@@ -40,7 +40,8 @@ not applicable; those elements were not introduced.
   stage states and data rows, visible focus treatment, no content beneath grain,
   cut edges, overlapping sections, clipped glyphs or cramped display tracking.
 - Content integrity: no fake aircraft values, solver capability claims or result
-  panels. 750 kg is labelled carried payload; incomplete inputs remain unknown.
+  panels. The payload statement now promises a capacity derived from supplied
+  design and operating cases; incomplete inputs remain unknown.
 - Cohesion and specificity: one document-desk visual language, explicit study
   prerequisites, separate application configuration and engineering evidence.
 

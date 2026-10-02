@@ -13,7 +13,7 @@ units_and_frames:
   cad_transform: {scale: 1.0, rotation_deg_zyx: [0, 0, 0], translation_m: [0, 0, 0]}
 
 mission:
-  payload_mass_kg: 750
+  payload_mass_kg: null            # optional installed payload for this case; no fixed target [USER 2026-10-02]
   payload_positions_body_m: null  # list of candidate CGs for payload
   cases:                          # [M§2] required environmental cases
     - {name: hover_nominal, kind: hover, velocity_world_m_s: [0, 0, 0], attitude_deg_zyx: [0, 0, 0],

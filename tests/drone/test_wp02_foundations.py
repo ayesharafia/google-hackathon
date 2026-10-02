@@ -175,9 +175,21 @@ def test_missing_category_is_reported():
     assert any(m.startswith("masses.energy") for m in s.missing)
 
 
-def test_payload_must_equal_requirement():
+def test_payload_ledger_has_no_fixed_target():
     s = summarize(_full_ledger(payload=700.0))
-    assert not s.complete and "payload items sum to 700.0" in s.errors[0]
+    assert s.complete and s.payload_kg == 700.0
+    assert s.empty_airframe_mass_kg == pytest.approx(2.0)
+
+
+def test_zero_installed_payload_is_valid_and_empty_mass_is_known():
+    s = summarize(_full_ledger(payload=0.0))
+    assert s.complete and s.empty_airframe_mass_kg == pytest.approx(2.0)
+
+
+def test_incomplete_ledger_has_no_empty_airframe_mass():
+    items = _full_ledger(payload=0.0)
+    items[1] = MassItem("frame", "structure", None, (1, 0, 0))
+    assert summarize(items).empty_airframe_mass_kg is None
 
 
 @pytest.mark.parametrize("field", ["pressure_pa", "temperature_k", "viscosity_pa_s", "gamma"])

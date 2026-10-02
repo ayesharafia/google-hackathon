@@ -39,18 +39,20 @@ class MassSummary:
     def complete(self) -> bool:
         return not self.missing and not self.errors
 
+    @property
+    def empty_airframe_mass_kg(self) -> float | None:
+        """Known mass excluding installed payload, in kg [M-E01; USER 2026-10-02]."""
+        if not self.complete or self.total_mass_kg is None or self.payload_kg is None:
+            return None
+        return self.total_mass_kg - self.payload_kg
 
-def summarize(items: Sequence[MassItem], *, required_payload_kg: float = 750.0,
-              need_inertia: bool = False, payload_abs_tol_kg: float = 1e-9) -> MassSummary:
+
+def summarize(items: Sequence[MassItem], *, need_inertia: bool = False) -> MassSummary:
     """Aggregate kg, body-frame metres and kg m² [M-E01/E02].
 
-    Payload requirement 750 kg [M§0]; absolute tolerance 1e-9 kg
-    [ASSUMPTION: floating-point comparison, not an engineering acceptance gate].
+    Payload is an observed ledger category, not a fixed design requirement
+    [USER 2026-10-02: calculate payload capacity from the approved design].
     """
-    if not math.isfinite(required_payload_kg) or required_payload_kg < 0:
-        raise ValueError("required payload must be finite kg >= 0")
-    if not math.isfinite(payload_abs_tol_kg) or payload_abs_tol_kg < 0:
-        raise ValueError("payload tolerance must be finite kg >= 0")
     missing: list[str] = []
     errors: list[str] = []
     for it in items:
@@ -90,8 +92,6 @@ def summarize(items: Sequence[MassItem], *, required_payload_kg: float = 750.0,
     for it in items:
         by_cat[it.category] += float(it.mass_kg)
     payload = by_cat["payload"]
-    if abs(payload - required_payload_kg) > payload_abs_tol_kg:
-        errors.append(f"payload items sum to {payload} kg, requirement is {required_payload_kg} kg")
     total = float(m.sum())                                          # E01
     if not np.isfinite(total) or total <= 0:
         errors.append("total mass must be finite and > 0")
