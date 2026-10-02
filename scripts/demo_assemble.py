@@ -5,6 +5,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from physimesh.postpro.interpretation import interpret
+from physimesh.postpro.refusals import sphere_refusals
 from physimesh.postpro.result_contract import assemble_results
 
 
@@ -19,7 +21,8 @@ def main():
     if hashlib.sha256(args.run_group.read_bytes()).hexdigest() != loads['run_group_sha256']:
         raise ValueError('load result has stale run-group provenance')
     plots = json.loads((root/'plots/index.json').read_text())
-    result = assemble_results(group, loads, plots)
+    result = assemble_results(group, loads, plots, refusals=sphere_refusals())
+    result['interpretation'] = interpret(result)
     package = args.data_root/'results'/result['run_group_id']
     package.mkdir(parents=True, exist_ok=True)
     files = {'results.json': (json.dumps(result, indent=2, allow_nan=False)+'\n').encode(),

@@ -62,6 +62,8 @@ class EvidencePlan:
 def select_evidence(intent: str, cap: CapabilityManifest, *, requested: Sequence[str] = (),
                     time_mode: str = "mean") -> EvidencePlan:
     """Steps 3-4 [M§22]. `requested` lists user-asked fields; prerequisites still apply."""
+    if time_mode not in ('mean', 'instantaneous'):
+        raise ValueError('time mode must be mean or instantaneous')
     if intent not in INTENTS:
         raise ValueError(f"unsupported intent {intent!r}")
     plan = EvidencePlan(intent)
@@ -150,10 +152,16 @@ def select_evidence(intent: str, cap: CapabilityManifest, *, requested: Sequence
             else:
                 sel.append(PlotSpec("pressure.cp", "explanatory", f"q_ref from U_ref={cap.reference_speed_m_s}"))
         elif f == "blade_pressure" and not cap.has_blade_walls:
-            rej.append("blade pressure: source-only rotor")
+            rej.append("blade pressure: source-only rotor" if cap.has_actuator_sources else "blade pressure: no blade surfaces in this case")
             miss.append(Missing("blade surface", "run a blade-resolved model"))
         elif f == "y_plus" and not (cap.has_yplus and cap.turbulent_walls):
             rej.append("y plus on laminar or non-wall region")
+        elif f == 'independent_ranges':
+            rej.append('comparison with independent colour ranges: shared bounds required')
+            miss.append(Missing('shared comparison range', 'use one declared range across every compared mesh'))
+        elif f not in ('cp', 'blade_pressure', 'y_plus'):
+            rej.append(f'unsupported field request: {f}')
+            miss.append(Missing(f, 'declare field semantics and prerequisites before rendering'))
     return plan
 
 
