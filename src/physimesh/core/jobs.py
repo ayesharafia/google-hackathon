@@ -92,6 +92,22 @@ class JobLedger:
             raise
         return self.get(row[0])
 
+    def claim_job(self, job_id: str, worker_id: str) -> Job:
+        """Claim one known queued job atomically without taking an unrelated job."""
+        if not worker_id:
+            raise ValueError("worker_id is required")
+        self.db.execute("BEGIN IMMEDIATE")
+        try:
+            if self.get(job_id).state != "queued":
+                raise ValueError("job is not queued")
+            self.db.execute("UPDATE jobs SET state='preparing', worker_id=?, updated_utc=? WHERE id=?",
+                            (worker_id, _now(), job_id))
+            self.db.execute("COMMIT")
+        except BaseException:
+            self.db.execute("ROLLBACK")
+            raise
+        return self.get(job_id)
+
     def transition(self, job_id: str, new_state: str, *, reason: str | None = None) -> None:
         """Apply an allowed transition atomically; execution state only [plan §4.2]."""
         self.db.execute("BEGIN IMMEDIATE")
