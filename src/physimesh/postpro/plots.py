@@ -81,7 +81,7 @@ def render(recipe: PlotRecipe, data: dict) -> tuple[bytes, dict]:
     record = _range(recipe, values, mask)
     masked = np.ma.array(values, mask=mask | ~np.isfinite(values))
     fig, ax = plt.subplots(figsize=(10, 6.5), dpi=130)
-    fig.patch.set_facecolor('#edf2ed'); ax.set_facecolor(MASK_COLOR)
+    fig.patch.set_facecolor('#edf2ed'); ax.set_facecolor(MASK_COLOR if recipe.kind in ('contour', 'vectors', 'streamlines') else '#edf2ed')
     try:
         if recipe.kind in ('contour', 'vectors', 'streamlines'):
             if field.signed and recipe.kind == 'contour':
@@ -111,7 +111,9 @@ def render(recipe: PlotRecipe, data: dict) -> tuple[bytes, dict]:
                               color='#203c2c', pivot='mid')
                 else:
                     ax.streamplot(x[0], z[:, 0], u, w, color='#203c2c', density=1.1, linewidth=0.7)
-            fig.colorbar(artist, ax=ax, label=f'{recipe.field_id} [{recipe.units}]', pad=0.025)
+            color_label = (f'|U| [{recipe.units}]; vectors Ux,Uz' if recipe.kind in ('vectors', 'streamlines')
+                           else f'{recipe.field_id} [{recipe.units}]')
+            fig.colorbar(artist, ax=ax, label=color_label, pad=0.025)
             ax.set(xlabel='world x [m]', ylabel='world z [m]', aspect='equal')
         elif recipe.kind == 'xy':
             x = np.asarray(data['x'], float)
@@ -154,7 +156,7 @@ def render(recipe: PlotRecipe, data: dict) -> tuple[bytes, dict]:
 
 
 def resample_slice(samples: np.ndarray, values: np.ndarray, *, bounds: tuple[float, float, float, float],
-                   diameter_m: float, shape: tuple[int, int] = (180, 360)) -> dict:
+                   diameter_m: float, plane_tolerance_m: float = 1e-10, shape: tuple[int, int] = (180, 360)) -> dict:
     """Linear griddata on native y=0 samples; grey outside hull or sphere interior.
 
     This regular grid is a visual interpolation only. It must never replace
@@ -166,7 +168,9 @@ def resample_slice(samples: np.ndarray, values: np.ndarray, *, bounds: tuple[flo
     if (samples.ndim != 2 or samples.shape[1] != 3 or len(values) != len(samples)
             or not np.isfinite(samples).all() or not np.isfinite(values).all()):
         raise ValueError('finite native slice coordinates and matching values required')
-    if not np.allclose(samples[:, 1], 0, atol=1e-10, rtol=0):
+    if not math.isfinite(plane_tolerance_m) or plane_tolerance_m < 0:
+        raise ValueError('explicit finite nonnegative plane tolerance required')
+    if not np.allclose(samples[:, 1], 0, atol=plane_tolerance_m, rtol=0):
         raise ValueError('demo requires explicitly y=0 world slice')
     if diameter_m <= 0 or not math.isfinite(diameter_m) or min(shape) < 2:
         raise ValueError('positive diameter and valid grid shape required')
