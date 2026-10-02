@@ -1051,7 +1051,8 @@ def test_missing_token_setting_refuses_start():
   - `AircraftStatus` (enum of the §4.1 strings), `ExecutionState` (§4.2), `EvidenceLevel` (§4.3), `Fidelity` (§4.5)
   - `ProjectSnapshot` (frozen; the parsed YAML groups from [M§26]: identity, units_and_frames, mission, masses, atmosphere, assembly, rotors, flow, fidelity, symmetry, domain, mesh, numerics, boundaries, convergence, postprocessing, validation, execution)
   - `load_project(path) -> ProjectSnapshot`
-  - `ReadinessReport(purpose: str, blocking: list[str], warnings: list[str], status: AircraftStatus)`
+  - `project_from_mapping(data) -> ProjectSnapshot` (same validation as `load_project`, used by the API)
+  - `ReadinessReport(purpose: str, blocking: list[str], warnings: list[str], status: AircraftStatus | None, ready: bool)`
   - `readiness(snapshot, purpose: Literal["screening", "cfd_run", "feasibility"]) -> ReadinessReport`
 
 - [ ] **Step 1: Write the failing tests**
@@ -1105,6 +1106,8 @@ def test_cfd_run_blocked_by_null_backend_digest():
     assert "execution.backend_image_digest" in rep.blocking
 ```
 
+Also required (added after the 2026-10-02 code review; see `tests/drone/test_models_readiness.py`): a **success-branch** test asserting `ready is True and status is None` for complete screening and CFD inputs; a map-only rotor written in full Appendix A record shape (blade/phase fields `null`) is screening-ready; a body component with `rotor_id: null` is CFD-ready; an invalid role, a blade naming an undeclared rotor, `requires_user_tag: true`, a zero rotor axis, and a missing `signed_rpm` for `cfd_run` each block.
+
 - [ ] **Step 2:** Run `python -m pytest tests/drone/test_models_readiness.py -v`. Expected: FAIL.
 - [ ] **Step 3:** Implement:
   - Use `yaml.safe_load` (never `yaml.load`) `[ASSUMPTION: PyYAML; reuse the checkout's YAML library if one exists]`.
@@ -1113,7 +1116,13 @@ def test_cfd_run_blocked_by_null_backend_digest():
     - `screening` needs: `mission.payload_mass_kg`, a complete mass ledger (Task 2.4 `summarize(...).complete`), atmosphere p and T plus viscosity, and per rotor: count, radius and either a measured map or blade geometry with polars.
     - `cfd_run` additionally needs: `units_and_frames.source_units`, geometry revision hash, every assembly component role, rotor zone assignment, mesh request, `execution.backend_version`, `execution.backend_image_digest`, complete boundaries, and a supported pressure-dimension declaration.
     - `feasibility` additionally needs: motor limits (sustained and peak), energy system, mission duration and reserve policy.
-  - Any blocking item gives `AircraftStatus.INPUTS_INCOMPLETE`.
+  - **Every branch of the output is fixed (review fix, 2026-10-02):** any blocking item gives `status=AircraftStatus.INPUTS_INCOMPLETE, ready=False`. **No** blocking item gives `status=None, ready=True`. Readiness checks inputs only and must **never** return `screening_only` or any higher status, because no screening has run (§4.1, §0 rule 6).
+  - **Record-shaped nulls are legal.** Appendix A record shapes (rotors, components) contain fields that only some purposes or models use. Never require every key of a record recursively. Require only the fields each purpose uses:
+    - rotor (all purposes): `rotor_id`, `radius_m > 0`, `model` ∈ {measured_map, bem, actuator_disk, actuator_line, blade_resolved} if given, and `map_ref` **or** (`blade_ref` **and** `polar_ref`);
+    - rotor (`cfd_run`, `feasibility`): finite `center_body_m`, finite non-zero `axis_body`, finite `signed_rpm` [M§3]. A `blade_resolved` rotor without `azimuth_zero_deg`/`phase_offset_deg` gets a **warning**, not a block. Those values are enforced when a transient case is generated (`RotorFrame.require_phase()`, Task 2.3);
+    - component (`cfd_run`): `component_id`, `role` ∈ `ROLES` (Task 3.3), `rotor_id` naming a declared rotor **only** for blade/hub, and `requires_user_tag` not `true`. Static parts have `rotor_id: null` legitimately.
+  - A whitespace-only string counts as missing.
+  - Wire `POST /api/drone/validate` (body `{"project": {...}, "purpose": "..."}`) to `project_from_mapping` + `readiness`. Malformed project or unknown purpose gives HTTP 422. The response is `{purpose, ready, status, blocking, warnings}`.
 - [ ] **Step 4:** Run. Expected: PASS.
 - [ ] **Step 5:** Commit: `git commit -m "feat(drone): drone_manifest_v1 schema, loader and readiness rules"`
 
