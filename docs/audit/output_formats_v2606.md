@@ -116,3 +116,29 @@ Raw plane, line and streamLine outputs contain finite numeric text.
   "incompressible/simpleFoam/squareBend/system/controlDict": "609ce28b34b60ff83612a329cd58f4653d6ba1944a6fc7f775d2111681725f10"
 }
 ```
+
+## Native sphere field semantics verified during reader work
+
+The retained coarse residual pilot (`.backend/demo/runs/015dee3ba0b24d729aef6c27d436aac0`,
+time 164) writes sphere pressure as `type zeroGradient;` without a `value` entry.
+The reader uses the written cell internal field addressed by the native
+`constant/polyMesh/owner` labels. This follows OpenCFD's documented
+[zeroGradient definition](https://doc.openfoam.com/2306/tools/processing/boundary-conditions/rtm/derived/general/zeroGradient/).
+No interpolated visualization pressure is used.
+
+Measured pressure force (N): native `(0.2092999441123, -1.437223535218e-6,
+-1.436716653723e-6)`; face integration `(0.20929994411233457,
+-1.437223565469868e-6, -1.436716657261534e-6)`.
+
+The native wall shear vector has the opposite sign from traction on the solid.
+Raw integration gives `(-0.24108372287287777, -6.73427289167481e-6,
+-6.729468265805442e-6)` N. Negating it once gives the native viscous force:
+`(0.2410837228729, 6.734272895274e-6, 6.729468257763e-6)` N to numerical precision.
+The adapter must negate the converted wall shear once before solid-load
+integration. Reconciliation still runs for every result.
+
+Native fluid-domain area vectors point into the sphere. Negating them gives a
+closed summed area vector and positive solid signed volume `0.5215105446535192`
+m³. Surface area is `3.135358929143267` m², within the specified 0.5% geometry
+check. These checks establish the pinned release's conventions, not aircraft
+validation.

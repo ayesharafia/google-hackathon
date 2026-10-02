@@ -1,0 +1,78 @@
+{
+  "source_case": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/.backend/demo-load-history/runs/78d9495dd48b4b528746f73b2768848b",
+  "image": "opencfd/openfoam-run@sha256:4229997e74defb81548222d511b8e3b95b98305e5df41b8e88b031813fe47eeb",
+  "purpose": "captured native ASCII reader fixtures; independent convergence assessment pending",
+  "compression": "gzip with mtime=0; decompression returns original bytes exactly",
+  "files": {
+    "constant/polyMesh/points": {
+      "original_sha256": "c619c8c5d3b7aa02362a4349295f7ceebd085500497b7296ff5d58ed76499bb1",
+      "original_bytes": 3480343,
+      "compressed_bytes": 935211
+    },
+    "constant/polyMesh/faces": {
+      "original_sha256": "da272000a8e44a8f045d8a7bb2fed1246890efae14e83528f9bf682227332953",
+      "original_bytes": 6672687,
+      "compressed_bytes": 1718391
+    },
+    "constant/polyMesh/boundary": {
+      "original_sha256": "ac474795a879d329d5f1197ea79099cd1f123f7fc6378441533d0cdc3199c9ee",
+      "original_bytes": 1675,
+      "compressed_bytes": 481
+    },
+    "constant/polyMesh/owner": {
+      "original_sha256": "54d3d0bce624496a833236ad4affcb9cf807e95f3c5a96f2d72f3e4629dfd648",
+      "original_bytes": 1464910,
+      "compressed_bytes": 146112
+    },
+    "812/p": {
+      "original_sha256": "890d867b438dfcbded1113928d38ef290971fe54d82ee5c3005ea57298522790",
+      "original_bytes": 1450197,
+      "compressed_bytes": 556595
+    },
+    "812/wallShearStress": {
+      "original_sha256": "2d23e6eed887229d64fdcd3bb2676abbfb291ac593849a5488015dc0cd41c23b",
+      "original_bytes": 95546,
+      "compressed_bytes": 38455
+    },
+    "postProcessing/forces/0/force.dat": {
+      "original_sha256": "fbea95fc30a1b44851a03d23d583a26f977c2040a55b79205d300ebf73dbd670",
+      "original_bytes": 158112,
+      "compressed_bytes": 29489
+    },
+    "postProcessing/forces/0/moment.dat": {
+      "original_sha256": "83786c6ba0539a46e74b801ec97342c401c59b944166ebd0378b9acd21da30cf",
+      "original_bytes": 158828,
+      "compressed_bytes": 33255
+    },
+    "postProcessing/forceCoeffs1/0/coefficient.dat": {
+      "original_sha256": "f66250464061c2f1b962795d463d1e99adb7206bff929f51e55a2dcbfd2b54f3",
+      "original_bytes": 206108,
+      "compressed_bytes": 48345
+    },
+    "postProcessing/solverInfo1/0/solverInfo.dat": {
+      "original_sha256": "4ea86a17111eb2bfc042085200d336037f23818c410d0d9e98ae812cd88407ab",
+      "original_bytes": 171108,
+      "compressed_bytes": 49626
+    },
+    "postProcessing/cuttingPlane/812/p_yNormal.raw": {
+      "original_sha256": "a1ad5dd7dc337085237aa2130130833217215582dc9cce75c87c8f6e8bed87ac",
+      "original_bytes": 186634,
+      "compressed_bytes": 74763
+    },
+    "postProcessing/cuttingPlane/812/U_yNormal.raw": {
+      "original_sha256": "aa27a2d888a6b3242ec7cbc57c5fcac747edb630e2895ba1f36c716cba44bd55",
+      "original_bytes": 284579,
+      "compressed_bytes": 116322
+    },
+    "postProcessing/cuttingPlane/812/vorticity_yNormal.raw": {
+      "original_sha256": "e4492d355e5b545850413d50f141de36d1c5ed7ea2da2b99284796532f0a52be",
+      "original_bytes": 297967,
+      "compressed_bytes": 121616
+    },
+    "postProcessing/sample1/812/centreLine_p_U.xy": {
+      "original_sha256": "6ec5fb08eeb3b95d22b571abc5538e6d447c9fb4f28387b3a39b4ad379dd8499",
+      "original_bytes": 16028,
+      "compressed_bytes": 6612
+    }
+  }
+}
