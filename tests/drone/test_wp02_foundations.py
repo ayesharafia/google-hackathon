@@ -1,6 +1,16 @@
+import math
+
 import numpy as np
 import pytest
 
+from physimesh.drone.frames import (
+    MissingInput,
+    RotorFrame,
+    rotation_matrix_zyx,
+    transform_axial_vectors,
+    transform_tensor,
+    transform_vectors,
+)
 from physimesh.drone.provenance import Provenance, canonical_json, sha256_bytes, sha256_record
 from physimesh.drone.units import (
     DIM_KINEMATIC_PRESSURE,
@@ -64,3 +74,33 @@ def test_unknown_or_nonfinite_length_cannot_reach_si(value):
 def test_invalid_dimensions_are_rejected(text):
     with pytest.raises(UnitsError):
         parse_foam_dimensions(text)
+
+
+def test_yaw_90_maps_body_forward_to_world_north():
+    r = rotation_matrix_zyx(math.pi / 2, 0.0, 0.0)
+    assert np.allclose(transform_vectors(r, [1.0, 0.0, 0.0]), [0.0, 1.0, 0.0])
+
+
+def test_axial_vector_flips_under_reflection_but_polar_does_not():
+    h = np.diag([1.0, -1.0, 1.0])                 # mirror in the y = 0 plane
+    assert np.allclose(transform_vectors(h, [0, 0, 10.0]), [0, 0, 10.0])
+    assert np.allclose(transform_axial_vectors(h, [0, 0, 10.0]), [0, 0, -10.0])
+
+
+def test_inertia_tensor_rotation():
+    r = rotation_matrix_zyx(math.pi / 2, 0.0, 0.0)
+    i_body = np.diag([1.0, 2.0, 3.0])
+    assert np.allclose(transform_tensor(r, i_body), np.diag([2.0, 1.0, 3.0]))
+
+
+def test_rotor_positive_rpm_right_hand_rule():
+    rf = RotorFrame("r1", (0, 0, 0), (0, 0, 2.0), 60.0)
+    assert np.allclose(rf.axis, (0, 0, 1))
+    assert np.allclose(rf.omega_vector(), [0, 0, 2 * math.pi])
+
+
+def test_rotor_null_rpm_blocks():
+    with pytest.raises(MissingInput):
+        RotorFrame("r1", (0, 0, 0), (0, 0, 1), None).omega_vector()
+
+
