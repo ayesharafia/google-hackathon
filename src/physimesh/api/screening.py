@@ -136,6 +136,8 @@ def screening(request: Request, body: ScreeningRequest):
     result['approved_design_sha256'] = design_hash
     result['assumptions'] = ['World-vertical force ceiling at supplied sustained limits; trim and structure pending.',
                              'Cases are alternative operating conditions; energies checked independently.',
+                             'Electrical power and usable energy are supplied data, not physically validated; limit checks alone do not prove operability.',
+                             'Isolated ideal-hover power is a diagnostic; ground effect and rotor interference are not modelled.',
                              'Rotor performance must already include environment, attitude and reserve policy.']
     return result
 

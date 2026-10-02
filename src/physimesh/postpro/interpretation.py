@@ -21,7 +21,8 @@ def interpret(results: dict) -> list[dict]:
         change, threshold = convergence.get('drift'), convergence.get('threshold')
         if _number(change) and _number(threshold) and type(convergence.get('passed')) is bool:
             state = 'passes' if convergence['passed'] else 'fails'
-            emit(f'{level.title()} drag history {state} the iteration-drift check: {change:.2%} '
+            display_change = f'{change * 100:.2e}%' if 0 < abs(change) < .00005 else f'{change:.2%}'
+            emit(f'{level.title()} drag history {state} the iteration-drift check: {display_change} '
                  f'change between the last two 200-iteration windows (gate {threshold:.2%}).',
                  path+'.convergence.drift', change, threshold)
         reconciliation = run.get('reconciliation', {})
@@ -45,9 +46,17 @@ def interpret(results: dict) -> list[dict]:
     behaviour = mesh.get('behaviour')
     if behaviour == 'monotonic' and _number(mesh.get('observed_order')) and _number(mesh.get('gci_fine')):
         p, gci = mesh['observed_order'], mesh['gci_fine']
-        emit(f'Mesh study: observed order {p:.3f}; fine GCI {gci:.3%}. '
+        value = {'observed_order': p, 'gci_fine': gci}
+        capped = mesh.get('order_capped_gci_fine')
+        if _number(capped) and _number(mesh.get('gci_order_used')):
+            intro = (f'Mesh study: order-capped GCI {capped:.3%} at order {mesh["gci_order_used"]:.3f}; '
+                     f'observed order {p:.3f}, observed-order GCI {gci:.3%}. ')
+            value.update(order_capped_gci_fine=capped, gci_order_used=mesh['gci_order_used'])
+        else:
+            intro = f'Mesh study: observed order {p:.3f}; fine GCI {gci:.3%}. '
+        emit(intro
              +mesh.get('qualification', 'This is a discretization sensitivity estimate, not total uncertainty.'),
-             'mesh_study', {'observed_order': p, 'gci_fine': gci})
+             'mesh_study', value)
     elif behaviour in ('oscillatory', 'divergent'):
         emit(f'Mesh study is {behaviour}; no GCI is reported.', 'mesh_study.behaviour', behaviour)
     return statements

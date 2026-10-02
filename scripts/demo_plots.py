@@ -125,10 +125,10 @@ def main():
          {'x': res['Time'], 'values': values, 'mask': mask, 'labels': labels, 'log_y': True, 'x_label': 'steady iteration'},
          (float(values[~mask].min()), float(values.max())), note='Initial residuals; zero/unavailable values masked.')
     cd_values = np.array([r['cd'] for r in load_results['runs']])
-    gci = load_results['mesh_study']['gci_fine']
+    gci = load_results['mesh_study'].get('order_capped_gci_fine')
     emit('mesh_cd', 'mesh_study.cd_by_level', 'bar', 'all',
          {'values': cd_values, 'labels': levels, 'reference': 1.09173, 'gci_absolute': None if gci is None else gci*cd_values[-1]},
-         (0., float(cd_values.max()*1.1)), note='GCI is qualified mesh sensitivity, not total uncertainty; observed order exceeds nominal.')
+         (0., float(cd_values.max()*1.1)), note='Error bar uses order-capped GCI (nominal cap 2, safety factor 1.25); qualified mesh sensitivity, not total uncertainty or a proven error bound.')
     (out/'index.json').write_text(json.dumps(records, indent=2, allow_nan=False)+'\n')
     observations = {level: {'wake_ux_min': float(entry['profile'][:, 2].min()),
                             'slice_p_min': float(entry['grids']['pressure']['values'][~entry['grids']['pressure']['mask']].min())}

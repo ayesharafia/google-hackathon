@@ -82,6 +82,9 @@ file SHA-256 hashes retain their exact byte semantics.
 [QA and remaining release gates](docs/qa/results_page_checklist.md) distinguish
 implemented behavior from pending independent physics review and release approval.
 
+[Presenter guide and rehearsal log](docs/demo/presenter-guide.md) give the actual
+demo steps, claim limits and outstanding presentation checks.
+
 [Code, backend and physics guide](docs/technical/mvp-code-and-physics-guide.md) explains
 the formulas, data flow, API, solver configuration, evidence checks and limitations.
 

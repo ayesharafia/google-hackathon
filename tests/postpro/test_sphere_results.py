@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from physimesh.postpro.results import sphere_load_result
-from physimesh.postpro.statistics import grid_convergence_unequal
+from physimesh.postpro.statistics import grid_convergence_unequal, order_capped_gci
 
 FIXTURE = Path(__file__).parents[1] / 'solver/fixtures/sphere_coarse'
 
@@ -28,6 +28,22 @@ def test_gci_recovers_known_second_order_on_unequal_meshes():
     assert result.observed_order == pytest.approx(2)
     assert result.extrapolated == pytest.approx(2)
     assert result.gci_fine == pytest.approx(1.25 * 0.03 / 2.03)
+
+
+def test_high_observed_order_cannot_reduce_the_order_capped_estimate():
+    # Analytical model f(h)=100+h^4 at h=1,2,4: observed order 4.
+    fitted = grid_convergence_unequal(101, 116, 356, 2, 2)
+    capped = order_capped_gci(101, 116, 2, fitted.observed_order, 2, 1.25)
+    assert fitted.observed_order == pytest.approx(4)
+    assert capped == pytest.approx(1.25 * (15 / 101) / 3)
+    assert capped > fitted.gci_fine
+    assert order_capped_gci(100, 101, 2, 1, 2, 1.25) == pytest.approx(.0125)
+
+
+@pytest.mark.parametrize('order,cap', [(0, 2), (2, 0), (float('nan'), 2)])
+def test_order_cap_requires_explicit_finite_positive_orders(order, cap):
+    with pytest.raises(ValueError):
+        order_capped_gci(100, 101, 2, order, cap, 1.25)
 
 
 def test_unequal_mesh_oscillation_and_divergence_are_refused():

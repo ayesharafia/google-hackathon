@@ -89,6 +89,25 @@ def effective_refinement_ratio(volume_m3: float, n_coarse: int, n_fine: int) -> 
     return ((volume_m3 / n_coarse) / (volume_m3 / n_fine)) ** (1.0 / 3.0)
 
 
+def order_capped_gci(f_fine: float, f_medium: float, r21: float,
+                     observed_order: float, nominal_order_cap: float,
+                     safety_factor: float) -> float:
+    """Dimensionless GCI sensitivity using min(observed, declared nominal order).
+
+    Values must share units; r21 and both orders are dimensionless. The formula
+    is Celik's fine-grid GCI with an explicit order cap [review F1; ASME Eq 7].
+    It does not establish an error bound or an asymptotic range. Call only after
+    a monotonic positive-order fit; the cap and safety factor have no defaults.
+    """
+    values = (f_fine, f_medium, r21, observed_order, nominal_order_cap, safety_factor)
+    if not all(math.isfinite(value) for value in values) or f_fine == 0:
+        raise ValueError('order-capped estimate requires finite values and nonzero fine value')
+    if r21 <= 1 or min(observed_order, nominal_order_cap, safety_factor) <= 0:
+        raise ValueError('ratio must exceed one; orders and safety factor must be positive')
+    order = min(observed_order, nominal_order_cap)
+    return safety_factor * abs((f_fine - f_medium) / f_fine) / math.expm1(order * math.log(r21))
+
+
 def grid_convergence_unequal(f1: float, f2: float, f3: float, r21: float,
                              r32: float, fs: float = 1.25) -> GridConvergence:
     """Generalized Richardson fit f(h)=f0+C*h**p, finest first.

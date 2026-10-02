@@ -70,3 +70,27 @@ from the original native records into a new immutable local package root;
 previous published packages were preserved.
 
 ![Actual synthetic example result](images/payload-example.jpg)
+
+## Review corrections, 2026-10-03
+
+Claude's required F1–F3 corrections are implemented. The mesh paragraph and
+chart now use the nominal-order-capped estimate (0.40844%, order 2, safety
+factor 1.25) while preserving observed order 4.327 and its 0.10989% estimate.
+Neither is labelled total accuracy or a proven error bound. Screening explicitly
+states that supplied electrical power/usable energy are physically unchecked.
+Nonzero drift no longer rounds to zero. Backend values drive every display.
+
+Actual clicks verify 52.23 kg for the complete example and "Capacity unavailable"
+with `mission.cases[climb]` for a missing case. Desktop 1280 and phone 390 checks
+show no document overflow; tables retain their intentional scroll regions.
+The supplied design law was rechecked point by point against these text changes:
+gutters, contrast, table alignment, stable controls, visible default content and
+wrapping remain intact. No new decorative shapes, font, palette, animation,
+shadow, icon or template layout was introduced. The native interactive surface
+remains the specific focal artifact. Both layouts were visually inspected.
+
+The revised authenticated export was checked against every manifest digest;
+the previous downloaded package and published root were preserved. This check
+does not claim a second GUI download or a recorded presentation. The independent
+report, its follow-up verdict and remaining presentation gates are in
+`independent_physics_review.md` and `mvp_gates.md`.

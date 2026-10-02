@@ -6,8 +6,12 @@ Backend: `opencfd/openfoam-run@sha256:4229997e74defb81548222d511b8e3b95b98305e5d
 
 Run group: `/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/.backend/demo-load-history/run_group.json`
 
-After 400 warm-up iterations, a vendor-derived drag-average controller waits for a 400-step window within
-an absolute range of 1e-3, then retains 400 further iterations. The cap is
+The vendor-derived drag-average controller starts at iteration 400, with
+`window=400`, `windowType=exact` and default `nIterStartUp=10`. v2606 checks
+`|running mean Cd - current Cd| < 1e-3`; it does not wait for a full 400-step
+window or test its range. Logs show the trigger at 412, followed by 400 further
+iterations, ending at 812. This description was corrected after independent
+review F3; no retained input or output was changed. The cap is
 3000. Independent 200-step drift and mesh checks remain separate. Completion
 is recorded as unverified until post-processing gates run.
 

@@ -25,7 +25,7 @@ tests deselected. Lint passes. Backend suite: 3 passed in 12.82 s with
 without that required configuration refused the two vendor-dependent tests;
 configuration was corrected, with no solver or test changes. No aircraft data or physics certification exists.
 
-## Review still required
+## Review still required (status before 2026-10-03 review)
 
 These are implementation checks by the primary GPT-family agent. They do not
 satisfy the master plan's independent different-family or human physics review.
@@ -52,3 +52,32 @@ recording remain pending. No release tag or main merge has been performed.
 
 The manual Linux GitHub backend workflow on 73ee812 also passed after the numeric
 host UID/GID mapping fix. See the portability follow-up in the reproduction record.
+
+## Independent review follow-up, 2026-10-03
+
+At the user's request, Claude Opus 5.5 reviewed commit 6dd6dfc and independently
+recomputed native loads with a new parser. Its report is
+`docs/qa/independent_physics_review.md`: conditional pass for the bounded sphere
+and illustrative screening scope, no critical/high findings. Claude disclosed
+that it authored the original plans/reference code; its fresh recomputation is
+recorded, and human aircraft engineering approval remains separate.
+
+The candidate addresses required F1–F3: nominal-order-capped GCI 0.40844% is
+primary while observed-order GCI 0.10989% remains visible; supplied power and
+energy are explicitly labelled physically unchecked; the documented stop rule
+now matches v2606 source and iteration 412/812 logs. Tiny drift uses scientific
+notation (F9). New plots and results were published in a separate immutable
+local root, preserving earlier packages and original solver outputs.
+
+Candidate verification: 290 unit tests and 118 reference tests passed; Ruff
+and JavaScript syntax passed. Backend/solver inputs were unchanged, so previous
+three pinned backend tests and Linux checks remain the applicable runtime
+evidence. Browser checks confirm missing climb inputs remove the headline and
+the complete example still returns 52.23 kg; 390/1280 layouts have no document
+overflow. Claude's follow-up acceptance is pending until recorded below.
+
+The presenter guide is `docs/demo/presenter-guide.md`. Both timed full
+walkthroughs and a playable backup recording remain pending: native QuickTime
+recording controls could not be exposed through the available automation.
+Product gate sign-off and human approval of final client wording also remain
+pending. No merge or release tag is authorized by these software checks.

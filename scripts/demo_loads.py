@@ -7,8 +7,9 @@ import math
 from dataclasses import asdict
 from pathlib import Path
 
+from physimesh.postpro import statistics
 from physimesh.postpro.results import sphere_load_result
-from physimesh.postpro.statistics import grid_convergence_unequal
+from physimesh.postpro.statistics import grid_convergence_unequal, order_capped_gci
 
 
 def main():
@@ -47,6 +48,17 @@ def main():
                 for key, value in estimate.items()}
     estimate.update(r21=r21, r32=r32, basis='effective global h proportional to N^(-1/3)',
                     qualification='fixed surface refinement levels; not proven asymptotic or total uncertainty')
+    # [review F1] Nominal second-order cap from the retained sphere fvSchemes;
+    # local limiters and fixed surface levels do not establish that actual order.
+    nominal_order_cap, safety_factor = 2., 1.25  # ASME three-grid Eq 7 safety factor
+    estimate.update(nominal_order_cap=nominal_order_cap, gci_safety_factor=safety_factor,
+                    nominal_order_cap_source='retained sphere fvSchemes; independent review F1',
+                    gci_order_used=None, order_capped_gci_fine=None,
+                    estimator_code_sha256=hashlib.sha256(Path(statistics.__file__).read_bytes()).hexdigest())
+    if estimate['behaviour'] == 'monotonic':
+        estimate['gci_order_used'] = min(estimate['observed_order'], nominal_order_cap)
+        estimate['order_capped_gci_fine'] = order_capped_gci(
+            runs[2]['cd'], runs[1]['cd'], r21, estimate['observed_order'], nominal_order_cap, safety_factor)
     result = {'label': group['label'], 'evidence': 'unverified', 'runs': runs,
               'mesh_study': estimate, 'run_group_sha256': hashlib.sha256(group_raw).hexdigest()}
     output = args.run_group.parent / 'load_results.json'

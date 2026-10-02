@@ -48,3 +48,14 @@ to Discretization in CFD Applications, Eqs 1, 3, 4, 7](https://www.asme.org/wwwa
 The monotonic branch is solved directly for a positive order; oscillatory or
 nonpositive-order data receive no GCI. Analytical unequal-spacing second-order
 fixtures recover order 2 and the exact extrapolate.
+
+## Independent-review follow-up, 2026-10-03
+
+F1 adds an order-capped sensitivity estimate with p_used=min(4.326944948,2)
+and Fs=1.25: GCI_fine=0.00408440535 (0.408440535%). The nominal cap comes from
+the retained sphere schemes. The observed-order estimate remains available;
+the order-capped value leads the page and mesh-chart error bar. Neither is a
+proven error bound or total uncertainty. The estimator code hash, cap, order
+and safety factor are retained in the regenerated load record. Published
+packages from before this correction remain intact. F3 corrected the stopping
+rule description in sphere_re100_runs.md without changing any native run.

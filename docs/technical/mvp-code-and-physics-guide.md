@@ -257,6 +257,14 @@ All force/performance/limit sources are explicitly synthetic.
 Hover power is 24 kW for 300 s, requiring 7.20 MJ. Climb power is 22.4 kW for
 180 s, requiring 4.032 MJ. The example usable energy is 11.52 MJ, computed from
 20 kg × 250 Wh/kg × 3600 J/Wh × 0.8 usable fraction × 0.8 reserve allowance.
+Here reserve is a fraction of usable pack energy. The separate battery exercise
+below instead multiplies mission energy by `(1 + reserve_fraction)`; these
+conventions are distinct. The API accepts the approved usable-energy declaration
+and does not derive it from pack mass. Electrical power is also supplied data;
+limit and energy checks do not establish its physical validity. Isolated ideal
+hover power is a diagnostic, not a general installed-rotor power gate. The
+example's acceleration is an instantaneous force margin. The 180 s duration
+checks constant-point energy; it does not integrate an accelerating trajectory.
 Both cases satisfy the illustrative limits. The headline is **52.23 kg**, limited
 by climb. Removing climb data blocks the headline rather than showing hover alone.
 
@@ -332,9 +340,12 @@ or total wall deadline. Its fixed stage strings prevent uploaded filenames from
 becoming arbitrary shell commands. The vendor entrypoint changes working
 directory, so every stage explicitly re-enters `/case`.
 
-The sphere's vendor-derived drag controller starts after 400 warm-up iterations,
-checks a 400-step drag-average window against absolute tolerance 1e−3, then
-retains 400 further iterations. The default hard cap is 3000. Residual-only
+The sphere's vendor-derived drag controller starts at iteration 400. Its exact
+running-average window is configured to 400, but v2606 does not require that
+window to fill before testing convergence. After the default `nIterStartUp=10`,
+it checks `|running mean Cd − current Cd| < 1e−3`, rather than a 400-step range.
+The retained logs show the trigger at iteration 412, followed by 400 further
+iterations, ending at 812. The default hard cap is 3000. Residual-only
 stopping is disabled in this profile. Separate post-processing checks inspect
 the last two complete 200-iteration windows. Steady iteration indices are not
 physical seconds or accepted time averages.
@@ -461,8 +472,13 @@ a forced GCI. The method follows the generalized Richardson/GCI procedure in
 ASME's numerical-accuracy guidance:
 https://www.asme.org/wwwasmeorg/media/resourcefiles/shop/journals/jfenumaccuracy.pdf
 
-The original observed order is 4.32694 and fine GCI is 0.109894%. This is qualified
-mesh sensitivity. Fixed surface levels, unusually high observed order and
+The original observed order is 4.32694 and observed-order fine GCI is 0.109894%.
+Independent review F1 requires a second estimate using
+`p_used = min(p_observed, nominal_order_cap)`, with cap 2 from the retained
+sphere schemes and safety factor 1.25. It gives approximately 0.40844% and is
+shown first, including in the mesh-chart error bar. Both estimates remain
+qualified mesh sensitivity; neither is a proven error bound. The estimator code
+hash, selected order, cap, source and safety factor are retained. Fixed surface levels, unusually high observed order and
 unproven asymptotic behavior prevent a total-accuracy claim. GCI does not include
 geometry, domain extent, boundary, model or experimental uncertainty. A small
 GCI does not validate a drone.
