@@ -157,6 +157,14 @@ def external_steady_case(spec: ExternalSteadySpec) -> dict[str, bytes]:
     text["0/U"] = _block(text["0/U"], "lowerWall", "        type slip;")
     text["constant/transportProperties"] = _entry(text["constant/transportProperties"], "nu", f"{spec.nu_m2_s:.17g}")
     text["constant/turbulenceProperties"] = _block(_entry(text["constant/turbulenceProperties"], "simulationType", "laminar"), "RAS", "")
+    residual_source = text.pop("system/residualSource")
+    residual = re.search(r"residualControl\s*\{[^}]+\}", residual_source).group(0)
+    residual = re.sub(r'(?m)^\s*"\(k[^\n]+\n', "", residual)
+    # Chosen solver stopping tolerance; the independent force-drift gate still applies.
+    residual = _entry(_entry(residual, "p", "1e-6"), "U", "1e-6")
+    provenance = "\n".join(residual_source.splitlines()[:2])
+    text["system/fvSolution"] = text["system/fvSolution"].replace(
+        "    consistent yes;", "    consistent yes;\n" + provenance + "\n    " + residual)
     control = text["system/controlDict"]
     for key, value in (("endTime", str(spec.iterations)), ("writeInterval", str(spec.iterations)),
                        ("purgeWrite", "1"), ("writeFormat", "ascii"), ("writePrecision", "12")):

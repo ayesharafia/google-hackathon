@@ -1,0 +1,60 @@
+// Source: v2606 tutorials/incompressible/simpleFoam/T3A/system/fvSolution
+// Original SHA-256: 91939d690c5a6eea06dd6e3195717c58f684b3aa9d75608c9e9b4c9ddf67915a
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2606                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p
+    {
+        solver          GAMG;
+        tolerance       1e-6;
+        relTol          0.1;
+        smoother        GaussSeidel;
+    }
+
+    "(U|k|omega|gammaInt|ReThetat)"
+    {
+        solver          smoothSolver;
+        smoother        symGaussSeidel;
+        tolerance       1e-8;
+        relTol          0.1;
+        maxIter         10;
+    }
+}
+
+SIMPLE
+{
+    consistent      yes;
+
+    residualControl
+    {
+        p               1e-5;
+        U               1e-6;
+        "(k|omega|gammaInt|ReThetat)" 1e-4;
+    }
+}
+
+relaxationFactors
+{
+    equations
+    {
+        ".*"            0.9;
+    }
+}
+
+
+// ************************************************************************* //
