@@ -1,0 +1,567 @@
+# Illustrative example inputs, not client data.
+label: Illustrative example inputs, not the client's aircraft. # EXAMPLE VALUE - not client data
+screening_request: # EXAMPLE VALUE - not client data
+  project: # EXAMPLE VALUE - not client data
+    identity: # EXAMPLE VALUE - not client data
+      schema_version: drone_manifest_v1 # EXAMPLE VALUE - not client data
+      study_id: EXAMPLE-multirotor # EXAMPLE VALUE - not client data
+      description: Illustrative example inputs, not the client's aircraft. # EXAMPLE VALUE - not client data
+      created_utc: '2026-10-02T00:00:00Z' # EXAMPLE VALUE - not client data
+    units_and_frames: # EXAMPLE VALUE - not client data
+      source_units: m # EXAMPLE VALUE - not client data
+      world_frame: ENU_z_up # EXAMPLE VALUE - not client data
+      body_frame: x_forward_y_left_z_up # EXAMPLE VALUE - not client data
+      solid_normal: outward_into_fluid # EXAMPLE VALUE - not client data
+      cad_transform: # EXAMPLE VALUE - not client data
+        scale: 1.0 # EXAMPLE VALUE - not client data
+        rotation_deg_zyx: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        translation_m: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+    mission: # EXAMPLE VALUE - not client data
+      payload_mass_kg: null # EXAMPLE VALUE - not client data
+      payload_positions_body_m: null # EXAMPLE VALUE - not client data
+      cases: # EXAMPLE VALUE - not client data
+      - name: hover # EXAMPLE VALUE - not client data
+        velocity_is_air_relative: true # EXAMPLE VALUE - not client data
+        kind: hover # EXAMPLE VALUE - not client data
+        duration_s: 300 # EXAMPLE VALUE - not client data
+        velocity_world_m_s: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        attitude_deg_zyx: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        acceleration_target_m_s2: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        ground_clearance_m: 10 # EXAMPLE VALUE - not client data
+        mass_state: empty_plus_calculated_payload # EXAMPLE VALUE - not client data
+      - name: climb # EXAMPLE VALUE - not client data
+        velocity_is_air_relative: true # EXAMPLE VALUE - not client data
+        kind: climb # EXAMPLE VALUE - not client data
+        duration_s: 180 # EXAMPLE VALUE - not client data
+        velocity_world_m_s: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 2 # EXAMPLE VALUE - not client data
+        attitude_deg_zyx: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        acceleration_target_m_s2: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0.6 # EXAMPLE VALUE - not client data
+        ground_clearance_m: 10 # EXAMPLE VALUE - not client data
+        mass_state: empty_plus_calculated_payload # EXAMPLE VALUE - not client data
+      duration_s: 300 # EXAMPLE VALUE - not client data
+      energy_system: # EXAMPLE VALUE - not client data
+        pack_wh_per_kg: 250 # EXAMPLE VALUE - not client data
+        usable_fraction: 0.8 # EXAMPLE VALUE - not client data
+        usable_energy_j: 11520000.0 # EXAMPLE VALUE - not client data
+        available_electrical_power_w: 28000 # EXAMPLE VALUE - not client data
+      reserve_policy: # EXAMPLE VALUE - not client data
+        kind: fraction # EXAMPLE VALUE - not client data
+        value: 0.2 # EXAMPLE VALUE - not client data
+    masses: # EXAMPLE VALUE - not client data
+      items: # EXAMPLE VALUE - not client data
+      - name: frame # EXAMPLE VALUE - not client data
+        category: structure # EXAMPLE VALUE - not client data
+        mass_kg: 25 # EXAMPLE VALUE - not client data
+        cg_body_m: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+      - name: motors # EXAMPLE VALUE - not client data
+        category: propulsion # EXAMPLE VALUE - not client data
+        mass_kg: 15 # EXAMPLE VALUE - not client data
+        cg_body_m: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+      - name: battery # EXAMPLE VALUE - not client data
+        category: energy # EXAMPLE VALUE - not client data
+        mass_kg: 20 # EXAMPLE VALUE - not client data
+        cg_body_m: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+      - name: avionics # EXAMPLE VALUE - not client data
+        category: avionics # EXAMPLE VALUE - not client data
+        mass_kg: 5 # EXAMPLE VALUE - not client data
+        cg_body_m: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+      - name: payload # EXAMPLE VALUE - not client data
+        category: payload # EXAMPLE VALUE - not client data
+        mass_kg: 0 # EXAMPLE VALUE - not client data
+        cg_body_m: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+      - name: other # EXAMPLE VALUE - not client data
+        category: other # EXAMPLE VALUE - not client data
+        mass_kg: 0 # EXAMPLE VALUE - not client data
+        cg_body_m: # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+        - 0 # EXAMPLE VALUE - not client data
+    atmosphere: # EXAMPLE VALUE - not client data
+      source: EXAMPLE dry sea-level atmosphere # EXAMPLE VALUE - not client data
+      altitude_m: 0 # EXAMPLE VALUE - not client data
+      pressure_pa: 101325 # EXAMPLE VALUE - not client data
+      temperature_k: 288.15 # EXAMPLE VALUE - not client data
+      viscosity: # EXAMPLE VALUE - not client data
+        law: sutherland # EXAMPLE VALUE - not client data
+      humidity_assumption: dry air # EXAMPLE VALUE - not client data
+      gamma: 1.4 # EXAMPLE VALUE - not client data
+    assembly: # EXAMPLE VALUE - not client data
+      geometry_revision_sha256: null # EXAMPLE VALUE - not client data
+      components: [] # EXAMPLE VALUE - not client data
+      topology_tolerance: # EXAMPLE VALUE - not client data
+        abs_m: null # EXAMPLE VALUE - not client data
+        rel: null # EXAMPLE VALUE - not client data
+      min_feature_m: null # EXAMPLE VALUE - not client data
+    rotors: # EXAMPLE VALUE - not client data
+    - rotor_id: R0 # EXAMPLE VALUE - not client data
+      model: measured_map # EXAMPLE VALUE - not client data
+      map_ref: dfede60436802dccc5ce92be092760827d3939d8231ba111b5673a4b4252b954 # EXAMPLE VALUE - not client data
+      radius_m: 0.65 # EXAMPLE VALUE - not client data
+      center_body_m: # EXAMPLE VALUE - not client data
+      - 1 # EXAMPLE VALUE - not client data
+      - -1 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      axis_body: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 1 # EXAMPLE VALUE - not client data
+      signed_rpm: 1500 # EXAMPLE VALUE - not client data
+      sustained_limits: # EXAMPLE VALUE - not client data
+        electrical_power_w: 7000 # EXAMPLE VALUE - not client data
+      pitch_deg: 0 # EXAMPLE VALUE - not client data
+      n_blades: 2 # EXAMPLE VALUE - not client data
+      root_cutout_m: 0.08 # EXAMPLE VALUE - not client data
+      azimuth_zero_deg: 0 # EXAMPLE VALUE - not client data
+      phase_offset_deg: 0 # EXAMPLE VALUE - not client data
+    - rotor_id: R1 # EXAMPLE VALUE - not client data
+      model: measured_map # EXAMPLE VALUE - not client data
+      map_ref: dfede60436802dccc5ce92be092760827d3939d8231ba111b5673a4b4252b954 # EXAMPLE VALUE - not client data
+      radius_m: 0.65 # EXAMPLE VALUE - not client data
+      center_body_m: # EXAMPLE VALUE - not client data
+      - 1 # EXAMPLE VALUE - not client data
+      - 1 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      axis_body: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 1 # EXAMPLE VALUE - not client data
+      signed_rpm: -1500 # EXAMPLE VALUE - not client data
+      sustained_limits: # EXAMPLE VALUE - not client data
+        electrical_power_w: 7000 # EXAMPLE VALUE - not client data
+      pitch_deg: 0 # EXAMPLE VALUE - not client data
+      n_blades: 2 # EXAMPLE VALUE - not client data
+      root_cutout_m: 0.08 # EXAMPLE VALUE - not client data
+      azimuth_zero_deg: 0 # EXAMPLE VALUE - not client data
+      phase_offset_deg: 0 # EXAMPLE VALUE - not client data
+    - rotor_id: R2 # EXAMPLE VALUE - not client data
+      model: measured_map # EXAMPLE VALUE - not client data
+      map_ref: dfede60436802dccc5ce92be092760827d3939d8231ba111b5673a4b4252b954 # EXAMPLE VALUE - not client data
+      radius_m: 0.65 # EXAMPLE VALUE - not client data
+      center_body_m: # EXAMPLE VALUE - not client data
+      - -1 # EXAMPLE VALUE - not client data
+      - 1 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      axis_body: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 1 # EXAMPLE VALUE - not client data
+      signed_rpm: 1500 # EXAMPLE VALUE - not client data
+      sustained_limits: # EXAMPLE VALUE - not client data
+        electrical_power_w: 7000 # EXAMPLE VALUE - not client data
+      pitch_deg: 0 # EXAMPLE VALUE - not client data
+      n_blades: 2 # EXAMPLE VALUE - not client data
+      root_cutout_m: 0.08 # EXAMPLE VALUE - not client data
+      azimuth_zero_deg: 0 # EXAMPLE VALUE - not client data
+      phase_offset_deg: 0 # EXAMPLE VALUE - not client data
+    - rotor_id: R3 # EXAMPLE VALUE - not client data
+      model: measured_map # EXAMPLE VALUE - not client data
+      map_ref: dfede60436802dccc5ce92be092760827d3939d8231ba111b5673a4b4252b954 # EXAMPLE VALUE - not client data
+      radius_m: 0.65 # EXAMPLE VALUE - not client data
+      center_body_m: # EXAMPLE VALUE - not client data
+      - -1 # EXAMPLE VALUE - not client data
+      - -1 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      axis_body: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 1 # EXAMPLE VALUE - not client data
+      signed_rpm: -1500 # EXAMPLE VALUE - not client data
+      sustained_limits: # EXAMPLE VALUE - not client data
+        electrical_power_w: 7000 # EXAMPLE VALUE - not client data
+      pitch_deg: 0 # EXAMPLE VALUE - not client data
+      n_blades: 2 # EXAMPLE VALUE - not client data
+      root_cutout_m: 0.08 # EXAMPLE VALUE - not client data
+      azimuth_zero_deg: 0 # EXAMPLE VALUE - not client data
+      phase_offset_deg: 0 # EXAMPLE VALUE - not client data
+    flow: # EXAMPLE VALUE - not client data
+      pressure_dimensions: null # EXAMPLE VALUE - not client data
+      compressibility: null # EXAMPLE VALUE - not client data
+      turbulence_model: null # EXAMPLE VALUE - not client data
+      pressure_includes_isotropic_turbulent_stress: null # EXAMPLE VALUE - not client data
+      ambient_turbulence: # EXAMPLE VALUE - not client data
+        intensity: null # EXAMPLE VALUE - not client data
+        length_scale_m: null # EXAMPLE VALUE - not client data
+        reference_speed_m_s: null # EXAMPLE VALUE - not client data
+    fidelity: # EXAMPLE VALUE - not client data
+      initial: measured_map # EXAMPLE VALUE - not client data
+      requested_question: payload_lift # EXAMPLE VALUE - not client data
+      bem: # EXAMPLE VALUE - not client data
+        radial_stations: 80 # EXAMPLE VALUE - not client data
+        relative_load_residual: 0.0001 # EXAMPLE VALUE - not client data
+        max_iterations: 200 # EXAMPLE VALUE - not client data
+        induction_relaxation: null # EXAMPLE VALUE - not client data
+        loss_model: prandtl_tip # EXAMPLE VALUE - not client data
+        loss_applies_to: momentum # EXAMPLE VALUE - not client data
+        polar_extrapolation: reject # EXAMPLE VALUE - not client data
+    symmetry: # EXAMPLE VALUE - not client data
+      execution: 'off' # EXAMPLE VALUE - not client data
+      plane: # EXAMPLE VALUE - not client data
+        x0_m: null # EXAMPLE VALUE - not client data
+        normal: null # EXAMPLE VALUE - not client data
+      match_tolerance: # EXAMPLE VALUE - not client data
+        abs_m: null # EXAMPLE VALUE - not client data
+        rel: null # EXAMPLE VALUE - not client data
+    domain: # EXAMPLE VALUE - not client data
+      bounds_m: null # EXAMPLE VALUE - not client data
+      clearances_in_rotor_diameters: null # EXAMPLE VALUE - not client data
+    mesh: # EXAMPLE VALUE - not client data
+      global_cell_m: null # EXAMPLE VALUE - not client data
+      surface_levels: {} # EXAMPLE VALUE - not client data
+      wake_refinement: [] # EXAMPLE VALUE - not client data
+      rotation_zones: {} # EXAMPLE VALUE - not client data
+      layers: # EXAMPLE VALUE - not client data
+        first_layer_yplus_target: 1 # EXAMPLE VALUE - not client data
+        growth: 1.2 # EXAMPLE VALUE - not client data
+        count: null # EXAMPLE VALUE - not client data
+        first_height_m: null # EXAMPLE VALUE - not client data
+      max_cells: null # EXAMPLE VALUE - not client data
+    numerics: # EXAMPLE VALUE - not client data
+      steady: # EXAMPLE VALUE - not client data
+        coupling: SIMPLE_or_backend_equivalent # EXAMPLE VALUE - not client data
+        iteration_budget: 3000 # EXAMPLE VALUE - not client data
+      transient: # EXAMPLE VALUE - not client data
+        coupling: PIMPLE_or_backend_equivalent # EXAMPLE VALUE - not client data
+        rotation_per_step_deg: 1 # EXAMPLE VALUE - not client data
+        target_courant: 0.8 # EXAMPLE VALUE - not client data
+        outer_correctors: 2 # EXAMPLE VALUE - not client data
+        pressure_correctors: 2 # EXAMPLE VALUE - not client data
+      linear: # EXAMPLE VALUE - not client data
+        final_rel_tol: 0 # EXAMPLE VALUE - not client data
+        p_abs_tol: 1.0e-07 # EXAMPLE VALUE - not client data
+        u_turb_abs_tol: 1.0e-06 # EXAMPLE VALUE - not client data
+      relaxation: null # EXAMPLE VALUE - not client data
+    boundaries: # EXAMPLE VALUE - not client data
+      far_field: null # EXAMPLE VALUE - not client data
+      outlet: null # EXAMPLE VALUE - not client data
+      ground_model: null # EXAMPLE VALUE - not client data
+      walls: null # EXAMPLE VALUE - not client data
+    convergence: # EXAMPLE VALUE - not client data
+      startup_discard_revs: 5 # EXAMPLE VALUE - not client data
+      averaging_window_revs: 10 # EXAMPLE VALUE - not client data
+      force_drift_gate: 0.005 # EXAMPLE VALUE - not client data
+      continuity_target: 0.001 # EXAMPLE VALUE - not client data
+      m_dot_scale: null # EXAMPLE VALUE - not client data
+    postprocessing: # EXAMPLE VALUE - not client data
+      load_history_cadence: every_time_step # EXAMPLE VALUE - not client data
+      full_field_cadence_deg: 5 # EXAMPLE VALUE - not client data
+      intents: [] # EXAMPLE VALUE - not client data
+    validation: # EXAMPLE VALUE - not client data
+      native_force_reconciliation: # EXAMPLE VALUE - not client data
+        rel: 0.001 # EXAMPLE VALUE - not client data
+        abs_n: null # EXAMPLE VALUE - not client data
+      mesh_time_change_target: 0.02 # EXAMPLE VALUE - not client data
+      symmetry_change_target: 0.01 # EXAMPLE VALUE - not client data
+      experimental_targets: # EXAMPLE VALUE - not client data
+        thrust_rel: 0.05 # EXAMPLE VALUE - not client data
+        torque_rel: 0.1 # EXAMPLE VALUE - not client data
+    execution: # EXAMPLE VALUE - not client data
+      backend_name: null # EXAMPLE VALUE - not client data
+      backend_version: null # EXAMPLE VALUE - not client data
+      backend_image_digest: null # EXAMPLE VALUE - not client data
+      cpu_cores: null # EXAMPLE VALUE - not client data
+      memory_gb: null # EXAMPLE VALUE - not client data
+      disk_gb: null # EXAMPLE VALUE - not client data
+      wall_time_limit_s: null # EXAMPLE VALUE - not client data
+      limits: # EXAMPLE VALUE - not client data
+        max_upload_bytes: null # EXAMPLE VALUE - not client data
+        max_triangles: null # EXAMPLE VALUE - not client data
+  approved_design_sha256: 24add72d321dd370f03ada042990ccc9a1f593ed10bbb75c75e96bc5f1baf4bc # EXAMPLE VALUE - not client data
+  case_inputs: # EXAMPLE VALUE - not client data
+  - case_id: hover # EXAMPLE VALUE - not client data
+    rotors: # EXAMPLE VALUE - not client data
+    - rotor_id: R0 # EXAMPLE VALUE - not client data
+      force_world_n: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 350 # EXAMPLE VALUE - not client data
+      electrical_power_w: 6000 # EXAMPLE VALUE - not client data
+      sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
+      performance_source_sha256: 8e846e2ca8646423e4a1913c8e8da3ff16bc703cd27e1956f1e3f946da4e0785 # EXAMPLE VALUE - not client data
+      limit_source_sha256: 8ce79ba27dfa34eb030fd36257b0e3300f7470f99a02671237e163bc7d58e020 # EXAMPLE VALUE - not client data
+    - rotor_id: R1 # EXAMPLE VALUE - not client data
+      force_world_n: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 350 # EXAMPLE VALUE - not client data
+      electrical_power_w: 6000 # EXAMPLE VALUE - not client data
+      sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
+      performance_source_sha256: 3683ac3bccbffb7a292d61194bfedf2497f843dbed11a1e64ecb7fddacc9fa91 # EXAMPLE VALUE - not client data
+      limit_source_sha256: 9e029add75804a9cbe34e93f7dc8330b790370cfac7a0ca3f55682920237f4c6 # EXAMPLE VALUE - not client data
+    - rotor_id: R2 # EXAMPLE VALUE - not client data
+      force_world_n: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 350 # EXAMPLE VALUE - not client data
+      electrical_power_w: 6000 # EXAMPLE VALUE - not client data
+      sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
+      performance_source_sha256: be9418a6bd2cae8b5a67766e290df56ec2e292301ff058b7ce31ae6cd253806e # EXAMPLE VALUE - not client data
+      limit_source_sha256: d98bde107f4c2db28d933ff34173f5ba13a8492e78bf36de3409b21d16b0601d # EXAMPLE VALUE - not client data
+    - rotor_id: R3 # EXAMPLE VALUE - not client data
+      force_world_n: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 350 # EXAMPLE VALUE - not client data
+      electrical_power_w: 6000 # EXAMPLE VALUE - not client data
+      sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
+      performance_source_sha256: fd65e7560c510ff8b3345404dc9e92c8c8afd3f2fa7d5d668c2bc4b17b362845 # EXAMPLE VALUE - not client data
+      limit_source_sha256: 1e6d50db09aea01cb8815fd0e3b1cb466b15918c6b391303f13aaaad60a7cc76 # EXAMPLE VALUE - not client data
+    body_force_world_n: # EXAMPLE VALUE - not client data
+    - 0 # EXAMPLE VALUE - not client data
+    - 0 # EXAMPLE VALUE - not client data
+    - -40 # EXAMPLE VALUE - not client data
+    body_force_source_sha256: c2e6aae6dadaee3faca59bbdde806efe3c71d8ac6a639f15c9bb421ba59a0e26 # EXAMPLE VALUE - not client data
+    vertical_acceleration_m_s2: 0 # EXAMPLE VALUE - not client data
+    duration_s: 300 # EXAMPLE VALUE - not client data
+    available_electrical_power_w: 28000 # EXAMPLE VALUE - not client data
+  - case_id: climb # EXAMPLE VALUE - not client data
+    rotors: # EXAMPLE VALUE - not client data
+    - rotor_id: R0 # EXAMPLE VALUE - not client data
+      force_world_n: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 320 # EXAMPLE VALUE - not client data
+      electrical_power_w: 5600 # EXAMPLE VALUE - not client data
+      sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
+      performance_source_sha256: 3c45377249218b0dda74e8c323075545f0ad8e07355b557491fba2fe8373f015 # EXAMPLE VALUE - not client data
+      limit_source_sha256: 8ce79ba27dfa34eb030fd36257b0e3300f7470f99a02671237e163bc7d58e020 # EXAMPLE VALUE - not client data
+    - rotor_id: R1 # EXAMPLE VALUE - not client data
+      force_world_n: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 320 # EXAMPLE VALUE - not client data
+      electrical_power_w: 5600 # EXAMPLE VALUE - not client data
+      sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
+      performance_source_sha256: 8b9002066c01a9bee009b8c80a11bec4eab66c41b6da02bcf5f5949f8ff56ed4 # EXAMPLE VALUE - not client data
+      limit_source_sha256: 9e029add75804a9cbe34e93f7dc8330b790370cfac7a0ca3f55682920237f4c6 # EXAMPLE VALUE - not client data
+    - rotor_id: R2 # EXAMPLE VALUE - not client data
+      force_world_n: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 320 # EXAMPLE VALUE - not client data
+      electrical_power_w: 5600 # EXAMPLE VALUE - not client data
+      sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
+      performance_source_sha256: ccfa1cdaa1a8c564841a079a9c8a6f10d140267b4ea62d378b50b7ec94574410 # EXAMPLE VALUE - not client data
+      limit_source_sha256: d98bde107f4c2db28d933ff34173f5ba13a8492e78bf36de3409b21d16b0601d # EXAMPLE VALUE - not client data
+    - rotor_id: R3 # EXAMPLE VALUE - not client data
+      force_world_n: # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 0 # EXAMPLE VALUE - not client data
+      - 320 # EXAMPLE VALUE - not client data
+      electrical_power_w: 5600 # EXAMPLE VALUE - not client data
+      sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
+      performance_source_sha256: 09dbae2de1cd973fd640979407bb2e7e5e1964e304815f6969d8c0bf0df8b21b # EXAMPLE VALUE - not client data
+      limit_source_sha256: 1e6d50db09aea01cb8815fd0e3b1cb466b15918c6b391303f13aaaad60a7cc76 # EXAMPLE VALUE - not client data
+    body_force_world_n: # EXAMPLE VALUE - not client data
+    - 0 # EXAMPLE VALUE - not client data
+    - 0 # EXAMPLE VALUE - not client data
+    - -60 # EXAMPLE VALUE - not client data
+    body_force_source_sha256: 6195cb25afb638a221db98daa7391cbfd76c45528a50612a37cb8cd233218463 # EXAMPLE VALUE - not client data
+    vertical_acceleration_m_s2: 0.6 # EXAMPLE VALUE - not client data
+    duration_s: 180 # EXAMPLE VALUE - not client data
+    available_electrical_power_w: 28000 # EXAMPLE VALUE - not client data
+  usable_energy_j: 11520000.0 # EXAMPLE VALUE - not client data
+battery_loops: # EXAMPLE VALUE - not client data
+  label: EXAMPLE analytical battery-sizing fixtures; separate from the four-rotor capacity example. # EXAMPLE VALUE - not client data
+  assumptions: # EXAMPLE VALUE - not client data
+    mass_without_battery_kg: 1200 # EXAMPLE VALUE - not client data
+    rotors: 8 # EXAMPLE VALUE - not client data
+    radius_m: 1.5 # EXAMPLE VALUE - not client data
+    figure_of_merit: 0.7 # EXAMPLE VALUE - not client data
+    electrical_efficiency: 0.85 # EXAMPLE VALUE - not client data
+    auxiliary_power_w: 2000 # EXAMPLE VALUE - not client data
+    usable_fraction: 0.8 # EXAMPLE VALUE - not client data
+    reserve_fraction: 0.2 # EXAMPLE VALUE - not client data
+    model: isolated ideal-hover lower bound divided by assumed FM and efficiency # EXAMPLE VALUE - not client data
+  cases: # EXAMPLE VALUE - not client data
+  - name: A # EXAMPLE VALUE - not client data
+    pack_wh_per_kg: 250 # EXAMPLE VALUE - not client data
+    duration_s: 600 # EXAMPLE VALUE - not client data
+    status: converged # EXAMPLE VALUE - not client data
+    iterations: 10 # EXAMPLE VALUE - not client data
+    total_mass_kg: 1442.1503018507412 # EXAMPLE VALUE - not client data
+    battery_mass_kg: 242.15030185074133 # EXAMPLE VALUE - not client data
+    electrical_power_w: 242150.30185074132 # EXAMPLE VALUE - not client data
+    mission_energy_wh: 40358.38364179022 # EXAMPLE VALUE - not client data
+    history_kg: # EXAMPLE VALUE - not client data
+    - 1384.2802062571154 # EXAMPLE VALUE - not client data
+    - 1427.841451163527 # EXAMPLE VALUE - not client data
+    - 1438.5852259587396 # EXAMPLE VALUE - not client data
+    - 1441.2605165619266 # EXAMPLE VALUE - not client data
+    - 1441.9282443725099 # EXAMPLE VALUE - not client data
+    - 1442.0949997721327 # EXAMPLE VALUE - not client data
+    - 1442.136650556751 # EXAMPLE VALUE - not client data
+    - 1442.1470541211468 # EXAMPLE VALUE - not client data
+    - 1442.1496527547577 # EXAMPLE VALUE - not client data
+    - 1442.1503018507412 # EXAMPLE VALUE - not client data
+  - name: B # EXAMPLE VALUE - not client data
+    pack_wh_per_kg: 200 # EXAMPLE VALUE - not client data
+    duration_s: 1200 # EXAMPLE VALUE - not client data
+    status: converged # EXAMPLE VALUE - not client data
+    iterations: 107 # EXAMPLE VALUE - not client data
+    total_mass_kg: 3066.9057954457116 # EXAMPLE VALUE - not client data
+    battery_mass_kg: 1866.9057954457116 # EXAMPLE VALUE - not client data
+    electrical_power_w: 746762.3181782848 # EXAMPLE VALUE - not client data
+    mission_energy_wh: 248920.77272609493 # EXAMPLE VALUE - not client data
+    history_kg: # EXAMPLE VALUE - not client data
+    - 1660.7005156427886 # EXAMPLE VALUE - not client data
+    - 1946.8987369270612 # EXAMPLE VALUE - not client data
+    - 2146.721955957956 # EXAMPLE VALUE - not client data
+    - 2295.3636082153216 # EXAMPLE VALUE - not client data
+    - 2410.5490598694278 # EXAMPLE VALUE - not client data
+    - 2502.4230610730056 # EXAMPLE VALUE - not client data
+    - 2577.2990142850217 # EXAMPLE VALUE - not client data
+    - 2639.3490906504394 # EXAMPLE VALUE - not client data
+    - 2691.4588950671223 # EXAMPLE VALUE - not client data
+    - 2735.6971661898624 # EXAMPLE VALUE - not client data
+    - 2773.5908660420564 # EXAMPLE VALUE - not client data
+    - 2806.2946350103284 # EXAMPLE VALUE - not client data
+    - 2834.699566119586 # EXAMPLE VALUE - not client data
+    - 2859.5054679293244 # EXAMPLE VALUE - not client data
+    - 2881.270290921303 # EXAMPLE VALUE - not client data
+    - 2900.4447924735987 # EXAMPLE VALUE - not client data
+    - 2917.397385624718 # EXAMPLE VALUE - not client data
+    - 2932.432296771749 # EXAMPLE VALUE - not client data
+    - 2945.8030621879975 # EXAMPLE VALUE - not client data
+    - 2957.722714110381 # EXAMPLE VALUE - not client data
+    - 2968.371574752659 # EXAMPLE VALUE - not client data
+    - 2977.903294746725 # EXAMPLE VALUE - not client data
+    - 2986.4495848729102 # EXAMPLE VALUE - not client data
+    - 2994.1239626212064 # EXAMPLE VALUE - not client data
+    - 3001.0247472334495 # EXAMPLE VALUE - not client data
+    - 3007.2374752413716 # EXAMPLE VALUE - not client data
+    - 3012.8368646670597 # EXAMPLE VALUE - not client data
+    - 3017.888424442999 # EXAMPLE VALUE - not client data
+    - 3022.449782543138 # EXAMPLE VALUE - not client data
+    - 3026.5717892943785 # EXAMPLE VALUE - not client data
+    - 3030.299439644007 # EXAMPLE VALUE - not client data
+    - 3033.672648599872 # EXAMPLE VALUE - not client data
+    - 3036.726906796645 # EXAMPLE VALUE - not client data
+    - 3039.4938375751826 # EXAMPLE VALUE - not client data
+    - 3042.0016726622034 # EXAMPLE VALUE - not client data
+    - 3044.2756601911397 # EXAMPLE VALUE - not client data
+    - 3046.338416182352 # EXAMPLE VALUE - not client data
+    - 3048.2102285316278 # EXAMPLE VALUE - not client data
+    - 3049.909320913042 # EXAMPLE VALUE - not client data
+    - 3051.452082690056 # EXAMPLE VALUE - not client data
+    - 3052.853269874778 # EXAMPLE VALUE - not client data
+    - 3054.1261813240635 # EXAMPLE VALUE - not client data
+    - 3055.2828136701446 # EXAMPLE VALUE - not client data
+    - 3056.333997919714 # EXAMPLE VALUE - not client data
+    - 3057.2895201932643 # EXAMPLE VALUE - not client data
+    - 3058.1582286959256 # EXAMPLE VALUE - not client data
+    - 3058.9481286962437 # EXAMPLE VALUE - not client data
+    - 3059.6664670278433 # EXAMPLE VALUE - not client data
+    - 3060.319807410777 # EXAMPLE VALUE - not client data
+    - 3060.9140977066572 # EXAMPLE VALUE - not client data
+    - 3061.454730068026 # EXAMPLE VALUE - not client data
+    - 3061.9465948127677 # EXAMPLE VALUE - not client data
+    - 3062.3941287444914 # EXAMPLE VALUE - not client data
+    - 3062.8013585464164 # EXAMPLE VALUE - not client data
+    - 3063.1719397965812 # EXAMPLE VALUE - not client data
+    - 3063.509192083966 # EXAMPLE VALUE - not client data
+    - 3063.816130646494 # EXAMPLE VALUE - not client data
+    - 3064.095494901366 # EXAMPLE VALUE - not client data
+    - 3064.34977419449 # EXAMPLE VALUE - not client data
+    - 3064.581231057934 # EXAMPLE VALUE - not client data
+    - 3064.7919222313512 # EXAMPLE VALUE - not client data
+    - 3064.9837176746464 # EXAMPLE VALUE - not client data
+    - 3065.158317774005 # EXAMPLE VALUE - not client data
+    - 3065.3172689214143 # EXAMPLE VALUE - not client data
+    - 3065.4619776284226 # EXAMPLE VALUE - not client data
+    - 3065.5937233178556 # EXAMPLE VALUE - not client data
+    - 3065.7136699221437 # EXAMPLE VALUE - not client data
+    - 3065.822876403591 # EXAMPLE VALUE - not client data
+    - 3065.9223063001086 # EXAMPLE VALUE - not client data
+    - 3066.012836389427 # EXAMPLE VALUE - not client data
+    - 3066.0952645554844 # EXAMPLE VALUE - not client data
+    - 3066.1703169323473 # EXAMPLE VALUE - not client data
+    - 3066.238654393574 # EXAMPLE VALUE - not client data
+    - 3066.300878448305 # EXAMPLE VALUE - not client data
+    - 3066.3575365993966 # EXAMPLE VALUE - not client data
+    - 3066.409127213573 # EXAMPLE VALUE - not client data
+    - 3066.4561039487794 # EXAMPLE VALUE - not client data
+    - 3066.498879779617 # EXAMPLE VALUE - not client data
+    - 3066.537830657851 # EXAMPLE VALUE - not client data
+    - 3066.5732988415025 # EXAMPLE VALUE - not client data
+    - 3066.6055959228734 # EXAMPLE VALUE - not client data
+    - 3066.6350055830335 # EXAMPLE VALUE - not client data
+    - 3066.6617860977162 # EXAMPLE VALUE - not client data
+    - 3066.68617261725 # EXAMPLE VALUE - not client data
+    - 3066.708379241082 # EXAMPLE VALUE - not client data
+    - 3066.7286009055324 # EXAMPLE VALUE - not client data
+    - 3066.747015101702 # EXAMPLE VALUE - not client data
+    - 3066.763783438916 # EXAMPLE VALUE - not client data
+    - 3066.7790530676734 # EXAMPLE VALUE - not client data
+    - 3066.7929579747824 # EXAMPLE VALUE - not client data
+    - 3066.805620162227 # EXAMPLE VALUE - not client data
+    - 3066.8171507202424 # EXAMPLE VALUE - not client data
+    - 3066.827650804128 # EXAMPLE VALUE - not client data
+    - 3066.837212523471 # EXAMPLE VALUE - not client data
+    - 3066.8459197516513 # EXAMPLE VALUE - not client data
+    - 3066.8538488628055 # EXAMPLE VALUE - not client data
+    - 3066.861069402759 # EXAMPLE VALUE - not client data
+    - 3066.8676446998625 # EXAMPLE VALUE - not client data
+    - 3066.8736324211263 # EXAMPLE VALUE - not client data
+    - 3066.879085078563 # EXAMPLE VALUE - not client data
+    - 3066.884050490202 # EXAMPLE VALUE - not client data
+    - 3066.8885721998386 # EXAMPLE VALUE - not client data
+    - 3066.8926898592276 # EXAMPLE VALUE - not client data
+    - 3066.8964395760704 # EXAMPLE VALUE - not client data
+    - 3066.899854230875 # EXAMPLE VALUE - not client data
+    - 3066.9029637654703 # EXAMPLE VALUE - not client data
+    - 3066.9057954457116 # EXAMPLE VALUE - not client data
+  - name: C # EXAMPLE VALUE - not client data
+    pack_wh_per_kg: 200 # EXAMPLE VALUE - not client data
+    duration_s: 3600 # EXAMPLE VALUE - not client data
+    status: diverged # EXAMPLE VALUE - not client data
+    iterations: 6 # EXAMPLE VALUE - not client data
+    total_mass_kg: 11121925.795255758 # EXAMPLE VALUE - not client data
+    battery_mass_kg: 11120725.795255758 # EXAMPLE VALUE - not client data
+    electrical_power_w: 1482763439.3674343 # EXAMPLE VALUE - not client data
+    mission_energy_wh: 1482763439.3674343 # EXAMPLE VALUE - not client data
+    history_kg: # EXAMPLE VALUE - not client data
+    - 2582.101546928366 # EXAMPLE VALUE - not client data
+    - 5530.080304736321 # EXAMPLE VALUE - not client data
+    - 14739.650859243597 # EXAMPLE VALUE - not client data
+    - 60066.79320984431 # EXAMPLE VALUE - not client data
+    - 485365.7131877715 # EXAMPLE VALUE - not client data
+    - 11121925.795255758 # EXAMPLE VALUE - not client data
