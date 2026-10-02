@@ -21,6 +21,7 @@ Run the retained reference suite independently:
 (cd reference_impl && ../.venv/bin/python -m pytest -q)
 ```
 
+Execution currently uses POSIX host UID/GID mapping (macOS/Linux).
 Backend tests need Docker and a confirmed, immutable OpenFOAM image pin.
 No CFD capability or aircraft feasibility is established by unit tests. Missing
 design inputs remain unknown and block dependent work. [M§2, M§26, M§27]

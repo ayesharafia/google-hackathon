@@ -610,7 +610,12 @@ resumed or treated as completed.
 
 Docker arguments enforce no network, a read-only root filesystem, all Linux
 capabilities dropped, PID limit, CPU limit and memory limit. The case directory
-is an explicitly writable bind mount and `/tmp` is a writable tmpfs. Python polls
+is an explicitly writable bind mount and `/tmp` is a writable tmpfs. On the
+POSIX host, Docker runs with the caller's numeric UID/GID. The pinned vendor
+entrypoint supports this through nss-wrapper. This keeps generated case files
+writable on Linux when all capabilities are dropped. Without that mapping, the
+manual GitHub backend check reached OpenFOAM but failed to write the runner-owned
+case; that portability issue was caught after the local Colima runs. Python polls
 wall deadline, case disk size and cancellation, and terminates the process/container
 when a gate trips. The driver uses 2 CPU cores, 4 GiB memory, 5 decimal GB disk,
 7200 seconds and 512 PIDs for each sphere run. These are demo execution choices,
