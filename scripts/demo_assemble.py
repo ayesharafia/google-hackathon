@@ -34,6 +34,21 @@ def main():
             raise ValueError('plot hash differs from recipe record')
         files[f'plots/{plot_id}.png'] = png
         files[f'recipes/{plot_id}.json'] = (json.dumps(record, indent=2, allow_nan=False)+'\n').encode()
+    surface_path = root/'surface.json'
+    if surface_path.exists():
+        surface_raw = surface_path.read_bytes()
+        surface = json.loads(surface_raw)
+        fine = next(mesh for mesh in group['meshes'] if mesh['level'] == 'fine')
+        if surface['job_id'] != fine['job_id'] or surface['final_iteration'] != fine['final_time']:
+            raise ValueError('native surface belongs to another run')
+        retained = json.loads((Path(fine['case_dir'])/'run_record.json').read_text())
+        if any(retained['outputs'][name]['sha256'] != digest
+               for name, digest in surface['source_hashes'].items()):
+            raise ValueError('native surface source hashes differ from retained record')
+        result['surfaces'] = [{key: surface[key] for key in ('label', 'association', 'job_id', 'final_iteration', 'faces', 'pressure_range_pa', 'shear_range_pa')} |
+                              {'surface_id': 'fine_sphere', 'sha256': hashlib.sha256(surface_raw).hexdigest()}]
+        files['surfaces/fine_sphere.json'] = surface_raw
+        files['results.json'] = (json.dumps(result, indent=2, allow_nan=False)+'\n').encode()
     files['hashes.json'] = (json.dumps({name: hashlib.sha256(raw).hexdigest() for name, raw in files.items()},
                                      indent=2, sort_keys=True)+'\n').encode()
     for name, raw in files.items():

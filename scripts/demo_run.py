@@ -50,6 +50,37 @@ def metrics(case: Path) -> dict:
             "evidence": "unverified", "run_record_sha256": hashlib.sha256((case / "run_record.json").read_bytes()).hexdigest()}
 
 
+
+def reuse_group(group: dict, specs: dict, levels: list[str], iterations: int) -> None:
+    """Reuse only identical generated inputs and byte-verified completed outputs."""
+    if group['image_digest'] != IMAGE or group['iteration_cap'] != iterations:
+        raise ValueError('retained backend or iteration cap differs')
+    if [entry['level'] for entry in group['meshes']] != levels:
+        raise ValueError('retained mesh selection differs or is incomplete')
+    for entry in group['meshes']:
+        if entry['state'] != 'completed':
+            raise ValueError('only completed groups can be reused')
+        case = Path(entry['case_dir'])
+        raw = (case/'run_record.json').read_bytes()
+        if hashlib.sha256(raw).hexdigest() != entry['run_record_sha256']:
+            raise ValueError('retained execution record changed')
+        record = json.loads(raw)
+        expected = {name: hashlib.sha256(data).hexdigest()
+                    for name, data in external_steady_case(specs[entry['level']]).items()}
+        if record['inputs'] != expected or record['image_digest'] != IMAGE:
+            raise ValueError('generated input hashes differ from retained run')
+        for name, evidence in record['outputs'].items():
+            path = case/name
+            if not path.is_file() or path.stat().st_size != evidence['bytes']:
+                raise ValueError(f'retained output missing or resized: {name}')
+            digest = hashlib.sha256()
+            with path.open('rb') as stream:
+                for chunk in iter(lambda: stream.read(1024*1024), b''):
+                    digest.update(chunk)
+            if digest.hexdigest() != evidence['sha256']:
+                raise ValueError(f'retained output hash differs: {name}')
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--levels", default="coarse,medium,fine")
@@ -76,7 +107,12 @@ def main() -> int:
              "rho_ref_kg_m3": 1., "meshes": [], "evidence": "unverified"}
     group_path = output / "run_group.json"
     if group_path.exists():
-        parser.error(f"{group_path} already exists; use a new output-root to retain prior evidence")
+        try:
+            reuse_group(json.loads(group_path.read_text()), specs, levels, args.iterations)
+        except (KeyError, OSError, ValueError) as exc:
+            parser.error(f'reuse refused: {exc}; use a new output-root')
+        print(f'{group_path}: reused completed runs after input and output hash verification', flush=True)
+        return 0
     for level in levels:
         print(f"{level}: preparing and running", flush=True)
         budgets = Budgets(2, 4, 5, 7200, 512)

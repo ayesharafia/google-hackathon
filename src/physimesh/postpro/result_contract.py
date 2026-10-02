@@ -45,6 +45,7 @@ class ResultsV1(BaseModel):
     runs: Annotated[list[dict[str, JsonValue]], Field(min_length=3, max_length=3)]
     mesh_study: dict[str, JsonValue]
     plots: list[dict[str, JsonValue]]
+    surfaces: list[dict[str, JsonValue]] = []
     interpretation: list[dict[str, JsonValue]]
     refusals: list[dict[str, JsonValue]]
     limitations: list[str]

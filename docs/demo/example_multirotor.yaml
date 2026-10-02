@@ -304,7 +304,7 @@ screening_request: # EXAMPLE VALUE - not client data
       limits: # EXAMPLE VALUE - not client data
         max_upload_bytes: null # EXAMPLE VALUE - not client data
         max_triangles: null # EXAMPLE VALUE - not client data
-  approved_design_sha256: 24add72d321dd370f03ada042990ccc9a1f593ed10bbb75c75e96bc5f1baf4bc # EXAMPLE VALUE - not client data
+  approved_design_sha256: 322076ebb5875c282e0afa568e7d00d13c0512d00a54bc3078152ac0b0594f2f # EXAMPLE VALUE - not client data
   case_inputs: # EXAMPLE VALUE - not client data
   - case_id: hover # EXAMPLE VALUE - not client data
     rotors: # EXAMPLE VALUE - not client data
@@ -315,8 +315,8 @@ screening_request: # EXAMPLE VALUE - not client data
       - 350 # EXAMPLE VALUE - not client data
       electrical_power_w: 6000 # EXAMPLE VALUE - not client data
       sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
-      performance_source_sha256: 8e846e2ca8646423e4a1913c8e8da3ff16bc703cd27e1956f1e3f946da4e0785 # EXAMPLE VALUE - not client data
-      limit_source_sha256: 8ce79ba27dfa34eb030fd36257b0e3300f7470f99a02671237e163bc7d58e020 # EXAMPLE VALUE - not client data
+      performance_source_sha256: 37b51c002ac450aeb9a1e8d919e20ee3d6e897ebc597c062e63ab973ce094972 # EXAMPLE VALUE - not client data
+      limit_source_sha256: 65df8371a70f76923ee73b2a8637997a3106943606fd23ec77b0c305ffae2fe7 # EXAMPLE VALUE - not client data
     - rotor_id: R1 # EXAMPLE VALUE - not client data
       force_world_n: # EXAMPLE VALUE - not client data
       - 0 # EXAMPLE VALUE - not client data
@@ -324,8 +324,8 @@ screening_request: # EXAMPLE VALUE - not client data
       - 350 # EXAMPLE VALUE - not client data
       electrical_power_w: 6000 # EXAMPLE VALUE - not client data
       sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
-      performance_source_sha256: 3683ac3bccbffb7a292d61194bfedf2497f843dbed11a1e64ecb7fddacc9fa91 # EXAMPLE VALUE - not client data
-      limit_source_sha256: 9e029add75804a9cbe34e93f7dc8330b790370cfac7a0ca3f55682920237f4c6 # EXAMPLE VALUE - not client data
+      performance_source_sha256: 8c48d28e75ebc624421c66357c680406a1e1d1483494296ef906dce0d59bf3aa # EXAMPLE VALUE - not client data
+      limit_source_sha256: c8b12e5e130a1aa3a47450b387392af88c50e78eff9894266b70a9154182de6f # EXAMPLE VALUE - not client data
     - rotor_id: R2 # EXAMPLE VALUE - not client data
       force_world_n: # EXAMPLE VALUE - not client data
       - 0 # EXAMPLE VALUE - not client data
@@ -333,8 +333,8 @@ screening_request: # EXAMPLE VALUE - not client data
       - 350 # EXAMPLE VALUE - not client data
       electrical_power_w: 6000 # EXAMPLE VALUE - not client data
       sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
-      performance_source_sha256: be9418a6bd2cae8b5a67766e290df56ec2e292301ff058b7ce31ae6cd253806e # EXAMPLE VALUE - not client data
-      limit_source_sha256: d98bde107f4c2db28d933ff34173f5ba13a8492e78bf36de3409b21d16b0601d # EXAMPLE VALUE - not client data
+      performance_source_sha256: b8dd8c0a933ba0f14456b4f12ecddbc5e0b7d8da3fed2c0e928cc4ea7c4caa15 # EXAMPLE VALUE - not client data
+      limit_source_sha256: 5c935b3a654c743cc923262c997bae490be3c2c1c9e88a277360a5e5f421f9d7 # EXAMPLE VALUE - not client data
     - rotor_id: R3 # EXAMPLE VALUE - not client data
       force_world_n: # EXAMPLE VALUE - not client data
       - 0 # EXAMPLE VALUE - not client data
@@ -342,13 +342,13 @@ screening_request: # EXAMPLE VALUE - not client data
       - 350 # EXAMPLE VALUE - not client data
       electrical_power_w: 6000 # EXAMPLE VALUE - not client data
       sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
-      performance_source_sha256: fd65e7560c510ff8b3345404dc9e92c8c8afd3f2fa7d5d668c2bc4b17b362845 # EXAMPLE VALUE - not client data
-      limit_source_sha256: 1e6d50db09aea01cb8815fd0e3b1cb466b15918c6b391303f13aaaad60a7cc76 # EXAMPLE VALUE - not client data
+      performance_source_sha256: d6086a70fa3da01e9f1e1c89b878b272ef73388714553219a47bbd3edfa8b737 # EXAMPLE VALUE - not client data
+      limit_source_sha256: c48e62845ad4884936e1ecc4056bebcb0e01c029ab2a1c3cec132addfa98eeb4 # EXAMPLE VALUE - not client data
     body_force_world_n: # EXAMPLE VALUE - not client data
     - 0 # EXAMPLE VALUE - not client data
     - 0 # EXAMPLE VALUE - not client data
     - -40 # EXAMPLE VALUE - not client data
-    body_force_source_sha256: c2e6aae6dadaee3faca59bbdde806efe3c71d8ac6a639f15c9bb421ba59a0e26 # EXAMPLE VALUE - not client data
+    body_force_source_sha256: 9c00acf830ea692ba8e2319efce05ed40457171e3436f8827c097e57bb77d984 # EXAMPLE VALUE - not client data
     vertical_acceleration_m_s2: 0 # EXAMPLE VALUE - not client data
     duration_s: 300 # EXAMPLE VALUE - not client data
     available_electrical_power_w: 28000 # EXAMPLE VALUE - not client data
@@ -361,8 +361,8 @@ screening_request: # EXAMPLE VALUE - not client data
       - 320 # EXAMPLE VALUE - not client data
       electrical_power_w: 5600 # EXAMPLE VALUE - not client data
       sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
-      performance_source_sha256: 3c45377249218b0dda74e8c323075545f0ad8e07355b557491fba2fe8373f015 # EXAMPLE VALUE - not client data
-      limit_source_sha256: 8ce79ba27dfa34eb030fd36257b0e3300f7470f99a02671237e163bc7d58e020 # EXAMPLE VALUE - not client data
+      performance_source_sha256: e9f19f00b50cfd06bed750a62e03d72a068b6dfbbd4523f85f70135448c7d2b6 # EXAMPLE VALUE - not client data
+      limit_source_sha256: 65df8371a70f76923ee73b2a8637997a3106943606fd23ec77b0c305ffae2fe7 # EXAMPLE VALUE - not client data
     - rotor_id: R1 # EXAMPLE VALUE - not client data
       force_world_n: # EXAMPLE VALUE - not client data
       - 0 # EXAMPLE VALUE - not client data
@@ -370,8 +370,8 @@ screening_request: # EXAMPLE VALUE - not client data
       - 320 # EXAMPLE VALUE - not client data
       electrical_power_w: 5600 # EXAMPLE VALUE - not client data
       sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
-      performance_source_sha256: 8b9002066c01a9bee009b8c80a11bec4eab66c41b6da02bcf5f5949f8ff56ed4 # EXAMPLE VALUE - not client data
-      limit_source_sha256: 9e029add75804a9cbe34e93f7dc8330b790370cfac7a0ca3f55682920237f4c6 # EXAMPLE VALUE - not client data
+      performance_source_sha256: 9499a60dcd7b6621242e5972ba6116e94a2c59263b9a1ea440f0a6fa329ee99e # EXAMPLE VALUE - not client data
+      limit_source_sha256: c8b12e5e130a1aa3a47450b387392af88c50e78eff9894266b70a9154182de6f # EXAMPLE VALUE - not client data
     - rotor_id: R2 # EXAMPLE VALUE - not client data
       force_world_n: # EXAMPLE VALUE - not client data
       - 0 # EXAMPLE VALUE - not client data
@@ -379,8 +379,8 @@ screening_request: # EXAMPLE VALUE - not client data
       - 320 # EXAMPLE VALUE - not client data
       electrical_power_w: 5600 # EXAMPLE VALUE - not client data
       sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
-      performance_source_sha256: ccfa1cdaa1a8c564841a079a9c8a6f10d140267b4ea62d378b50b7ec94574410 # EXAMPLE VALUE - not client data
-      limit_source_sha256: d98bde107f4c2db28d933ff34173f5ba13a8492e78bf36de3409b21d16b0601d # EXAMPLE VALUE - not client data
+      performance_source_sha256: 31a5a4c2cb837bcdf2f172966ff225294793763ad5558c37d11f977396e82633 # EXAMPLE VALUE - not client data
+      limit_source_sha256: 5c935b3a654c743cc923262c997bae490be3c2c1c9e88a277360a5e5f421f9d7 # EXAMPLE VALUE - not client data
     - rotor_id: R3 # EXAMPLE VALUE - not client data
       force_world_n: # EXAMPLE VALUE - not client data
       - 0 # EXAMPLE VALUE - not client data
@@ -388,13 +388,13 @@ screening_request: # EXAMPLE VALUE - not client data
       - 320 # EXAMPLE VALUE - not client data
       electrical_power_w: 5600 # EXAMPLE VALUE - not client data
       sustained_electrical_power_limit_w: 7000 # EXAMPLE VALUE - not client data
-      performance_source_sha256: 09dbae2de1cd973fd640979407bb2e7e5e1964e304815f6969d8c0bf0df8b21b # EXAMPLE VALUE - not client data
-      limit_source_sha256: 1e6d50db09aea01cb8815fd0e3b1cb466b15918c6b391303f13aaaad60a7cc76 # EXAMPLE VALUE - not client data
+      performance_source_sha256: 3f15fda753523f7f788dbd52f86152c74b69662200a7f3b21ea889f82546ff76 # EXAMPLE VALUE - not client data
+      limit_source_sha256: c48e62845ad4884936e1ecc4056bebcb0e01c029ab2a1c3cec132addfa98eeb4 # EXAMPLE VALUE - not client data
     body_force_world_n: # EXAMPLE VALUE - not client data
     - 0 # EXAMPLE VALUE - not client data
     - 0 # EXAMPLE VALUE - not client data
     - -60 # EXAMPLE VALUE - not client data
-    body_force_source_sha256: 6195cb25afb638a221db98daa7391cbfd76c45528a50612a37cb8cd233218463 # EXAMPLE VALUE - not client data
+    body_force_source_sha256: 1f0c5d818f4826964444bba184d6e910827a993be79c8c51d1dae36f273d32d6 # EXAMPLE VALUE - not client data
     vertical_acceleration_m_s2: 0.6 # EXAMPLE VALUE - not client data
     duration_s: 180 # EXAMPLE VALUE - not client data
     available_electrical_power_w: 28000 # EXAMPLE VALUE - not client data

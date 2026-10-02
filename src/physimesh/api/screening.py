@@ -12,9 +12,9 @@ from pydantic import BaseModel, ConfigDict
 from physimesh.core.artifacts import ArtifactStore
 from physimesh.drone.mass import MassItem, summarize
 from physimesh.drone.models import project_from_mapping, readiness
-from physimesh.drone.provenance import sha256_record
 from physimesh.drone.screening import CapacityCaseInput, RotorLimitPoint, capacity_from_cases
 from physimesh.drone.screening_diagnostics import diagnostics
+from physimesh.drone.snapshot_hash import snapshot_sha256
 
 router = APIRouter(prefix='/api/drone')
 
@@ -41,7 +41,7 @@ def screening(request: Request, body: ScreeningRequest):
         return _blocked([f'invalid project: {exc}'])
     check = readiness(snapshot, 'screening')
     try:
-        design_hash = sha256_record(body.project)
+        design_hash = snapshot_sha256(body.project)
     except (TypeError, ValueError, OverflowError) as exc:
         return _blocked([f'invalid project provenance: {exc}'])
     blocking = list(check.blocking)
@@ -58,7 +58,7 @@ def screening(request: Request, body: ScreeningRequest):
     if blocking:
         return _blocked(blocking)
     store = ArtifactStore(request.app.state.settings.data_root/'artifacts')
-    conditions = {case['name']: sha256_record(dict(case)) for case in declared}
+    conditions = {case['name']: snapshot_sha256(dict(case)) for case in declared}
     energy = snapshot.mission.get('energy_system')
     if not isinstance(energy, Mapping) or body.usable_energy_j != energy.get('usable_energy_j'):
         return _blocked(['mission.energy_system.usable_energy_j: explicit approved energy limit required'])
@@ -146,3 +146,13 @@ def example(request: Request):
     if not path.is_file():
         raise HTTPException(404, 'example records have not been seeded')
     return json.loads(path.read_text())
+
+
+@router.get('/project-template')
+def project_template():
+    from pathlib import Path
+
+    import yaml
+
+    from physimesh.drone import models
+    return yaml.safe_load(Path(models.__file__).with_name('schema').joinpath('drone_manifest_v1.yaml').read_text())

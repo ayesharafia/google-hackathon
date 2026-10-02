@@ -102,6 +102,17 @@
       "title": "Plots",
       "type": "array"
     },
+    "surfaces": {
+      "default": [],
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "title": "Surfaces",
+      "type": "array"
+    },
     "interpretation": {
       "items": {
         "additionalProperties": {

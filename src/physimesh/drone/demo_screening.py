@@ -5,7 +5,8 @@ from pathlib import Path
 import yaml
 
 from physimesh.core.artifacts import ArtifactStore
-from physimesh.drone.provenance import canonical_json, sha256_record
+from physimesh.drone.provenance import canonical_json
+from physimesh.drone.snapshot_hash import snapshot_sha256
 
 LABEL = "Illustrative example inputs, not the client's aircraft."
 
@@ -37,11 +38,11 @@ def example_request(store: ArtifactStore) -> dict:
                              "pitch_deg": 0, "n_blades": 2, "root_cutout_m": .08, "azimuth_zero_deg": 0, "phase_offset_deg": 0}
                          for i, (x, y, sign) in enumerate([(1, -1, 1), (1, 1, -1), (-1, 1, 1), (-1, -1, -1)])]
     project['fidelity'].update(initial='measured_map', requested_question='payload_lift')
-    design_hash = sha256_record(project)
+    design_hash = snapshot_sha256(project)
     cases = []
     for case in project['mission']['cases']:
         name = case['name']; hover = name == 'hover'
-        common = {'label': LABEL, 'design_snapshot_sha256': design_hash, 'case_sha256': sha256_record(case)}
+        common = {'label': LABEL, 'design_snapshot_sha256': design_hash, 'case_sha256': snapshot_sha256(case)}
         body_force = [0, 0, -40 if hover else -60]
         body_record = {**common, 'schema': 'body_force_v1', 'body_force_world_n': body_force}
         body_sha = store.put_bytes(canonical_json(body_record).encode(), kind='EXAMPLE_body_force', meta={'label': LABEL})

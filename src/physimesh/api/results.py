@@ -18,7 +18,7 @@ from physimesh.postpro.result_contract import ResultsV1
 
 router = APIRouter(prefix='/api/drone')
 _GROUP = re.compile(r'[0-9a-f]{16}')
-_FILE = re.compile(r'(results\.json|run_group\.json|plots/[a-z0-9_]+\.png|recipes/[a-z0-9_]+\.json)')
+_FILE = re.compile(r'(results\.json|run_group\.json|plots/[a-z0-9_]+\.png|recipes/[a-z0-9_]+\.json|surfaces/[a-z0-9_]+\.json)')
 
 
 def _package(request, group_id):
@@ -133,3 +133,11 @@ def export(request: Request, group_id: str):
             archive.writestr(info, raw)
     return Response(stream.getvalue(), media_type='application/zip',
                     headers={'Content-Disposition': f'attachment; filename="sphere-{group_id}.zip"'})
+
+
+@router.get('/surfaces/{group_id}/{surface_id}.json')
+def surface(request: Request, group_id: str, surface_id: str):
+    if re.fullmatch(r'[a-z0-9_]+', surface_id) is None:
+        raise HTTPException(404, 'unknown surface')
+    package = _package(request, group_id)
+    return Response(_read(package, f'surfaces/{surface_id}.json', _manifest(package)), media_type='application/json')

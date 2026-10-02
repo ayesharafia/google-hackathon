@@ -60,3 +60,12 @@ def test_hover_power_and_tip_mach_are_labelled_screening_diagnostics(tmp_path):
     assert math.isclose(hover['isolated_ideal_hover_power_w'], 350**1.5/math.sqrt(2*rho*math.pi*.65**2))
     assert math.isclose(hover['tip_mach'], (1500*2*math.pi/60*.65)/math.sqrt(1.4*287.05*288.15))
     assert next(item for item in result['rotor_diagnostics'] if item['case_id'] == 'climb')['isolated_ideal_hover_power_w'] is None
+
+
+def test_browser_number_roundtrip_does_not_invalidate_snapshot_approval(tmp_path):
+    client, body = fixture(tmp_path)
+    # Browser JSON.stringify serializes a Python-origin 1.0 as 1.
+    assert body['project']['units_and_frames']['cad_transform']['scale'] == 1.0
+    body['project']['units_and_frames']['cad_transform']['scale'] = 1
+    response = client.post('/api/drone/screening', headers=AUTH, json=body)
+    assert response.json()['status'] == 'screening_only'

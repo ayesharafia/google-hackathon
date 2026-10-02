@@ -2,7 +2,7 @@
 
 Image: `opencfd/openfoam-run@sha256:4229997e74defb81548222d511b8e3b95b98305e5df41b8e88b031813fe47eeb`
 
-Retained run: `/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/.backend/output-format-probe/fc96f428468b49e6ba1bbbc94e6158f2`
+Retained run: `/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/.backend/output-format-probe/e7678d546e6f4b18a9db40e76d7062ff`
 
 Five iterations verify format support only.
 

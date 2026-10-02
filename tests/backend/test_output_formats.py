@@ -101,7 +101,7 @@ def test_v2606_text_output_formats():
               "outputs": records, "iterations": 5, "format": "raw",
               "purpose": "output-format verification; no convergence or aircraft claim"}
     (case / "output_manifest.json").write_text(json.dumps(report, indent=2))
-    audit = root / "docs/audit/output_formats_v2606.md"
+    audit = case / "output_format_audit.md"  # backend reruns must not overwrite curated convention evidence
     lines = ["# OpenCFD v2606 output-format probe", "", f"Image: `{IMAGE}`", "",
              f"Retained run: `{case}`", "", "Five iterations verify format support only.", "",
              "Raw plane, line and streamLine outputs contain finite numeric text.", "",
