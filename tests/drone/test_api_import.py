@@ -1,6 +1,7 @@
 import hashlib
 import json
 
+import numpy as np
 import pytest
 from fastapi.testclient import TestClient
 
@@ -70,3 +71,16 @@ def test_invalid_transform_is_refused(client):
                            data={"source_units": "m", "transform_json": '{"scale": 2}'},
                            files={"files": ("sphere.stl", raw, "model/stl")})
     assert response.status_code == 422
+
+
+def test_import_transform_uses_body_to_world_zyx_order(client):
+    raw = binary_stl_bytes(np.array([[[0, 0, 0], [1, 0, 0], [0, 2, 0]]], float))
+    transform = {"scale": 1, "rotation_deg_zyx": [90, 90, 0], "translation_m": [0, 0, 0]}
+    response = client.post("/api/drone/import", headers={"Authorization": "Bearer test-token"},
+                           data={"source_units": "m", "transform_json": json.dumps(transform)},
+                           files={"files": ("triangle.stl", raw, "model/stl")})
+    assert response.status_code == 200, response.text
+    bounds = response.json()["bounding_box_m"]
+    # Rz(90) Ry(90) maps +x to -z and +y to -x [plan E03].
+    assert bounds["min"] == pytest.approx([-2, 0, -1], abs=1e-12)
+    assert bounds["max"] == pytest.approx([0, 0, 0], abs=1e-12)

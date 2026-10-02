@@ -7,9 +7,9 @@ from typing import Annotated
 
 import numpy as np
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
-from scipy.spatial.transform import Rotation
 
 from ..core.artifacts import ArtifactStore
+from .frames import rotation_matrix_zyx
 from .geometry import topology, weld
 from .provenance import canonical_json, sha256_record
 from .stl_import import StlError, parse_stl
@@ -38,10 +38,14 @@ async def import_stl(request: Request, source_units: Annotated[str, Form()],
             raise HTTPException(422, "transform_json needs scale, rotation_deg_zyx, translation_m")
         transform = supplied
     scale_transform = transform["scale"]
-    rotation = np.asarray(transform["rotation_deg_zyx"])
-    translation = np.asarray(transform["translation_m"])
+    try:
+        rotation = np.asarray(transform["rotation_deg_zyx"], dtype=float)
+        translation = np.asarray(transform["translation_m"], dtype=float)
+        finite_scale = math.isfinite(float(scale_transform))
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise HTTPException(422, "transform must contain finite SI quantities") from exc
     if (not isinstance(scale_transform, (int, float)) or isinstance(scale_transform, bool)
-            or not math.isfinite(scale_transform) or scale_transform <= 0
+            or not finite_scale or scale_transform <= 0
             or rotation.shape != (3,) or translation.shape != (3,)
             or not np.issubdtype(rotation.dtype, np.number)
             or not np.issubdtype(translation.dtype, np.number)
@@ -52,7 +56,7 @@ async def import_stl(request: Request, source_units: Annotated[str, Form()],
     transform = {"scale": float(scale_transform), "rotation_deg_zyx": rotation.tolist(),
                  "translation_m": translation.tolist()}
     transform_sha = sha256_record(transform)
-    rotation_matrix = Rotation.from_euler("zyx", rotation, degrees=True).as_matrix()
+    rotation_matrix = rotation_matrix_zyx(*np.deg2rad(rotation))
     store = ArtifactStore(settings.data_root / "artifacts")
     components = []
     all_triangles = []
