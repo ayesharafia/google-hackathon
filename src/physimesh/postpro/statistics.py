@@ -94,7 +94,9 @@ def order_capped_gci(f_fine: float, f_medium: float, r21: float,
                      safety_factor: float) -> float:
     """Dimensionless GCI sensitivity using min(observed, declared nominal order).
 
-    Values must share units; r21 and both orders are dimensionless. The formula
+    Implements: [M-E40] with an explicitly declared nominal-order cap.
+    f_fine and f_medium must share units; r21, both orders and safety_factor
+    are dimensionless. The returned sensitivity is dimensionless. The formula
     is Celik's fine-grid GCI with an explicit order cap [review F1; ASME Eq 7].
     It does not establish an error bound or an asymptotic range. Call only after
     a monotonic positive-order fit; the cap and safety factor have no defaults.

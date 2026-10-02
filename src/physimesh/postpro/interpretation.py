@@ -21,6 +21,8 @@ def interpret(results: dict) -> list[dict]:
         change, threshold = convergence.get('drift'), convergence.get('threshold')
         if _number(change) and _number(threshold) and type(convergence.get('passed')) is bool:
             state = 'passes' if convergence['passed'] else 'fails'
+            # [ASSUMPTION: display precision; review F9] Below 0.00005 relative
+            # change, two-decimal percent formatting rounds a nonzero value to zero.
             display_change = f'{change * 100:.2e}%' if 0 < abs(change) < .00005 else f'{change:.2%}'
             emit(f'{level.title()} drag history {state} the iteration-drift check: {display_change} '
                  f'change between the last two 200-iteration windows (gate {threshold:.2%}).',
