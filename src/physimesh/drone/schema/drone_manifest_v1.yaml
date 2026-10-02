@@ -1,0 +1,118 @@
+# Reconstructed application template [M§26], plan Appendix A; Q10 remains pending.
+identity:
+  schema_version: drone_manifest_v1
+  study_id: null
+  description: null
+  created_utc: null
+
+units_and_frames:
+  source_units: null              # m | mm | cm | in | ft  -- never inferred
+  world_frame: ENU_z_up
+  body_frame: x_forward_y_left_z_up
+  solid_normal: outward_into_fluid
+  cad_transform: {scale: 1.0, rotation_deg_zyx: [0, 0, 0], translation_m: [0, 0, 0]}
+
+mission:
+  payload_mass_kg: 750
+  payload_positions_body_m: null  # list of candidate CGs for payload
+  cases:                          # [M§2] required environmental cases
+    - {name: hover_nominal, kind: hover, velocity_world_m_s: [0, 0, 0], attitude_deg_zyx: [0, 0, 0],
+       acceleration_target_m_s2: [0, 0, 0], ground_clearance_m: null, mass_state: max}
+  duration_s: null
+  energy_system: null            # [ASSUMPTION: application field name], plan Task 2.5
+  reserve_policy: null            # e.g. {kind: fraction, value: null}
+
+masses:
+  items: []                       # {name, category, mass_kg, cg_body_m, inertia_own_cg_body_kgm2, uncertainty_kg, state}
+
+atmosphere:
+  source: null                    # "ISA troposphere" | "measured ..." (provenance text)
+  altitude_m: null
+  pressure_pa: null
+  temperature_k: null
+  viscosity: null                 # {law: sutherland} or {value_pa_s: ...}
+  humidity_assumption: null
+  gamma: 1.4
+
+assembly:
+  geometry_revision_sha256: null
+  components: []                  # {component_id, role, rotor_id, requires_user_tag}
+  topology_tolerance: {abs_m: null, rel: null}
+  min_feature_m: null
+
+rotors: []                        # {rotor_id, center_body_m, axis_body, signed_rpm, pitch_deg, n_blades,
+                                  #  radius_m, root_cutout_m, azimuth_zero_deg, phase_offset_deg,
+                                  #  model: measured_map|bem|actuator_disk|actuator_line|blade_resolved,
+                                  #  map_ref, blade_ref, polar_ref, sustained_limits, peak_limits}
+
+flow:
+  pressure_dimensions: null     # [ASSUMPTION: application field name], plan Task 2.5
+  compressibility: null           # decided from local blade Mach (capability decision)
+  turbulence_model: null          # pinned backend SST variant for RANS tests
+  pressure_includes_isotropic_turbulent_stress: null
+  ambient_turbulence: {intensity: null, length_scale_m: null, reference_speed_m_s: null}
+
+fidelity:
+  initial: null                   # measured_map | bem
+  requested_question: null        # engineering intent driving fidelity selection
+  bem: {radial_stations: 80, relative_load_residual: 1.0e-4, max_iterations: 200,
+        induction_relaxation: null, loss_model: prandtl_tip, loss_applies_to: momentum,
+        polar_extrapolation: reject}
+
+symmetry:
+  execution: "off"                # quoted: bare off is boolean false in YAML 1.1
+  plane: {x0_m: null, normal: null}
+  match_tolerance: {abs_m: null, rel: null}
+
+domain:
+  bounds_m: null
+  clearances_in_rotor_diameters: null
+
+mesh:
+  global_cell_m: null
+  surface_levels: {}
+  wake_refinement: []
+  rotation_zones: {}
+  layers: {first_layer_yplus_target: 1, growth: 1.2, count: null, first_height_m: null}
+  max_cells: null
+
+numerics:
+  steady: {coupling: SIMPLE_or_backend_equivalent, iteration_budget: 3000}
+  transient: {coupling: PIMPLE_or_backend_equivalent, rotation_per_step_deg: 1, target_courant: 0.8,
+              outer_correctors: 2, pressure_correctors: 2}
+  linear: {final_rel_tol: 0, p_abs_tol: 1.0e-7, u_turb_abs_tol: 1.0e-6}
+  relaxation: null                # conservative initial values, versioned
+
+boundaries:
+  far_field: null
+  outlet: null
+  ground_model: null              # explicit per case
+  walls: null
+
+convergence:
+  startup_discard_revs: 5
+  averaging_window_revs: 10
+  force_drift_gate: 0.005
+  continuity_target: 0.001
+  m_dot_scale: null
+
+postprocessing:
+  load_history_cadence: every_time_step
+  full_field_cadence_deg: 5
+  intents: []
+
+validation:
+  native_force_reconciliation: {rel: 0.001, abs_n: null}
+  mesh_time_change_target: 0.02
+  symmetry_change_target: 0.01
+  experimental_targets: {thrust_rel: 0.05, torque_rel: 0.10}   # proposed, not demonstrated [M§15]
+
+execution:
+  backend_name: null
+  backend_version: null
+  backend_image_digest: null
+  cpu_cores: null
+  memory_gb: null
+  disk_gb: null
+  wall_time_limit_s: null
+  limits: {max_upload_bytes: null, max_triangles: null}
