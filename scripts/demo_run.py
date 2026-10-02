@@ -26,7 +26,8 @@ def demo_spec(iterations: int) -> ExternalSteadySpec:
     return ExternalSteadySpec(binary_stl_bytes(icosphere_triangles(1.0, 5)), "sphere",
                               (-10., -10., -10.), (30., 10., 10.), (64, 32, 32), (4, 4),
                               (1., 0., 0.), 0.01, math.pi / 4, 1., (-9.731, 0.123, 0.137),
-                              iterations, (0., 1., 0.), ((0.6, 0., 0.), (10., 0., 0.), 201))
+                              iterations, (0., 1., 0.), ((0.6, 0., 0.), (10., 0., 0.), 201),
+                              stop_on_residuals=False)
 
 
 def metrics(case: Path) -> dict:
@@ -68,7 +69,9 @@ def main() -> int:
     store = ArtifactStore(output / "artifacts")
     group = {"label": "VERIFICATION CASE: sphere Re=100; no aircraft result",
              "image_digest": IMAGE, "code_version": code_version,
-             "iteration_cap": args.iterations, "solver_stopping_residual_p_U": 1e-6,
+             "iteration_cap": args.iterations, "stop_on_residuals": False,
+             "load_stopping": {"monitor_start_iteration": 400, "average_cd_window": 400, "absolute_tolerance": 1e-3,
+                               "additional_iterations_after_trigger": 400},
              "Re": 100., "D_m": 1., "u_inf_m_s": [1., 0., 0.], "nu_m2_s": 0.01,
              "rho_ref_kg_m3": 1., "meshes": [], "evidence": "unverified"}
     group_path = output / "run_group.json"
@@ -94,8 +97,10 @@ def main() -> int:
     audit.parent.mkdir(parents=True, exist_ok=True)
     lines = ["# Sphere Re=100 execution record", "", group["label"], "",
              f"Backend: `{IMAGE}`", "", f"Run group: `{group_path}`", "",
-             "Residual stopping tolerance is a chosen 1e-6 for p and U. Load drift and mesh",
-             "assessment remain separate. A completed solve is recorded as unverified.", "",
+             "After 400 warm-up iterations, a vendor-derived drag-average controller waits for a 400-step window within",
+             "an absolute range of 1e-3, then retains 400 further iterations. The cap is",
+             f"{args.iterations}. Independent 200-step drift and mesh checks remain separate. Completion",
+             "is recorded as unverified until post-processing gates run.", "",
              "| Mesh | Cells | Iterations | Wall seconds | Peak container bytes |", "|---|---:|---:|---:|---:|"]
     for entry in group["meshes"]:
         lines.append(f"| {entry['level']} | {entry['cells']} | {entry['iterations']} | {entry['wall_time_s']:.3f} | {entry['peak_memory_bytes']} |")

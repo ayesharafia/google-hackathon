@@ -29,6 +29,7 @@ class ExternalSteadySpec:
     iterations: int
     slice_normal: tuple[float, float, float]
     wake_line: tuple[tuple[float, float, float], tuple[float, float, float], int]
+    stop_on_residuals: bool = True
 
 
 def _vector(value) -> str:
@@ -61,6 +62,8 @@ def _block(text: str, name: str, contents: str, delimiters=("{", "}")) -> str:
 
 
 def _validate(spec: ExternalSteadySpec) -> None:
+    if not isinstance(spec.stop_on_residuals, bool):
+        raise TypeError("stop_on_residuals must be an explicit boolean")
     if re.fullmatch(r"[A-Za-z][A-Za-z0-9_]*", spec.body_patch) is None:
         raise ValueError("body_patch must be a safe OpenFOAM word")
     lo, hi, keep = (np.asarray(v, float) for v in
@@ -122,6 +125,7 @@ def translated_settings(spec: ExternalSteadySpec) -> dict:
         "iterations": ("system/controlDict", "endTime", spec.iterations),
         "slice_normal": ("system/cuttingPlane", "surfaces/yNormal/normal", spec.slice_normal),
         "wake_line": ("system/wakeLine", "sets/centreLine", spec.wake_line),
+        "stop_on_residuals": ("system/fvSolution", "SIMPLE/residualControl/enabled", spec.stop_on_residuals),
     }
     return {name: {"file": f, "key": key, "value": value} for name, (f, key, value) in mapping.items()}
 
@@ -163,13 +167,24 @@ def external_steady_case(spec: ExternalSteadySpec) -> dict[str, bytes]:
     # Chosen solver stopping tolerance; the independent force-drift gate still applies.
     residual = _entry(_entry(residual, "p", "1e-6"), "U", "1e-6")
     provenance = "\n".join(residual_source.splitlines()[:2])
-    text["system/fvSolution"] = text["system/fvSolution"].replace(
-        "    consistent yes;", "    consistent yes;\n" + provenance + "\n    " + residual)
+    if spec.stop_on_residuals:
+        text["system/fvSolution"] = text["system/fvSolution"].replace(
+            "    consistent yes;", "    consistent yes;\n" + provenance + "\n    " + residual)
+        text.pop("system/runTimeControls")
+    else:
+        controls = text["system/runTimeControls"].split("/*\n    runTimeControl3")[0]
+        controls = _entry(_entry(controls, "window", "400"), "duration", "400")
+        # Inherited timeStart entry is retained in the vorticity source template.
+        # It guarantees warm-up history even before the average condition fills.
+        controls = controls.replace("runTimeControl1\n{", "runTimeControl1\n{\n    timeStart       400;")
+        text["system/runTimeControls"] = controls
     control = text["system/controlDict"]
     for key, value in (("endTime", str(spec.iterations)), ("writeInterval", str(spec.iterations)),
                        ("purgeWrite", "1"), ("writeFormat", "ascii"), ("writePrecision", "12")):
         control = _entry(control, key, value)
     includes = ("vorticity", "wallShearStress", "cuttingPlane", "wakeLine", "forceCoeffs", "forces", "solverInfo")
+    if not spec.stop_on_residuals:
+        includes += ("runTimeControls",)
     text["system/controlDict"] = _block(control, "functions", "\n".join(f'    #include "{name}"' for name in includes))
     plane = _entry(text["system/cuttingPlane"], "surfaceFormat", "raw")
     plane = _entry(plane, "normal", _vector(spec.slice_normal))

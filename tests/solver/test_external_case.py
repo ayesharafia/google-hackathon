@@ -52,6 +52,16 @@ def test_refinement_changes_only_background_divisions():
         assert replace(level, background_divisions=spec.background_divisions) == spec
 
 
+def test_load_history_stopping_policy_is_recorded_and_uses_vendor_controller():
+    spec = replace(demo_spec(), stop_on_residuals=False)
+    files = external_steady_case(spec)
+    assert "residualControl" not in files["system/fvSolution"].decode()
+    controls = files["system/runTimeControls"].decode()
+    assert "window          400;" in controls
+    assert "duration        400;" in controls
+    assert translated_settings(spec)["stop_on_residuals"]["value"] is False
+
+
 @pytest.mark.parametrize("location", [(0, 0, 0), (40, 0, 0)])
 def test_location_in_mesh_must_be_outside_body_and_inside_domain(location):
     with pytest.raises(ValueError, match="location_in_mesh"):

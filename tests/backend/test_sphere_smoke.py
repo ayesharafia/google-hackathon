@@ -20,7 +20,7 @@ def test_coarse_sphere_stage_runner_retains_four_logs():
     root.mkdir(parents=True, exist_ok=True)
     ledger = JobLedger(root / "jobs.sqlite")
     store = ArtifactStore(root / "artifacts")
-    files = external_steady_case(replace(demo_spec(), iterations=20))
+    files = external_steady_case(replace(demo_spec(), iterations=20, stop_on_residuals=False))
     job_id = run_case(ledger, store, files, IMAGE, Budgets(2, 4, 5, 600, 512), root / "runs")
     job = ledger.get(job_id)
     assert job.state == "completed", job.reason
