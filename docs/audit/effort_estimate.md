@@ -17,8 +17,9 @@ recovery. Retained reference files and supplied test expectations are unchanged.
 
 Final standards/spec review identified and corrected an untagged SQLite wait
 timeout and a backend test that could silently skip when tutorial inputs were
-absent. Missing backend fixture inputs now fail explicitly. The blocked local
-backend fixture has not been retried, and backend CI is not passing evidence.
+absent. Missing backend fixture inputs now fail explicitly. The original backend failure was subsequently diagnosed and fixed with user
+authorization; local meshing and profiling evidence is documented separately.
+Backend CI still needs vendor source provisioning and is not passing evidence.
 
 ## Test evidence
 
@@ -62,9 +63,12 @@ it unchanged; its own tests run separately. [ASSUMPTION]
 
 ## BLOCKED / QUESTIONS
 
-Task 1.4 is incomplete: hardened blockMesh cannot read the copied case's
-controlDict. See backend_pin.md. Under plan §1.4 the capability failure stops
-progress. Task 1.5 and WP02 onwards have not started.
+Task 1.4 Steps 1–5 have local fixture and short-window profiling evidence.
+The mount failure is fixed; aircraft sizing and effort Steps 6/7 remain pending.
+The user confirmed real geometry and rotor data are unavailable, and explicitly
+authorized independent software tasks to continue with data-dependent steps
+pending. See backend_pin.md and compute_sizing.md. The profiling window is
+20 iterations and does not claim convergence.
 
 No person-days estimate is supplied: [M§28] and Task 1.4 Step 7 require the
 backend measurements plus first real STL and rotor-data review. Actual geometry
