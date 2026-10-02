@@ -3,6 +3,12 @@ import math
 import numpy as np
 import pytest
 
+from physimesh.drone.atmosphere import (
+    check_altitude_pressure_consistency,
+    isa_troposphere,
+    make_atmosphere,
+    tip_mach_screen,
+)
 from physimesh.drone.frames import (
     MissingInput,
     RotorFrame,
@@ -11,6 +17,7 @@ from physimesh.drone.frames import (
     transform_tensor,
     transform_vectors,
 )
+from physimesh.drone.mass import MassItem, summarize
 from physimesh.drone.provenance import Provenance, canonical_json, sha256_bytes, sha256_record
 from physimesh.drone.units import (
     DIM_KINEMATIC_PRESSURE,
@@ -104,3 +111,111 @@ def test_rotor_null_rpm_blocks():
         RotorFrame("r1", (0, 0, 0), (0, 0, 1), None).omega_vector()
 
 
+
+
+def test_isa_sea_level_density_and_sound_speed():
+    p, t = isa_troposphere(0.0)
+    atm = make_atmosphere(p, t, source="ISA troposphere", viscosity_law="sutherland")
+    assert atm.density == pytest.approx(1.2250123, rel=1e-7)
+    assert atm.speed_of_sound == pytest.approx(340.29229, rel=1e-7)
+    assert atm.dynamic_viscosity_pa_s == pytest.approx(1.7892976e-5, rel=1e-7)
+    assert atm.kinematic_viscosity == pytest.approx(1.4606365e-5, rel=1e-6)
+
+
+def test_missing_pressure_blocks():
+    with pytest.raises(MissingInput):
+        make_atmosphere(None, 288.15, source="x", viscosity_pa_s=1.8e-5)
+
+
+def test_inconsistent_altitude_and_pressure_rejected():
+    with pytest.raises(ValueError, match="inconsistent"):
+        check_altitude_pressure_consistency(2000.0, 101325.0, rel_tol=1e-3)
+
+
+def test_tip_mach_screen_fixture():
+    atm = make_atmosphere(101325.0, 288.15, source="ISA", viscosity_law="sutherland")
+    omega = 500 * 2 * math.pi / 60
+    assert tip_mach_screen(atm, omega, 1.0, 0.0) == pytest.approx(0.15386737, rel=1e-7)
+
+
+# ---------- mass ----------
+def _full_ledger(payload=750.0):
+    return [
+        MassItem("payload", "payload", payload, (0, 0, 0), ((0, 0, 0), (0, 0, 0), (0, 0, 0))),
+        MassItem("frame", "structure", 1.0, (1, 0, 0), ((0, 0, 0), (0, 0, 0), (0, 0, 0))),
+        MassItem("motors", "propulsion", 1.0, (-1, 0, 0), ((0, 0, 0), (0, 0, 0), (0, 0, 0))),
+        MassItem("battery", "energy", 0.0, (0, 0, 0), ((0, 0, 0), (0, 0, 0), (0, 0, 0))),
+        MassItem("fc", "avionics", 0.0, (0, 0, 0), ((0, 0, 0), (0, 0, 0), (0, 0, 0))),
+        MassItem("misc", "other", 0.0, (0, 0, 0), ((0, 0, 0), (0, 0, 0), (0, 0, 0))),
+    ]
+
+
+def test_payload_weight_fixture():
+    assert 750.0 * 9.80665 == pytest.approx(7354.9875, abs=1e-9)
+
+
+def test_total_mass_cg_inertia_parallel_axis():
+    s = summarize(_full_ledger(), need_inertia=True)
+    assert s.complete
+    assert s.total_mass_kg == pytest.approx(752.0)
+    assert np.allclose(s.cg_body_m, [0, 0, 0])
+    assert np.allclose(s.inertia_cg_body_kgm2, np.diag([0.0, 2.0, 2.0]))
+
+
+def test_null_mass_gives_no_total():
+    items = _full_ledger()
+    items[1] = MassItem("frame", "structure", None, (1, 0, 0))
+    s = summarize(items)
+    assert s.total_mass_kg is None and "masses[frame].mass_kg" in s.missing
+
+
+def test_missing_category_is_reported():
+    items = [it for it in _full_ledger() if it.category != "energy"]
+    s = summarize(items)
+    assert any(m.startswith("masses.energy") for m in s.missing)
+
+
+def test_payload_must_equal_requirement():
+    s = summarize(_full_ledger(payload=700.0))
+    assert not s.complete and "payload items sum to 700.0" in s.errors[0]
+
+
+@pytest.mark.parametrize("field", ["pressure_pa", "temperature_k", "viscosity_pa_s", "gamma"])
+def test_nonfinite_atmosphere_inputs_rejected(field):
+    params = {"pressure_pa": 101325., "temperature_k": 288.15, "viscosity_pa_s": 1.8e-5,
+              "gamma": 1.4, "source": "test"}
+    params[field] = float("inf")
+    with pytest.raises(ValueError):
+        make_atmosphere(**params)
+
+
+@pytest.mark.parametrize("item", [
+    MassItem("frame", "structure", float("inf"), (0, 0, 0)),
+    MassItem("frame", "structure", 1., (float("nan"), 0, 0)),
+    MassItem("frame", "structure", 1., (0, 0)),
+    MassItem("frame", "structure", 1., (0, 0, 0), ((-1, 0, 0), (0, 1, 0), (0, 0, 1))),
+])
+def test_invalid_mass_input_cannot_produce_complete_summary(item):
+    items = _full_ledger()
+    items[1] = item
+    summary = summarize(items)
+    assert not summary.complete
+    assert summary.total_mass_kg is None
+    assert summary.errors
+
+
+def test_physically_impossible_principal_inertia_rejected():
+    items = _full_ledger()
+    items[1] = MassItem("frame", "structure", 1., (1, 0, 0), ((1, 0, 0), (0, 1, 0), (0, 0, 3)))
+    result = summarize(items, need_inertia=True)
+    assert not result.complete and result.total_mass_kg is None
+    assert "triangle inequality" in result.errors[0]
+
+
+def test_finite_mass_overflow_cannot_be_complete():
+    items = _full_ledger()
+    items[1] = MassItem("frame", "structure", 1e308, (1, 0, 0))
+    items[2] = MassItem("motors", "propulsion", 1e308, (-1, 0, 0))
+    with np.errstate(over="ignore", invalid="ignore"):
+        result = summarize(items)
+    assert not result.complete and result.total_mass_kg is None
