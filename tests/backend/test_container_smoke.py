@@ -17,7 +17,7 @@ IMAGE = "opencfd/openfoam-run@sha256:4229997e74defb81548222d511b8e3b95b98305e5df
 def test_v2606_tutorial_mesh_in_hardened_container(tmp_path):
     tutorials = os.environ.get("PHYSIMESH_OPENFOAM_TUTORIALS")
     if not tutorials:
-        pytest.skip("Set PHYSIMESH_OPENFOAM_TUTORIALS to the hash-verified v2606 source tutorials")
+        pytest.fail("Set PHYSIMESH_OPENFOAM_TUTORIALS to the hash-verified v2606 source tutorials")
     source = Path(tutorials) / "incompressible/simpleFoam/squareBend"
     assert source.is_dir(), f"Missing vendor tutorial: {source}"
     case = tmp_path / "case"

@@ -15,6 +15,11 @@ and resolved a directory-based CI gate that could skip backend fixtures.
 Task 1.2 review clarified Docker memory units and required transactional orphan
 recovery. Retained reference files and supplied test expectations are unchanged.
 
+Final standards/spec review identified and corrected an untagged SQLite wait
+timeout and a backend test that could silently skip when tutorial inputs were
+absent. Missing backend fixture inputs now fail explicitly. The blocked local
+backend fixture has not been retried, and backend CI is not passing evidence.
+
 ## Test evidence
 
 Scaffold test first failed with `ModuleNotFoundError: No module named 'physimesh'`.

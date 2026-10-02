@@ -59,6 +59,7 @@ class JobLedger:
     """Durable lifecycle ledger; one connection per worker thread [M§26]."""
 
     def __init__(self, db_path: pathlib.Path) -> None:
+        # Wait up to 30 seconds for short competing ledger transactions [ASSUMPTION].
         self.db = sqlite3.connect(str(db_path), timeout=30, isolation_level=None)
         self.db.execute("PRAGMA journal_mode=WAL")
         self.db.execute("""CREATE TABLE IF NOT EXISTS jobs(id TEXT PRIMARY KEY, kind TEXT, payload_json TEXT,
