@@ -1,0 +1,32 @@
+// Source: v2606 tutorials/incompressible/pisoFoam/RAS/cavity/system/FOs/FOvorticity
+// Original SHA-256: f4e6493009e98bc43717c268b9ece8cfdcbef3524d840f5729e38573a2a64cf7
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2606                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+vorticity1
+{
+    // Mandatory entries
+    type            vorticity;
+    libs            (fieldFunctionObjects);
+
+    // Optional (inherited) entries
+    field           U;
+    result          vorticityField;
+    region          region0;
+    enabled         true;
+    log             true;
+    timeStart       0.25;
+    timeEnd         1000;
+    executeControl  timeStep;
+    executeInterval 5;
+    writeControl    timeStep;
+    writeInterval   25;
+}
+
+
+// ************************************************************************* //

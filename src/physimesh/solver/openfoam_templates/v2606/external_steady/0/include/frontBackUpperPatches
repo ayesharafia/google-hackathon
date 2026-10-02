@@ -1,0 +1,21 @@
+// Source: v2606 tutorials/incompressible/simpleFoam/motorBike/0.orig/include/frontBackUpperPatches
+// Original SHA-256: 1617c1d32cf068aee078b3a61b92981a7f5ece9d43d76c2d003a4b3203458f18
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2606                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+upperWall
+{
+    type slip;
+}
+
+frontAndBack
+{
+    type slip;
+}
+
+// ************************************************************************* //

@@ -1,0 +1,23 @@
+// Source: v2606 tutorials/incompressible/simpleFoam/motorBike/system/solverInfo
+// Original SHA-256: 2cefb568aafc92b88a08cce69b63866d5dd57c6cb7ac0165545f7c431629fe0d
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2606                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+solverInfo1
+{
+    // Mandatory entries
+    type            solverInfo;
+    libs            (utilityFunctionObjects);
+    fields          (U p);
+
+    // Optional entries
+    writeResidualFields no;
+}
+
+
+// ************************************************************************* //

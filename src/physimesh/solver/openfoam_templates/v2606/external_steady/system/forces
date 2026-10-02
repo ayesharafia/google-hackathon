@@ -1,0 +1,27 @@
+// Source: v2606 tutorials/incompressible/pimpleFoam/RAS/wingMotion/wingMotion2D_simpleFoam/system/forces
+// Original SHA-256: 8d5bc4a6fd701b664b2bd79c95ff490817c36836a284ab0226b2bdf1efb6e77e
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2606                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+forces
+{
+    type            forces;
+    libs            (forces);
+
+    writeControl    timeStep;
+    writeInterval   10;
+    log             false;
+
+    patches         (wing);
+    rho             rhoInf;
+    rhoInf          1;
+    CofR            (0.4974612746 -0.01671895744 0.125);
+}
+
+
+// ************************************************************************* //

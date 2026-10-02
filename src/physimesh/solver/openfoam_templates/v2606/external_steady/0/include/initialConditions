@@ -1,0 +1,16 @@
+// Source: v2606 tutorials/incompressible/simpleFoam/motorBike/0.orig/include/initialConditions
+// Original SHA-256: c03e65c2f6945c01cb0e7deea7b58d89ee83b93bbc63773c74316e7f2ce68e0f
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2606                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+flowVelocity         (20 0 0);
+pressure             0;
+turbulentKE          0.24;
+turbulentOmega       1.78;
+
+// ************************************************************************* //

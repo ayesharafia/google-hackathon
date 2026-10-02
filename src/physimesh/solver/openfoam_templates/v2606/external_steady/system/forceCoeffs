@@ -1,0 +1,56 @@
+// Source: v2606 tutorials/incompressible/simpleFoam/motorBike/system/forceCoeffs
+// Original SHA-256: 6f516ecef3d09456ef42c5fb297d118373927b8e35a518e0059499fe42cf1fc5
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2606                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+forceCoeffs1
+{
+    type            forceCoeffs;
+
+    libs            (forces);
+
+    writeControl    timeStep;
+    writeInterval   1;
+
+    log             yes;
+
+    patches         (motorBikeGroup);
+    rho             rhoInf;      // Indicates incompressible
+    rhoInf          1;           // Required when rho = rhoInf
+    liftDir         (0 0 1);
+    dragDir         (1 0 0);
+    CofR            (0.72 0 0);  // Axle midpoint on ground
+    pitchAxis       (0 1 0);
+    magUInf         20;
+    lRef            1.42;        // Wheelbase length
+    Aref            0.75;        // Estimated
+}
+
+/*
+binField1
+{
+    type                    binField;
+    libs                    (fieldFunctionObjects);
+    binModel                singleDirectionUniformBin;
+    fields                  (forceCoeff);
+    patches                 (motorBikeGroup);
+    decomposePatchValues    true;
+    CofR                    ${../forceCoeffs1/CofR};
+
+    binData
+    {
+        nBin        20;          // output data into 20 bins
+        direction   (1 0 0);     // bin direction
+        cumulative  yes;
+    }
+    writeControl            timeStep;
+}
+*/
+
+
+// ************************************************************************* //

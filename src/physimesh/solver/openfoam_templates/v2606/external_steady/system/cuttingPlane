@@ -1,0 +1,35 @@
+// Source: v2606 tutorials/incompressible/simpleFoam/motorBike/system/cuttingPlane
+// Original SHA-256: 2177d56457fc0b58a4cfab48eaf054dbf082f6b28fde634d7a7a354477a8d132
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2606                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+cuttingPlane
+{
+    type            surfaces;
+    libs            (sampling);
+    writeControl    writeTime;
+
+    surfaceFormat   vtk;
+    fields          ( p U );
+
+    interpolationScheme cellPoint;
+
+    surfaces
+    {
+        yNormal
+        {
+            type        cuttingPlane;
+            point       (0 0 0);
+            normal      (0 1 0);
+            interpolate true;
+        }
+    }
+}
+
+
+// ************************************************************************* //

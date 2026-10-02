@@ -1,0 +1,17 @@
+// Source: v2606 tutorials/incompressible/simpleFoam/motorBike/0.orig/include/fixedInlet
+// Original SHA-256: 8cf95ebd7cac6e545f4fa545ea6503690ed12055349fecfd4276acc0bccc6c60
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2606                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+inlet
+{
+    type  fixedValue;
+    value $internalField;
+}
+
+// ************************************************************************* //
