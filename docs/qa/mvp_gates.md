@@ -20,7 +20,10 @@ Fifteen real-data plots have recipes, verified source-byte hashes, array hashes,
 shared contour ranges and full captions. Visual observations and the nominal
 slice coordinate caveat are in `sphere_re100_plot_review.md`. Results envelope
 rejects status upgrades and nonfinite metrics. Unit suite: 261 passed, 3 backend
-tests deselected. Lint passes. No aircraft data or physics certification exists.
+tests deselected. Lint passes. Backend suite: 3 passed in 12.82 s with
+`PHYSIMESH_OPENFOAM_TUTORIALS=.backend/vendor/v2606/tutorials`. A first invocation
+without that required configuration refused the two vendor-dependent tests;
+configuration was corrected, with no solver or test changes. No aircraft data or physics certification exists.
 
 ## Review still required
 
