@@ -50,3 +50,19 @@ and group hashes differ between studies even when Cd is identical.
 
 Independent physics/product reviews, two timed presentation rehearsals and a
 backup screen recording remain release gates. No aircraft capability is inferred.
+
+## Linux CI portability follow-up
+
+Manual workflow 37047160696 on 8a35d02 fetched and verified the vendor archive,
+but all backend fixtures failed while writing the Linux runner-owned bind mount.
+The image's default root process had all capabilities dropped and did not own
+those files. The inspected pinned `/openfoam/run` documents numeric `--user` and
+nss-wrapper support. Docker arguments now set the host caller's POSIX UID/GID,
+with all existing isolation/resource limits retained. A unit regression verified
+UID 1001 / GID 123; local 285 unit and 3 backend tests passed after the change.
+Software follow-up review found no actionable issues.
+
+[Manual GitHub workflow 37047628955](https://github.com/PhysiCoreEngine12/Drone-Project/actions/runs/37047628955)
+on 73ee812 passed unit, lint and all three actual pinned backend fixtures on Linux.
+The push workflow also passed. This records Linux execution capability, not an
+independent physics review or an aircraft validation result.

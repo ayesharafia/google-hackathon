@@ -49,3 +49,6 @@ See `fresh_clone_reproduction.md` and `results_page_checklist.md`.
 This software gate is a primary-agent implementation record. Independent physics
 review and product sign-off, two timed presentation rehearsals and a backup screen
 recording remain pending. No release tag or main merge has been performed.
+
+The manual Linux GitHub backend workflow on 73ee812 also passed after the numeric
+host UID/GID mapping fix. See the portability follow-up in the reproduction record.
