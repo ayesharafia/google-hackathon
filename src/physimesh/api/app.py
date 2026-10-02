@@ -9,6 +9,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
+from ..drone.models import project_from_mapping, readiness
 from .settings import Settings, load_settings
 
 
@@ -37,11 +38,22 @@ def create_app(settings: Settings) -> FastAPI:
 
     @app.post("/api/drone/validate")
     def validate(body: dict) -> JSONResponse:
-        """Report the absent snapshot validator honestly until Task 2.5 [M§26]."""
-        return JSONResponse({"status": "inputs_incomplete", "available": False,
-                             "blocking": ["project snapshot validator is pending Task 2.5"],
-                             "next_action": "Implement the versioned project schema and readiness gates."},
-                            status_code=501)
+        """Input readiness for a project snapshot [M§26]; never a capability or validation claim.
+
+        Body: {"project": <drone_manifest_v1 mapping>, "purpose": "screening"|"cfd_run"|"feasibility"}.
+        """
+        purpose = body.get("purpose")
+        if purpose not in ("screening", "cfd_run", "feasibility"):
+            return JSONResponse({"detail": "purpose must be screening, cfd_run or feasibility"},
+                                status_code=422)
+        try:
+            snapshot = project_from_mapping(body.get("project"))
+        except (TypeError, ValueError) as exc:
+            return JSONResponse({"detail": f"invalid project: {exc}"}, status_code=422)
+        report = readiness(snapshot, purpose)
+        return JSONResponse({"purpose": report.purpose, "ready": report.ready,
+                             "status": report.status.value if report.status else None,
+                             "blocking": report.blocking, "warnings": report.warnings})
 
     @app.get("/", include_in_schema=False)
     def index() -> RedirectResponse:

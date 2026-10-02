@@ -18,6 +18,7 @@ import numpy as np
 import yaml
 
 from .atmosphere import make_atmosphere
+from .geometry import ROLES
 from .mass import MassItem, summarize
 from .units import DIM_KINEMATIC_PRESSURE, DIM_PRESSURE_PA, length_factor, parse_foam_dimensions
 
@@ -99,7 +100,11 @@ class ProjectSnapshot:
 
 def load_project(path: str | Path) -> ProjectSnapshot:
     """Load safe YAML without replacing nulls; reject unknown versions/groups [M§26]."""
-    data = yaml.safe_load(Path(path).read_text())
+    return project_from_mapping(yaml.safe_load(Path(path).read_text()))
+
+
+def project_from_mapping(data: Any) -> ProjectSnapshot:
+    """Validate an already-parsed project (YAML or JSON body) with the same rules as load_project."""
     if not isinstance(data, dict):
         raise TypeError("project must be a mapping")
     groups = {f.name for f in fields(ProjectSnapshot)}
@@ -116,13 +121,22 @@ def load_project(path: str | Path) -> ProjectSnapshot:
     return ProjectSnapshot(**data)
 
 
+ROTOR_MODELS = ("measured_map", "bem", "actuator_disk", "actuator_line", "blade_resolved")  # [plan Appendix A]
+
+
 @dataclass(frozen=True)
 class ReadinessReport:
-    """Blocking input paths and warnings; status is not a validation certificate."""
+    """Blocking input paths and warnings.
+
+    ready=True means only that the inputs for `purpose` are present and well-formed.
+    Readiness never assigns a higher aircraft status: with no blocking items, status
+    is None until screening or CFD actually runs (plan §4.1, §0 rule 6).
+    """
     purpose: str
     blocking: list[str]
     warnings: list[str]
-    status: AircraftStatus
+    status: AircraftStatus | None
+    ready: bool
 
 
 def readiness(snapshot: ProjectSnapshot,
@@ -133,9 +147,24 @@ def readiness(snapshot: ProjectSnapshot,
     blocking: list[str] = []
     warnings: list[str] = []
 
+    def present(value: Any) -> bool:
+        if isinstance(value, str):
+            return bool(value.strip())
+        return value is not None and value != () and value != {}
+
+    def vector3(value: Any, path: str, *, nonzero: bool = False) -> None:
+        try:
+            v = np.asarray(value, float)
+            ok = v.shape == (3,) and bool(np.isfinite(v).all()) and (not nonzero or bool(np.any(v)))
+        except (TypeError, ValueError):
+            ok = False
+        if not ok:
+            blocking.append(path)
+
     def require(value: Any, path: str) -> bool:
-        present = value is not None and value != "" and value != () and value != {}
-        if not present:
+        """Present and, for mappings/sequences, every nested value present."""
+        is_present = present(value)
+        if not is_present:
             blocking.append(path)
         elif isinstance(value, Mapping):
             for key, child in value.items():
@@ -145,7 +174,7 @@ def readiness(snapshot: ProjectSnapshot,
                 require(child, f"{path}[{i}]")
         elif isinstance(value, (int, float)) and not math.isfinite(value):
             blocking.append(path)
-        return present
+        return is_present
 
     def positive(value: Any, path: str) -> bool:
         valid = isinstance(value, (float, int)) and not isinstance(value, bool) and math.isfinite(value) and value > 0
@@ -214,18 +243,37 @@ def readiness(snapshot: ProjectSnapshot,
     except (ValueError, TypeError, OverflowError) as exc:
         blocking.append(f"atmosphere.viscosity ({exc})")
 
-    require(snapshot.rotors, "rotors (count must be declared)")
+    if not snapshot.rotors:
+        blocking.append("rotors (count must be declared)")
     rotor_keys = {"rotor_id", "center_body_m", "axis_body", "signed_rpm", "pitch_deg", "n_blades",
                   "radius_m", "root_cutout_m", "azimuth_zero_deg", "phase_offset_deg", "model", "map_ref",
                   "blade_ref", "polar_ref", "sustained_limits", "peak_limits"}  # [plan Appendix A]
+    # Record-shaped nulls are allowed: each purpose requires only the fields it uses.
     for i, rotor in enumerate(snapshot.rotors):
         prefix = f"rotors[{i}]"
         for key in rotor.keys() - rotor_keys:
             warnings.append(f"unknown key retained: {prefix}.{key}")
         require(rotor.get("rotor_id"), f"{prefix}.rotor_id")
         positive(rotor.get("radius_m"), f"{prefix}.radius_m")
-        if not rotor.get("map_ref") and not (rotor.get("blade_ref") and rotor.get("polar_ref")):
+        model = rotor.get("model")
+        if model is not None and model not in ROTOR_MODELS:
+            blocking.append(f"{prefix}.model")
+        if not present(rotor.get("map_ref")) and not (present(rotor.get("blade_ref"))
+                                                      and present(rotor.get("polar_ref"))):
             blocking.append(f"{prefix}.map_ref or blade_ref + polar_ref")
+        if purpose in ("cfd_run", "feasibility"):
+            # A rotor frame is mandatory to build a rotating zone or source [M§3].
+            vector3(rotor.get("center_body_m"), f"{prefix}.center_body_m")
+            vector3(rotor.get("axis_body"), f"{prefix}.axis_body", nonzero=True)
+            rpm = rotor.get("signed_rpm")
+            if isinstance(rpm, bool) or not isinstance(rpm, (int, float)) or not math.isfinite(rpm):
+                blocking.append(f"{prefix}.signed_rpm")
+            if model == "blade_resolved" and (rotor.get("azimuth_zero_deg") is None
+                                              or rotor.get("phase_offset_deg") is None):
+                # Mandatory only for blade-resolved transient comparisons [M§3]; enforced at
+                # transient case generation by RotorFrame.require_phase().
+                warnings.append(f"{prefix}: azimuth_zero_deg/phase_offset_deg required before any "
+                                "transient blade-resolved run")
         if purpose == "feasibility":
             for key in ("sustained_limits", "peak_limits"):
                 require(rotor.get(key), f"{prefix}.{key}")
@@ -239,12 +287,24 @@ def readiness(snapshot: ProjectSnapshot,
         if not isinstance(geometry_hash, str) or not re.fullmatch(r"[0-9a-f]{64}", geometry_hash):
             blocking.append("assembly.geometry_revision_sha256")
         components = snapshot.assembly.get("components")
-        if require(components, "assembly.components"):
+        rotor_ids = {r.get("rotor_id") for r in snapshot.rotors}
+        if not components:
+            blocking.append("assembly.components")
+        else:
+            # Static parts legitimately have rotor_id null; no blanket recursion [M§11].
             for i, component in enumerate(components):
+                prefix = f"assembly.components[{i}]"
                 if not isinstance(component, Mapping):
-                    blocking.append(f"assembly.components[{i}]")
-                else:
-                    require(component.get("role"), f"assembly.components[{i}].role")
+                    blocking.append(prefix)
+                    continue
+                require(component.get("component_id"), f"{prefix}.component_id")
+                role = component.get("role")
+                if role not in ROLES:
+                    blocking.append(f"{prefix}.role")
+                if role in ("blade", "hub") and component.get("rotor_id") not in rotor_ids:
+                    blocking.append(f"{prefix}.rotor_id")
+                if component.get("requires_user_tag") is True:
+                    blocking.append(f"{prefix}.requires_user_tag")
         zones = snapshot.mesh.get("rotation_zones")
         for i, rotor in enumerate(snapshot.rotors):
             if not isinstance(zones, Mapping):
@@ -282,6 +342,6 @@ def readiness(snapshot: ProjectSnapshot,
         require(snapshot.mission.get("reserve_policy"), "mission.reserve_policy")
         # Energy specification complements mass only [ASSUMPTION: field name; plan Task 2.5].
         require(snapshot.mission.get("energy_system"), "mission.energy_system")
-    status = AircraftStatus.INPUTS_INCOMPLETE if blocking else AircraftStatus.SCREENING_ONLY
+    status = AircraftStatus.INPUTS_INCOMPLETE if blocking else None
     warnings.append("Input readiness does not establish backend capability or engineering validation.")
-    return ReadinessReport(purpose, list(dict.fromkeys(blocking)), warnings, status)
+    return ReadinessReport(purpose, list(dict.fromkeys(blocking)), warnings, status, not blocking)

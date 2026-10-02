@@ -34,12 +34,38 @@ def test_future_drone_routes_are_protected(tmp_path):
     assert make(tmp_path).get("/api/drone/future").status_code == 401
 
 
-def test_validator_is_explicitly_unavailable(tmp_path):
-    response = make(tmp_path).post("/api/drone/validate", json={},
-                                  headers={"Authorization": "Bearer test-token"})
-    assert response.status_code == 501
-    assert response.json()["status"] == "inputs_incomplete"
-    assert response.json()["available"] is False
+def _template_project():
+    import pathlib
+
+    import yaml
+
+    from physimesh.drone import models
+    path = pathlib.Path(models.__file__).with_name("schema") / "drone_manifest_v1.yaml"
+    return yaml.safe_load(path.read_text())
+
+
+AUTH = {"Authorization": "Bearer test-token"}
+
+
+def test_validate_reports_template_as_inputs_incomplete(tmp_path):
+    response = make(tmp_path).post("/api/drone/validate", headers=AUTH,
+                                   json={"project": _template_project(), "purpose": "screening"})
+    assert response.status_code == 200
+    body = response.json()
+    assert body["ready"] is False and body["status"] == "inputs_incomplete"
+    assert "rotors (count must be declared)" in body["blocking"]
+
+
+def test_validate_rejects_malformed_project(tmp_path):
+    response = make(tmp_path).post("/api/drone/validate", headers=AUTH,
+                                   json={"project": {"identity": {}}, "purpose": "screening"})
+    assert response.status_code == 422
+
+
+def test_validate_rejects_unknown_purpose(tmp_path):
+    response = make(tmp_path).post("/api/drone/validate", headers=AUTH,
+                                   json={"project": _template_project(), "purpose": "publish"})
+    assert response.status_code == 422
 
 
 def test_direct_settings_cannot_bypass_missing_token(tmp_path):
