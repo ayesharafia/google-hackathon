@@ -1,6 +1,15 @@
+import numpy as np
 import pytest
 
 from physimesh.drone.provenance import Provenance, canonical_json, sha256_bytes, sha256_record
+from physimesh.drone.units import (
+    DIM_KINEMATIC_PRESSURE,
+    DIM_PRESSURE_PA,
+    UnitsError,
+    length_factor,
+    parse_foam_dimensions,
+    to_si_length,
+)
 
 
 def test_sha256_of_empty_bytes_is_standard_value():
@@ -22,3 +31,36 @@ def test_null_backend_digest_blocks_execution():
     assert p.blocking_for_execution() == ["backend_image_digest"]
 
 
+def test_null_source_unit_is_rejected_never_inferred():
+    with pytest.raises(UnitsError, match="source_units is null"):
+        length_factor(None)
+
+
+def test_mm_conversion_is_recorded():
+    v, rec = to_si_length(np.array([1000.0, 25.4]), "mm")
+    assert np.allclose(v, [1.0, 0.0254])
+    assert (rec.from_unit, rec.to_unit, rec.factor) == ("mm", "m", 1e-3)
+
+
+def test_inch_is_exact():
+    assert length_factor("in") == 0.0254
+
+
+def test_parse_foam_dimensions_pressure_and_kinematic():
+    assert parse_foam_dimensions("dimensions      [1 -1 -2 0 0 0 0];") == DIM_PRESSURE_PA
+    assert parse_foam_dimensions("dimensions [0 2 -2 0 0];") == DIM_KINEMATIC_PRESSURE
+
+
+
+
+@pytest.mark.parametrize("value", [None, float("nan"), float("inf")])
+def test_unknown_or_nonfinite_length_cannot_reach_si(value):
+    with pytest.raises(UnitsError):
+        to_si_length(value, "m")
+
+
+@pytest.mark.parametrize("text", ["dimensions [1 -1 -2 0 0 0];", "dimensions [nan 0 0 0 0];",
+                                 "dimensions [1.5 0 0 0 0];", "dimensions [bad 0 0 0 0];"])
+def test_invalid_dimensions_are_rejected(text):
+    with pytest.raises(UnitsError):
+        parse_foam_dimensions(text)
