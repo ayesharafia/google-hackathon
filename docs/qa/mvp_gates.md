@@ -74,7 +74,20 @@ and JavaScript syntax passed. Backend/solver inputs were unchanged, so previous
 three pinned backend tests and Linux checks remain the applicable runtime
 evidence. Browser checks confirm missing climb inputs remove the headline and
 the complete example still returns 52.23 kg; 390/1280 layouts have no document
-overflow. Claude's follow-up acceptance is pending until recorded below.
+overflow. The revised export has 33 hash-verified members, 2,579,327 bytes,
+SHA-256 `c3fe646f64e44a80d2ecb176aef374fcf475e08ff7b7fda31f8043ed193bf6c7`.
+
+Claude's §6 follow-up independently verifies F1–F3/F9 and issues **PASS for the
+bounded MVP at f19cbeb**. It reran 290 unit and 118 reference tests, Ruff and JS
+syntax checks, verified the new package and unchanged native evidence, and
+visually inspected the corrected chart. Low findings remain recorded without
+status upgrades. Two-axis software review: Spec has no findings; Standards found
+two documentation omissions, both corrected in d065729 and verified. GitHub
+checks passed for f19cbeb and d065729. Code-review acceptance is separate from
+machine package review attestation, which remains pending/unverified.
+
+Use `.backend/demo-reviewed` for this retained demo. Historical packages share
+the run-group ID; cite the root and ZIP hash to distinguish revisions (N1).
 
 The presenter guide is `docs/demo/presenter-guide.md`. Both timed full
 walkthroughs and a playable backup recording remain pending: native QuickTime

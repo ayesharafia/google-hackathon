@@ -94,3 +94,5 @@ the previous downloaded package and published root were preserved. This check
 does not claim a second GUI download or a recorded presentation. The independent
 report, its follow-up verdict and remaining presentation gates are in
 `independent_physics_review.md` and `mvp_gates.md`.
+
+![Actual revised power-data disclosure](images/power-data-disclosure.jpg)

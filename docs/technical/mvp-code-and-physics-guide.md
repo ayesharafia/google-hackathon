@@ -685,8 +685,12 @@ package and a 2,577,760-byte ZIP with all 33 listed members matching SHA-256. Th
 synthetic 52.23 kg result and missing-case refusal also passed in that clone.
 See `docs/qa/fresh_clone_reproduction.md` for the record.
 
-The full local unit suite at the documented implementation point has 285 passing
-tests plus 118 passing reference tests; three backend tests pass. GitHub unit, lint and manual pinned-backend checks for commit 73ee812 pass.
+The corrected candidate f19cbeb passes 290 unit tests and 118 reference tests;
+Ruff and JavaScript syntax pass. The documentation-only follow-up d065729 passes
+12 affected tests and Ruff. GitHub unit/lint checks for both commits pass.
+The unchanged runtime previously passed three pinned backend tests and the manual
+Linux backend workflow on 73ee812. The revised export has 33 hash-verified members
+(2,579,327 bytes, SHA-256 `c3fe646f64e44a80d2ecb176aef374fcf475e08ff7b7fda31f8043ed193bf6c7`).
 A warning remains about FastAPI/Starlette TestClient's httpx dependency deprecation;
 it does not fail the suite. Rendering and reference tests do not certify aircraft
 feasibility. Backend fixture tests write temporary audit output so they do not
@@ -712,12 +716,25 @@ validated actuator or blade-resolved rotating models, trim/control feasibility,
 structure, installed rotor interference, sequential missions and measured validation.
 These are not hidden behind the successful sphere case.
 
-Release still requires the independent physics review described by the master
-plan, independent product gate sign-off, two timed rehearsals
-and a backup screen recording. Browser export saving is confirmed. No
-main-branch merge or release tag follows
-merely from unit tests or a primary-agent software review. See
-`docs/qa/results_page_checklist.md` and `docs/qa/mvp_gates.md` for current evidence.
+Claude Opus 5.5 independently recomputed the native loads and reviewed the
+corrections, issuing PASS for the bounded MVP at f19cbeb. Required F1–F3 and F9
+are resolved; low findings remain as recorded in
+`docs/qa/independent_physics_review.md`. Claude disclosed prior authorship of the
+plans/reference code. This software review does not certify aircraft physics.
+
+For this retained presentation, serve `.backend/demo-reviewed`. Earlier roots
+are preserved and share the run-group ID, so cite the data root and ZIP digest
+as well as the run-group ID. Fresh README commands generate the corrected
+artifacts; do not point them at an already-published obsolete package. Machine
+envelopes still say review pending/unverified: this external code-review record
+does not upgrade an immutable package's status or its aircraft evidence level.
+
+Release still requires product gate sign-off, two full timed presentation
+rehearsals, a playable backup and human approval of final client wording. Native
+QuickTime recording controls could not be exposed through available automation;
+no backup video is claimed. See `docs/demo/presenter-guide.md` for the concrete
+walkthrough and blank actual rehearsal record. No merge or release tag follows
+from software tests. Current evidence is in `docs/qa/mvp_gates.md`.
 
 ## 18. Reading map and primary references
 

@@ -20,6 +20,19 @@ tabs, the desktop, notifications and other applications. Use no microphone
 unless the presenter intends to narrate. Keep the evidence ZIP alongside the
 recording so reviewers can inspect the numbers without a running server.
 
+For the reviewed retained demonstration on this machine, use data root
+`.backend/demo-reviewed`; its current local server is on port 8766. Historical
+packages under `demo-final` share the run-group ID but predate the corrections.
+Identify this revision by its data root and exported ZIP SHA-256
+`c3fe646f64e44a80d2ecb176aef374fcf475e08ff7b7fda31f8043ed193bf6c7`.
+Fresh README commands rebuild with the corrected code; use a fresh publishing
+root rather than an existing historical immutable package.
+
+Claude's independent code review passes the bounded MVP at f19cbeb (see §6 of
+`docs/qa/independent_physics_review.md`). The retained envelope's review-pending
+label is a separate machine attestation field and was not upgraded by this
+external review. Its evidence level remains unverified.
+
 If an image, source check, connection or download fails, stop and show the
 failure. Do not replace it with a fabricated result or suppress the refusal.
 

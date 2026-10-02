@@ -168,3 +168,78 @@ No findings on: SI/frame conventions; kinematic pressure conversion (applied exa
 | Battery-loop fixtures (separate, labelled) | **PASS** |
 | UI and package claims | **PASS** (banners and limitations present; F9, F10 low) |
 | **Overall, bounded MVP scope** | **CONDITIONAL PASS**: resolve F1–F3 (or explicitly disclose them) before client presentation. Evidence remains `unverified`. Not an aircraft validation or certification. |
+
+---
+
+## 6. Follow-up review, 2026-10-03: candidate `f19cbebddffaf788df76f8a5cd35adf8b99d3cea`
+
+| Item | Value |
+|---|---|
+| Candidate | `mvp/3day` @ `f19cbebddffaf788df76f8a5cd35adf8b99d3cea` (one commit after reviewed `6dd6dfc`: "fix(mvp): address independent physics review conditions"); working tree clean except `.DS_Store` |
+| Reviewer | Claude Opus 5.5 (`claude-opus-5-5`) |
+| New package | `.backend/demo-reviewed/results/acd1b8716144aeaa` |
+| Scope | Verify F1–F3 and F9 fixes and the documentation clarifications. Write-only: this section. No code, solver, input, status, merge, tag or push changes. Not aircraft validation |
+
+### 6.1 Integrity of this review file
+The candidate commit adds this file for the first time. Its committed content (170 lines, SHA-256 `359339749f1f…93fc80`) is byte-identical to the file as I wrote it. Nothing was altered by the implementing agent.
+
+### 6.2 Checks performed
+1. `git diff 6dd6dfc f19cbeb` read in full for `src/`, `scripts/`, `web/` and `tests/`, plus the changed lines in `docs/technical`, `docs/validation`, `docs/plans` and `README.md`. Eighteen files changed. No changes to the solver case generator, native readers, load integration, runner or any retained run input or output.
+2. **F1 numbers recomputed independently** from cell counts and Cd: r₂₁ = 1.4738970688, p_used = min(4.3269449, 2) = 2, Fs = 1.25, giving GCI_fine = **0.004084405348574** (0.408440535 %). Package value: 0.004084405348580 (agrees to 6e-15). `order_capped_gci` (`postpro/statistics.py:92-108`) implements 1.25·|(f₁−f₂)/f₁|/(r₂₁^p − 1) via `expm1`, with explicit validation and no defaults for the cap or safety factor. The analytical test f(h) = 100 + h⁴ checks that a high observed order cannot reduce the capped estimate.
+3. **New package** `demo-reviewed/…/acd1b8716144aeaa`:
+   - `hashes.json` 33/33 SHA-256 match.
+   - Status `numerical_checks_passed`, evidence `unverified` and `independent_review: pending` are all unchanged (no status upgrade).
+   - Per-mesh Cd, reconciliation status, drift and `source_sha256` of all native inputs are identical to the original package (native runs unchanged).
+   - `mesh_study` retains the observed-order GCI 0.0010989410 and adds `order_capped_gci_fine`, `gci_order_used = 2`, `nominal_order_cap = 2`, `gci_safety_factor = 1.25`, the cap source and the estimator code hash.
+   - The original package `demo-final/…/acd1b8716144aeaa` still verifies 33/33 and is unmodified (no cap fields).
+4. **Mesh chart** `plots/mesh_cd.png` inspected visually. The fine bar carries a small error bar (expected ±1.1206 × 0.0040844 = ±0.00458). The caption reads "Error bar uses order-capped GCI (nominal cap 2, safety factor 1.25); qualified mesh sensitivity, not total uncertainty or a proven error bound." The code source is `scripts/demo_plots.py:128-131`.
+5. **UI text** `web/js/results.js:15`: the order-capped GCI is shown first, followed by the observed order and observed-order GCI, ending with "These estimates are not total accuracy or proven error bounds." Interpretation sentence in the package: "order-capped GCI 0.408% at order 2.000; observed order 4.327, observed-order GCI 0.110%. …".
+6. **F2 label:**
+   - `web/results.html:13`: "Power and energy checks use supplied data. Their physical validity is not assessed."
+   - `api/screening.py` assumptions (rendered under every capacity result): "Electrical power and usable energy are supplied data, not physically validated; limit checks alone do not prove operability." and "Isolated ideal-hover power is a diagnostic; ground effect and rotor interference are not modelled."
+   - This is the allowed alternative in F2 (labelling instead of a physics gate). The capacity arithmetic is unchanged.
+7. **F3 wording** in `docs/technical/mvp-code-and-physics-guide.md` (§9) and `docs/validation/sphere_re100_runs.md` checked against the v2606 source and log evidence in §2.4/F3: start 400, `window=400`, `windowType=exact`, default `nIterStartUp=10`, test `|running mean Cd − current Cd| < 1e−3` (no full-window or range test), trigger at 412, then 400 further iterations to 812. **Accurate.** Both documents state that no retained input or output was changed.
+8. **F9:** `postpro/interpretation.py:24` formats drifts in (0, 5e-5) as `x.xxe-yy%`. Package sentences now read 2.64e-07 %, 8.52e-09 % and 3.37e-08 %, which equal 100 × the stored drifts. The load table in `results.js:14` also uses `toExponential(2)`.
+9. **Clarifications** (`docs/technical/mvp-code-and-physics-guide.md`):
+   - Screening reserve is a fraction of usable pack energy, distinct from the battery exercise's `(1 + reserve_fraction)` mission-energy convention.
+   - Usable energy is accepted as declared, not derived from pack mass.
+   - The example's a_z is an instantaneous force margin.
+   - The 180 s duration checks constant-point energy only.
+   These resolve the disclosure aspects of F6 and F8.
+10. **Re-ran locally:** unit suite **290 passed**, 3 backend deselected; `reference_impl` **118 passed**; `ruff check .` passed; `node --check web/js/results.js` passed.
+11. **Not performed by this reviewer:** backend/Docker re-runs, browser interaction, refusal-button and export-download behaviour in a browser, Linux CI. These rely on the project records in `docs/qa/mvp_gates.md` and `docs/qa/results_page_checklist.md`.
+
+### 6.3 Finding status
+
+| ID | Was | Now | Evidence |
+|---|---|---|---|
+| F1 | Medium | **Resolved** | Capped GCI 0.40844 % (cap 2, Fs 1.25) is primary in the UI, interpretation and chart error bar; observed-order 0.10989 % retained and qualified; independently recomputed |
+| F2 | Medium | **Resolved (by allowed labelling alternative)** | Explicit "supplied data, not physically validated" text on the page and in every capacity result. A physics gate is still absent, so the residual risk is disclosed, not removed |
+| F3 | Medium | **Resolved** | Both docs now describe the actual v2606 test, startup 10, trigger 412 and stop 812 |
+| F9 | Low | **Resolved** | Scientific display of tiny drifts in the interpretation and load table |
+| F6 | Low | **Partially resolved (disclosed)** | Instantaneous-a_z / constant-point-energy meaning documented; the example case itself is unchanged |
+| F8 | Low | **Partially resolved (disclosed)** | Reserve conventions and the declared (not derived) usable energy documented; no consistency check added |
+| F4, F5, F7, F10, F11 | Low | **Open** (unchanged) | Moment abs_tol not discriminating; power/energy infeasibility reported as `inputs_incomplete`; post-hoc slice tolerance; `numerical_checks_passed` vocabulary; z-only force balance (documented scope limit) |
+
+**New, Low:**
+
+| ID | Severity | Location | Finding | Recommendation |
+|---|---|---|---|---|
+| N1 | Low | `.backend/demo-final/results/acd1b8716144aeaa` vs `.backend/demo-reviewed/results/acd1b8716144aeaa` | Two packages with different contents (pre- and post-review) share the identifier `acd1b8716144aeaa`, because the ID is the run-group hash, not the package content hash. They live under separate data roots and both verify, but a presenter or export consumer could load or cite the superseded one, which shows only the 0.110 % GCI. | Demo only from `demo-reviewed`. Consider including a package-content hash or revision in the visible ID. |
+
+### 6.4 Follow-up verdict
+
+**PASS for the bounded MVP scope at `f19cbeb`.** The required conditions F1–F3 are cleared, and F9 is resolved.
+
+The sphere pipeline is accepted as a software-verification demonstration. The screening panel is accepted as a labelled illustrative `screening_only` calculation, whose power and energy inputs are explicitly unchecked supplied data.
+
+Remaining Low findings (F4, F5, F7, F10, F11, N1; F6/F8 partially) do not block a client presentation, provided the presenter:
+- uses the `demo-reviewed` package, and
+- keeps to the claim limits in §4 and `plan.md` §13.
+
+All §4 unresolved limits still apply. In particular:
+- the +2.6 % gap to Schiller–Naumann is unexplained and must not be attributed;
+- asymptotic convergence is not demonstrated;
+- evidence remains `unverified`.
+
+This is not aircraft validation, rotor CFD evidence or human certification. Product sign-off, two full timed rehearsals and a playable backup recording remain pending and are outside this review.
