@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "physimesh-drone"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26", "scipy>=1.11", "pyyaml>=6",
+  "fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2.6", "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx>=0.27", "ruff>=0.4"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+markers = ["backend: needs the pinned OpenFOAM container (run in the backend CI job)"]
+
+[tool.ruff]
+line-length = 110
+# Retained reference code is evidence, not production code to rewrite [ASSUMPTION].
+extend-exclude = ["reference_impl"]
