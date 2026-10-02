@@ -16,11 +16,14 @@ three-mesh sphere package acd1b8716144aeaa. No aircraft data supplied.
   climb inputs blocks the headline. No 750 kg target remains.
 - ZIP preparation succeeds and produces a visible Save evidence ZIP link. API
   tests verify archive bytes, hashes and retained status. In-app browser download
-  capture times out for blob links, including explicit link activation. Actual
-  browser file saving remains unverified; the UI reports ready rather than saved.
+  capture times out for blob links, including explicit link activation. Brave
+  activation saved `sphere-acd1b8716144aeaa.zip` in Downloads: 2,576,790 bytes,
+  all 33 manifest-listed members match SHA-256, evidence unverified/review pending.
+  The UI reports ready rather than claiming file saving.
 - Desktop 1280 and phone 390 CSS-pixel layouts have no horizontal document overflow.
   Tables have their own scroll regions; phone columns stack. Screenshot captures
-  were visually inspected in the browser tooling; no saved screenshot artifact yet.
+  were visually inspected in browser tooling; a compact actual payload screenshot
+  is retained at `docs/qa/images/payload-example.jpg`.
 - Browser console has no captured errors or warnings during tested flows.
 
 ## Design-law recheck
@@ -50,8 +53,10 @@ Backend fixture tests write temporary audit reports rather than overwriting
 curated repository evidence. Numeric snapshot hashes survive 1.0 to 1 browser
 serialization without changing native-file digest semantics.
 
-Independent physics review, fresh-clone solver reproduction, two full timed
-rehearsals and backup video are pending. No release tag or main-branch merge is
+Fresh-clone solver reproduction and byte-identical re-publishing after reuse
+passed; details are in `docs/qa/fresh_clone_reproduction.md`. Independent physics
+review, independent product gate sign-off, two full timed rehearsals and a backup
+screen video remain pending. No release tag or main-branch merge is
 approved by these implementation checks. Evidence stays unverified.
 
 Final software review identified three spec issues: plot/run binding, hard-coded
@@ -60,6 +65,8 @@ corrected. Plot operators now retain version, source-code hash, library versions
 interpolation method/grid/tolerance and rendering parameters. Diagnostic velocity
 eligibility has a named assumption and retained tolerance/version. Native reader
 and electrical-power public signatures have explicit types and units. Final unit
-suite: 285 passed. GitHub checks for 6d90b8d passed. Updated plots were regenerated
+suite: 285 passed. GitHub checks for 58a9596 passed. Updated plots were regenerated
 from the original native records into a new immutable local package root;
 previous published packages were preserved.
+
+![Actual synthetic example result](images/payload-example.jpg)

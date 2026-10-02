@@ -31,3 +31,21 @@ These are implementation checks by the primary GPT-family agent. They do not
 satisfy the master plan's independent different-family or human physics review.
 Evidence remains unverified, and the branch must stay unmerged until that review
 and the Day 3 product/reproduction gate are complete.
+
+## Day 3 software gate, 2026-10-02
+
+The evidence desk, native face-constant 3D, source-bound galleries, screening,
+missing-input refusals, geometry intake and export are implemented. Browser QA
+covers desktop and phone layouts, actual controls and the design-law recheck.
+Brave saved an actual evidence ZIP; every listed member matches its digest.
+
+A fresh clone from GitHub at 58a9596 reproduced all three sphere solves, native
+checks, fifteen plots and native surface. The completed-run reuse path verified
+inputs/outputs, rebuilt derived artifacts and re-published identical bytes.
+The clone's API/export and synthetic capacity/refusal checks passed. Local unit
+suite: 285 passed; pinned backend fixtures: 3 passed. Ruff and JS syntax pass.
+See `fresh_clone_reproduction.md` and `results_page_checklist.md`.
+
+This software gate is a primary-agent implementation record. Independent physics
+review and product sign-off, two timed presentation rehearsals and a backup screen
+recording remain pending. No release tag or main merge has been performed.

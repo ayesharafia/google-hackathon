@@ -35,14 +35,14 @@ jobs:
           python-version: '3.11'
       - run: python -m pip install -r requirements.lock
       - run: python -m pip install --no-deps -e .
-      - name: Run backend fixtures when implemented
+      - name: Fetch and verify exact vendor tutorials
         shell: bash
         run: |
-          set +e
-          python -m pytest -q -m backend
-          result=$?
-          if [ "$result" -eq 5 ]; then
-            echo '::warning::No backend fixtures collected. No backend capability established.'
-            exit 0
-          fi
-          exit "$result"
+          mkdir -p .backend/vendor/v2606
+          curl --fail --location https://dl.openfoam.com/source/v2606/OpenFOAM-v2606.tgz -o .backend/vendor/v2606/OpenFOAM-v2606.tgz
+          printf '%s\n' '2a1310e3ed192cc4c521e1d22dcc176f57bec61160c878dc4348f21d6672294d  .backend/vendor/v2606/OpenFOAM-v2606.tgz' | sha256sum -c -
+          tar -xzf .backend/vendor/v2606/OpenFOAM-v2606.tgz -C .backend/vendor/v2606 --strip-components=1
+      - name: Run pinned backend fixtures
+        env:
+          PHYSIMESH_OPENFOAM_TUTORIALS: ${{ github.workspace }}/.backend/vendor/v2606/tutorials
+        run: python -m pytest -q -m backend

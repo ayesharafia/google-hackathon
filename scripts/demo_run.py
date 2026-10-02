@@ -95,8 +95,8 @@ def main() -> int:
     args = parser.parse_args()
     levels = args.levels.split(",")
     allowed = ("coarse", "medium", "fine")
-    if not levels or len(set(levels)) != len(levels) or any(level not in allowed for level in levels):
-        parser.error("levels must be unique names from coarse,medium,fine")
+    if tuple(levels) != allowed:
+        parser.error("full demo requires ordered coarse,medium,fine; use the stage runner for individual cases")
     output = args.output_root.resolve()
     output.mkdir(parents=True, exist_ok=True)
     specs = dict(zip(allowed, refinement_levels(demo_spec(args.iterations), 1.5, 3)))

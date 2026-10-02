@@ -35,7 +35,8 @@ The retained sphere is a software verification case. The drone panel uses
 synthetic example inputs and reports `screening_only`. Real aircraft geometry,
 rotor performance and an approved mass ledger are still required.
 
-After setup, start Docker and fetch the exact vendor tutorials for backend tests:
+Clone into a directory shared with your Docker VM (for Colima, use your home
+directory rather than `/tmp`). After setup, start Docker and fetch the exact vendor tutorials for backend tests:
 
 ```sh
 mkdir -p .backend/vendor/v2606
@@ -56,6 +57,7 @@ Generate the study, native-data plots and immutable evidence package:
 .venv/bin/python scripts/demo_surface.py --run-group .backend/demo/run_group.json
 .venv/bin/python scripts/demo_assemble.py --run-group .backend/demo/run_group.json --data-root .backend/demo-app
 .venv/bin/python scripts/demo_seed.py --data-root .backend/demo-app
+export PHYSIMESH_OPENFOAM_IMAGE_DIGEST=opencfd/openfoam-run@sha256:4229997e74defb81548222d511b8e3b95b98305e5df41b8e88b031813fe47eeb
 export PHYSIMESH_DATA_ROOT="$PWD/.backend/demo-app"
 export PHYSIMESH_DB_PATH="$PWD/.backend/demo/jobs.sqlite"
 read -s 'PHYSIMESH_API_TOKEN?Choose a local session token: '
@@ -78,3 +80,6 @@ file SHA-256 hashes retain their exact byte semantics.
 
 [QA and remaining release gates](docs/qa/results_page_checklist.md) distinguish
 implemented behavior from pending independent physics review and release approval.
+
+[Code, backend and physics guide](docs/technical/mvp-code-and-physics-guide.md) explains
+the formulas, data flow, API, solver configuration, evidence checks and limitations.
