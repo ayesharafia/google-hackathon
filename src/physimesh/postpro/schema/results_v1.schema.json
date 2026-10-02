@@ -1,0 +1,151 @@
+{
+  "$defs": {
+    "JsonValue": {},
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "run_group_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Run Group Sha256",
+          "type": "string"
+        },
+        "code_version": {
+          "title": "Code Version",
+          "type": "string"
+        },
+        "image_digest": {
+          "pattern": "^[^\\s@]+@sha256:[0-9a-f]{64}$",
+          "title": "Image Digest",
+          "type": "string"
+        }
+      },
+      "required": [
+        "run_group_sha256",
+        "code_version",
+        "image_digest"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Numerical success and independent evidence are separate explicit fields.\n\nMetric dictionaries preserve recipes and native comparison detail without\ninventing unavailable data. Recursively reject all nonfinite values.",
+  "properties": {
+    "schema_version": {
+      "const": "results_v1",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "run_group_id": {
+      "pattern": "^[0-9a-f]{16}$",
+      "title": "Run Group Id",
+      "type": "string"
+    },
+    "label": {
+      "title": "Label",
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "numerical_checks_passed",
+        "diagnostic_only"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "evidence": {
+      "const": "unverified",
+      "title": "Evidence",
+      "type": "string"
+    },
+    "independent_review": {
+      "const": "pending",
+      "title": "Independent Review",
+      "type": "string"
+    },
+    "provenance": {
+      "$ref": "#/$defs/Provenance"
+    },
+    "case": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Case",
+      "type": "object"
+    },
+    "runs": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "title": "Runs",
+      "type": "array"
+    },
+    "mesh_study": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JsonValue"
+      },
+      "title": "Mesh Study",
+      "type": "object"
+    },
+    "plots": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "title": "Plots",
+      "type": "array"
+    },
+    "interpretation": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "title": "Interpretation",
+      "type": "array"
+    },
+    "refusals": {
+      "items": {
+        "additionalProperties": {
+          "$ref": "#/$defs/JsonValue"
+        },
+        "type": "object"
+      },
+      "title": "Refusals",
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Limitations",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_group_id",
+    "label",
+    "status",
+    "evidence",
+    "independent_review",
+    "provenance",
+    "case",
+    "runs",
+    "mesh_study",
+    "plots",
+    "interpretation",
+    "refusals",
+    "limitations"
+  ],
+  "title": "ResultsV1",
+  "type": "object"
+}
