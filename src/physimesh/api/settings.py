@@ -1,0 +1,45 @@
+"""Explicit environment configuration; unknown backend pins remain null [M§26]."""
+from __future__ import annotations
+
+import pathlib
+import re
+from collections.abc import Mapping
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class Settings:
+    """Server paths, token, immutable image reference, and bind host; no physical units."""
+
+    data_root: pathlib.Path
+    db_path: pathlib.Path
+    api_token: str
+    openfoam_image_digest: str | None
+    bind_host: str = "127.0.0.1"  # Private development binding [plan Task 1.5].
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.api_token, str) or not self.api_token.strip():
+            raise ValueError("PHYSIMESH_API_TOKEN is required")
+        if (self.openfoam_image_digest is not None
+                and re.fullmatch(r"[^\s@]+@sha256:[0-9a-f]{64}", self.openfoam_image_digest) is None):
+            raise ValueError("PHYSIMESH_OPENFOAM_IMAGE_DIGEST must be an immutable SHA-256 reference")
+        if not self.bind_host:
+            raise ValueError("PHYSIMESH_BIND_HOST cannot be empty")
+
+
+def load_settings(env: Mapping[str, str]) -> Settings:
+    """Load explicit paths and credentials; missing design/backend values are never guessed."""
+    token = env.get("PHYSIMESH_API_TOKEN")
+    if not token:
+        raise ValueError("PHYSIMESH_API_TOKEN is required; refusing unauthenticated startup")
+    root = env.get("PHYSIMESH_DATA_ROOT")
+    if not root:
+        raise ValueError("PHYSIMESH_DATA_ROOT is required")
+    root_path = pathlib.Path(root)
+    return Settings(
+        root_path,
+        pathlib.Path(env.get("PHYSIMESH_DB_PATH", str(root_path / "jobs.sqlite"))),
+        token,
+        env.get("PHYSIMESH_OPENFOAM_IMAGE_DIGEST") or None,
+        env.get("PHYSIMESH_BIND_HOST", "127.0.0.1"),
+    )

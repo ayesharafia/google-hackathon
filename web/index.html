@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PhysiCore | Drone studies</title>
+<style>
+:root{--paper:#dde5dc;--ink:#20382c;--muted:#506457;--surface:#cbd8cc;--dark:#233b2d;--light:#edf2eb;--display:Optima,"Candara",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,sans-serif}button,input{font:inherit}button{cursor:pointer}button:disabled{cursor:wait}a{color:inherit}:focus-visible{outline:3px solid var(--ink);outline-offset:5px}.skip{position:absolute;left:24px;top:-70px;background:var(--light);padding:10px;z-index:5}.skip:focus{top:16px}
+header{padding:28px 5vw;display:flex;align-items:center;gap:16px;background:var(--dark);color:var(--light)}.mark{width:36px;height:36px;flex:none}.brand{font-family:var(--display);font-size:30px;letter-spacing:.015em}.edition{font-size:13px;margin-left:18px;color:#c4d4c7}.server{margin-left:auto;display:flex;align-items:center;gap:18px;font-size:14px}.quiet-button{background:none;border:0;color:inherit;padding:9px 4px;font-weight:600}.quiet-button:hover{color:#b2c9b9}.quiet-button:disabled{color:#adc1b1}
+main{max-width:1440px;margin:auto;padding:48px 5vw 36px}.intro{display:flex;align-items:baseline;gap:32px;margin-bottom:36px}.intro h1{font:400 clamp(32px,4vw,54px)/1.15 var(--display);margin:0}.intro p{max-width:350px;margin:0 0 0 auto;font-size:14px;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px}nav{display:flex;flex-direction:column;gap:5px;padding-top:8px}nav button{display:flex;align-items:center;text-align:left;gap:18px;width:100%;padding:17px 16px;border:0;background:transparent;color:var(--muted);font-size:17px;transition:background-color .2s,color .2s}nav button:hover{background:#ccd9cc;color:var(--ink)}nav button[aria-selected=true]{background:var(--ink);color:var(--light);font-weight:600}nav .step{font-size:12px;font-variant-numeric:tabular-nums;color:inherit}nav p{font-size:13px;color:var(--muted);padding:15px 16px;margin-top:24px}
+.sheet{position:relative;isolation:isolate;padding:38px 44px;min-height:525px}.sheet:before{content:"";position:absolute;inset:0;z-index:-1;background:var(--light);clip-path:polygon(0 0,calc(100% - 28px) 0,100% 28px,100% 100%,0 100%)}.sheet-top{display:flex;gap:24px;align-items:center;margin-bottom:32px}.sheet-title{font-size:14px;color:var(--muted);margin:0}.sheet-id{margin-left:auto;font-size:12px;font-variant-numeric:tabular-nums}.sheet h2{font:400 clamp(30px,3vw,44px)/1.2 var(--display);max-width:700px;margin:0 0 18px}.lead{max-width:610px;margin:0 0 32px;color:var(--muted)}.requirements{margin:0;padding:0;list-style:none;display:grid;gap:18px}.requirements li{display:grid;grid-template-columns:15px 1fr;gap:13px;align-items:start}.requirements svg{width:14px;height:17px;margin-top:4px;fill:var(--ink)}.requirements strong{display:block;font-size:15px}.requirements span{font-size:14px;color:var(--muted)}.pending{margin-top:32px;background:var(--surface);padding:20px 24px;font-size:14px}.pending strong{display:block;margin-bottom:5px}.pending p{margin:0}.backend{margin-top:36px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px}.backend h2{font:400 24px/1.2 var(--display);margin:8px 0}.backend p{font-size:13px;color:var(--muted)}.backend-values{display:grid;grid-template-columns:1fr 1fr;gap:25px 35px;background:var(--surface);padding:25px 32px}.backend-values dt{font-size:13px;color:var(--muted);margin-bottom:6px}.backend-values dd{margin:0;font-size:15px;font-weight:600}.backend-values .wide{grid-column:1/-1}.digest{font:12px/1.6 ui-monospace,monospace;overflow-wrap:anywhere;font-weight:400!important}
+footer{max-width:1440px;margin:20px auto 0;padding:18px 5vw 30px;font-size:12px;color:var(--muted)}.motion-feedback{animation:check-feedback .4s ease-out}@keyframes check-feedback{50%{color:#829e89}}@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(max-width:760px){header{padding:20px 24px;flex-wrap:wrap;gap:12px}.edition{margin-left:0}.server{width:100%;margin-left:0}.server .quiet-button{margin-left:auto}main{padding:28px 24px}.intro{display:block}.intro p{margin-top:18px;max-width:500px}.workspace{grid-template-columns:1fr;gap:20px}nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}nav button{padding:12px 8px;font-size:12px;gap:6px;min-width:0}nav p{display:none}.sheet{padding:28px 24px;min-height:0}.sheet-id{font-size:11px}.sheet-top{gap:10px}.backend{grid-template-columns:1fr;gap:12px}.backend-values{padding:24px;gap:22px}.backend h2{margin:0}footer{padding:12px 24px 24px}}
+</style>
+<script src="/web/js/app.js" defer></script>
+</head>
+<body>
+<a href="#workspace" class="skip">Skip to study workspace</a>
+<header>
+<svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><path fill="currentColor" d="M17 2h6l-1 13 13-1v6l-13 1 1 17h-6l1-17-15 1v-6l15-1z"/><path fill="#9eb8a5" d="m23 2 14 12-15 1zM17 38 3 22l15-1z"/></svg>
+<span class="brand">PhysiCore</span><span class="edition">Drone studies / development</span>
+<div class="server"><span id="server-status" role="status">Checking server…</span><button id="refresh" class="quiet-button" type="button">Check again</button></div>
+</header>
+<main>
+<div class="intro"><h1>A study starts with its inputs.</h1><p>750 kg is the carried payload requirement. Total aircraft mass has not been supplied.</p></div>
+<div class="workspace" id="workspace">
+<nav role="tablist" aria-label="Study workflow" aria-orientation="vertical">
+<button type="button" id="tab-import" role="tab" aria-controls="stage-panel" aria-selected="true" data-stage="import"><span class="step">01</span>Import</button>
+<button type="button" id="tab-assemble" role="tab" aria-controls="stage-panel" aria-selected="false" tabindex="-1" data-stage="assemble"><span class="step">02</span>Assemble</button>
+<button type="button" id="tab-conditions" role="tab" aria-controls="stage-panel" aria-selected="false" tabindex="-1" data-stage="conditions"><span class="step">03</span>Conditions</button>
+<button type="button" id="tab-mesh" role="tab" aria-controls="stage-panel" aria-selected="false" tabindex="-1" data-stage="mesh"><span class="step">04</span>Mesh</button>
+<button type="button" id="tab-run" role="tab" aria-controls="stage-panel" aria-selected="false" tabindex="-1" data-stage="run"><span class="step">05</span>Run</button>
+<button type="button" id="tab-results" role="tab" aria-controls="stage-panel" aria-selected="false" tabindex="-1" data-stage="results"><span class="step">06</span>Results</button>
+<p>Workflow preview.<br>Stage selection shows prerequisites. Execution features are still being built.</p>
+</nav>
+<section id="stage-panel" class="sheet" role="tabpanel" aria-labelledby="tab-import" tabindex="0">
+<div class="sheet-top"><p id="sheet-title" class="sheet-title">Geometry intake</p><span class="sheet-id">No project loaded</span></div>
+<h2 id="stage-title">Bring the assembly, and its units.</h2>
+<p id="stage-description" class="lead">An STL describes a surface. Start with the original component files and an explicit declaration of their units.</p>
+<ul id="requirements" class="requirements">
+<li><span aria-hidden="true">›</span><div><strong>Original component files</strong><span>Keep the airframe and rotating parts identifiable.</span></div></li>
+<li><span aria-hidden="true">›</span><div><strong>Declared source units</strong><span>Metres, millimetres, centimetres, inches or feet. Units are never inferred.</span></div></li>
+<li><span aria-hidden="true">›</span><div><strong>Component transforms</strong><span>Record the position, orientation and source of every component.</span></div></li>
+</ul>
+<div class="pending" role="status"><strong id="pending-title">Import is pending implementation.</strong><p id="pending-description">The safe parser and assembly contracts arrive in WP03. No file has been imported.</p></div>
+</section>
+</div>
+<section class="backend" aria-labelledby="backend-heading">
+<div><h2 id="backend-heading">Server record</h2><p>Configuration is separate from verified solver capability.</p></div>
+<dl class="backend-values">
+<div><dt>Application</dt><dd id="application-state">Checking…</dd></div><div><dt>Backend pin</dt><dd id="pin-state">Unknown</dd></div>
+<div><dt>API solver capabilities</dt><dd id="capability-state">Unknown</dd></div><div><dt>Study readiness</dt><dd>Project inputs incomplete</dd></div>
+<div class="wide"><dt>Configured image reference</dt><dd id="image-reference" class="digest">Not yet read from the server.</dd></div>
+</dl>
+</section>
+</main>
+<footer>Foundation build. No aircraft loads, performance or feasibility have been evaluated.</footer>
+</body>
+</html>
