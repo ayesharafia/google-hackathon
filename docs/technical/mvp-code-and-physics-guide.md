@@ -665,7 +665,7 @@ synthetic 52.23 kg result and missing-case refusal also passed in that clone.
 See `docs/qa/fresh_clone_reproduction.md` for the record.
 
 The full local unit suite at the documented implementation point has 285 passing
-tests plus 118 passing reference tests; three backend tests pass. GitHub unit/lint checks for commit 58a9596 pass.
+tests plus 118 passing reference tests; three backend tests pass. GitHub unit/lint checks for commit 7897ff4 pass.
 A warning remains about FastAPI/Starlette TestClient's httpx dependency deprecation;
 it does not fail the suite. Rendering and reference tests do not certify aircraft
 feasibility. Backend fixture tests write temporary audit output so they do not

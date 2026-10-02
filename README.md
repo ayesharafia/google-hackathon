@@ -83,3 +83,5 @@ implemented behavior from pending independent physics review and release approva
 
 [Code, backend and physics guide](docs/technical/mvp-code-and-physics-guide.md) explains
 the formulas, data flow, API, solver configuration, evidence checks and limitations.
+
+The full guide is also published in [Notion](https://app.notion.com/p/3ed6ce44c2b681f2a04ad78ce659c211).

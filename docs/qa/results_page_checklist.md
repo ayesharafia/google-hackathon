@@ -65,7 +65,7 @@ corrected. Plot operators now retain version, source-code hash, library versions
 interpolation method/grid/tolerance and rendering parameters. Diagnostic velocity
 eligibility has a named assumption and retained tolerance/version. Native reader
 and electrical-power public signatures have explicit types and units. Final unit
-suite: 285 passed. GitHub checks for 58a9596 passed. Updated plots were regenerated
+suite: 285 passed. GitHub unit/lint checks for 7897ff4 passed. Updated plots were regenerated
 from the original native records into a new immutable local package root;
 previous published packages were preserved.
 
