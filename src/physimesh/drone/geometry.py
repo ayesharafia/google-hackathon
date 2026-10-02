@@ -9,6 +9,7 @@ import numpy as np
 from scipy.spatial import cKDTree
 
 from .frames import RotorFrame
+from .provenance import sha256_record
 
 
 class _UnionFind:
@@ -261,3 +262,192 @@ def validate_assembly(a: Assembly) -> list[str]:
     if len(set(zones)) != len(zones):
         problems.append("rotation zone assigned to multiple rotors")
     return problems
+
+
+def _closest_point_on_triangle(p: np.ndarray, a: np.ndarray, b: np.ndarray, c: np.ndarray) -> np.ndarray:
+    """Ericson, Real-Time Collision Detection, 5.1.5 [STD]."""
+    if not np.any(np.cross(b - a, c - a)):
+        candidates = []
+        for start, end in ((a, b), (b, c), (c, a)):
+            edge = end - start
+            length2 = float(edge @ edge)
+            fraction = np.clip(float((p - start) @ edge) / length2, 0, 1) if length2 else 0
+            candidates.append(start + fraction * edge)
+        return min(candidates, key=lambda q: float(np.linalg.norm(q - p)))
+    ab, ac, ap = b - a, c - a, p - a
+    d1, d2 = ab @ ap, ac @ ap
+    if d1 <= 0 and d2 <= 0:
+        return a
+    bp = p - b
+    d3, d4 = ab @ bp, ac @ bp
+    if d3 >= 0 and d4 <= d3:
+        return b
+    vc = d1 * d4 - d3 * d2
+    if vc <= 0 and d1 >= 0 and d3 <= 0:
+        return a + (d1 / (d1 - d3)) * ab
+    cp = p - c
+    d5, d6 = ab @ cp, ac @ cp
+    if d6 >= 0 and d5 <= d6:
+        return c
+    vb = d5 * d2 - d1 * d6
+    if vb <= 0 and d2 >= 0 and d6 <= 0:
+        return a + (d2 / (d2 - d6)) * ac
+    va = d3 * d6 - d5 * d4
+    if va <= 0 and (d4 - d3) >= 0 and (d5 - d6) >= 0:
+        return b + ((d4 - d3) / ((d4 - d3) + (d5 - d6))) * (c - b)
+    denom = 1.0 / (va + vb + vc)
+    return a + ab * (vb * denom) + ac * (vc * denom)
+
+
+@dataclass(frozen=True)
+class GeometryRevision:
+    """Immutable repair result and provenance in metres/m² [M§11].
+
+    max_surface_distance_m is a bidirectional sampled point-to-surface metric,
+    not a certified continuous Hausdorff bound [ASSUMPTION: plan Task 3.4 metric].
+    """
+    revision_sha256: str
+    parent_sha256: str | None
+    operations: tuple[str, ...]
+    area_before_m2: float
+    area_after_m2: float
+    bounds_before_m: tuple
+    bounds_after_m: tuple
+    max_surface_distance_m: float
+    confirmed_by: str | None
+    triangles_m: np.ndarray
+
+    def __post_init__(self) -> None:
+        # Backing immutable bytes prevent enabling ndarray write access on parent CAD.
+        array = np.asarray(self.triangles_m, dtype=np.float64)
+        frozen = np.frombuffer(array.tobytes(), dtype=np.float64).reshape(array.shape)
+        object.__setattr__(self, "triangles_m", frozen)
+
+
+ALLOWED_OPS = {"remove_degenerate": "minor", "remove_duplicate": "minor",
+               "orient_consistently": "minor"}  # [plan Task 3.4; M§11]
+
+
+def _metrics(triangles: np.ndarray) -> tuple[float, tuple]:
+    if triangles.ndim != 3 or triangles.shape[1:] != (3, 3) or not len(triangles) or not np.isfinite(triangles).all():
+        raise ValueError("revision requires finite nonempty (N,3,3) triangles in metres")
+    # Triangle area from cross product [STD].
+    area = float(np.linalg.norm(np.cross(triangles[:, 1] - triangles[:, 0],
+                                         triangles[:, 2] - triangles[:, 0]), axis=1).sum() / 2)
+    if not np.isfinite(area):
+        raise ValueError("revision area overflowed")
+    points = triangles.reshape(-1, 3)
+    bounds = (tuple(points.min(0)), tuple(points.max(0)))
+    return area, bounds
+
+
+def _revision_hash(parent: str | None, operations: tuple[str, ...], triangles: np.ndarray) -> str:
+    return sha256_record({"parent": parent, "operations": operations, "triangles_m": triangles.tolist()})
+
+
+def initial_revision(triangles_m: np.ndarray) -> GeometryRevision:
+    """Create an unmodified SI geometry revision; no unit inference or repair [M§11]."""
+    triangles = np.asarray(triangles_m, float)
+    area, bounds = _metrics(triangles)
+    return GeometryRevision(_revision_hash(None, (), triangles), None, (), area, area,
+                            bounds, bounds, 0., None, triangles)
+
+
+def _orient(triangles: np.ndarray) -> np.ndarray:
+    # Exact shared vertices only: no guessed weld tolerance or coordinate changes [M§11].
+    _verts, inverse = np.unique(triangles.reshape(-1, 3), axis=0, return_inverse=True)
+    faces = inverse.reshape(-1, 3)
+    edges: dict[tuple[int, int], list[tuple[int, int]]] = defaultdict(list)
+    for i, (a, b, c) in enumerate(faces):
+        if len({a, b, c}) != 3:
+            raise ValueError("remove degenerate faces before orientation")
+        for u, v in ((a, b), (b, c), (c, a)):
+            edges[(min(u, v), max(u, v))].append((i, 1 if u < v else -1))
+    adjacency: dict[int, list[tuple[int, bool]]] = defaultdict(list)
+    for pair in edges.values():
+        if len(pair) > 2:
+            raise ValueError("orientation cannot repair nonmanifold edges")
+        if len(pair) == 2:
+            (a, da), (b, db) = pair
+            adjacency[a].append((b, da == db))
+            adjacency[b].append((a, da == db))
+    oriented = triangles.copy()
+    flips: dict[int, bool] = {}
+    for seed in range(len(faces)):
+        if seed in flips:
+            continue
+        flips[seed] = False
+        shell, queue = [], [seed]
+        for current in queue:
+            shell.append(current)
+            for neighbour, same in adjacency[current]:
+                required = flips[current] ^ same
+                if neighbour in flips and flips[neighbour] != required:
+                    raise ValueError("surface cannot be oriented consistently")
+                if neighbour not in flips:
+                    flips[neighbour] = required
+                    queue.append(neighbour)
+        for i in shell:
+            if flips[i]:
+                oriented[i] = oriented[i, [0, 2, 1]]
+        # Signed volume determines outward orientation only for closed shells [STD].
+        shell_set = set(shell)
+        closed = all(len(pair) == 2 for pair in edges.values() if pair[0][0] in shell_set)
+        part = oriented[shell]
+        volume = float(np.einsum("ij,ij->i", part[:, 0], np.cross(part[:, 1], part[:, 2])).sum() / 6)
+        if closed and volume < 0:
+            oriented[shell] = part[:, [0, 2, 1]]
+    return oriented
+
+
+def _sampled_surface_distance(before: np.ndarray, after: np.ndarray) -> float:
+    def directed(source: np.ndarray, target: np.ndarray) -> float:
+        # Vertices + centroids [ASSUMPTION: finite repair metric samples].
+        points = np.concatenate((source.reshape(-1, 3), source.mean(axis=1)))
+        centers = target.mean(axis=1)
+        tree = cKDTree(centers)
+        radius = float(np.linalg.norm(target - centers[:, None, :], axis=2).max())
+        nearest, _ = tree.query(points)
+        maximum = 0.
+        for point, distance in zip(points, nearest):
+            # Next representable radius avoids omitting a boundary candidate [STD: IEEE754].
+            candidates = tree.query_ball_point(point, np.nextafter(distance + radius, np.inf))
+            closest = min(float(np.linalg.norm(point - _closest_point_on_triangle(point, *target[i])))
+                          for i in candidates)
+            maximum = max(maximum, closest)
+        return maximum
+    return max(directed(before, after), directed(after, before))
+
+
+def repair(rev: GeometryRevision, ops: list[str], *, confirmed_by: str | None) -> GeometryRevision:
+    """Explicit, deterministic minor repairs; closing holes/merging surfaces is not offered [M§11]."""
+    operations = tuple(ops)
+    for operation in operations:
+        if operation not in ALLOWED_OPS:
+            raise ValueError(f"repair {operation!r} not offered")
+        if ALLOWED_OPS[operation] == "major" and not confirmed_by:
+            raise ValueError("major repair requires confirmation")
+    before = rev.triangles_m
+    triangles = before.copy()
+    area_before, bounds_before = _metrics(before)
+    for operation in operations:
+        if operation == "remove_degenerate":
+            # Exact zero only: no unprovided area threshold and no thin-feature deletion [M§11].
+            cross = np.cross(triangles[:, 1] - triangles[:, 0], triangles[:, 2] - triangles[:, 0])
+            triangles = triangles[np.any(cross != 0, axis=1)]
+        elif operation == "remove_duplicate":
+            seen: set[tuple] = set()
+            keep = []
+            for i, triangle in enumerate(triangles):
+                key = tuple(sorted(tuple(vertex) for vertex in triangle))
+                if key not in seen:
+                    seen.add(key)
+                    keep.append(i)
+            triangles = triangles[keep]
+        else:
+            triangles = _orient(triangles)
+    area_after, bounds_after = _metrics(triangles)
+    distance = _sampled_surface_distance(before, triangles)
+    return GeometryRevision(_revision_hash(rev.revision_sha256, operations, triangles),
+                            rev.revision_sha256, operations, area_before, area_after,
+                            bounds_before, bounds_after, distance, confirmed_by, triangles)
