@@ -8,6 +8,8 @@ from dataclasses import dataclass, field
 import numpy as np
 from scipy.spatial import cKDTree
 
+from .frames import RotorFrame
+
 
 class _UnionFind:
     def __init__(self, n: int):
@@ -194,3 +196,68 @@ def resolve_topology_tolerance(triangles_m: np.ndarray, abs_tol_m: float,
     if not np.isfinite(resolved) or resolved <= 0:
         raise ValueError("resolved topology tolerance must be finite metres > 0")
     return TopologyTolerance(abs_tol_m, rel_tol, diagonal, resolved)
+
+
+ROLES = ("body", "blade", "hub", "landing_gear", "payload", "ground", "excluded")  # [M§11]
+
+
+@dataclass(frozen=True)
+class Component:
+    """Explicit classification of a revision-local shell; geometry does not supply rotor metadata."""
+    component_id: str
+    source_file_sha256: str
+    shell_index: int | None
+    role: str | None
+    rotor_id: str | None
+    requires_user_tag: bool
+
+
+@dataclass(frozen=True)
+class Assembly:
+    """SI rotor frames, component tags and rotor-to-zone assignments [M§11].
+
+    rotor_source_model explicitly declares source-modelled rotor IDs, never inferred
+    from absent blades [ASSUMPTION: field name for plan Task 3.3 declaration].
+    """
+    components: tuple[Component, ...]
+    rotors: tuple[RotorFrame, ...]
+    rotation_zones: dict[str, str]
+    rotor_source_model: frozenset[str] = frozenset()
+
+
+def validate_assembly(a: Assembly) -> list[str]:
+    """List blocking tags/assignments; RPM and axes must be supplied, never recovered from CAD [M§11]."""
+    problems: list[str] = []
+    rotor_ids = {r.rotor_id for r in a.rotors}
+    if len(rotor_ids) != len(a.rotors):
+        problems.append("duplicate rotor_id")
+    component_ids = {c.component_id for c in a.components}
+    if len(component_ids) != len(a.components):
+        problems.append("duplicate component_id")
+    for c in a.components:
+        if c.role not in ROLES:
+            problems.append(f"component {c.component_id}: role must be explicitly selected from {ROLES}")
+        if c.requires_user_tag:
+            problems.append(f"component {c.component_id}: user tag confirmation required")
+        if c.role in ("blade", "hub") and c.rotor_id not in rotor_ids:
+            problems.append(f"component {c.component_id}: blade/hub needs an existing rotor")
+        elif c.rotor_id is not None and c.rotor_id not in rotor_ids:
+            problems.append(f"component {c.component_id}: unknown rotor {c.rotor_id}")
+        elif c.rotor_id is not None and c.role not in ("blade", "hub"):
+            problems.append(f"component {c.component_id}: static role cannot be assigned to a rotor")
+    for r in a.rotors:
+        zone = a.rotation_zones.get(r.rotor_id)
+        if not isinstance(zone, str) or not zone.strip():
+            problems.append(f"rotor {r.rotor_id}: rotation zone required")
+        if r.signed_rpm is None:
+            problems.append(f"rotor {r.rotor_id}: signed RPM input required")
+        if (not any(c.role == "blade" and c.rotor_id == r.rotor_id for c in a.components)
+                and r.rotor_id not in a.rotor_source_model):
+            problems.append(f"rotor {r.rotor_id}: blade or explicit rotor_source_model required")
+    for rotor_id in a.rotation_zones.keys() | a.rotor_source_model:
+        if rotor_id not in rotor_ids:
+            problems.append(f"unknown rotor {rotor_id} in zone/source-model declarations")
+    zones = [z for z in a.rotation_zones.values() if isinstance(z, str) and z.strip()]
+    if len(set(zones)) != len(zones):
+        problems.append("rotation zone assigned to multiple rotors")
+    return problems
