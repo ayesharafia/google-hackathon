@@ -75,7 +75,7 @@ def _root_list(text: str) -> tuple[int, str]:
     return int(match[1]), contents
 
 
-def read_points(path) -> np.ndarray:
+def read_points(path: str | Path) -> np.ndarray:
     """Read the native point list as (N,3) SI metres."""
     count, contents = _root_list(_text(path))
     values = _numbers(contents.translate({ord("("): None, ord(")"): None}))
@@ -84,7 +84,7 @@ def read_points(path) -> np.ndarray:
     return values.reshape(count, 3)
 
 
-def read_faces(path) -> list[np.ndarray]:
+def read_faces(path: str | Path) -> list[np.ndarray]:
     """Read ordered polygon vertex indices; preserve native face numbering."""
     count, contents = _root_list(_text(path))
     faces = []
@@ -102,7 +102,7 @@ def read_faces(path) -> list[np.ndarray]:
     return faces
 
 
-def read_boundary(path) -> dict[str, dict]:
+def read_boundary(path: str | Path) -> dict[str, dict]:
     """Native patch type, nFaces and startFace; no patch-name inference."""
     count, contents = _root_list(_text(path))
     patches = {}
@@ -159,7 +159,7 @@ def _field_values(body: str, key: str, count: int | None) -> np.ndarray:
     return values
 
 
-def read_patch_field(path, patch: str) -> tuple[np.ndarray, tuple[int, ...]]:
+def read_patch_field(path: str | Path, patch: str) -> tuple[np.ndarray, tuple[int, ...]]:
     """Read scalar/vector boundary values with native dimensions and face count.
 
     Uniform fields expand from the retained case's constant/polyMesh/boundary.
@@ -203,7 +203,7 @@ def read_patch_field(path, patch: str) -> tuple[np.ndarray, tuple[int, ...]]:
     return values, dimensions
 
 
-def face_centres_and_areas(points, faces) -> tuple[np.ndarray, np.ndarray]:
+def face_centres_and_areas(points: np.ndarray, faces: list[np.ndarray]) -> tuple[np.ndarray, np.ndarray]:
     """OpenFOAM polygon method: fan about point mean, area-weighted centroid.
 
     Return centres in m and area vectors in m² with native fluid-domain winding.
@@ -262,11 +262,11 @@ def _table(path, *, numeric_only: bool) -> tuple[list[str], np.ndarray]:
     return headers, np.asarray(rows, dtype=dtype)
 
 
-def read_function_object_table(path) -> tuple[list[str], np.ndarray]:
+def read_function_object_table(path: str | Path) -> tuple[list[str], np.ndarray]:
     """Preserve actual native column headers, including solver names as strings."""
     return _table(path, numeric_only=False)
 
 
-def read_raw_samples(path) -> tuple[list[str], np.ndarray]:
+def read_raw_samples(path: str | Path) -> tuple[list[str], np.ndarray]:
     """Read numeric samples; an unheaded .xy returns no invented column names."""
     return _table(path, numeric_only=True)

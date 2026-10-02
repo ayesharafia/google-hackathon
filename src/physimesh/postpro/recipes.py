@@ -18,3 +18,4 @@ class PlotRecipe:
     mask: str
     caption: str
     overrides: tuple = ()
+    renderer_version: str = "native_plot_v1"

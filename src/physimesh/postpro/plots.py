@@ -8,8 +8,10 @@ import math
 import re
 import textwrap
 from dataclasses import asdict
+from pathlib import Path
 
 import matplotlib
+import scipy
 
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -65,6 +67,8 @@ def render(recipe: PlotRecipe, data: dict) -> tuple[bytes, dict]:
     Masked/non-finite samples stay masked and grey. No PNG-byte replay claim;
     the array hash and full serialized recipe are the reproducibility contract.
     """
+    if recipe.renderer_version != 'native_plot_v1':
+        raise ValueError('unsupported renderer version')
     field = DEMO_FIELDS[recipe.field_id]
     if recipe.units != field.units:
         raise ValueError('recipe units differ from declared field semantics')
@@ -150,6 +154,11 @@ def render(recipe: PlotRecipe, data: dict) -> tuple[bytes, dict]:
         fig.text(0.06, 0.03, '\n'.join(textwrap.wrap(caption, 120)), fontsize=8, color='#203c2c', va='bottom')
         stream = io.BytesIO(); fig.savefig(stream, format='png')
         return stream.getvalue(), {'range': asdict(record), 'arrays_sha256': arrays_hash(data),
+                                  'operators': {'renderer': recipe.renderer_version, 'source_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+                                                'matplotlib': matplotlib.__version__, 'numpy': np.__version__, 'scipy': scipy.__version__,
+                                                'figure_inches': [10, 6.5], 'dpi': 130, 'shading': 'auto',
+                                                'vector_stride': max(1, values.shape[-1]//28), 'streamline_density': 1.1,
+                                                'interpolation': data.get('interpolation')},
                                   'mask_color': MASK_COLOR, 'caption': caption, 'recipe': asdict(recipe)}
     finally:
         plt.close(fig)
@@ -180,7 +189,8 @@ def resample_slice(samples: np.ndarray, values: np.ndarray, *, bounds: tuple[flo
     x, z = np.meshgrid(np.linspace(xmin, xmax, shape[1]), np.linspace(zmin, zmax, shape[0]))
     grid = griddata(samples[:, [0, 2]], values, (x, z), method='linear')
     interior = x*x+z*z <= (diameter_m/2)**2
-    result = {'x': x, 'z': z, 'values': grid, 'mask': interior}
+    result = {'x': x, 'z': z, 'values': grid, 'mask': interior, 'interpolation': {'version': 'slice_griddata_v1', 'method': 'linear', 'shape': list(shape),
+                                                    'bounds_m': list(bounds), 'diameter_m': diameter_m, 'plane_tolerance_m': plane_tolerance_m}}
     if grid.ndim == 3:
         if grid.shape[-1] != 3:
             raise ValueError('vector slice must contain world Ux,Uy,Uz')

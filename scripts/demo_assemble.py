@@ -28,6 +28,35 @@ def main():
     files = {'results.json': (json.dumps(result, indent=2, allow_nan=False)+'\n').encode(),
              'run_group.json': args.run_group.read_bytes()}
     for record in plots:
+        if record.get('run_group_sha256') != loads['run_group_sha256']:
+            raise ValueError('plot belongs to a different run group')
+        by_level = {mesh['level']: mesh for mesh in group['meshes']}
+        run_id = record['recipe']['run_id']
+        matching = [mesh for mesh in group['meshes'] if mesh['job_id'] == run_id]
+        if matching:
+            bindings = [(matching[0], record['source_hashes'])]
+        elif run_id == loads['run_group_sha256']:
+            if set(record['source_hashes']) != set(by_level):
+                raise ValueError('comparison plot mesh sources differ')
+            bindings = [(by_level[level], sources) for level, sources in record['source_hashes'].items()]
+        else:
+            raise ValueError('plot run identifier differs from selected group')
+        if matching:
+            source_digest = hashlib.sha256(json.dumps(record['source_hashes'], sort_keys=True).encode()).hexdigest()
+        else:
+            per_level = {level: hashlib.sha256(json.dumps(sources, sort_keys=True).encode()).hexdigest()
+                         for level, sources in record['source_hashes'].items()}
+            source_digest = hashlib.sha256(json.dumps(per_level, sort_keys=True).encode()).hexdigest()
+        if source_digest != record['recipe']['source_sha256']:
+            raise ValueError('plot recipe aggregate source hash differs')
+        for mesh, sources in bindings:
+            raw = (Path(mesh['case_dir'])/'run_record.json').read_bytes()
+            if hashlib.sha256(raw).hexdigest() != mesh['run_record_sha256']:
+                raise ValueError('plot execution record changed')
+            retained = json.loads(raw)
+            if not sources or any(retained['outputs'].get(name, {}).get('sha256') != digest
+                                  for name, digest in sources.items()):
+                raise ValueError('plot native source hashes differ')
         plot_id = record['recipe']['plot_id']
         png = (root/'plots'/f'{plot_id}.png').read_bytes()
         if hashlib.sha256(png).hexdigest() != record['png_sha256']:

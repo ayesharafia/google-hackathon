@@ -24,8 +24,8 @@ class MissionResult:
     history_kg: list[float] = field(default_factory=list)
 
 
-def electrical_power(shaft_powers_w, eta_motor, eta_inverter, eta_drive, p_aux_w: float) -> float:
-    """P_elec = sum P_shaft,i / (eta_m eta_inv eta_drv) + P_aux  [M-E46]."""
+def electrical_power(shaft_powers_w: list[float], eta_motor: list[float], eta_inverter: list[float], eta_drive: list[float], p_aux_w: float) -> float:
+    """Power in W, dimensionless efficiencies: sum P_shaft,i/(eta_m eta_inv eta_drv) + P_aux [M-E46]."""
     if not math.isfinite(p_aux_w) or p_aux_w < 0:
         raise ValueError('auxiliary power must be finite and nonnegative')
     total = p_aux_w

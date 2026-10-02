@@ -78,7 +78,8 @@ def main():
         source = entry['source_sha256'] if entry else hashlib.sha256(json.dumps(
             {k: v['source_sha256'] for k, v in native.items()}, sort_keys=True).encode()).hexdigest()
         run_id = entry['job_id'] if entry else load_results['run_group_sha256']
-        caption = ('VERIFICATION CASE: sphere Re=100; world frame; final steady iteration 812. '
+        iteration = entry['iteration'] if entry else ', '.join(f"{key}={value['iteration']}" for key, value in native.items())
+        caption = (f'VERIFICATION CASE: sphere Re=100; world frame; final steady iteration(s) {iteration}. '
                    'Native outputs; visual slice interpolation only; nominal y=0 with native |y| deviation below 1e-5 D; no aircraft result. '+note)
         recipe = PlotRecipe(plot_id, field_id, kind, run_id, source, plane,
                             {'pressure.static_gauge': 'Pa', 'vorticity.y': '1/s',
@@ -88,6 +89,7 @@ def main():
                             'shared_global', *limits, 'sphere interior and nonfinite; grey', caption)
         png, record = render(recipe, data)
         (out/f'{plot_id}.png').write_bytes(png)
+        record['run_group_sha256'] = load_results['run_group_sha256']
         record['png_sha256'] = hashlib.sha256(png).hexdigest()
         record['maximum_abs_sample_y_m'] = entry['maximum_abs_sample_y_m'] if entry else None
         record['source_hashes'] = entry['sources'] if entry else {k: v['sources'] for k, v in native.items()}

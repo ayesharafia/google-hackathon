@@ -53,3 +53,13 @@ serialization without changing native-file digest semantics.
 Independent physics review, fresh-clone solver reproduction, two full timed
 rehearsals and backup video are pending. No release tag or main-branch merge is
 approved by these implementation checks. Evidence stays unverified.
+
+Final software review identified three spec issues: plot/run binding, hard-coded
+iteration captions, and a reuse command that did not rebuild plots. All were
+corrected. Plot operators now retain version, source-code hash, library versions,
+interpolation method/grid/tolerance and rendering parameters. Diagnostic velocity
+eligibility has a named assumption and retained tolerance/version. Native reader
+and electrical-power public signatures have explicit types and units. Final unit
+suite: 285 passed. GitHub checks for 6d90b8d passed. Updated plots were regenerated
+from the original native records into a new immutable local package root;
+previous published packages were preserved.

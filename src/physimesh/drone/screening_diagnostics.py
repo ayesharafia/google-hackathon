@@ -6,8 +6,11 @@ import numpy as np
 from physimesh.drone.atmosphere import make_atmosphere, tip_mach_screen
 from physimesh.drone.frames import rotation_matrix_zyx
 
+# [ASSUMPTION] Numerical zero for support eligibility, not a physical flight margin.
+VELOCITY_ZERO_TOLERANCE_M_S = 1e-9
 
 def diagnostics(project: dict, case_inputs: list[dict]) -> list[dict]:
+    """SI case velocities (m/s), forces (N), radius (m), RPM; output W and Mach."""
     atm_data = project['atmosphere']
     viscosity = atm_data['viscosity']
     atm = make_atmosphere(atm_data['pressure_pa'], atm_data['temperature_k'], source=atm_data['source'],
@@ -21,7 +24,7 @@ def diagnostics(project: dict, case_inputs: list[dict]) -> list[dict]:
         for point in case_input['rotors']:
             rotor = rotors[point['rotor_id']]
             record = {'case_id': case_input['case_id'], 'rotor_id': point['rotor_id'],
-                      'tip_mach': None, 'isolated_ideal_hover_power_w': None, 'unavailable': []}
+                      'tip_mach': None, 'isolated_ideal_hover_power_w': None, 'unavailable': [], 'eligibility_velocity_tolerance_m_s': VELOCITY_ZERO_TOLERANCE_M_S, 'diagnostic_version': 1}
             try:
                 axis = np.asarray(rotor['axis_body'], float)
                 attitude = np.asarray(case['attitude_deg_zyx'], float)
@@ -35,11 +38,11 @@ def diagnostics(project: dict, case_inputs: list[dict]) -> list[dict]:
                     raise ValueError('declare air-relative velocity before tip-Mach or hover diagnostics')
                 axial = float(velocity @ world_axis)
                 lateral = np.linalg.norm(velocity-axial*world_axis)
-                if lateral > 1e-9:
+                if lateral > VELOCITY_ZERO_TOLERANCE_M_S:
                     record['unavailable'].append('tip Mach formula is axial-flight screening only')
                 else:
                     record['tip_mach'] = tip_mach_screen(atm, rpm*2*math.pi/60, radius, axial)
-                if case.get('kind') == 'hover' and np.linalg.norm(velocity) <= 1e-9:
+                if case.get('kind') == 'hover' and np.linalg.norm(velocity) <= VELOCITY_ZERO_TOLERANCE_M_S:
                     thrust = float(np.asarray(point['force_world_n']) @ world_axis)
                     if thrust >= 0:
                         record['isolated_ideal_hover_power_w'] = thrust**1.5/math.sqrt(2*atm.density*math.pi*radius**2)

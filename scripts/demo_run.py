@@ -81,6 +81,12 @@ def reuse_group(group: dict, specs: dict, levels: list[str], iterations: int) ->
                 raise ValueError(f'retained output hash differs: {name}')
 
 
+def render_derived(group_path: Path) -> None:
+    """Rebuild derived SI loads and visualizations from verified native runs."""
+    for script in ('demo_loads.py', 'demo_plots.py', 'demo_surface.py'):
+        subprocess.run([sys.executable, str(ROOT/'scripts'/script), '--run-group', str(group_path)], check=True)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--levels", default="coarse,medium,fine")
@@ -112,6 +118,7 @@ def main() -> int:
         except (KeyError, OSError, ValueError) as exc:
             parser.error(f'reuse refused: {exc}; use a new output-root')
         print(f'{group_path}: reused completed runs after input and output hash verification', flush=True)
+        render_derived(group_path)
         return 0
     for level in levels:
         print(f"{level}: preparing and running", flush=True)
@@ -148,6 +155,7 @@ def main() -> int:
                      if "Solving for" in line][-4:]
         lines.extend(["", f"## {entry['level']}", "", f"Case: `{case}`", "", "```text", *excerpt, *residuals, "```"])
     audit.write_text("\n".join(lines) + "\n")
+    render_derived(group_path)
     print(group_path, flush=True)
     return 0
 
