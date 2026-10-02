@@ -87,3 +87,42 @@ def grid_convergence(f1: float, f2: float, f3: float, r: float, fs: float = 1.25
 def effective_refinement_ratio(volume_m3: float, n_coarse: int, n_fine: int) -> float:
     """3-D effective length h = (V/N)^(1/3) [M§15]."""
     return ((volume_m3 / n_coarse) / (volume_m3 / n_fine)) ** (1.0 / 3.0)
+
+
+def grid_convergence_unequal(f1: float, f2: float, f3: float, r21: float,
+                             r32: float, fs: float = 1.25) -> GridConvergence:
+    """Generalized Richardson fit f(h)=f0+C*h**p, finest first.
+
+    Uses distinct measured ratios, Celik et al., ASME JFE procedure Eqs 1,3,4,7:
+    https://www.asme.org/wwwasmeorg/media/resourcefiles/shop/journals/jfenumaccuracy.pdf
+    Oscillation and absence of a positive-order fit are reported without GCI.
+    This is an estimate of discretization sensitivity, not total uncertainty.
+    """
+    from scipy.optimize import brentq
+
+    if not all(math.isfinite(x) for x in (f1, f2, f3, r21, r32, fs)):
+        raise ValueError('grid study requires finite values')
+    if min(r21, r32) <= 1 or fs <= 0 or f1 == 0:
+        raise ValueError('ratios must exceed one, safety factor positive and fine value nonzero')
+    e21, e32 = f2 - f1, f3 - f2
+    if e21 == 0 or e32 == 0:
+        raise ValueError('zero difference: additional refinement required')
+    ratio = e32 / e21
+    missing = float('nan')
+    if ratio < 0:
+        return GridConvergence(missing, missing, missing, 'oscillatory')
+    a, b = math.log(r21), math.log(r32)
+    if ratio <= b / a:
+        return GridConvergence(missing, missing, missing, 'divergent')
+
+    def log_ratio(p):
+        # log(expm1(x)) = x + log(1-exp(-x)); stable even for high order.
+        return p*b + math.log(-math.expm1(-p*b)) - math.log(-math.expm1(-p*a))
+
+    upper = 1.0
+    while log_ratio(upper) < math.log(ratio):
+        upper *= 2
+    p = brentq(lambda x: log_ratio(x) - math.log(ratio), 1e-10, upper)
+    denominator = math.expm1(p*a)
+    return GridConvergence(p, f1 + (f1-f2)/denominator,
+                           fs*abs((f1-f2)/f1)/denominator, 'monotonic')
