@@ -16,6 +16,8 @@ class Settings:
     api_token: str
     openfoam_image_digest: str | None
     bind_host: str = "127.0.0.1"  # Private development binding [plan Task 1.5].
+    max_upload_bytes: int = 50_000_000
+    max_triangles: int = 1_000_000
 
     def __post_init__(self) -> None:
         if not isinstance(self.api_token, str) or not self.api_token.strip():
@@ -25,6 +27,8 @@ class Settings:
             raise ValueError("PHYSIMESH_OPENFOAM_IMAGE_DIGEST must be an immutable SHA-256 reference")
         if not self.bind_host:
             raise ValueError("PHYSIMESH_BIND_HOST cannot be empty")
+        if self.max_upload_bytes <= 0 or self.max_triangles <= 0:
+            raise ValueError("STL upload limits must be positive")
 
 
 def load_settings(env: Mapping[str, str]) -> Settings:
@@ -42,4 +46,6 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         token,
         env.get("PHYSIMESH_OPENFOAM_IMAGE_DIGEST") or None,
         env.get("PHYSIMESH_BIND_HOST", "127.0.0.1"),
+        int(env.get("PHYSIMESH_MAX_UPLOAD_BYTES", "50000000")),
+        int(env.get("PHYSIMESH_MAX_TRIANGLES", "1000000")),
     )
