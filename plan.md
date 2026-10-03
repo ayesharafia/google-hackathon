@@ -348,7 +348,7 @@ Owner roles: **APP** application engineer; **PHY** rotorcraft/physics engineer; 
 
 **Acceptance/evidence:** fresh clone instructions resolve; tampering is refused; presenter selects the reviewed package; `docs/qa/production-baseline.md` lists performed and pending checks separately. No aircraft validation is asserted.
 
-#### P00.2 [ ] Close Claude findings with meaningful regressions
+#### P00.2 [x] Close Claude findings with meaningful regressions
 
 **Dependencies:** P00.1. **Owner:** APP + PHY; independent reviewer.
 **Existing:** `postpro/results.py`, `drone/screening.py`, result/plot contracts.
@@ -877,7 +877,7 @@ For each release deliver:
 - Security findings, recovery/load evidence, service targets, cost/resource policy and operational ownership.
 - Updated repository guide and the existing Notion technical guide, with links to the accepted code/results rather than future promises.
 
-P00.1 is complete. The next work order is **P00.2, then P01.1**. Hosting and real-data decisions should be collected before their dependent tasks. The release outcome is a private client workspace that explains an approved design's supported payload capability with evidence the client can inspect and the engineering team can reproduce.
+P00.1 and P00.2 are complete within their bounded software/evidence scopes. The P00.2 corrections and final independent review are recorded in `docs/qa/baseline-findings-closure.md`. The next work order is **P01.1**. Before prospective production slice registration, bind the full metric definition into the policy and support historical policy versions; see the closure constraints. Hosting and real-data decisions should be collected before their dependent tasks. The release outcome is a private client workspace that explains an approved design's supported payload capability with evidence the client can inspect and the engineering team can reproduce.
 
 ## 16. Plan self-review and design-law audit obligations
 

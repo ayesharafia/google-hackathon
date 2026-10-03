@@ -1,0 +1,131 @@
+{
+  "archived_reviewed_package_unchanged": true,
+  "original_package_members": 33,
+  "native_files_unchanged": 174,
+  "native_records_unchanged": 3,
+  "legacy_and_new_packages": [
+    {
+      "root": "demo-reviewed",
+      "identity": {
+        "identity": {
+          "schema_version": "publication_identity_v1",
+          "study_id": "acd1b8716144aeaa",
+          "study_sha256": "acd1b8716144aeaa045019515bdf377018ae4a74ce3a0403cf50c52da007ff6a",
+          "payload_manifest_sha256": "23e025d7665a2d29b4d01ee6fef5b3c63328b57fd5a91e31487d013ce8a78d63",
+          "package_revision_sha256": "00507514ad5d009b8d3e2ca2b72ac826cb6287d94202460f7392b9c25c64732d"
+        },
+        "origin": "derived_legacy",
+        "qualification": "Content identity only; evidence and independent review remain separate."
+      },
+      "export_sha256": "6f60886d36235520567373a766d7efd74ab35709fe5854bd070a7a7916ff020f",
+      "export_bytes": 2579724,
+      "members": 34,
+      "evidence": "unverified",
+      "independent_review": "pending"
+    },
+    {
+      "root": "demo-final",
+      "identity": {
+        "identity": {
+          "schema_version": "publication_identity_v1",
+          "study_id": "acd1b8716144aeaa",
+          "study_sha256": "acd1b8716144aeaa045019515bdf377018ae4a74ce3a0403cf50c52da007ff6a",
+          "payload_manifest_sha256": "18e6cc7a54fde79d6bd8966728e243e9878fcd2435e5ac986a190835c355b079",
+          "package_revision_sha256": "051749fc81e27324d9a72e777e7ca6c6781adc404840576a26ca5c6fed3c916e"
+        },
+        "origin": "derived_legacy",
+        "qualification": "Content identity only; evidence and independent review remain separate."
+      },
+      "export_sha256": "0a084f5d52b2f1075baee1466c51ae23e75a23448944b0643ee24a39a81a7f49",
+      "export_bytes": 2577183,
+      "members": 34,
+      "evidence": "unverified",
+      "independent_review": "pending"
+    },
+    {
+      "root": "p00-findings-accepted",
+      "identity": {
+        "identity": {
+          "schema_version": "publication_identity_v1",
+          "study_id": "acd1b8716144aeaa",
+          "study_sha256": "acd1b8716144aeaa045019515bdf377018ae4a74ce3a0403cf50c52da007ff6a",
+          "payload_manifest_sha256": "61a2a14eac4c260571c4e2d51fcbe0dfa4e4a13d03db6682198a01eb3669ac89",
+          "package_revision_sha256": "75967364f6d48556874bc369ac0175f92ebe3b6fc902e38df71e834ac9b071f1"
+        },
+        "origin": "retained_envelope",
+        "qualification": "Content identity only; evidence and independent review remain separate."
+      },
+      "export_sha256": "04efb390c8c2b69b21519bf997766cb08f2e906a2c704405a6f6824140d49c0b",
+      "export_bytes": 2261416,
+      "members": 27,
+      "evidence": "unverified",
+      "independent_review": "pending"
+    }
+  ],
+  "schema_version": "baseline_findings_checks_v1",
+  "code_candidate": "0bc092fa160319eab8b4e9113307def3986992c3",
+  "review_fixed_point": "966d99d3ab6cd5272534c05d22e26476560e5a2f",
+  "scope": "bounded P00.2 baseline corrections",
+  "review": {
+    "physics": "pass_bounded_p002",
+    "reviewer": "Claude Opus 5.5",
+    "historical_reference_authorship_disclosed": true,
+    "standards_remaining_actionable": 0,
+    "spec_remaining_actionable": 0
+  },
+  "tests": {
+    "unit": 365,
+    "reference": 118,
+    "backend": 3,
+    "backend_candidate": "6dbf558fff3f863d2e43fccddc9a2173c494d0da",
+    "ruff": "passed"
+  },
+  "policy": {
+    "version": "sphere_slice_policy_v1",
+    "sha256": "babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7",
+    "existing_campaign_registration": "retrospective",
+    "production_followup": "bind metric definition and add compatible multi-version loader before prospective production campaign"
+  },
+  "browser": {
+    "desktop_width": 944,
+    "phone_width": 390,
+    "page_overflow": false,
+    "console_errors_or_warnings": 0,
+    "zip_preparation": "verified",
+    "save_link_filename": "full package revision present",
+    "download_capture": "timeout; API ZIP bytes verified; no new browser-saved file claimed"
+  },
+  "production_ready": false,
+  "aircraft_validation": "not_established",
+  "human_release_approval": "pending",
+  "local_receipt_fingerprints": {
+    ".backend/p00-findings-final/unit-final.xml": {
+      "sha256": "d89a35753a7c3e884d5e8d8c5e9f4e84ca312c88b08daf28beb8bc50154a57e9",
+      "bytes": 45654
+    },
+    ".backend/p00-findings-v2/reference.xml": {
+      "sha256": "df0b812d7d037ed278b09f5910c4dca60b43d460672e3e79380624d9982b7784",
+      "bytes": 13901
+    },
+    ".backend/p00-findings-v2/backend-final.xml": {
+      "sha256": "e27b8f2710645e24e87229a915cd9e23b69ca95bcc686764c7f6d075810a962b",
+      "bytes": 610
+    },
+    ".backend/p00-findings-final/claude-delta.json": {
+      "sha256": "4ca7bf0b0eee07d67ba3dcffe511f6c3423c090f44826118af4cc59baf56818e",
+      "bytes": 11969
+    },
+    ".backend/p00-findings-v3/claude-final.json": {
+      "sha256": "167f0fbce05c2d47338f47e34bed38319f09094ed751bcef65f74a419b9ac418",
+      "bytes": 18324
+    },
+    ".backend/p00-findings-accepted/screening-desktop.jpg": {
+      "sha256": "8ea1e0b48952b4da85ae0dbe28010aa7cf218ca62b06b41990a3f930260c6933",
+      "bytes": 71334
+    },
+    ".backend/p00-findings-accepted/screening-mobile.jpg": {
+      "sha256": "dd84fc708efacaae51403021f37644877e09c0010f678f22c89c37c40ba7b00c",
+      "bytes": 37087
+    }
+  }
+}
