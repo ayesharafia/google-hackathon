@@ -93,3 +93,13 @@ def test_horizontal_force_blocks_unresolved_trim():
     assert report.max_payload_kg is None and report.outcome == 'unsupported_scope'
     assert report.reasons[0]['code'] == 'horizontal_balance_unresolved'
     assert report.trim_eligibility == 'not_evaluated'
+
+
+@pytest.mark.parametrize('sideforce', [1e200, 1e308])
+def test_finite_large_horizontal_force_cannot_overflow_into_trim_eligibility(sideforce):
+    from dataclasses import replace
+    case = _case('hover', 400)
+    case = replace(case, rotors=(replace(case.rotors[0], force_world_n=(sideforce, 0, 1600)),))
+    report = capacity_from_cases(_mass(), ['hover'], [case], usable_energy_j=200_000)
+    assert report.max_payload_kg is None
+    assert report.outcome in ('unsupported_scope', 'inputs_incomplete')

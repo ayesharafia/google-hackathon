@@ -10,6 +10,7 @@ import math
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass
+from numbers import Real
 
 import numpy as np
 
@@ -88,8 +89,11 @@ def _finite_nonnegative(value: object) -> bool:
 
 def _vector3(value: object) -> np.ndarray | None:
     try:
+        raw = np.asarray(value, object)
+        if raw.shape != (3,) or any(isinstance(v, bool) or not isinstance(v, Real) for v in raw):
+            return None
         array = np.asarray(value, float)
-    except (TypeError, ValueError):
+    except (TypeError, ValueError, OverflowError):
         return None
     if array.shape != (3,) or not bool(np.isfinite(array).all()):
         return None
@@ -148,7 +152,7 @@ def capacity_from_cases(mass: MassSummary, declared_case_ids: Sequence[str],
             blocking.append(f"{path}.body_force_world_n")
         if not isinstance(case.body_force_source_sha256, str) or not _SHA256.fullmatch(case.body_force_source_sha256):
             blocking.append(f"{path}.body_force_source_sha256")
-        if not isinstance(case.vertical_acceleration_m_s2, (int, float)) or not math.isfinite(
+        if isinstance(case.vertical_acceleration_m_s2, bool) or not isinstance(case.vertical_acceleration_m_s2, (int, float)) or not math.isfinite(
             case.vertical_acceleration_m_s2
         ) or G0 + case.vertical_acceleration_m_s2 <= 0:
             blocking.append(f"{path}.vertical_acceleration_m_s2")
@@ -212,12 +216,19 @@ def capacity_from_cases(mass: MassSummary, declared_case_ids: Sequence[str],
             infeasible.append({"category": "infeasible_limits", "code": "usable_energy_exceeded",
                                "detail": f"{path}: usable energy insufficient at the stated operating point",
                                "actual_j": energy, "limit_j": usable_energy_j})
-        horizontal = np.sum([*forces, body_force], axis=0)[:2]
-        scale_n = max(1.0, sum(float(np.linalg.norm(f)) for f in [*forces, body_force]))
-        if np.linalg.norm(horizontal) > 1e-9 * scale_n:
+        try:
+            horizontal = [math.fsum(float(f[axis]) for f in [*forces, body_force]) for axis in (0, 1)]
+            scale_n = max(1.0, math.fsum(math.hypot(*f) for f in [*forces, body_force]))
+        except OverflowError:
+            blocking.append(f'{path}: horizontal force/scale overflowed')
+            continue
+        if not all(map(math.isfinite, [*horizontal, scale_n])):
+            blocking.append(f'{path}: horizontal force/scale nonfinite')
+            continue
+        if math.hypot(*horizontal) > 1e-9 * scale_n:
             unsupported.append({"category": "unsupported_scope", "code": "horizontal_balance_unresolved",
                                 "detail": f"{path}: horizontal force balance requires trim",
-                                "residual_n": horizontal.tolist(), "numerical_tolerance_n": 1e-9 * scale_n})
+                                "residual_n": horizontal, "numerical_tolerance_n": 1e-9 * scale_n})
         try:
             net_z = math.fsum([*(float(force[2]) for force in forces), float(body_force[2])])
         except OverflowError:

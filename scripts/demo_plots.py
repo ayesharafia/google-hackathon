@@ -55,6 +55,9 @@ def main():
             ('vorticity', arrays['omega'][:, :3], arrays['omega'][:, 4]),
         ):
             grids[field], eligibility[field] = evaluate_slice(samples, values, diameter_m=group['D_m'])
+            filename = {'speed': 'U_yNormal.raw', 'pressure': 'p_yNormal.raw', 'vorticity': 'vorticity_yNormal.raw'}[field]
+            name = str((plane/filename).relative_to(case))
+            eligibility[field]['source_sha256'] = {name: hashes[name]}
         profile_path = verified(case/'postProcessing/sample1'/time/'centreLine_p_U.xy')
         _, profile = read_raw_samples(profile_path)
         if profile.shape[1] != 5:

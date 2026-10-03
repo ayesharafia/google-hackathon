@@ -9,7 +9,7 @@ from physimesh.postpro.interpretation import interpret
 from physimesh.postpro.publication import identity_bytes, publication_identity
 from physimesh.postpro.refusals import sphere_refusals
 from physimesh.postpro.result_contract import assemble_results
-from physimesh.postpro.slice_eligibility import registered_policy
+from physimesh.postpro.slice_eligibility import registered_policy, validate_native_reports
 
 
 def main():
@@ -31,6 +31,10 @@ def main():
     eligibility_raw = (root/'slice_eligibility.json').read_bytes()
     eligibility = json.loads(eligibility_raw)
     policy, policy_sha = registered_policy()
+    if set(eligibility) != {mesh['level'] for mesh in group['meshes']}:
+        raise ValueError('slice eligibility must cover every mesh')
+    for mesh in group['meshes']:
+        validate_native_reports(mesh, eligibility[mesh['level']], rho=group['rho_ref_kg_m3'], diameter_m=group['D_m'])
     for level, fields in eligibility.items():
         for field, check in fields.items():
             if check['policy'] != policy or check['policy_sha256'] != policy_sha:

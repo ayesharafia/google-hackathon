@@ -5,6 +5,8 @@ from pathlib import Path
 
 import numpy as np
 
+from physimesh.solver.foam_ascii import read_raw_samples
+
 from .plots import resample_slice
 
 
@@ -74,3 +76,36 @@ def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float
     report['status'] = 'eligible_visualization_only'
     baseline['slice_eligibility'] = report
     return baseline, report
+
+
+def native_slice_reports(mesh: dict, *, rho: float, diameter_m: float) -> dict:
+    """Recompute eligibility from verified native bytes at publication time.
+
+    A copied status or fabricated sensitivity report is insufficient. The full
+    report, including exact native-file hashes, must equal this re-derivation.
+    """
+    case = Path(mesh['case_dir'])
+    record_raw = (case/'run_record.json').read_bytes()
+    if hashlib.sha256(record_raw).hexdigest() != mesh['run_record_sha256']:
+        raise ValueError('slice execution record changed')
+    record = json.loads(record_raw)
+    reports, coordinates = {}, None
+    for field, filename in [('speed', 'U_yNormal.raw'), ('pressure', 'p_yNormal.raw'), ('vorticity', 'vorticity_yNormal.raw')]:
+        name = f"postProcessing/cuttingPlane/{mesh['final_time']}/{filename}"
+        path = case/name
+        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        if record['outputs'].get(name, {}).get('sha256') != digest:
+            raise ValueError('native slice source changed')
+        _, data = read_raw_samples(path)
+        if coordinates is not None and not np.array_equal(coordinates, data[:, :3]):
+            raise ValueError('native slice sample associations differ')
+        coordinates = data[:, :3]
+        values = data[:, 3:6] if field == 'speed' else data[:, 3]*rho if field == 'pressure' else data[:, 4]
+        _, reports[field] = evaluate_slice(coordinates, values, diameter_m=diameter_m)
+        reports[field]['source_sha256'] = {name: digest}
+    return reports
+
+
+def validate_native_reports(mesh: dict, reports: dict, *, rho: float, diameter_m: float) -> None:
+    if reports != native_slice_reports(mesh, rho=rho, diameter_m=diameter_m):
+        raise ValueError('slice eligibility differs from independently reprocessed native bytes')
