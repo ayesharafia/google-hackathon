@@ -17,6 +17,7 @@ import numpy as np
 from .atmosphere import G0
 from .mass import MassSummary
 from .models import AircraftStatus
+from .screening_scope import MAX_MARGIN_DURATION_S
 
 _SHA256 = re.compile(r"[0-9a-f]{64}")
 
@@ -62,6 +63,7 @@ class CaseCapacity:
     electrical_power_w: float
     energy_required_j: float
     source_sha256: tuple[str, ...]
+    eligibility: str = 'vertical_screening_only'
 
 
 @dataclass(frozen=True)
@@ -196,6 +198,9 @@ def capacity_from_cases(mass: MassSummary, declared_case_ids: Sequence[str],
             continue
         if blocking:
             continue
+        if abs(case.vertical_acceleration_m_s2) > 1e-9 and case.duration_s > MAX_MARGIN_DURATION_S:
+            unsupported.append({'category': 'unsupported_scope', 'code': 'instantaneous_duration_exceeded',
+                                'detail': f'{path}: acceleration margin longer than 2 s requires a trajectory model'})
         try:
             power = math.fsum(powers)
         except OverflowError:
@@ -239,8 +244,13 @@ def capacity_from_cases(mass: MassSummary, declared_case_ids: Sequence[str],
         if not all(map(math.isfinite, (net_z, supported, raw_margin))):
             blocking.append(f"{path}: force or capacity overflowed")
             continue
+        case_infeasible = any(reason['detail'].startswith(path) for reason in infeasible)
+        case_unsupported = any(reason['detail'].startswith(path) for reason in unsupported)
+        eligibility = ('excluded_infeasible_and_unsupported' if case_infeasible and case_unsupported else
+                       'excluded_infeasible' if case_infeasible else
+                       'excluded_unsupported' if case_unsupported else 'vertical_screening_only')
         calculated.append(CaseCapacity(identifier, net_z, supported, raw_margin,
-                                       max(0., raw_margin), power, energy, tuple(sources)))
+                                       max(0., raw_margin), power, energy, tuple(sources), eligibility))
 
     if blocking:
         return CapacityReport(None, None, tuple(calculated), empty_mass,

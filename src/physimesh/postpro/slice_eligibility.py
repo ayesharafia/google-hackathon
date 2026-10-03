@@ -9,10 +9,34 @@ from physimesh.solver.foam_ascii import read_raw_samples
 
 from .plots import resample_slice
 
+POLICY_PATH = Path(__file__).with_name('schema').joinpath('sphere_slice_policy_v1.json')
+POLICY_DIGESTS = {'sphere_slice_policy_v1': 'babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7'}
+REGISTRATION_INPUT = 'system/sliceEligibility.json'
+
 
 def registered_policy() -> tuple[dict, str]:
-    raw = Path(__file__).with_name('schema').joinpath('sphere_slice_policy_v1.json').read_bytes()
-    return json.loads(raw), hashlib.sha256(raw).hexdigest()
+    raw = POLICY_PATH.read_bytes()
+    policy, digest = json.loads(raw), hashlib.sha256(raw).hexdigest()
+    if POLICY_DIGESTS.get(policy['schema_version']) != digest:
+        raise ValueError('registered slice policy changed under its version; register a new version')
+    return policy, digest
+
+
+def registration_input() -> bytes:
+    policy, digest = registered_policy()
+    return (json.dumps({'schema_version': 'slice_policy_registration_v1',
+                        'policy_version': policy['schema_version'], 'policy_sha256': digest}, sort_keys=True)+'\n').encode()
+
+
+def registration_for_run(case: Path, record: dict) -> dict:
+    """A pre-execution input hash, not a retroactive annotation, proves binding."""
+    if REGISTRATION_INPUT not in record.get('inputs', {}):
+        return {'state': 'retrospective', 'reason': 'captured native run predates registered policy input'}
+    raw = (case/REGISTRATION_INPUT).read_bytes()
+    if raw != registration_input() or hashlib.sha256(raw).hexdigest() != record['inputs'][REGISTRATION_INPUT]:
+        raise ValueError('pre-execution slice registration differs from the registered policy')
+    return {'state': 'pre_execution_input', 'input_path': REGISTRATION_INPUT,
+            'input_sha256': hashlib.sha256(raw).hexdigest(), **json.loads(raw)}
 
 
 def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float) -> tuple[dict | None, dict]:
@@ -26,7 +50,8 @@ def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float
     """
     policy, digest = registered_policy()
     report = {'policy': policy, 'policy_sha256': digest, 'status': 'refused',
-              'maximum_abs_sample_y_m': None, 'sensitivity': [], 'reasons': []}
+              'maximum_abs_sample_y_m': None, 'sensitivity': [], 'reasons': [],
+              'registration': {'state': 'evaluation_only', 'reason': 'no native run input binding supplied'}}
     samples, values = np.asarray(samples, float), np.asarray(values, float)
     options = {'bounds': tuple(diameter_m*np.asarray(policy['view_bounds_d'])),
                'diameter_m': diameter_m, 'shape': tuple(policy['grid_shape'])}
@@ -63,14 +88,21 @@ def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float
             rms = float(np.sqrt(np.mean(difference**2))/scale)
             peak = float(np.max(np.abs(difference))/scale)
             item.update(external_coverage=subset_coverage, normalized_rms_change=rms, normalized_peak_change=peak)
-            item['passed'] = (subset_coverage >= policy['minimum_external_coverage']
-                              and rms <= policy['maximum_normalized_rms_change']
-                              and peak <= policy['maximum_normalized_peak_change'])
+            failures = []
+            if subset_coverage < policy['minimum_external_coverage']:
+                failures.append('external coverage')
+            if rms > policy['maximum_normalized_rms_change']:
+                failures.append('normalized RMS change')
+            if peak > policy['maximum_normalized_peak_change']:
+                failures.append('normalized peak change')
+            item['failed_metrics'] = failures
+            item['passed'] = not failures
         except ValueError as exc:
             item['reason'] = str(exc)
         report['sensitivity'].append(item)
         if not item['passed']:
-            report['reasons'].append(f'sensitivity/coverage failed at {fraction:g} D')
+            detail = ', '.join(item.get('failed_metrics', [])) or item.get('reason', 'unsupported subset')
+            report['reasons'].append(f'{detail} failed at {fraction:g} D')
     if report['reasons']:
         return None, report
     report['status'] = 'eligible_visualization_only'
@@ -89,6 +121,7 @@ def native_slice_reports(mesh: dict, *, rho: float, diameter_m: float) -> dict:
     if hashlib.sha256(record_raw).hexdigest() != mesh['run_record_sha256']:
         raise ValueError('slice execution record changed')
     record = json.loads(record_raw)
+    registration = registration_for_run(case, record)
     reports, coordinates = {}, None
     for field, filename in [('speed', 'U_yNormal.raw'), ('pressure', 'p_yNormal.raw'), ('vorticity', 'vorticity_yNormal.raw')]:
         name = f"postProcessing/cuttingPlane/{mesh['final_time']}/{filename}"
@@ -103,6 +136,7 @@ def native_slice_reports(mesh: dict, *, rho: float, diameter_m: float) -> dict:
         values = data[:, 3:6] if field == 'speed' else data[:, 3]*rho if field == 'pressure' else data[:, 4]
         _, reports[field] = evaluate_slice(coordinates, values, diameter_m=diameter_m)
         reports[field]['source_sha256'] = {name: digest}
+        reports[field]['registration'] = registration
     return reports
 
 

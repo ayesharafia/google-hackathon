@@ -156,7 +156,7 @@ def screening(request: Request, body: ScreeningRequest):
                              'Rotor performance must already include environment, attitude and reserve policy.']
     result['assumptions'] += ['Constant-point force and energy screening only; no trajectory or sequential mission integration.',
                               'Acceleration margin uses force at the supplied instantaneous velocity; its duration is an illustrative constant-power energy check.',
-                              'Trim eligibility: geometry/conditions meet the restricted vertical screen, but moment balance, control allocation and payload CG remain unevaluated.']
+                              'Moment balance, control allocation and payload CG remain unevaluated; any restricted-screen failure withholds the headline.']
     return result
 
 

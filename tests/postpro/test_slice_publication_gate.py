@@ -67,3 +67,24 @@ def test_assembly_refuses_unsupported_slice_even_with_matching_fabricated_recipe
     with pytest.raises(ValueError, match='reprocessed native'):
         assembly.main()
     assert not (tmp_path/'published/results').exists()
+
+
+def test_registration_requires_exact_retained_pre_execution_input(tmp_path):
+    from physimesh.postpro.slice_eligibility import (
+        REGISTRATION_INPUT,
+        registration_for_run,
+        registration_input,
+    )
+    mesh = native(tmp_path)
+    case = Path(mesh['case_dir'])
+    record = json.loads((case/'run_record.json').read_bytes())
+    assert registration_for_run(case, record)['state'] == 'retrospective'
+    raw = registration_input()
+    path = case/REGISTRATION_INPUT
+    path.parent.mkdir(exist_ok=True)
+    path.write_bytes(raw)
+    record['inputs'] = {REGISTRATION_INPUT: hashlib.sha256(raw).hexdigest()}
+    assert registration_for_run(case, record)['state'] == 'pre_execution_input'
+    path.write_bytes(raw.replace(b'sphere_slice_policy_v1', b'sphere_slice_policy_v9'))
+    with pytest.raises(ValueError, match='pre-execution slice registration'):
+        registration_for_run(case, record)

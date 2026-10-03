@@ -11,14 +11,16 @@ from physimesh.api.settings import Settings
 from physimesh.postpro.result_contract import assemble_results
 
 AUTH = {'Authorization': 'Bearer test-token'}
-ID = 'c'*16
+GROUP = {'label': 'VERIFICATION CASE: sphere Re=100', 'code_version': 'a'*40,
+         'image_digest': 'image@sha256:'+'b'*64, 'Re': 100, 'D_m': 1,
+         'rho_ref_kg_m3': 1, 'nu_m2_s': .01, 'u_inf_m_s': [1, 0, 0]}
+STUDY_SHA256 = hashlib.sha256(json.dumps(GROUP).encode()).hexdigest()
+ID = STUDY_SHA256[:16]
 
 
 def package(tmp_path):
-    group = {'label': 'VERIFICATION CASE: sphere Re=100', 'code_version': 'a'*40,
-             'image_digest': 'image@sha256:'+'b'*64, 'Re': 100, 'D_m': 1,
-             'rho_ref_kg_m3': 1, 'nu_m2_s': .01, 'u_inf_m_s': [1, 0, 0]}
-    loads = {'run_group_sha256': 'c'*64, 'runs': [{'level': level, 'cd': 1.1,
+    group = GROUP
+    loads = {'run_group_sha256': STUDY_SHA256, 'runs': [{'level': level, 'cd': 1.1,
               'reconciliation': {'status': 'diagnostic_only'}, 'convergence': {'passed': True}}
              for level in ('coarse', 'medium', 'fine')], 'mesh_study': {'behaviour': 'oscillatory'}}
     result = assemble_results(group, loads, [])
@@ -88,7 +90,7 @@ def test_rehashed_changes_cannot_reuse_retained_revision(tmp_path):
     from physimesh.postpro.publication import identity_bytes, publication_identity
     client, root = package(tmp_path)
     manifest = json.loads((root/'hashes.json').read_text())
-    envelope = identity_bytes(publication_identity(manifest, 'c'*64))
+    envelope = identity_bytes(publication_identity(manifest, STUDY_SHA256))
     (root/'publication.json').write_bytes(envelope)
     manifest['publication.json'] = hashlib.sha256(envelope).hexdigest()
     (root/'hashes.json').write_text(json.dumps(manifest))
@@ -96,6 +98,17 @@ def test_rehashed_changes_cannot_reuse_retained_revision(tmp_path):
     changed = b'changed recipe'
     (root/'recipes/pressure.json').write_bytes(changed)
     manifest['recipes/pressure.json'] = hashlib.sha256(changed).hexdigest()
+    (root/'hashes.json').write_text(json.dumps(manifest))
+    assert client.get(f'/api/drone/results/{ID}/publication', headers=AUTH).status_code == 409
+    assert client.get(f'/api/drone/runs/{ID}/export', headers=AUTH).status_code == 409
+
+
+def test_identity_refuses_a_run_group_provenance_mismatch(tmp_path):
+    client, root = package(tmp_path)
+    changed = b'{"different":"group"}'
+    (root/'run_group.json').write_bytes(changed)
+    manifest = json.loads((root/'hashes.json').read_text())
+    manifest['run_group.json'] = hashlib.sha256(changed).hexdigest()
     (root/'hashes.json').write_text(json.dumps(manifest))
     assert client.get(f'/api/drone/results/{ID}/publication', headers=AUTH).status_code == 409
     assert client.get(f'/api/drone/runs/{ID}/export', headers=AUTH).status_code == 409

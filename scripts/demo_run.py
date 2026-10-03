@@ -14,11 +14,17 @@ from pathlib import Path
 from physimesh.core.artifacts import ArtifactStore
 from physimesh.core.jobs import Budgets, JobLedger
 from physimesh.drone.demo_geometry import binary_stl_bytes, icosphere_triangles
+from physimesh.postpro.slice_eligibility import REGISTRATION_INPUT, registration_input
 from physimesh.solver.openfoam_cases import ExternalSteadySpec, external_steady_case, refinement_levels
 from physimesh.solver.runner import run_case
 
 IMAGE = "opencfd/openfoam-run@sha256:4229997e74defb81548222d511b8e3b95b98305e5df41b8e88b031813fe47eeb"
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def registered_case_files(spec):
+    """Retain the slice policy with hashed job inputs BEFORE solver execution."""
+    return external_steady_case(spec) | {REGISTRATION_INPUT: registration_input()}
 
 
 def demo_spec(iterations: int) -> ExternalSteadySpec:
@@ -55,6 +61,8 @@ def reuse_group(group: dict, specs: dict, levels: list[str], iterations: int) ->
     """Reuse only identical generated inputs and byte-verified completed outputs."""
     if group['image_digest'] != IMAGE or group['iteration_cap'] != iterations:
         raise ValueError('retained backend or iteration cap differs')
+    if 'slice_policy' in group and group['slice_policy'] != json.loads(registration_input()):
+        raise ValueError('retained pre-execution slice policy differs')
     if [entry['level'] for entry in group['meshes']] != levels:
         raise ValueError('retained mesh selection differs or is incomplete')
     for entry in group['meshes']:
@@ -66,7 +74,8 @@ def reuse_group(group: dict, specs: dict, levels: list[str], iterations: int) ->
             raise ValueError('retained execution record changed')
         record = json.loads(raw)
         expected = {name: hashlib.sha256(data).hexdigest()
-                    for name, data in external_steady_case(specs[entry['level']]).items()}
+                    for name, data in (registered_case_files(specs[entry['level']]) if 'slice_policy' in group
+                                       else external_steady_case(specs[entry['level']])).items()}
         if record['inputs'] != expected or record['image_digest'] != IMAGE:
             raise ValueError('generated input hashes differ from retained run')
         for name, evidence in record['outputs'].items():
@@ -111,6 +120,7 @@ def main() -> int:
                                "additional_iterations_after_trigger": 400},
              "Re": 100., "D_m": 1., "u_inf_m_s": [1., 0., 0.], "nu_m2_s": 0.01,
              "rho_ref_kg_m3": 1., "meshes": [], "evidence": "unverified"}
+    group['slice_policy'] = json.loads(registration_input())
     group_path = output / "run_group.json"
     if group_path.exists():
         try:
@@ -123,7 +133,7 @@ def main() -> int:
     for level in levels:
         print(f"{level}: preparing and running", flush=True)
         budgets = Budgets(2, 4, 5, 7200, 512)
-        job_id = run_case(ledger, store, external_steady_case(specs[level]), IMAGE, budgets, output / "runs")
+        job_id = run_case(ledger, store, registered_case_files(specs[level]), IMAGE, budgets, output / "runs")
         job = ledger.get(job_id)
         entry = {"level": level, "job_id": job_id, "case_dir": job.payload["case_dir"],
                  "state": job.state, "reason": job.reason,

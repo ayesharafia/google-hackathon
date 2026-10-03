@@ -61,3 +61,14 @@ def test_unsupported_vertical_scope_refused(tmp_path, change):
     else:
         case.pop('analysis_scope')
     assert case_scope(case, rotors)
+
+
+def test_long_acceleration_margin_cannot_recreate_a_constant_climb_trajectory(tmp_path):
+    project = example(tmp_path)
+    case = project['mission']['cases'][1]
+    case['duration_s'] = 180
+    assert any('at most 2 s' in issue for issue in case_scope(case, project['rotors']))
+
+
+def test_malformed_pack_selection_returns_a_structured_refusal():
+    assert pack_consistency({'mission': {'energy_system': {}, 'reserve_policy': {}}, 'masses': {'items': [None]}})['status'] == 'inputs_incomplete'

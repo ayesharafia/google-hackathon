@@ -45,3 +45,19 @@ def test_degenerate_sample_geometry_is_refused():
     xyz = np.c_[np.linspace(-2, 5, 10), np.zeros(10), np.zeros(10)]
     grid, check = evaluate_slice(xyz, np.ones(10), diameter_m=1)
     assert grid is None and check['reasons']
+
+
+def test_policy_version_is_pinned_and_cannot_silently_admit_more_views(tmp_path, monkeypatch):
+    import json
+
+    import pytest
+
+    import physimesh.postpro.slice_eligibility as module
+    policy, digest = registered_policy()
+    assert digest == 'babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7'
+    policy['maximum_normalized_peak_change'] = .06
+    changed = tmp_path/'policy.json'
+    changed.write_text(json.dumps(policy))
+    monkeypatch.setattr(module, 'POLICY_PATH', changed)
+    with pytest.raises(ValueError, match='changed under its version'):
+        registered_policy()

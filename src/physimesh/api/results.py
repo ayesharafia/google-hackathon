@@ -105,7 +105,11 @@ def _publication(package, manifest, result):
     for name in manifest:
         _read(package, name, manifest)
     try:
+        if manifest.get('run_group.json') != result['provenance']['run_group_sha256']:
+            raise ValueError('study provenance differs from actual run-group bytes')
         identity = publication_identity(manifest, result['provenance']['run_group_sha256'])
+        if identity.study_id != result['run_group_id']:
+            raise ValueError('study identity differs from results')
         if 'publication.json' in manifest:
             validate_identity(_read(package, 'publication.json', manifest), identity)
         return identity

@@ -68,3 +68,10 @@ def test_conflicting_duplicate_native_history_is_refused(tmp_path):
     path.write_text('\n'.join(lines)+'\n')
     with pytest.raises(FoamAsciiError, match='conflicting'):
         _columns(path)
+
+
+def test_moment_components_below_floor_do_not_claim_discriminating_agreement():
+    result = sphere_load_result(FIXTURE, '812', rho=1, speed=1, diameter=1)
+    check = result['reconciliation']['checks']['moment']
+    assert len(check['component_discriminating']) == 3
+    assert all(isinstance(value, bool) for value in check['component_discriminating'])

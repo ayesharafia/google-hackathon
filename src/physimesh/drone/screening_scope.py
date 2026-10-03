@@ -8,14 +8,16 @@ from collections.abc import Mapping
 
 import numpy as np
 
+MAX_MARGIN_DURATION_S = 2.0  # Bounded illustration policy, not a physical trajectory-validity limit.
+
 
 def pack_consistency(project: dict) -> dict:
-    energy = project['mission']['energy_system']
-    reserve = project['mission']['reserve_policy']
-    names = energy.get('pack_mass_item_names')
-    items = project['masses']['items']
-    by_name = {item['name']: item for item in items}
     try:
+        energy = project['mission']['energy_system']
+        reserve = project['mission']['reserve_policy']
+        names = energy.get('pack_mass_item_names')
+        items = project['masses']['items']
+        by_name = {item['name']: item for item in items}
         if (not isinstance(names, list) or not names or any(not isinstance(n, str) for n in names)
                 or len(set(names)) != len(names) or len(by_name) != len(items)
                 or any(n not in by_name or by_name[n]['category'] != 'energy' for n in names)):
@@ -33,7 +35,7 @@ def pack_consistency(project: dict) -> dict:
         derived = mass * density * fraction * (1-r) * 3600
         if not math.isfinite(derived) or derived <= 0:
             raise ValueError('derived pack energy overflowed or underflowed')
-    except (KeyError, TypeError, ValueError, OverflowError) as exc:
+    except (AttributeError, KeyError, TypeError, ValueError, OverflowError) as exc:
         return {'status': 'inputs_incomplete', 'code': 'pack_inputs_unresolved', 'detail': str(exc)}
     return {'status': 'consistent' if math.isclose(declared, derived, rel_tol=1e-9, abs_tol=0) else 'inconsistent',
             'code': 'pack_energy_consistency', 'pack_mass_kg': mass, 'pack_mass_item_names': names,
@@ -70,6 +72,11 @@ def case_scope(case: dict, rotors: list[dict]) -> list[str]:
         # this acceleration into a trajectory at unchanged thrust/velocity.
         if scope == 'instantaneous_vertical_margin' and case.get('kind') != 'acceleration_margin':
             issues.append('instantaneous margin must be labelled acceleration_margin')
+        if scope == 'instantaneous_vertical_margin':
+            duration = case.get('duration_s')
+            if (isinstance(duration, bool) or not isinstance(duration, (int, float)) or
+                    not math.isfinite(duration) or not 0 < duration <= MAX_MARGIN_DURATION_S):
+                issues.append('instantaneous margin duration must be at most 2 s; longer segments require a trajectory model')
     except (KeyError, TypeError, ValueError) as exc:
         issues.append(f'operating scope unresolved: {exc}')
     return [f"case {case.get('name')}: {issue}" for issue in issues]

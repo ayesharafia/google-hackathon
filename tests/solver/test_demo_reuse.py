@@ -29,3 +29,11 @@ def test_reuse_checks_inputs_and_outputs(tmp_path, monkeypatch):
     output.write_bytes(b'retained'); inputs['system/controlDict'] = b'changed'
     with pytest.raises(ValueError, match='input hashes differ'):
         demo.reuse_group(group, {'fine': None}, ['fine'], 3000)
+
+
+def test_future_demo_registers_policy_in_generated_job_inputs(monkeypatch):
+    from physimesh.postpro.slice_eligibility import REGISTRATION_INPUT, registration_input
+    monkeypatch.setattr(demo, 'external_steady_case', lambda _: {'system/controlDict': b'original'})
+    inputs = demo.registered_case_files(None)
+    assert inputs[REGISTRATION_INPUT] == registration_input()
+    assert json.loads(inputs[REGISTRATION_INPUT])['policy_sha256'] == 'babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7'

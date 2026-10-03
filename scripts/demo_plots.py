@@ -10,7 +10,7 @@ import numpy as np
 from physimesh.postpro.plots import render
 from physimesh.postpro.recipes import PlotRecipe
 from physimesh.postpro.results import _columns
-from physimesh.postpro.slice_eligibility import evaluate_slice
+from physimesh.postpro.slice_eligibility import evaluate_slice, registration_for_run
 from physimesh.solver.foam_ascii import read_function_object_table, read_raw_samples
 
 
@@ -58,6 +58,7 @@ def main():
             filename = {'speed': 'U_yNormal.raw', 'pressure': 'p_yNormal.raw', 'vorticity': 'vorticity_yNormal.raw'}[field]
             name = str((plane/filename).relative_to(case))
             eligibility[field]['source_sha256'] = {name: hashes[name]}
+            eligibility[field]['registration'] = registration_for_run(case, run_record)
         profile_path = verified(case/'postProcessing/sample1'/time/'centreLine_p_U.xy')
         _, profile = read_raw_samples(profile_path)
         if profile.shape[1] != 5:
@@ -111,7 +112,7 @@ def main():
                 continue
             emit(f'{level}_{name}', field, 'contour', level, entry['grids'][name], shared[name],
                  plane={'axis': 'y', 'position_m': 0, 'view_bounds_m': [-1.5, 4, -1.5, 1.5]},
-                 note='y=0 slice. Shared bounds across all three meshes in this view.')
+                 note='y=0 slice. Bounds shared only across eligible views: '+', '.join(k for k, v in native.items() if v['grids'][name] is not None)+'.')
     for kind in ('vectors', 'streamlines') if native['fine']['grids']['speed'] is not None else ():
         emit(f'fine_{kind}', 'velocity.in_plane', kind, 'fine', native['fine']['grids']['speed'], shared['speed'],
              plane={'axis': 'y', 'position_m': 0},

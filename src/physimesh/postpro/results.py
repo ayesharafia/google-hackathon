@@ -117,6 +117,9 @@ def sphere_load_result(case_dir: Path, final_time: str, *, rho: float,
                         'absolute_error': check.abs_error.tolist(), 'allowed': check.allowed.tolist(),
                         'units': 'N m' if name == 'moment' else ('dimensionless' if name == 'cd' else 'N'),
                         'absolute_tolerance': absolute_tolerance}
+        if name == 'moment':
+            checks[name]['component_discriminating'] = (np.abs(native) >= 2*moment_floor).tolist()
+            checks[name]['discrimination_policy'] = 'abs(native component) >= 2 * absolute_floor_nm; smaller components establish only absolute consistency'
     accepted = all(check['passed'] for check in checks.values())
     end = float(final_time)
     windows = [window_stats(coeff['Time'], coeff['Cd'], end-400, end-200),

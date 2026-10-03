@@ -103,3 +103,16 @@ def test_finite_large_horizontal_force_cannot_overflow_into_trim_eligibility(sid
     report = capacity_from_cases(_mass(), ['hover'], [case], usable_energy_j=200_000)
     assert report.max_payload_kg is None
     assert report.outcome in ('unsupported_scope', 'inputs_incomplete')
+
+
+def test_per_case_ceiling_is_explicitly_excluded_when_energy_is_infeasible():
+    report = capacity_from_cases(_mass(), ['hover'], [_case('hover', 400)], usable_energy_j=100_000)
+    assert report.max_payload_kg is None
+    assert report.cases[0].eligibility == 'excluded_infeasible'
+
+
+def test_long_acceleration_margin_is_refused_in_domain_kernel():
+    from dataclasses import replace
+    case = replace(_case('climb', 400), vertical_acceleration_m_s2=.6, duration_s=180)
+    report = capacity_from_cases(_mass(), ['climb'], [case], usable_energy_j=1_000_000)
+    assert report.max_payload_kg is None and report.outcome == 'unsupported_scope'
