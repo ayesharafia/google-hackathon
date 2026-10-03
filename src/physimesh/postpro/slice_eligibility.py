@@ -10,9 +10,9 @@ from physimesh.solver.foam_ascii import read_raw_samples
 from .plots import resample_slice
 
 LEGACY_POLICY_VERSION = 'sphere_slice_policy_v1'
-CURRENT_POLICY_VERSION = 'sphere_slice_policy_v2'
+CURRENT_POLICY_VERSION = 'sphere_slice_policy_v3'
 POLICY_PATH = Path(__file__).with_name('schema').joinpath(CURRENT_POLICY_VERSION+'.json')
-POLICY_DIGESTS = {'sphere_slice_policy_v2': '94a3a59109753b79556a74424bbac14a759e814faa3df2a756c2c2418bc85a0f', 'sphere_slice_policy_v1': 'babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7'}
+POLICY_DIGESTS = {'sphere_slice_policy_v3': '8744e2b764df40d4975b0cafc31c2dd7462099643f83a8b91eea69080abdd5b1', 'sphere_slice_policy_v2': '94a3a59109753b79556a74424bbac14a759e814faa3df2a756c2c2418bc85a0f', 'sphere_slice_policy_v1': 'babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7'}
 REGISTRATION_INPUT = 'system/sliceEligibility.json'
 
 
@@ -62,6 +62,10 @@ def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float
     report = {'policy': policy, 'policy_sha256': digest, 'status': 'refused',
               'maximum_abs_sample_y_m': None, 'sensitivity': [], 'reasons': [],
               'registration': {'state': 'evaluation_only', 'reason': 'no native run input binding supplied'}}
+    if policy_version == 'sphere_slice_policy_v3':
+        import scipy
+        report['operator_versions'] = {'numpy': np.__version__, 'scipy': scipy.__version__,
+                                       'qhull': 'bundled with scipy; separate build digest not captured'}
     samples, values = np.asarray(samples, float), np.asarray(values, float)
     options = {'bounds': tuple(diameter_m*np.asarray(policy['view_bounds_d'])),
                'diameter_m': diameter_m, 'shape': tuple(policy['grid_shape'])}

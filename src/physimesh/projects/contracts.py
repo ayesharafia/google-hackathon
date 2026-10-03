@@ -199,6 +199,8 @@ def bound_mission(snapshot: dict) -> MissionDefinitionV1:
     actual = raw.get('cases', [])
     if not isinstance(actual, list) or any(not isinstance(case, dict) for case in actual):
         raise ValueError('approved operating conditions must be a list of records')
+    if any(not isinstance(case.get('name'), str) for case in actual):
+        raise ValueError('approved operating conditions require named case identities')
     by_name = {case.get('name'): case for case in actual}
     if len(by_name) != len(actual) or set(by_name) != {case.case_id for case in mission.cases}:
         raise ValueError('typed mission cases differ from approved operating conditions')
@@ -209,7 +211,7 @@ def bound_mission(snapshot: dict) -> MissionDefinitionV1:
     reserve = raw.get('reserve_policy', {})
     energy = raw.get('energy_system', {})
     if not isinstance(reserve, dict) or not isinstance(energy, dict):
-        raise ValueError('explicit reserve and energy records required')
+        raise ValueError('explicit reserve and energy records required')  # noqa: TRY004 - Pydantic validation boundary
     if (reserve.get('convention') != mission.reserve_convention or reserve.get('value') != mission.reserve_value
             or energy.get('pack_mode') != mission.pack_mode):
         raise ValueError('typed mission reserve or pack mode differs from approved snapshot')
@@ -305,12 +307,16 @@ class AircraftStudyV2(Record):
             raise ValueError('publication bound to a different study')
         if self.publication_state == 'published' and (self.publication is None or self.execution != 'completed'):
             raise ValueError('published aircraft result requires complete execution and content identity')
+        if self.publication_state == 'withdrawn' and self.publication is None:
+            raise ValueError('withdrawn result requires retained publication identity')
         if self.evidence == 'validated_for_case_family' and self.validation_envelope_sha256 is None:
             raise ValueError('validated evidence requires scoped validation envelope')
         if self.aircraft_status == 'within_validated_envelope' and self.evidence != 'validated_for_case_family':
             raise ValueError('validated aircraft status requires validated evidence')
         if self.execution != 'completed' and self.evidence != 'unverified':
             raise ValueError('uncompleted execution cannot claim achieved numerical or validation evidence')
+        if self.spec.method == 'supplied_point_screening' and self.evidence != 'unverified':
+            raise ValueError('supplied-point screening cannot establish numerical or validated aircraft evidence')
         if self.physical_outcome == 'not_evaluated' and (
                 self.aircraft_status != 'inputs_incomplete' or self.evidence != 'unverified'):
             raise ValueError('unevaluated study must retain incomplete status and unverified evidence')
@@ -325,8 +331,6 @@ class AircraftStudyV2(Record):
                 'validation_pending', 'within_validated_envelope')
             if self.aircraft_status not in allowed:
                 raise ValueError('feasible status must match the declared method and validation scope')
-            if self.spec.method == 'supplied_point_screening' and self.evidence != 'unverified':
-                raise ValueError('supplied-point screening cannot establish numerical or validated aircraft evidence')
         if self.physical_outcome in ('unsupported', 'unresolved', 'infeasible') and not self.reasons:
             raise ValueError('nonfeasible aircraft outcome requires structured reasons')
         if self.physical_outcome == 'unsupported' and self.aircraft_status != 'inputs_incomplete':
@@ -335,6 +339,10 @@ class AircraftStudyV2(Record):
             raise ValueError('unresolved search must not imply physical infeasibility or success')
         if self.physical_outcome == 'infeasible' and self.aircraft_status != 'requirement_not_met':
             raise ValueError('infeasible outcome needs compatibility requirement_not_met')
+        if (self.physical_outcome == 'infeasible' and required <= by_name.keys()
+                and all(by_name[name].outcome == 'feasible' for name in required)
+                and not any(reason.code == 'limit_exceeded' for reason in self.reasons)):
+            raise ValueError('infeasible aggregate with feasible cases requires an explicit aggregate limit reason')
         if self.payload_lower_bound_kg is not None:
             if self.physical_outcome != 'feasible':
                 raise ValueError('only feasible complete results have a headline')
@@ -363,8 +371,12 @@ class ReviewAttestationV1(Record):
 
     @model_validator(mode='after')
     def authentication_reference(self):
+        if not self.scope.strip():
+            raise ValueError('review scope must contain meaningful text')
         if self.state != 'pending' and self.authenticated_record_sha256 is None:
             raise ValueError('review decision requires separately authenticated record reference')
+        if self.state == 'superseded' and self.supersedes_attestation_sha256 is None:
+            raise ValueError('superseded review requires the attestation it supersedes')
         return self
 
     def assert_applies_to(self, result: AircraftStudyV2) -> None:

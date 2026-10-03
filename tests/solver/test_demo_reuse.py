@@ -36,4 +36,4 @@ def test_future_demo_registers_policy_in_generated_job_inputs(monkeypatch):
     monkeypatch.setattr(demo, 'external_steady_case', lambda _: {'system/controlDict': b'original'})
     inputs = demo.registered_case_files(None)
     assert inputs[REGISTRATION_INPUT] == registration_input()
-    assert json.loads(inputs[REGISTRATION_INPUT])['policy_sha256'] == '94a3a59109753b79556a74424bbac14a759e814faa3df2a756c2c2418bc85a0f'
+    assert json.loads(inputs[REGISTRATION_INPUT])['policy_sha256'] == '8744e2b764df40d4975b0cafc31c2dd7462099643f83a8b91eea69080abdd5b1'

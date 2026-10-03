@@ -179,7 +179,7 @@ def test_feasible_and_unevaluated_statuses_cannot_cross_outcome_or_method_axes()
         parse(value)
     value = feasible(); value.update(aircraft_status='within_validated_envelope',
                                     evidence='validated_for_case_family',validation_envelope_sha256='9'*64)
-    with pytest.raises(ValueError, match='feasible status'):
+    with pytest.raises(ValueError, match='supplied-point screening'):
         parse(value)
     value = feasible(); value.update(execution='queued',physical_outcome='not_evaluated',
                                     aircraft_status='within_validated_envelope',evidence='validated_for_case_family',
@@ -214,4 +214,42 @@ def test_approved_revision_cannot_bind_conflicting_typed_and_raw_mission():
     snapshot['mission']['cases'][0]['duration_s'] = 600
     value.update(snapshot_json=canonical_json(snapshot),snapshot_sha256=snapshot_sha256(snapshot))
     with pytest.raises(ValueError, match='condition digest'):
+        parse(value)
+
+
+@pytest.mark.parametrize('fixture', ['infeasible', 'unsupported', 'unresolved'])
+def test_screening_cannot_claim_mesh_evidence_even_for_nonfeasible_outcomes(fixture):
+    value = data(fixture); value['evidence'] = 'mesh_assessed'
+    with pytest.raises(ValueError, match='supplied-point screening'):
+        parse(value)
+
+
+@pytest.mark.parametrize('status', ['inputs_incomplete', 'numerically_unverified', 'requirement_not_met'])
+def test_feasible_screening_refuses_contradictory_statuses(status):
+    value = feasible(); value['aircraft_status'] = status
+    with pytest.raises(ValueError, match='feasible status'):
+        parse(value)
+
+
+def test_review_scope_and_supersession_require_explicit_meaningful_binding():
+    value = data('detached_review'); value['scope'] = '  \n '
+    with pytest.raises(ValueError, match='meaningful text'):
+        parse(value)
+    value = data('detached_review'); value['state'] = 'superseded'
+    with pytest.raises(ValueError, match='attestation it supersedes'):
+        parse(value)
+    value['supersedes_attestation_sha256'] = '7'*64
+    assert parse(value).state == 'superseded'
+
+
+def test_aggregate_failure_and_withdrawal_require_reasons_and_retained_identity():
+    value = feasible()
+    value.update(physical_outcome='infeasible', aircraft_status='requirement_not_met',
+                 payload_lower_bound_kg=None, limiting_case_id=None, reasons=data('unresolved')['reasons'])
+    with pytest.raises(ValueError, match='aggregate limit reason'):
+        parse(value)
+    value['reasons'][0]['code'] = 'limit_exceeded'
+    assert parse(value).physical_outcome == 'infeasible'
+    value['publication_state'] = 'withdrawn'
+    with pytest.raises(ValueError, match='retained publication identity'):
         parse(value)

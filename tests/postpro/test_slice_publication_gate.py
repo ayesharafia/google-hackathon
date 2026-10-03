@@ -85,12 +85,12 @@ def test_registration_requires_exact_retained_pre_execution_input(tmp_path):
     path.write_bytes(raw)
     record['inputs'] = {REGISTRATION_INPUT: hashlib.sha256(raw).hexdigest()}
     assert registration_for_run(case, record)['state'] == 'pre_execution_input'
-    path.write_bytes(raw.replace(b'sphere_slice_policy_v2', b'sphere_slice_policy_v9'))
+    path.write_bytes(raw.replace(b'sphere_slice_policy_v3', b'sphere_slice_policy_v9'))
     with pytest.raises(ValueError, match='pre-execution slice registration'):
         registration_for_run(case, record)
 
 
-@pytest.mark.parametrize('version', ['sphere_slice_policy_v1', 'sphere_slice_policy_v2'])
+@pytest.mark.parametrize('version', ['sphere_slice_policy_v1', 'sphere_slice_policy_v2', 'sphere_slice_policy_v3'])
 def test_historical_and_current_registered_policies_replay_with_original_version(tmp_path, version):
     from physimesh.postpro.slice_eligibility import REGISTRATION_INPUT, registration_input
     mesh = native(tmp_path)

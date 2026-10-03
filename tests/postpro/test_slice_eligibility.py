@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from physimesh.postpro.slice_eligibility import evaluate_slice, registered_policy
 
@@ -54,7 +55,7 @@ def test_policy_version_is_pinned_and_cannot_silently_admit_more_views(tmp_path,
 
     import physimesh.postpro.slice_eligibility as module
     policy, digest = registered_policy()
-    assert digest == '94a3a59109753b79556a74424bbac14a759e814faa3df2a756c2c2418bc85a0f'
+    assert digest == '8744e2b764df40d4975b0cafc31c2dd7462099643f83a8b91eea69080abdd5b1'
     policy['maximum_normalized_peak_change'] = .06
     changed = tmp_path/'policy.json'
     changed.write_text(json.dumps(policy))
@@ -63,17 +64,28 @@ def test_policy_version_is_pinned_and_cannot_silently_admit_more_views(tmp_path,
         registered_policy()
 
 
-def test_velocity_reversal_cannot_hide_behind_identical_speed():
+@pytest.mark.parametrize('version', ['sphere_slice_policy_v1', 'sphere_slice_policy_v2', 'sphere_slice_policy_v3'])
+@pytest.mark.parametrize('vector', [True, False])
+def test_known_reversal_metric_is_retained_per_policy_version(version, vector):
+    # Nested triangles avoid coincident x/z samples and ambiguous Qhull tie-breaking.
+    # The whole view is inside the inner off-plane triangle: baseline = -a,
+    # tighter subsets = +a. Span is zero, magnitude fallback = a, hence RMS = peak = 2.
     on_plane = np.array([[-100, 0, -100], [100, 0, -100], [0, 0, 100]], float)
-    off_plane = on_plane.copy()
+    off_plane = on_plane/10
     off_plane[:, 1] = 8e-6
     samples = np.concatenate([off_plane, on_plane])
-    velocity = np.array([[-1, 0, 0]]*3+[[1, 0, 0]]*3, float)
-    grid, report = evaluate_slice(samples, velocity, diameter_m=1)
+    values = np.array([[-1, 0, 0]]*3+[[1, 0, 0]]*3, float) if vector else np.array([-3]*3+[3]*3)
+    grid, report = evaluate_slice(samples, values, diameter_m=1, policy_version=version)
     assert grid is None and report['status'] == 'refused'
-    assert report['compared_quantity'] == 'world_velocity_vector'
+    assert report['compared_quantity'] == ('world_velocity_vector' if vector else 'scalar_field')
+    assert report['normalization_scale'] == pytest.approx(1 if vector else 3, abs=1e-14)
     assert all(item['external_coverage'] == 1 for item in report['sensitivity'])
-    assert all(item['normalized_peak_change'] > .05 for item in report['sensitivity'])
+    for item in report['sensitivity']:
+        assert item['normalized_peak_change'] == pytest.approx(2, abs=1e-14)
+        assert item['normalized_rms_change'] == pytest.approx(2, abs=1e-14)
+    if version == 'sphere_slice_policy_v3':
+        import scipy
+        assert report['operator_versions']['scipy'] == scipy.__version__
 
 
 def test_extreme_finite_velocity_refuses_overflow_without_nonfinite_report():
@@ -99,3 +111,13 @@ def test_v1_bytes_preserved_and_v2_binds_full_metric_without_looser_limits():
     assert new['metric_definition']['nonfinite'] == 'refuse'
     assert {k: v for k, v in new.items() if k not in ('schema_version', 'metric_definition')} == {
         k: v for k, v in old.items() if k != 'schema_version'}
+
+
+def test_v3_retains_v2_bytes_and_limits_and_defines_exact_grid_and_comparison_sets():
+    old, digest = registered_policy('sphere_slice_policy_v2')
+    new, _ = registered_policy('sphere_slice_policy_v3')
+    assert digest == '94a3a59109753b79556a74424bbac14a759e814faa3df2a756c2c2418bc85a0f'
+    assert {k: v for k, v in new.items() if k not in ('schema_version', 'metric_definition')} == {
+        k: v for k, v in old.items() if k not in ('schema_version', 'metric_definition')}
+    assert new['metric_definition']['comparison_nodes'] == 'external_grid_nodes_finite_in_both_baseline_and_subset'
+    assert new['metric_definition']['grid_axes'] == 'rows_world_z_columns_world_x'

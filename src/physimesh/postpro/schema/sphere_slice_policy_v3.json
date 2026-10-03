@@ -1,0 +1,56 @@
+{
+  "schema_version": "sphere_slice_policy_v3",
+  "plane": {
+    "axis": "y",
+    "position_m": 0
+  },
+  "geometry_tolerance_d": 1e-05,
+  "sensitivity_tolerances_d": [
+    1e-06,
+    5e-06
+  ],
+  "view_bounds_d": [
+    -1.5,
+    4.0,
+    -1.5,
+    1.5
+  ],
+  "grid_shape": [
+    180,
+    360
+  ],
+  "minimum_external_coverage": 0.99,
+  "maximum_normalized_rms_change": 0.01,
+  "maximum_normalized_peak_change": 0.05,
+  "qualification": "Versioned visual interpolation policy only. Registration is recorded per run; evaluations of previously captured outputs are retrospective. No force integration or accuracy claim.",
+  "rationale": "Nominal-plane geometry error is limited to 10 ppm of diameter. Tighter 1 ppm and 5 ppm subsets must preserve at least 99% external grid coverage, with RMS change at most 1% and peak change at most 5% of the baseline external field span. These are display stability limits, not physical error bounds.",
+  "metric_definition": {
+    "velocity_quantity": "world_velocity_vector",
+    "scalar_quantity": "signed_scalar_field",
+    "vector_change": "euclidean_norm_of_vector_difference",
+    "vector_span": "euclidean_norm_of_component_peak_to_peak_spans",
+    "scalar_change": "signed_scalar_difference",
+    "scalar_span": "peak_to_peak",
+    "constant_field_fallback": "maximum_absolute_magnitude",
+    "constant_span_cutoff": "64_times_float64_epsilon_times_maximum_absolute_magnitude",
+    "zero_fallback": "float64_tiny",
+    "rms": "sqrt_mean_squared_change_divided_by_normalization_scale",
+    "peak": "maximum_absolute_change_divided_by_normalization_scale",
+    "nonfinite": "refuse",
+    "external_mask": "x_squared_plus_z_squared_greater_than_radius_squared",
+    "coverage_denominator": "all_external_grid_nodes",
+    "subset_coordinates": "same_world_x_z_grid",
+    "interpolation": "scipy_griddata_linear",
+    "comparison_nodes": "external_grid_nodes_finite_in_both_baseline_and_subset",
+    "baseline_span_nodes": "all_finite_baseline_external_grid_nodes",
+    "subset_selection": "abs_world_y_less_than_or_equal_to_fraction_times_diameter_inclusive",
+    "grid_axes": "rows_world_z_columns_world_x",
+    "grid_coordinates": "numpy_linspace_inclusive_bounds_no_rescaling",
+    "interpolation_fill": "nan_outside_sample_convex_hull",
+    "vector_components": "world_Ux_Uy_Uz_interpolated_componentwise_before_norms",
+    "geometry_gate": "all_samples_abs_world_y_less_than_or_equal_to_geometry_tolerance_times_diameter",
+    "threshold_comparison": "refuse_if_coverage_below_minimum_or_rms_or_peak_above_maximum_equality_passes",
+    "runtime_provenance": "numpy_and_scipy_versions_recorded_in_v3_evaluation_report_scipy_bundled_qhull",
+    "unsupported_subset": "refuse_entire_slice_if_any_subset_has_insufficient_geometry_or_no_common_finite_external_nodes"
+  }
+}
