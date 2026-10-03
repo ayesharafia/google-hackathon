@@ -58,6 +58,8 @@ if already set. It selects `.backend/demo-reviewed`, the frozen image and
 `127.0.0.1`, and verifies every selected package/example/source byte before
 starting. Its preset binds the inventory hash. It refuses the superseded
 `demo-final` report even though that report shares the same short study ID.
+The selected data root must contain only the frozen visible result group, so
+the browser cannot default to an unrelated study.
 Use `--port` to select a free local port. This is a local demonstration, not
 the planned hosted production application.
 

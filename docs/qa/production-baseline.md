@@ -51,6 +51,8 @@ The historical `.backend/demo-final` package still exists unchanged. It shares t
 
 Verification is a point-in-time check of a trusted committed inventory, not a continuous security monitor or signed physics attestation. API routes retain their existing requested-artifact integrity checks. Do not edit the inventory/preset to force a changed package through. Future reviewed revisions need their own explicitly recorded inventory/preset; preserve this baseline.
 
+The launcher additionally refuses a root containing another API-visible result group. The existing browser defaults to its first group; requiring a dedicated single-group root prevents an unrelated study from becoming the presentation default. Ordinary read-only verification can still check the frozen group in a multi-study root.
+
 ## Performed checks on 3 October 2026
 
 | Check | Actual result | Scope |

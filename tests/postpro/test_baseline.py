@@ -213,6 +213,12 @@ def test_demo_preset_checks_before_launch_and_never_prints_token(frozen, tmp_pat
     assert kw["env"]["PHYSIMESH_DATA_ROOT"] == str(data)
     assert kw["env"]["PHYSIMESH_OPENFOAM_IMAGE_DIGEST"] == IMAGE
     assert "private-session-token" not in capsys.readouterr().out
+    other_group = data / "results" / ("0" * 16)
+    other_group.mkdir()
+    with pytest.raises(SystemExit) as error:
+        cli.main(["demo", "--preset", str(preset), "--check-only"])
+    assert error.value.code == 2 and len(calls) == 1
+    other_group.rmdir()
     (data / "examples/screening.json").write_bytes(b"changed")
     with pytest.raises(SystemExit) as error:
         cli.main(["demo", "--preset", str(preset)])

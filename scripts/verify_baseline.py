@@ -6,6 +6,7 @@ import argparse
 import getpass
 import json
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -46,6 +47,11 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("port must be between 1 and 65535")
             inventory = load_inventory(DEFAULT_INVENTORY)
             report = verify_baseline(ROOT, inventory, data_root=args.data_root)
+            selected = (args.data_root or ROOT / inventory.package.data_root).resolve()
+            visible = {p.name for p in (selected / "results").iterdir()
+                       if p.is_dir() and re.fullmatch(r"[0-9a-f]{16}", p.name)}
+            if visible != {inventory.package.group_id}:
+                raise ValueError("reviewed demo requires one frozen result group; use a dedicated data-root copy")
         print(json.dumps(report, indent=2), flush=True)
         if args.command != "demo" or args.check_only:
             return 0
