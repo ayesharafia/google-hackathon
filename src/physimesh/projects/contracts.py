@@ -137,7 +137,9 @@ class DesignRevisionV1(Record):
         if self.approval == 'approved' and not readiness(project_from_mapping(data), self.readiness_purpose).ready:
             raise ValueError('approved revision has incomplete method-specific inputs')
         if self.approval == 'approved':
-            bound_mission(data)
+            mission = bound_mission(data)
+            if self.readiness_purpose == 'screening' and mission.reserve_convention != 'held_usable_energy_fraction':
+                raise ValueError('supplied-point screening supports only held usable-energy fraction reserve')
         return self
 
     def revision_sha256(self) -> str:
@@ -215,6 +217,10 @@ def bound_mission(snapshot: dict) -> MissionDefinitionV1:
     if (reserve.get('convention') != mission.reserve_convention or reserve.get('value') != mission.reserve_value
             or energy.get('pack_mode') != mission.pack_mode):
         raise ValueError('typed mission reserve or pack mode differs from approved snapshot')
+    kind = {'held_usable_energy_fraction': 'fraction', 'held_energy_j': 'energy_j',
+            'additional_mission_demand': 'additional_mission_demand_fraction'}[mission.reserve_convention]
+    if reserve.get('kind') != kind:
+        raise ValueError('reserve kind disagrees with the declared convention and units')
     return mission
 
 

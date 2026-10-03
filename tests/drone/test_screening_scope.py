@@ -72,3 +72,12 @@ def test_long_acceleration_margin_cannot_recreate_a_constant_climb_trajectory(tm
 
 def test_malformed_pack_selection_returns_a_structured_refusal():
     assert pack_consistency({'mission': {'energy_system': {}, 'reserve_policy': {}}, 'masses': {'items': [None]}})['status'] == 'inputs_incomplete'
+
+
+@pytest.mark.parametrize('convention', ['held_energy_j', 'additional_mission_demand'])
+def test_legacy_screening_refuses_conflicting_explicit_reserve_convention(tmp_path, convention):
+    project = example(tmp_path)
+    project['mission']['reserve_policy']['convention'] = convention
+    result = pack_consistency(project)
+    assert result['status'] == 'inputs_incomplete'
+    assert 'convention' in result['detail']

@@ -26,6 +26,8 @@ def pack_consistency(project: dict) -> dict:
         density, fraction, declared = (energy.get(k) for k in ('pack_wh_per_kg', 'usable_fraction', 'usable_energy_j'))
         if not isinstance(reserve, Mapping) or reserve.get('kind') != 'fraction':
             raise ValueError('reserve must be a fraction of usable pack energy')
+        if reserve.get('convention', 'held_usable_energy_fraction') != 'held_usable_energy_fraction':
+            raise ValueError('screening reserve convention must hold a fraction of usable pack energy')
         r = reserve.get('value')
         if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)
                for v in (mass, density, fraction, declared, r)):

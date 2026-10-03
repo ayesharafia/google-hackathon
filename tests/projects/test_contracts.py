@@ -253,3 +253,27 @@ def test_aggregate_failure_and_withdrawal_require_reasons_and_retained_identity(
     value['publication_state'] = 'withdrawn'
     with pytest.raises(ValueError, match='retained publication identity'):
         parse(value)
+
+
+@pytest.mark.parametrize('convention', ['held_energy_j', 'additional_mission_demand'])
+def test_approved_reserve_cannot_keep_legacy_fraction_kind_under_other_convention(convention):
+    from physimesh.drone.provenance import canonical_json
+    from physimesh.drone.snapshot_hash import snapshot_sha256
+    value = data('approved_synthetic_design'); snapshot = json.loads(value['snapshot_json'])
+    snapshot['mission']['reserve_policy']['convention'] = convention
+    snapshot['mission']['contract_definition']['reserve_convention'] = convention
+    value.update(snapshot_json=canonical_json(snapshot), snapshot_sha256=snapshot_sha256(snapshot))
+    with pytest.raises(ValueError, match='reserve kind disagrees'):
+        parse(value)
+
+
+def test_screening_approval_refuses_other_reserve_model_even_with_matching_units():
+    from physimesh.drone.provenance import canonical_json
+    from physimesh.drone.snapshot_hash import snapshot_sha256
+    value = data('approved_synthetic_design'); snapshot = json.loads(value['snapshot_json'])
+    snapshot['mission']['reserve_policy'].update(convention='additional_mission_demand',
+                                                kind='additional_mission_demand_fraction')
+    snapshot['mission']['contract_definition']['reserve_convention'] = 'additional_mission_demand'
+    value.update(snapshot_json=canonical_json(snapshot), snapshot_sha256=snapshot_sha256(snapshot))
+    with pytest.raises(ValueError, match='screening supports only'):
+        parse(value)
