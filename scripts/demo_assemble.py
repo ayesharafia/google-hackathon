@@ -9,7 +9,12 @@ from physimesh.postpro.interpretation import interpret
 from physimesh.postpro.publication import identity_bytes, publication_identity
 from physimesh.postpro.refusals import sphere_refusals
 from physimesh.postpro.result_contract import assemble_results
-from physimesh.postpro.slice_eligibility import registered_policy, registration_input, validate_native_reports
+from physimesh.postpro.slice_eligibility import (
+    LEGACY_POLICY_VERSION,
+    registered_policy,
+    registration_input,
+    validate_native_reports,
+)
 
 
 def main():
@@ -30,8 +35,9 @@ def main():
              'run_group.json': args.run_group.read_bytes()}
     eligibility_raw = (root/'slice_eligibility.json').read_bytes()
     eligibility = json.loads(eligibility_raw)
-    policy, policy_sha = registered_policy()
-    if 'slice_policy' in group and group['slice_policy'] != json.loads(registration_input()):
+    policy_version = group.get('slice_policy', {}).get('policy_version', LEGACY_POLICY_VERSION)
+    policy, policy_sha = registered_policy(policy_version)
+    if 'slice_policy' in group and group['slice_policy'] != json.loads(registration_input(policy_version)):
         raise ValueError('run group slice policy differs from registered input')
     if set(eligibility) != {mesh['level'] for mesh in group['meshes']}:
         raise ValueError('slice eligibility must cover every mesh')

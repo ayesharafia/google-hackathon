@@ -10,7 +10,7 @@ import numpy as np
 from physimesh.postpro.plots import render
 from physimesh.postpro.recipes import PlotRecipe
 from physimesh.postpro.results import _columns
-from physimesh.postpro.slice_eligibility import evaluate_slice, registration_for_run
+from physimesh.postpro.slice_eligibility import LEGACY_POLICY_VERSION, evaluate_slice, registration_for_run
 from physimesh.solver.foam_ascii import read_function_object_table, read_raw_samples
 
 
@@ -49,16 +49,18 @@ def main():
         if not np.array_equal(arrays['u'][:, :3], arrays['p'][:, :3]) or not np.array_equal(arrays['u'][:, :3], arrays['omega'][:, :3]):
             raise ValueError('plane sample locations differ; no implicit association permitted')
         grids, eligibility = {}, {}
+        registration = registration_for_run(case, run_record)
         for field, samples, values in (
             ('speed', arrays['u'][:, :3], arrays['u'][:, 3:6]),
             ('pressure', arrays['p'][:, :3], arrays['p'][:, 3]*group['rho_ref_kg_m3']),
             ('vorticity', arrays['omega'][:, :3], arrays['omega'][:, 4]),
         ):
-            grids[field], eligibility[field] = evaluate_slice(samples, values, diameter_m=group['D_m'])
+            grids[field], eligibility[field] = evaluate_slice(samples, values, diameter_m=group['D_m'],
+                                                            policy_version=registration.get('policy_version', LEGACY_POLICY_VERSION))
             filename = {'speed': 'U_yNormal.raw', 'pressure': 'p_yNormal.raw', 'vorticity': 'vorticity_yNormal.raw'}[field]
             name = str((plane/filename).relative_to(case))
             eligibility[field]['source_sha256'] = {name: hashes[name]}
-            eligibility[field]['registration'] = registration_for_run(case, run_record)
+            eligibility[field]['registration'] = registration
         profile_path = verified(case/'postProcessing/sample1'/time/'centreLine_p_U.xy')
         _, profile = read_raw_samples(profile_path)
         if profile.shape[1] != 5:

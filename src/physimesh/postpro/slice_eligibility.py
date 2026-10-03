@@ -9,21 +9,26 @@ from physimesh.solver.foam_ascii import read_raw_samples
 
 from .plots import resample_slice
 
-POLICY_PATH = Path(__file__).with_name('schema').joinpath('sphere_slice_policy_v1.json')
-POLICY_DIGESTS = {'sphere_slice_policy_v1': 'babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7'}
+LEGACY_POLICY_VERSION = 'sphere_slice_policy_v1'
+CURRENT_POLICY_VERSION = 'sphere_slice_policy_v2'
+POLICY_PATH = Path(__file__).with_name('schema').joinpath(CURRENT_POLICY_VERSION+'.json')
+POLICY_DIGESTS = {'sphere_slice_policy_v2': '94a3a59109753b79556a74424bbac14a759e814faa3df2a756c2c2418bc85a0f', 'sphere_slice_policy_v1': 'babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7'}
 REGISTRATION_INPUT = 'system/sliceEligibility.json'
 
 
-def registered_policy() -> tuple[dict, str]:
-    raw = POLICY_PATH.read_bytes()
+def registered_policy(version: str = CURRENT_POLICY_VERSION) -> tuple[dict, str]:
+    if version not in POLICY_DIGESTS:
+        raise ValueError('unknown registered slice policy version')
+    path = POLICY_PATH if version == CURRENT_POLICY_VERSION else POLICY_PATH.with_name(version+'.json')
+    raw = path.read_bytes()
     policy, digest = json.loads(raw), hashlib.sha256(raw).hexdigest()
-    if POLICY_DIGESTS.get(policy['schema_version']) != digest:
+    if policy['schema_version'] != version or POLICY_DIGESTS.get(version) != digest:
         raise ValueError('registered slice policy changed under its version; register a new version')
     return policy, digest
 
 
-def registration_input() -> bytes:
-    policy, digest = registered_policy()
+def registration_input(version: str = CURRENT_POLICY_VERSION) -> bytes:
+    policy, digest = registered_policy(version)
     return (json.dumps({'schema_version': 'slice_policy_registration_v1',
                         'policy_version': policy['schema_version'], 'policy_sha256': digest}, sort_keys=True)+'\n').encode()
 
@@ -33,13 +38,18 @@ def registration_for_run(case: Path, record: dict) -> dict:
     if REGISTRATION_INPUT not in record.get('inputs', {}):
         return {'state': 'retrospective', 'reason': 'captured native run predates registered policy input'}
     raw = (case/REGISTRATION_INPUT).read_bytes()
-    if raw != registration_input() or hashlib.sha256(raw).hexdigest() != record['inputs'][REGISTRATION_INPUT]:
+    try:
+        expected = registration_input(json.loads(raw)['policy_version'])
+    except (ValueError, KeyError, TypeError) as exc:
+        raise ValueError('pre-execution slice registration has an unsupported version') from exc
+    if raw != expected or hashlib.sha256(raw).hexdigest() != record['inputs'][REGISTRATION_INPUT]:
         raise ValueError('pre-execution slice registration differs from the registered policy')
     return {'state': 'pre_execution_input', 'input_path': REGISTRATION_INPUT,
             'input_sha256': hashlib.sha256(raw).hexdigest(), **json.loads(raw)}
 
 
-def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float) -> tuple[dict | None, dict]:
+def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float,
+                   policy_version: str = CURRENT_POLICY_VERSION) -> tuple[dict | None, dict]:
     """Return an eligible grid or a refusal with retained sensitivity metrics.
 
     All grids share bounds, mask and resolution. Changes are normalized by the
@@ -48,7 +58,7 @@ def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float
     Subset coverage is measured against ALL external grid nodes, not just their
     common finite overlap. Geometry violations reject the whole slice.
     """
-    policy, digest = registered_policy()
+    policy, digest = registered_policy(policy_version)
     report = {'policy': policy, 'policy_sha256': digest, 'status': 'refused',
               'maximum_abs_sample_y_m': None, 'sensitivity': [], 'reasons': [],
               'registration': {'state': 'evaluation_only', 'reason': 'no native run input binding supplied'}}
@@ -148,7 +158,8 @@ def native_slice_reports(mesh: dict, *, rho: float, diameter_m: float) -> dict:
             raise ValueError('native slice sample associations differ')
         coordinates = data[:, :3]
         values = data[:, 3:6] if field == 'speed' else data[:, 3]*rho if field == 'pressure' else data[:, 4]
-        _, reports[field] = evaluate_slice(coordinates, values, diameter_m=diameter_m)
+        _, reports[field] = evaluate_slice(coordinates, values, diameter_m=diameter_m,
+                                          policy_version=registration.get('policy_version', LEGACY_POLICY_VERSION))
         reports[field]['source_sha256'] = {name: digest}
         reports[field]['registration'] = registration
     return reports

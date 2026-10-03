@@ -25,7 +25,7 @@ Use these references when implementing:
 
 ### Work one task at a time
 
-1. Select the earliest unblocked task in Section 10. Read its dependencies and the relevant existing implementation before editing.
+1. Select the earliest unblocked task in the active work order in Section 10. Phase numbers group capabilities; they do not force hosted infrastructure ahead of the fixture-driven payload pilot. Read its dependencies and the relevant existing implementation before editing.
 2. State the concrete change, limitations and expected evidence. Ask only when a missing decision materially changes implementation; continue independent work while awaiting external inputs.
 3. Implement a complete vertical slice: persisted input, domain behavior, server interface, visible behavior, and relevant verification. Do not build disconnected screens or mark a shell as a working feature.
 4. Test the public behavior with meaningful positive, negative and failure cases. Physics changes require an independent derivation or reference and review appropriate to their risk. Reuse established fixtures rather than testing a formula against a copy of itself.
@@ -68,7 +68,11 @@ Important limitations to preserve:
 
 ## 3. Product outcomes and boundaries
 
-### First credible private pilot
+### Local Pilot-1 before hosted rollout
+
+Deliver the local single-user mass ledger → measured rotor-map fixture → required alternative cases → bounded payload/limiting-case workflow first. [Pilot-1](docs/pilots/pilot-1.md) records acceptance and the physics investigation queue. Keep the existing browser technology. This local milestone does not establish invited access or hosted production. Use explicit labelled fixtures while D04-D06 data remains unavailable.
+
+### First credible private hosted pilot
 
 An engineer can create a project, import an assembly, enter its mass ledger, bind rotor maps and electrical limits, define mission cases, approve an immutable revision, calculate payload feasibility, and share an approved report with an invited client. All persisted information survives a restart. A client can inspect the limiting case and compare two approved revisions without needing solver knowledge.
 
@@ -126,7 +130,7 @@ The diagram expresses planned responsibilities. These hosted modules do not yet 
 - Use private S3-compatible object storage for original geometry, map sources, native outputs, recipes and packages. Metadata points to exact versions and full SHA-256 hashes. Keep a local adapter for reproducible development.
 - Start with a database-backed queue, transactional submission/outbox and worker leases. PostgreSQL documents `SKIP LOCKED` as suitable for queue-like contention handling; it does not itself provide delivery or recovery guarantees. Define those explicitly. [PostgreSQL SELECT](https://www.postgresql.org/docs/18/sql-select.html)
 - Run CFD on dedicated Linux CPU hosts. The web application must not own a Docker socket or launch user-defined commands. A worker agent owns local execution and receives only authorized, bounded job specifications.
-- Recommend TypeScript/React for the expanding design workspace, CSS Modules or an equally scoped styling system, and tested accessible primitives. Keep the current evidence desk functional during migration. Confirm the migration with a single working import-to-save slice before expanding it.
+- Retain the working plain-JS evidence desk for Pilot-1. Use accessible native/tested primitives and scoped styling. React/TypeScript is an optional later migration: require a working local payload journey, demonstrated complexity/typing need and a separate ADR before changing framework. Persistent authoring does not itself require a framework rewrite.
 - Keep three.js native-data semantics and source/license records. Pin an upgrade only after representative geometry and field fixtures verify equivalent behavior.
 - Prefer managed identity supporting invited users and MFA. Choose the provider with the deployment region, data residency and client policy; do not invent a custom password system.
 - Start with one application deployment, managed database/object storage, and a small bounded worker pool. Do not add Redis, a service mesh or orchestration layers without a demonstrated need.
@@ -332,6 +336,16 @@ CFD turnaround targets are established after the real geometry benchmark. The MV
 
 Owner roles: **APP** application engineer; **PHY** rotorcraft/physics engineer; **PLAT** platform engineer; **UX** product/frontend engineer; **QA** test/release engineer. A named human engineering owner is required for validation tolerances and operational aircraft claims.
 
+### Active work order and client-review follow-up
+
+1. P01.1 first: contracts, full versioned slice metric and historical-version compatibility.
+2. Build the local Pilot-1 domain path with validated fixture inputs: the local portions of P02.2/P02.3, then P03.1/P03.2 and P04.1/P04.2. Hosted persistence/identity work can progress independently; it must not block pure fixture-driven physics. Full task checkboxes still require their authoring/UI acceptance, not only a domain helper.
+3. I01: separately versioned regular-grid native sampling experiment. Retain raw native samples, compare supported coverage and vector/scalar sensitivity; preserve existing refusal policy and original artifacts.
+4. I02: preregister the cheap sphere domain/surface-refinement matrix, retain exact job/source/resource/load evidence and investigate the +2.65% gap without assigning a cause in advance. Independent review determines what the experiment supports.
+5. I03: add separate evidence-only baseline verification usable in a later checkout and exact-git-commit source reproduction mode. Preserve the frozen historical inventory/checker and test native/package tampering refusal. Do not weaken the old launcher in place.
+
+I01-I03 are pending investigations, not completed capabilities or a reason to delay independent pilot contracts. Client data request [prepared here](docs/client/aircraft-data-request.md); no recipient/send action is authorized. The user confirmed **client** as human engineering owner. A named engineering contact, real data and approved tolerances remain external inputs.
+
 ### Phase P00: close the baseline and make evidence unambiguous
 
 #### P00.1 [x] Freeze the current evidence and reconcile release status
@@ -401,9 +415,9 @@ Owner roles: **APP** application engineer; **PHY** rotorcraft/physics engineer; 
 #### P01.4 [ ] Build persistent project navigation and draft editing
 
 **Dependencies:** P01.2; hosted acceptance also requires P01.3. **Owner:** UX + APP.
-**Existing:** `web/` workflow shell/evidence desk. **New:** typed frontend workspace.
+**Existing:** `web/` workflow shell/evidence desk. **New:** persistent frontend workspace; framework migration is separately gated.
 
-1. Deliver create/open/save/reopen project, draft status, source references and conflict recovery as the first frontend migration slice.
+1. Deliver create/open/save/reopen project, draft status, source references and conflict recovery as a working plain-JS slice; adopt a different frontend framework only after Pilot-1 evidence and a separate ADR.
 2. Establish the geometry-centered composition, licensed type/palette study, accessible primitives and reusable error/loading/save behavior.
 3. Preserve old evidence-desk links; prevent stale browser responses from replacing a newly selected project/revision.
 
@@ -840,7 +854,7 @@ Resolved: private hosted web app; OpenCFD v2606 pinned by digest; no fixed paylo
 | D03 | Confidentiality, data residency, retention/deletion, backup and review policy | Client owner | External client access and production release | Private local/staging work with labelled fixtures |
 | D04 | Real assembly with units/roles; rotor maps or blade/polar data; installation context and source rights | Client engineer | Real sizing, real model coverage, P10.1 and applicable advanced capabilities | All fixture-driven software; exact backend probes |
 | D05 | Approved mass/CG/inertia ledger, pack/motor/ESC limits, payload placement and external allowable loads | Client engineer | Real trim/capacity/operational scope | Ledger editor and independent analytic fixtures |
-| D06 | Required mission/environment cases, chronological segments, reserve, human physics owner and acceptance tolerances | Client engineer + user | Real mission claim and validation acceptance | Mission/schema/search implementation with labelled fixtures |
+| D06 | Required mission/environment cases, chronological segments, reserve and acceptance tolerances; engineering owner is the client, named contact/approver still pending | Client engineer (owner confirmed by user) | Real mission claim and validation acceptance | Mission/schema/search implementation with labelled fixtures |
 | D07 | Expected users/projects, assembly size, job concurrency, acceptable turnaround and cost ceiling | User/client | Final capacity sizing and service targets | Bounded single-worker staging and measurements |
 | D08 | Approved brand assets, type licenses and client presentation wording | User/client + UX | Final branding and human claim acceptance | Functional design workspace and rendered candidate study |
 | D09 | Existing 2D export consumer/schema and compatibility owner | Product owner | External 2D integration | Self-contained versioned exports |
@@ -877,7 +891,7 @@ For each release deliver:
 - Security findings, recovery/load evidence, service targets, cost/resource policy and operational ownership.
 - Updated repository guide and the existing Notion technical guide, with links to the accepted code/results rather than future promises.
 
-P00.1 and P00.2 are complete within their bounded software/evidence scopes. The P00.2 corrections and final independent review are recorded in `docs/qa/baseline-findings-closure.md`. The next work order is **P01.1**. Before prospective production slice registration, bind the full metric definition into the policy and support historical policy versions; see the closure constraints. Hosting and real-data decisions should be collected before their dependent tasks. The release outcome is a private client workspace that explains an approved design's supported payload capability with evidence the client can inspect and the engineering team can reproduce.
+P00.1 and P00.2 are complete within their bounded software/evidence scopes. The P00.2 corrections and final independent review are recorded in `docs/qa/baseline-findings-closure.md`. The active work order is **P01.1, then the local Pilot-1 fixture path**, with I01-I03 investigations and hosting adapters tracked separately. Before prospective production slice registration, bind the full metric definition into the policy and support historical policy versions; see the closure constraints. Hosting and real-data decisions should be collected before their dependent tasks. The release outcome is a private client workspace that explains an approved design's supported payload capability with evidence the client can inspect and the engineering team can reproduce.
 
 ## 16. Plan self-review and design-law audit obligations
 

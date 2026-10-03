@@ -1,0 +1,13 @@
+{
+  "schema_version": "review_attestation_v1",
+  "organization_id": "EXAMPLE-org",
+  "project_id": "EXAMPLE-project",
+  "package_revision_sha256": "96df6bcb4c6c25c1a53e840e9eac085ffe74187e91205011c2aa6474c5b9fd47",
+  "study_sha256": "4c036152a2dbc4fde270aeed63a86735781ed0ea73ff75f04baec95cf67aeb3a",
+  "reviewer_identity_id": "EXAMPLE-reviewer",
+  "created_utc": "2026-10-03T00:00:00Z",
+  "state": "accepted",
+  "scope": "EXAMPLE schema roundtrip only; not an actual approval or aircraft validation",
+  "authenticated_record_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "supersedes_attestation_sha256": null
+}

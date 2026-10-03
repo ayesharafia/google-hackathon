@@ -14,7 +14,7 @@ from pathlib import Path
 from physimesh.core.artifacts import ArtifactStore
 from physimesh.core.jobs import Budgets, JobLedger
 from physimesh.drone.demo_geometry import binary_stl_bytes, icosphere_triangles
-from physimesh.postpro.slice_eligibility import REGISTRATION_INPUT, registration_input
+from physimesh.postpro.slice_eligibility import CURRENT_POLICY_VERSION, REGISTRATION_INPUT, registration_input
 from physimesh.solver.openfoam_cases import ExternalSteadySpec, external_steady_case, refinement_levels
 from physimesh.solver.runner import run_case
 
@@ -22,9 +22,9 @@ IMAGE = "opencfd/openfoam-run@sha256:4229997e74defb81548222d511b8e3b95b98305e5df
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def registered_case_files(spec):
+def registered_case_files(spec, policy_version=CURRENT_POLICY_VERSION):
     """Retain the slice policy with hashed job inputs BEFORE solver execution."""
-    return external_steady_case(spec) | {REGISTRATION_INPUT: registration_input()}
+    return external_steady_case(spec) | {REGISTRATION_INPUT: registration_input(policy_version)}
 
 
 def demo_spec(iterations: int) -> ExternalSteadySpec:
@@ -61,7 +61,8 @@ def reuse_group(group: dict, specs: dict, levels: list[str], iterations: int) ->
     """Reuse only identical generated inputs and byte-verified completed outputs."""
     if group['image_digest'] != IMAGE or group['iteration_cap'] != iterations:
         raise ValueError('retained backend or iteration cap differs')
-    if 'slice_policy' in group and group['slice_policy'] != json.loads(registration_input()):
+    policy_version = group.get('slice_policy', {}).get('policy_version', CURRENT_POLICY_VERSION)
+    if 'slice_policy' in group and group['slice_policy'] != json.loads(registration_input(policy_version)):
         raise ValueError('retained pre-execution slice policy differs')
     if [entry['level'] for entry in group['meshes']] != levels:
         raise ValueError('retained mesh selection differs or is incomplete')
@@ -74,7 +75,7 @@ def reuse_group(group: dict, specs: dict, levels: list[str], iterations: int) ->
             raise ValueError('retained execution record changed')
         record = json.loads(raw)
         expected = {name: hashlib.sha256(data).hexdigest()
-                    for name, data in (registered_case_files(specs[entry['level']]) if 'slice_policy' in group
+                    for name, data in (registered_case_files(specs[entry['level']], policy_version) if 'slice_policy' in group
                                        else external_steady_case(specs[entry['level']])).items()}
         if record['inputs'] != expected or record['image_digest'] != IMAGE:
             raise ValueError('generated input hashes differ from retained run')

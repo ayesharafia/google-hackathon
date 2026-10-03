@@ -54,7 +54,7 @@ def test_policy_version_is_pinned_and_cannot_silently_admit_more_views(tmp_path,
 
     import physimesh.postpro.slice_eligibility as module
     policy, digest = registered_policy()
-    assert digest == 'babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7'
+    assert digest == '94a3a59109753b79556a74424bbac14a759e814faa3df2a756c2c2418bc85a0f'
     policy['maximum_normalized_peak_change'] = .06
     changed = tmp_path/'policy.json'
     changed.write_text(json.dumps(policy))
@@ -88,3 +88,14 @@ def test_extreme_finite_velocity_refuses_overflow_without_nonfinite_report():
     assert grid is None and report['status'] == 'refused'
     assert report['reasons'] == ['nonfinite sensitivity normalization']
     json.dumps(report, allow_nan=False)
+
+
+def test_v1_bytes_preserved_and_v2_binds_full_metric_without_looser_limits():
+    old, old_sha = registered_policy('sphere_slice_policy_v1')
+    new, new_sha = registered_policy('sphere_slice_policy_v2')
+    assert old_sha == 'babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7'
+    assert new_sha != old_sha
+    assert new['metric_definition']['velocity_quantity'] == 'world_velocity_vector'
+    assert new['metric_definition']['nonfinite'] == 'refuse'
+    assert {k: v for k, v in new.items() if k not in ('schema_version', 'metric_definition')} == {
+        k: v for k, v in old.items() if k != 'schema_version'}

@@ -1,0 +1,62 @@
+# P01.1: production data contracts
+
+Status: implemented contracts and labelled schema fixtures; task acceptance awaits final independent review. This does not deliver persistence, hosted authentication, rotor-map inference, trim/search or production readiness. Runtime modules are `projects/contracts.py`, `projects/serialization.py` and the read-only `api/contracts.py` endpoint.
+
+## Versions and public boundaries
+
+| Version | Meaning and boundary |
+|---|---|
+| `results_v1` | Original strict sphere contract, unchanged. Old records retain unverified/pending status. |
+| `publication_identity_v1` | Existing detached content identity, unchanged. Exact payload-manifest/study binding; no approval implied. |
+| `project_draft_v1` | Organization/project, current and expected write version, canonical legacy snapshot, original migration byte hash and explicit installed-payload interpretation. Incomplete/null snapshots are allowed. Actual conflict resolution/persistence is P01.2. |
+| `design_revision_v1` | Immutable canonical snapshot, numeric snapshot hash, author/time, requested readiness purpose, reasons, approval state and detached attestation reference. Approval requires actual method-specific input readiness, not an empty caller reason list. Schema does not authenticate that reference. |
+| `mission_definition_v1` | Required/optional alternative cases with exact condition hashes, plus a separate ordered sequence referencing those cases. Unique IDs and valid references; explicit reserve convention and fixed/sized pack mode. |
+| `aircraft_study_spec_v1` | Exact organization/project/design revision, mission, method/version, model sources, settings, code and exact backend image for CFD. Identity is the complete canonical spec hash. Resolve and check design binding before execution. |
+| `aircraft_study_v2` | Execution, model-scoped physical outcome, legacy aircraft status, evidence, validation envelope and publication state are separate. Case bounds/reasons and optional mission lower bound retain units and coverage. This is a data contract, not a capacity solver. |
+| `review_attestation_v1` | Detached same-project study/result revision reference, reviewer, UTC time, state, scope and authenticated record hash. Accepted/rejected/superseded decisions require a separate authentication reference. Actual identity/authenticity verification is P01.3; a hash-shaped value is not approval. |
+
+`load_contract(bytes)` dispatches exact known versions, rejects unknown versions/duplicate JSON keys/nonfinite constants, then validates the registered model. `dump_contract(record)` revalidates on export, including records created with Pydantic's unchecked copy operation. `GET /api/drone/contracts` and `GET /api/drone/contracts/{version}` are authenticated, read-only schema discovery. They do not approve or persist input. The current shared-token demo stays a local adapter.
+
+## Entity graph and identity rules
+
+`ResourceRef` names organization, identity, membership, project, geometry asset, component instance, rotor configuration, performance dataset, mass ledger, mission, study, job attempt, artifact manifest, result revision, review and client grant. A byte hash and an immutable record/revision hash are distinct fields. It is a reference type, not a database/resource implementation.
+
+Organization → identities/memberships → projects → drafts/design revisions. Design revisions reference geometry assets through component instances, rotor configurations, performance sources and mass/mission ledgers. Two placements have different instance IDs and may share original byte hashes. Study specs bind exact design/mission/model/settings/code/backend. Attempts retain execution and artifact associations. Result revisions bind published bytes; reviews attach separately to exact result revisions; client grants are scoped to project/resources and later verified by access policy. P01.2 implements these relations transactionally and P01.3 authenticates actors/grants. Never resolve an asset by filename or infer membership from a resource ID.
+
+`DesignRevisionV1.revision_sha256()` hashes the complete versioned revision document. `snapshot_sha256` separately identifies normalized physical input values. A study uses the full revision digest, not the snapshot alone. `StudySpecV1.assert_design_binding(revision)` requires matching full revision, organization/project, approved state and applicable readiness purpose. A changed author/time/approval association can therefore change revision identity even for equal input values. Physical readiness and authenticated human design approval remain distinct.
+
+Mission case IDs identify alternatives. Sequence IDs identify chronological positions and can reference a case more than once. Each segment carries duration, approximation and model hash. Passing individual alternative cases cannot establish chronological energy: a feasible sequential result needs separate sequence energy evidence. Actual energy integration, reserve application and residual checks are P04; the contract only requires their binding.
+
+## Status consistency and units
+
+Outcomes are `feasible`, `infeasible`, `unresolved`, `unsupported`, `not_evaluated`, scoped to the declared method. Schema feasibility does not establish installed-aircraft feasibility. Missing/unsupported data maps conservatively to `inputs_incomplete`; unresolved maps to `numerically_unverified`; infeasible maps to `requirement_not_met`; a supplied screening pass maps to `screening_only`. A completed job never promotes evidence or review. Unsupported/unresolved outcomes cannot masquerade as requirement failure or produce a capacity headline.
+
+Case IDs are unique and declared. A feasible result requires complete execution and every required case feasible. The headline, when present, is exactly the minimum verified case lower bound, and its limiting case must attain that value. Optional cases are declared with `required=false`; they do not silently remove required cases. A case can retain an explored upper bound and positive search tolerance; upper bound cannot lie below its feasible lower bound. Failed/cancelled jobs cannot have a published result. Detached reviews cannot move to a changed project, study or package revision.
+
+SI fields: payload bounds/search tolerance in kg, force residual in N, moment residual in N·m, segment duration in s. Held-energy reserve values are J; the other reserve values are dimensionless fractions. Held usable-energy fraction is in [0,1); additional mission demand is nonnegative. A validation envelope digest is mandatory for `validated_for_case_family`; `within_validated_envelope` requires that evidence. Those references must be resolved/authorized by later service implementations; schema construction alone proves neither measurements nor approval. Nonfeasible states have structured reason codes, exact field paths, explanatory messages and optional source hashes.
+
+## Serialization, unknown values and migration
+
+UTF-8 JSON, sorted object keys, compact separators, Unicode unescaped, no whitespace/newline in canonical record bytes. Arrays retain order. No Unicode normalization is invented. Record digests use exact canonical bytes, including version; the existing numeric snapshot scheme separately normalizes 1 and 1.0 and signed zero while preserving strings, booleans/null and refusing nonfinite/browser-inexact integers. This is the explicitly retained Python JSON encoding, not a claim of RFC 8785 compliance.
+
+Extensible manifest groups remain within immutable `snapshot_json` strings, with canonical encoding verified on load. This avoids frozen models containing mutable nested dicts. Use `snapshot_json(mapping)` to encode and `parse_snapshot(text)` to recover an independently parsed dictionary. `null` remains unknown, zero is a supplied zero, omitted top-level manifest groups/unknown contract fields/versions are rejected. Existing nested client extensions remain retained by the legacy manifest parser with readiness warnings.
+
+UTC record timestamps use a real calendar time in exact second-resolution `YYYY-MM-DDTHH:MM:SSZ`. Design approval with missing method inputs is refused even if a caller supplies no reasons. Drafts accept incompleteness. An approval/reference ID does not cause a physics claim.
+
+Legacy manifest import requires an explicit `installed_mass` interpretation and preserves original raw-byte SHA-256. Historical target-payload data is refused until corrected source data is provided; no automatic conversion to a real installed mass. This import creates a draft with version zero, never an approved design. Legacy result packages are read under `results_v1`; publication identities are derived without rewriting archives. New aircraft results are never inserted into or coerced into `ResultsV1`.
+
+For future schema changes: register a new literal/model, fixtures and explicit migration; preserve previous parser/byte provenance. No automatic unknown-version fallback, lossy round trip or in-place evidence rewrite.
+
+## Slice metric registry correction
+
+`sphere_slice_policy_v1` remains byte-identical at `babdcdb91ee800086d4aeb4a32d6dfae6e2d1614b668f906e517ba86f02213a7`. Its P00.2 retrospective final vector implementation is retained for compatibility; the earlier magnitude-only interpretation is historical and not reconstructed as accepted evidence.
+
+New prospective inputs use `sphere_slice_policy_v2`, SHA-256 `94a3a59109753b79556a74424bbac14a759e814faa3df2a756c2c2418bc85a0f`. Its policy text binds full world-velocity vector differences, Euclidean component-span normalization, signed scalar differences/span, constant-field magnitude fallback with 64-epsilon cutoff/tiny floor, RMS/peak operators, nonfinite refusal, external mask/coverage, shared grid and linear interpolation. Geometry, coverage and RMS/peak thresholds remain unchanged. No refused view is admitted by a threshold change.
+
+Both versions load by exact known version and pinned bytes. Native records select their original registered version; original unregistered data remains a v1 retrospective replay. Case reuse, plot construction and publication use the retained registration, not today's default. Unknown/tampered versions fail closed. There is still no external timestamp/signature or prospectively registered three-grid campaign, and the underlying +2.65% discrepancy/slice instability is unexplained. The experiments are tracked in [Pilot-1](../pilots/pilot-1.md).
+
+## Verification artifacts and next work
+
+Seven JSON fixtures in `tests/projects/fixtures`: original sphere, incomplete draft, approved synthetic design and infeasible/unsupported/unresolved schema records, plus detached review. Synthetic reference/attestation digests are explicitly schema fixtures; they are not real authenticated approvals or computed trim results. Tests cover round-trip, immutable/hash-bound revisions, forged completeness, missing required cases, minimum/limiting-case consistency, separate sequence energy evidence, stale project/review binding, unsupported/unresolved separation, publication/validation axes, calendar/JSON errors, unchecked-copy export and explicit legacy migration. Read-only API schema discovery is authenticated.
+
+Persistence is P01.2; actual invited identity is P01.3. Fixture-driven local Pilot-1 domain work proceeds without waiting for a hosting provider. A frontend framework migration is deferred until this journey demonstrates a need and a separate ADR records it. The client data request is [prepared](../client/aircraft-data-request.md); no message has been sent.

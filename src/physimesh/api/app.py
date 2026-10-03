@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 
 from ..drone.api import router as drone_router
 from ..drone.models import project_from_mapping, readiness
+from .contracts import router as contracts_router
 from .results import router as results_router
 from .screening import router as screening_router
 from .settings import Settings, load_settings
@@ -22,6 +23,7 @@ def create_app(settings: Settings) -> FastAPI:
     app.state.settings = settings
     app.include_router(drone_router)
     app.include_router(results_router)
+    app.include_router(contracts_router)
     app.include_router(screening_router)
 
     @app.middleware("http")

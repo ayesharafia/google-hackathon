@@ -1,0 +1,72 @@
+{
+  "schema_version": "aircraft_study_v2",
+  "spec": {
+    "schema_version": "aircraft_study_spec_v1",
+    "organization_id": "EXAMPLE-org",
+    "project_id": "EXAMPLE-project",
+    "design_revision_sha256": "f2a98a2b81654c78adb5dfac3e9a12bdfa8be73a6b6b54728187bf6d6a37127c",
+    "mission": {
+      "schema_version": "mission_definition_v1",
+      "cases": [
+        {
+          "case_id": "hover",
+          "required": true,
+          "conditions_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        },
+        {
+          "case_id": "climb",
+          "required": true,
+          "conditions_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      ],
+      "sequence": [],
+      "reserve_convention": "held_usable_energy_fraction",
+      "reserve_value": 0.2,
+      "pack_mode": "fixed"
+    },
+    "method": "supplied_point_screening",
+    "method_version": "EXAMPLE-schema-fixture-only",
+    "model_source_sha256": [
+      "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    ],
+    "settings_sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+    "code_commit": "0000000000000000000000000000000000000000",
+    "backend_image_digest": null
+  },
+  "execution": "completed",
+  "physical_outcome": "infeasible",
+  "aircraft_status": "requirement_not_met",
+  "evidence": "unverified",
+  "publication_state": "published",
+  "publication": {
+    "schema_version": "publication_identity_v1",
+    "study_id": "4c036152a2dbc4fd",
+    "study_sha256": "4c036152a2dbc4fde270aeed63a86735781ed0ea73ff75f04baec95cf67aeb3a",
+    "payload_manifest_sha256": "026fcdb6de24ca06885c4d42ca5d359678592218103947e2ede3d2e22412936a",
+    "package_revision_sha256": "96df6bcb4c6c25c1a53e840e9eac085ffe74187e91205011c2aa6474c5b9fd47"
+  },
+  "cases": [
+    {
+      "case_id": "hover",
+      "outcome": "infeasible",
+      "reasons": [
+        {
+          "code": "limit_exceeded",
+          "field_path": "cases.hover",
+          "message": "EXAMPLE contract fixture only; no aircraft solve or authenticated engineering approval",
+          "source_sha256": null
+        }
+      ]
+    }
+  ],
+  "payload_lower_bound_kg": null,
+  "limiting_case_id": null,
+  "reasons": [
+    {
+      "code": "limit_exceeded",
+      "field_path": "cases.hover",
+      "message": "EXAMPLE contract fixture only; no aircraft solve or authenticated engineering approval",
+      "source_sha256": null
+    }
+  ]
+}
