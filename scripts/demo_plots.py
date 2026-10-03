@@ -7,9 +7,10 @@ from pathlib import Path
 
 import numpy as np
 
-from physimesh.postpro.plots import render, resample_slice
+from physimesh.postpro.plots import render
 from physimesh.postpro.recipes import PlotRecipe
 from physimesh.postpro.results import _columns
+from physimesh.postpro.slice_eligibility import evaluate_slice
 from physimesh.solver.foam_ascii import read_function_object_table, read_raw_samples
 
 
@@ -47,12 +48,13 @@ def main():
         # Metadata is retained from the actual raw headers and generator sampling dictionaries.
         if not np.array_equal(arrays['u'][:, :3], arrays['p'][:, :3]) or not np.array_equal(arrays['u'][:, :3], arrays['omega'][:, :3]):
             raise ValueError('plane sample locations differ; no implicit association permitted')
-        bounds = (-1.5, 4., -1.5, 1.5)
-        grids = {
-            'speed': resample_slice(arrays['u'][:, :3], arrays['u'][:, 3:6], bounds=bounds, diameter_m=group['D_m'], plane_tolerance_m=1e-5*group['D_m']),
-            'pressure': resample_slice(arrays['p'][:, :3], arrays['p'][:, 3]*group['rho_ref_kg_m3'], bounds=bounds, diameter_m=group['D_m'], plane_tolerance_m=1e-5*group['D_m']),
-            'vorticity': resample_slice(arrays['omega'][:, :3], arrays['omega'][:, 4], bounds=bounds, diameter_m=group['D_m'], plane_tolerance_m=1e-5*group['D_m']),
-        }
+        grids, eligibility = {}, {}
+        for field, samples, values in (
+            ('speed', arrays['u'][:, :3], arrays['u'][:, 3:6]),
+            ('pressure', arrays['p'][:, :3], arrays['p'][:, 3]*group['rho_ref_kg_m3']),
+            ('vorticity', arrays['omega'][:, :3], arrays['omega'][:, 4]),
+        ):
+            grids[field], eligibility[field] = evaluate_slice(samples, values, diameter_m=group['D_m'])
         profile_path = verified(case/'postProcessing/sample1'/time/'centreLine_p_U.xy')
         _, profile = read_raw_samples(profile_path)
         if profile.shape[1] != 5:
@@ -61,12 +63,15 @@ def main():
         headers, residual_rows = read_function_object_table(verified(case/'postProcessing/solverInfo1/0/solverInfo.dat'))
         residuals = {name: np.asarray(residual_rows[:, headers.index(name)], float)
                      for name in ('Time', 'p_initial', 'Ux_initial', 'Uy_initial', 'Uz_initial')}
-        native[level] = {'grids': grids, 'profile': profile, 'coefficient': coefficient, 'residuals': residuals,
+        native[level] = {'grids': grids, 'slice_eligibility': eligibility, 'profile': profile, 'coefficient': coefficient, 'residuals': residuals,
                              'source_sha256': hashlib.sha256(json.dumps(hashes, sort_keys=True).encode()).hexdigest(),
                              'sources': hashes, 'job_id': mesh['job_id'], 'iteration': time, 'maximum_abs_sample_y_m': float(np.abs(arrays['u'][:, 1]).max())}
     for name in ('speed', 'pressure', 'vorticity'):
-        vals = np.concatenate([entry['grids'][name]['values'][~entry['grids'][name]['mask']].ravel()
-                               for entry in native.values()])
+        candidates = [entry['grids'][name]['values'][~entry['grids'][name]['mask']].ravel()
+                      for entry in native.values() if entry['grids'][name] is not None]
+        if not candidates:
+            continue
+        vals = np.concatenate(candidates)
         vals = vals[np.isfinite(vals)]
         if name == 'speed':
             shared[name] = (0., float(vals.max()))
@@ -92,16 +97,19 @@ def main():
         record['run_group_sha256'] = load_results['run_group_sha256']
         record['png_sha256'] = hashlib.sha256(png).hexdigest()
         record['maximum_abs_sample_y_m'] = entry['maximum_abs_sample_y_m'] if entry else None
+        record['slice_eligibility'] = entry['slice_eligibility'] if entry and plane else None
         record['source_hashes'] = entry['sources'] if entry else {k: v['sources'] for k, v in native.items()}
         (out/f'{plot_id}.json').write_text(json.dumps(record, indent=2, allow_nan=False)+'\n')
         records.append(record); print(plot_id, flush=True)
 
     for level, entry in native.items():
         for name, field in [('speed', 'velocity.magnitude'), ('pressure', 'pressure.static_gauge'), ('vorticity', 'vorticity.y')]:
+            if entry['grids'][name] is None:
+                continue
             emit(f'{level}_{name}', field, 'contour', level, entry['grids'][name], shared[name],
                  plane={'axis': 'y', 'position_m': 0, 'view_bounds_m': [-1.5, 4, -1.5, 1.5]},
                  note='y=0 slice. Shared bounds across all three meshes in this view.')
-    for kind in ('vectors', 'streamlines'):
+    for kind in ('vectors', 'streamlines') if native['fine']['grids']['speed'] is not None else ():
         emit(f'fine_{kind}', 'velocity.in_plane', kind, 'fine', native['fine']['grids']['speed'], shared['speed'],
              plane={'axis': 'y', 'position_m': 0},
              note='In-plane '+kind+' of the y=0 slice velocity; background |U|. These are not 3D particle paths.')
@@ -130,8 +138,10 @@ def main():
          {'values': cd_values, 'labels': levels, 'reference': 1.09173, 'gci_absolute': None if gci is None else gci*cd_values[-1]},
          (0., float(cd_values.max()*1.1)), note='Error bar uses order-capped GCI (nominal cap 2, safety factor 1.25); qualified mesh sensitivity, not total uncertainty or a proven error bound.')
     (out/'index.json').write_text(json.dumps(records, indent=2, allow_nan=False)+'\n')
+    eligibility_path = args.run_group.parent/'slice_eligibility.json'
+    eligibility_path.write_text(json.dumps({level: entry['slice_eligibility'] for level, entry in native.items()}, indent=2, allow_nan=False)+'\n')
     observations = {level: {'wake_ux_min': float(entry['profile'][:, 2].min()),
-                            'slice_p_min': float(entry['grids']['pressure']['values'][~entry['grids']['pressure']['mask']].min())}
+                            'slice_p_min': (float(entry['grids']['pressure']['values'][~entry['grids']['pressure']['mask']].min()) if entry['grids']['pressure'] is not None else None)}
                     for level, entry in native.items()}
     (out/'observations.json').write_text(json.dumps(observations, indent=2)+'\n')
 

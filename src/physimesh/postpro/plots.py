@@ -172,6 +172,7 @@ def resample_slice(samples: np.ndarray, values: np.ndarray, *, bounds: tuple[flo
     unsmoothed native face data for integration. Coordinates are world x and z.
     """
     from scipy.interpolate import griddata
+    from scipy.spatial import QhullError
 
     samples, values = np.asarray(samples, float), np.asarray(values, float)
     if (samples.ndim != 2 or samples.shape[1] != 3 or len(values) != len(samples)
@@ -187,7 +188,12 @@ def resample_slice(samples: np.ndarray, values: np.ndarray, *, bounds: tuple[flo
     if not all(math.isfinite(v) for v in bounds) or xmin >= xmax or zmin >= zmax:
         raise ValueError('invalid view bounds')
     x, z = np.meshgrid(np.linspace(xmin, xmax, shape[1]), np.linspace(zmin, zmax, shape[0]))
-    grid = griddata(samples[:, [0, 2]], values, (x, z), method='linear')
+    if len(samples) < 3:
+        raise ValueError('slice requires at least three non-collinear samples')
+    try:
+        grid = griddata(samples[:, [0, 2]], values, (x, z), method='linear')
+    except QhullError as exc:
+        raise ValueError('slice lacks supported two-dimensional sample geometry') from exc
     interior = x*x+z*z <= (diameter_m/2)**2
     result = {'x': x, 'z': z, 'values': grid, 'mask': interior, 'interpolation': {'version': 'slice_griddata_v1', 'method': 'linear', 'shape': list(shape),
                                                     'bounds_m': list(bounds), 'diameter_m': diameter_m, 'plane_tolerance_m': plane_tolerance_m}}

@@ -14,6 +14,7 @@ from physimesh.drone.mass import MassItem, summarize
 from physimesh.drone.models import project_from_mapping, readiness
 from physimesh.drone.screening import CapacityCaseInput, RotorLimitPoint, capacity_from_cases
 from physimesh.drone.screening_diagnostics import diagnostics
+from physimesh.drone.screening_scope import case_scope, pack_consistency
 from physimesh.drone.snapshot_hash import snapshot_sha256
 
 router = APIRouter(prefix='/api/drone')
@@ -27,10 +28,13 @@ class ScreeningRequest(BaseModel):
     usable_energy_j: float | None = None
 
 
-def _blocked(blocking):
+def _blocked(blocking, *, category='inputs_incomplete', code='missing_or_invalid_input', **details):
     return {'max_payload_kg': None, 'limiting_case_id': None, 'cases': [],
             'empty_airframe_mass_kg': None, 'status': 'inputs_incomplete', 'blocking': blocking,
-            'interpretation': 'Capacity unavailable until every declared design, case and operating limit is complete.'}
+            'outcome': category, 'trim_eligibility': 'not_evaluated',
+            'reasons': [{'category': category, 'code': code, 'detail': item} for item in blocking],
+            'interpretation': 'Capacity unavailable until every declared design, case and operating limit is complete.',
+            **details}
 
 
 @router.post('/screening')
@@ -62,6 +66,13 @@ def screening(request: Request, body: ScreeningRequest):
     energy = snapshot.mission.get('energy_system')
     if not isinstance(energy, Mapping) or body.usable_energy_j != energy.get('usable_energy_j'):
         return _blocked(['mission.energy_system.usable_energy_j: explicit approved energy limit required'])
+    pack = pack_consistency(body.project)
+    if pack['status'] != 'consistent':
+        return _blocked(['Battery mass and usable energy must agree with the approved pack parameters.'],
+                        code=pack['code'], pack_consistency=pack)
+    scope_issues = [issue for case in declared for issue in case_scope(case, snapshot.rotors)]
+    if scope_issues:
+        return _blocked(scope_issues, category='unsupported_scope', code='trim_or_scope_unresolved')
     ids = [rotor.get('rotor_id') for rotor in snapshot.rotors]
     if any(not isinstance(identifier, str) or not identifier.strip() for identifier in ids) or len(set(ids)) != len(ids):
         return _blocked(['rotors: unique string rotor IDs required'])
@@ -134,11 +145,18 @@ def screening(request: Request, body: ScreeningRequest):
     result['status'] = report.status.value
     result['rotor_diagnostics'] = diagnostics(body.project, body.case_inputs)
     result['approved_design_sha256'] = design_hash
+    result['pack_consistency'] = pack
+    result['case_scope'] = [{'case_id': case['name'], 'analysis_scope': case['analysis_scope'],
+                             'duration_s': case.get('duration_s', snapshot.mission.get('duration_s')),
+                             'trajectory_evaluated': False} for case in declared]
     result['assumptions'] = ['World-vertical force ceiling at supplied sustained limits; trim and structure pending.',
                              'Cases are alternative operating conditions; energies checked independently.',
                              'Electrical power and usable energy are supplied data, not physically validated; limit checks alone do not prove operability.',
                              'Isolated ideal-hover power is a diagnostic; ground effect and rotor interference are not modelled.',
                              'Rotor performance must already include environment, attitude and reserve policy.']
+    result['assumptions'] += ['Constant-point force and energy screening only; no trajectory or sequential mission integration.',
+                              'Acceleration margin uses force at the supplied instantaneous velocity; its duration is an illustrative constant-power energy check.',
+                              'Trim eligibility: geometry/conditions meet the restricted vertical screen, but moment balance, control allocation and payload CG remain unevaluated.']
     return result
 
 

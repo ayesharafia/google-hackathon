@@ -14,11 +14,12 @@ from fastapi.responses import Response
 from pydantic import ValidationError
 
 from physimesh.core.jobs import JobLedger
+from physimesh.postpro.publication import identity_bytes, publication_identity, validate_identity
 from physimesh.postpro.result_contract import ResultsV1
 
 router = APIRouter(prefix='/api/drone')
 _GROUP = re.compile(r'[0-9a-f]{16}')
-_FILE = re.compile(r'(results\.json|run_group\.json|plots/[a-z0-9_]+\.png|recipes/[a-z0-9_]+\.json|surfaces/[a-z0-9_]+\.json)')
+_FILE = re.compile(r'(slice_eligibility\.json|publication\.json|results\.json|run_group\.json|plots/[a-z0-9_]+\.png|recipes/[a-z0-9_]+\.json|surfaces/[a-z0-9_]+\.json)')
 
 
 def _package(request, group_id):
@@ -98,6 +99,30 @@ def plot(request: Request, group_id: str, plot_id: str):
     return Response(raw, media_type='image/png', headers={'Cache-Control': 'private, no-cache'})
 
 
+def _publication(package, manifest, result):
+    # Verify all payload bytes before exposing a content identity, including
+    # legacy packages that predate the envelope. Never rewrite their files.
+    for name in manifest:
+        _read(package, name, manifest)
+    try:
+        identity = publication_identity(manifest, result['provenance']['run_group_sha256'])
+        if 'publication.json' in manifest:
+            validate_identity(_read(package, 'publication.json', manifest), identity)
+        return identity
+    except (ValueError, TypeError) as exc:
+        raise HTTPException(409, 'publication identity differs from retained content') from exc
+
+
+@router.get('/results/{group_id}/publication')
+def publication(request: Request, group_id: str):
+    package = _package(request, group_id)
+    manifest = _manifest(package)
+    result = _result(package, manifest)
+    return {'identity': _publication(package, manifest, result).model_dump(mode='json'),
+            'origin': 'retained_envelope' if 'publication.json' in manifest else 'derived_legacy',
+            'qualification': 'Content identity only; evidence and independent review remain separate.'}
+
+
 @router.get('/runs/{run_id}')
 def run(request: Request, run_id: str):
     if _GROUP.fullmatch(run_id):
@@ -122,8 +147,11 @@ def run(request: Request, run_id: str):
 def export(request: Request, group_id: str):
     package = _package(request, group_id)
     manifest = _manifest(package)
-    _result(package, manifest)  # refuse schema/status corruption before export
+    result = _result(package, manifest)  # refuse schema/status corruption before export
+    identity = _publication(package, manifest, result)
     files = {name: _read(package, name, manifest) for name in manifest}
+    files['publication.json'] = identity_bytes(identity)
+    manifest = {name: hashlib.sha256(raw).hexdigest() for name, raw in files.items()}
     files['hashes.json'] = (json.dumps(manifest, indent=2, sort_keys=True)+'\n').encode()
     stream = io.BytesIO()
     with zipfile.ZipFile(stream, 'w', compression=zipfile.ZIP_DEFLATED) as archive:
@@ -132,7 +160,7 @@ def export(request: Request, group_id: str):
             info.compress_type = zipfile.ZIP_DEFLATED
             archive.writestr(info, raw)
     return Response(stream.getvalue(), media_type='application/zip',
-                    headers={'Content-Disposition': f'attachment; filename="sphere-{group_id}.zip"'})
+                    headers={'Content-Disposition': f'attachment; filename="sphere-{group_id}-{identity.package_revision_sha256}.zip"'})
 
 
 @router.get('/surfaces/{group_id}/{surface_id}.json')

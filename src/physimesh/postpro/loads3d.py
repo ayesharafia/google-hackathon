@@ -121,6 +121,24 @@ def source_reaction(force_density_on_fluid: np.ndarray, cell_volumes_m3: np.ndar
 
 
 # ---------------------------------------------------------------- reconciliation
+def moment_absolute_floor(*, force_reference_n: float, length_reference_m: float) -> float:
+    """v1 numerical reconciliation floor: 1e-9 F_ref L_ref, in N m.
+
+    Reference scales must be independent of the (possibly cancelling) moment.
+    For the 12-significant-digit sphere adapter this permits nine-digit
+    force-length agreement, with three digits of headroom for serialization
+    and different summation orders. It is a comparison policy, not an accuracy
+    estimate. A smaller-than-floor moment cannot establish relative agreement.
+    """
+    if any(isinstance(v, bool) or not np.isfinite(v) or v <= 0
+           for v in (force_reference_n, length_reference_m)):
+        raise ValueError('positive finite independent force and length references required')
+    floor = 1e-9 * force_reference_n * length_reference_m
+    if not np.isfinite(floor) or floor <= 0:
+        raise ValueError('force-length moment floor underflowed or overflowed')
+    return float(floor)
+
+
 @dataclass(frozen=True)
 class Reconciliation:
     passed: bool

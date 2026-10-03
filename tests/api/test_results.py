@@ -63,3 +63,39 @@ def test_results_inventory_and_missing_group(tmp_path):
     response = client.get('/api/drone/results', headers=AUTH)
     assert response.status_code == 200 and response.json()['groups'][0]['run_group_id'] == ID
     assert client.get('/api/drone/results/'+'a'*16, headers=AUTH).status_code == 404
+
+
+def test_legacy_package_identity_is_exported_without_mutating_archive(tmp_path):
+    client, root = package(tmp_path)
+    before = {str(path.relative_to(root)): path.read_bytes() for path in root.rglob('*') if path.is_file()}
+    response = client.get(f'/api/drone/results/{ID}/publication', headers=AUTH)
+    assert response.status_code == 200 and response.json()['origin'] == 'derived_legacy'
+    identity = response.json()['identity']
+    exported = client.get(f'/api/drone/runs/{ID}/export', headers=AUTH)
+    assert identity['package_revision_sha256'] in exported.headers['content-disposition']
+    with zipfile.ZipFile(io.BytesIO(exported.content)) as archive:
+        assert json.loads(archive.read('publication.json')) == identity
+    assert {str(path.relative_to(root)): path.read_bytes() for path in root.rglob('*') if path.is_file()} == before
+
+
+def test_corrupt_member_blocks_even_a_legacy_publication_identity(tmp_path):
+    client, root = package(tmp_path)
+    (root/'recipes/pressure.json').write_bytes(b'changed')
+    assert client.get(f'/api/drone/results/{ID}/publication', headers=AUTH).status_code == 409
+
+
+def test_rehashed_changes_cannot_reuse_retained_revision(tmp_path):
+    from physimesh.postpro.publication import identity_bytes, publication_identity
+    client, root = package(tmp_path)
+    manifest = json.loads((root/'hashes.json').read_text())
+    envelope = identity_bytes(publication_identity(manifest, 'c'*64))
+    (root/'publication.json').write_bytes(envelope)
+    manifest['publication.json'] = hashlib.sha256(envelope).hexdigest()
+    (root/'hashes.json').write_text(json.dumps(manifest))
+    assert client.get(f'/api/drone/results/{ID}/publication', headers=AUTH).status_code == 200
+    changed = b'changed recipe'
+    (root/'recipes/pressure.json').write_bytes(changed)
+    manifest['recipes/pressure.json'] = hashlib.sha256(changed).hexdigest()
+    (root/'hashes.json').write_text(json.dumps(manifest))
+    assert client.get(f'/api/drone/results/{ID}/publication', headers=AUTH).status_code == 409
+    assert client.get(f'/api/drone/runs/{ID}/export', headers=AUTH).status_code == 409

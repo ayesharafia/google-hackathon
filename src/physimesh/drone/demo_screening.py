@@ -11,7 +11,7 @@ from physimesh.drone.snapshot_hash import snapshot_sha256
 LABEL = "Illustrative example inputs, not the client's aircraft."
 
 
-def example_request(store: ArtifactStore) -> dict:
+def example_request(store: ArtifactStore, *, hover_duration_s: float = 300) -> dict:
     """Retain synthetic performance records before returning a screening request."""
     project = yaml.safe_load(Path(__file__).with_name('schema').joinpath('drone_manifest_v1.yaml').read_text())
     project['identity'].update(study_id='EXAMPLE-multirotor', description=LABEL, created_utc='2026-10-02T00:00:00Z')
@@ -21,12 +21,12 @@ def example_request(store: ArtifactStore) -> dict:
                                                             ('battery', 'energy', 20), ('avionics', 'avionics', 5), ('payload', 'payload', 0), ('other', 'other', 0)]]
     project['atmosphere'].update(source='EXAMPLE dry sea-level atmosphere', altitude_m=0, pressure_pa=101325,
                                  temperature_k=288.15, viscosity={'law': 'sutherland'}, humidity_assumption='dry air')
-    project['mission'].update(duration_s=300, reserve_policy={'kind': 'fraction', 'value': .2},
-                             energy_system={'pack_wh_per_kg': 250, 'usable_fraction': .8, 'usable_energy_j': 20*250*.8*(1-.2)*3600, 'available_electrical_power_w': 28000})
+    project['mission'].update(duration_s=hover_duration_s, reserve_policy={'kind': 'fraction', 'value': .2},
+                             energy_system={'pack_mass_item_names': ['battery'], 'pack_wh_per_kg': 250, 'usable_fraction': .8, 'usable_energy_j': 20*250*.8*(1-.2)*3600, 'available_electrical_power_w': 28000})
     project['mission']['cases'] = [
-        {"name": 'hover', "velocity_is_air_relative": True, "kind": 'hover', "duration_s": 300, "velocity_world_m_s": [0, 0, 0], "attitude_deg_zyx": [0, 0, 0],
+        {"name": 'hover', "velocity_is_air_relative": True, "kind": 'hover', "analysis_scope": 'constant_operating_point', "duration_s": hover_duration_s, "velocity_world_m_s": [0, 0, 0], "attitude_deg_zyx": [0, 0, 0],
              "acceleration_target_m_s2": [0, 0, 0], "ground_clearance_m": 10, "mass_state": 'empty_plus_calculated_payload'},
-        {"name": 'climb', "velocity_is_air_relative": True, "kind": 'climb', "duration_s": 180, "velocity_world_m_s": [0, 0, 2], "attitude_deg_zyx": [0, 0, 0],
+        {"name": 'climb', "velocity_is_air_relative": True, "kind": 'acceleration_margin', "analysis_scope": 'instantaneous_vertical_margin', "duration_s": 2, "velocity_world_m_s": [0, 0, 2], "attitude_deg_zyx": [0, 0, 0],
              "acceleration_target_m_s2": [0, 0, .6], "ground_clearance_m": 10, "mass_state": 'empty_plus_calculated_payload'},
     ]
     map_doc = {'schema': 'EXAMPLE-map-description', 'label': LABEL,
@@ -58,7 +58,7 @@ def example_request(store: ArtifactStore) -> dict:
                                "electrical_power_w": point['electrical_power_w'], "sustained_electrical_power_limit_w": 7000,
                                "performance_source_sha256": point_sha, "limit_source_sha256": limit_sha})
         cases.append({"case_id": name, "rotors": rotors, "body_force_world_n": body_force, "body_force_source_sha256": body_sha,
-                          "vertical_acceleration_m_s2": case['acceleration_target_m_s2'][2], "duration_s": 300 if hover else 180,
+                          "vertical_acceleration_m_s2": case['acceleration_target_m_s2'][2], "duration_s": case['duration_s'],
                           "available_electrical_power_w": 28000})
     return {'project': deepcopy(project), 'approved_design_sha256': design_hash, 'case_inputs': cases,
             'usable_energy_j': 20*250*.8*(1-.2)*3600}

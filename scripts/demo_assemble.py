@@ -6,8 +6,10 @@ import json
 from pathlib import Path
 
 from physimesh.postpro.interpretation import interpret
+from physimesh.postpro.publication import identity_bytes, publication_identity
 from physimesh.postpro.refusals import sphere_refusals
 from physimesh.postpro.result_contract import assemble_results
+from physimesh.postpro.slice_eligibility import registered_policy
 
 
 def main():
@@ -24,9 +26,19 @@ def main():
     result = assemble_results(group, loads, plots, refusals=sphere_refusals())
     result['interpretation'] = interpret(result)
     package = args.data_root/'results'/result['run_group_id']
-    package.mkdir(parents=True, exist_ok=True)
     files = {'results.json': (json.dumps(result, indent=2, allow_nan=False)+'\n').encode(),
              'run_group.json': args.run_group.read_bytes()}
+    eligibility_raw = (root/'slice_eligibility.json').read_bytes()
+    eligibility = json.loads(eligibility_raw)
+    policy, policy_sha = registered_policy()
+    for level, fields in eligibility.items():
+        for field, check in fields.items():
+            if check['policy'] != policy or check['policy_sha256'] != policy_sha:
+                raise ValueError('slice eligibility differs from the registered policy')
+            if check['status'] == 'refused':
+                result['limitations'].append(f'{level} {field} slice withheld: '+ '; '.join(check['reasons']))
+    result['limitations'].append('Slice eligibility is a retrospective replay of existing outputs under a fixed visual stability policy, not preregistration of the original CFD campaign.')
+    files['slice_eligibility.json'] = eligibility_raw
     for record in plots:
         if record.get('run_group_sha256') != loads['run_group_sha256']:
             raise ValueError('plot belongs to a different run group')
@@ -35,6 +47,13 @@ def main():
         matching = [mesh for mesh in group['meshes'] if mesh['job_id'] == run_id]
         if matching:
             bindings = [(matching[0], record['source_hashes'])]
+            if record['recipe']['plane'] is not None:
+                level = matching[0]['level']
+                field = {'pressure.static_gauge': 'pressure', 'vorticity.y': 'vorticity',
+                         'velocity.magnitude': 'speed', 'velocity.in_plane': 'speed'}[record['recipe']['field_id']]
+                check = eligibility[level][field]
+                if check['status'] != 'eligible_visualization_only' or record.get('slice_eligibility') != eligibility[level]:
+                    raise ValueError('unsupported or stale slice cannot be published')
         elif run_id == loads['run_group_sha256']:
             if set(record['source_hashes']) != set(by_level):
                 raise ValueError('comparison plot mesh sources differ')
@@ -78,8 +97,21 @@ def main():
                               {'surface_id': 'fine_sphere', 'sha256': hashlib.sha256(surface_raw).hexdigest()}]
         files['surfaces/fine_sphere.json'] = surface_raw
         files['results.json'] = (json.dumps(result, indent=2, allow_nan=False)+'\n').encode()
+    files['results.json'] = (json.dumps(result, indent=2, allow_nan=False)+'\n').encode()
+    payload_hashes = {name: hashlib.sha256(raw).hexdigest() for name, raw in files.items()}
+    files['publication.json'] = identity_bytes(publication_identity(payload_hashes, loads['run_group_sha256']))
     files['hashes.json'] = (json.dumps({name: hashlib.sha256(raw).hexdigest() for name, raw in files.items()},
                                      indent=2, sort_keys=True)+'\n').encode()
+    # Check ALL existing members before writing anything. An archived package
+    # cannot acquire new envelope files on a failed attempt to republish it.
+    if package.exists():
+        for name, raw in files.items():
+            target = package/name
+            if not target.is_file() or target.read_bytes() != raw:
+                raise ValueError(f'published package is immutable: {name} differs')
+        print(package)
+        return
+    package.mkdir(parents=True, exist_ok=False)
     for name, raw in files.items():
         target = package/name
         target.parent.mkdir(exist_ok=True, parents=True)

@@ -11,6 +11,7 @@ import numpy as np
 
 from physimesh.postpro.loads3d import (
     integrate_surface_loads,
+    moment_absolute_floor,
     reconcile,
     solid_area_vectors_from_backend,
     to_physical_pressure,
@@ -101,6 +102,7 @@ def sphere_load_result(case_dir: Path, final_time: str, *, rho: float,
     force_index, moment_index, coeff_index = indices
     scale = 0.5*rho*speed**2 * math.pi*diameter**2/4
     cd = float(loads.force_total_n[0]/scale)
+    moment_floor = moment_absolute_floor(force_reference_n=scale, length_reference_m=diameter)
     checks = {}
     for name, ours, native in (
         ('pressure', loads.force_pressure_n, _vector(force, 'pressure', force_index)),
@@ -109,9 +111,12 @@ def sphere_load_result(case_dir: Path, final_time: str, *, rho: float,
         ('moment', loads.moment_total_nm, _vector(moment, 'total', moment_index)),
         ('cd', np.array([cd]), np.array([coeff['Cd'][coeff_index]])),
     ):
-        check = reconcile(ours, native, rel_tol=1e-3, abs_tol=1e-6)
+        absolute_tolerance = moment_floor if name == 'moment' else 1e-6
+        check = reconcile(ours, native, rel_tol=1e-3, abs_tol=absolute_tolerance)
         checks[name] = {'passed': check.passed, 'ours': ours.tolist(), 'native': native.tolist(),
-                        'absolute_error': check.abs_error.tolist(), 'allowed': check.allowed.tolist()}
+                        'absolute_error': check.abs_error.tolist(), 'allowed': check.allowed.tolist(),
+                        'units': 'N m' if name == 'moment' else ('dimensionless' if name == 'cd' else 'N'),
+                        'absolute_tolerance': absolute_tolerance}
     accepted = all(check['passed'] for check in checks.values())
     end = float(final_time)
     windows = [window_stats(coeff['Time'], coeff['Cd'], end-400, end-200),
@@ -133,7 +138,13 @@ def sphere_load_result(case_dir: Path, final_time: str, *, rho: float,
         'surface_area_m2': loads.area_m2, 'cd': cd,
         'reference_cd': reference, 'reference_relative_difference': (cd-reference)/reference,
         'reconciliation': {'status': 'accepted' if accepted else 'diagnostic_only',
-                           'relative_tolerance': 1e-3, 'absolute_tolerance': 1e-6, 'checks': checks},
+                           'relative_tolerance': 1e-3, 'force_absolute_tolerance_n': 1e-6,
+                           'coefficient_absolute_tolerance': 1e-6,
+                           'moment_policy': {'version': 'force_length_floor_v1', 'force_reference_n': scale,
+                                             'length_reference_m': diameter, 'floor_fraction': 1e-9,
+                                             'absolute_floor_nm': moment_floor,
+                                             'qualification': 'Numerical comparison only; below-floor components do not establish relative moment agreement.'},
+                           'checks': checks},
         'convergence': {'passed': bool(cd_drift < 0.005), 'drift': float(cd_drift), 'threshold': 0.005,
                         'treatment': 'steady iteration windows, not physical time averages',
                         'windows': [asdict(window) for window in windows]},

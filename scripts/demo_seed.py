@@ -16,7 +16,7 @@ def main():
     parser.add_argument('--write-doc-fixture', action='store_true')
     args = parser.parse_args()
     body = example_request(ArtifactStore(args.data_root/'artifacts'))
-    record = {'label': LABEL, 'screening_request': body, 'battery_loops': example_battery_loops()}
+    record = {'label': LABEL, 'screening_request': body, 'energy_limit_request': example_request(ArtifactStore(args.data_root/'artifacts'), hover_duration_s=600), 'battery_loops': example_battery_loops()}
     directory = args.data_root/'examples'; directory.mkdir(parents=True, exist_ok=True)
     (directory/'screening.json').write_text(json.dumps(record, indent=2, allow_nan=False)+'\n')
     if args.write_doc_fixture:

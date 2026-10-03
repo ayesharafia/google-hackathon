@@ -73,3 +73,23 @@ def test_invalid_force_provenance_blocks_capacity():
     report = capacity_from_cases(_mass(), ["hover"], [case], usable_energy_j=200_000.0)
     assert report.max_payload_kg is None
     assert any("body_force_source_sha256" in item for item in report.blocking)
+
+
+def test_infeasible_energy_is_distinct_from_missing_input():
+    infeasible = capacity_from_cases(_mass(), ['hover'], [_case('hover', 400)], usable_energy_j=100_000)
+    missing = capacity_from_cases(_mass(), ['hover'], [], usable_energy_j=100_000)
+    assert infeasible.status is AircraftStatus.REQUIREMENT_NOT_MET
+    assert infeasible.outcome == 'infeasible_limits' and infeasible.max_payload_kg is None
+    assert infeasible.reasons[0]['actual_j'] == 120_000
+    assert infeasible.reasons[0]['limit_j'] == 100_000
+    assert missing.status is AircraftStatus.INPUTS_INCOMPLETE
+    assert missing.outcome == 'inputs_incomplete'
+
+
+def test_horizontal_force_blocks_unresolved_trim():
+    from dataclasses import replace
+    case = replace(_case('hover', 400), body_force_world_n=(10, 0, -100))
+    report = capacity_from_cases(_mass(), ['hover'], [case], usable_energy_j=200_000)
+    assert report.max_payload_kg is None and report.outcome == 'unsupported_scope'
+    assert report.reasons[0]['code'] == 'horizontal_balance_unresolved'
+    assert report.trim_eligibility == 'not_evaluated'

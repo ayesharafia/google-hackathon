@@ -74,6 +74,9 @@ class CapacityReport:
     status: AircraftStatus
     blocking: tuple[str, ...]
     interpretation: str
+    outcome: str = "vertical_screening_ceiling"
+    reasons: tuple[dict, ...] = ()
+    trim_eligibility: str = "not_evaluated"
 
 
 def _finite_nonnegative(value: object) -> bool:
@@ -110,6 +113,8 @@ def capacity_from_cases(mass: MassSummary, declared_case_ids: Sequence[str],
     structural margins, varying body load and model/measurement uncertainty.
     """
     blocking: list[str] = []
+    infeasible: list[dict] = []
+    unsupported: list[dict] = []
     empty_mass = mass.empty_airframe_mass_kg
     if empty_mass is None or not math.isfinite(empty_mass) or empty_mass < 0:
         blocking.append("masses: complete finite empty-airframe ledger required")
@@ -171,7 +176,10 @@ def capacity_from_cases(mass: MassSummary, declared_case_ids: Sequence[str],
             elif not _finite_nonnegative(rotor.sustained_electrical_power_limit_w):
                 blocking.append(f"{rotor_path}.sustained_electrical_power_limit_w")
             elif rotor.electrical_power_w > rotor.sustained_electrical_power_limit_w:
-                blocking.append(f"{rotor_path}: sustained motor power exceeded")
+                infeasible.append({"category": "infeasible_limits", "code": "motor_power_exceeded",
+                                   "detail": f"{rotor_path}: sustained motor power exceeded",
+                                   "actual_w": rotor.electrical_power_w, "limit_w": rotor.sustained_electrical_power_limit_w})
+                powers.append(rotor.electrical_power_w)
             else:
                 powers.append(rotor.electrical_power_w)
             for field_name in ("performance_source_sha256", "limit_source_sha256"):
@@ -189,13 +197,27 @@ def capacity_from_cases(mass: MassSummary, declared_case_ids: Sequence[str],
         except OverflowError:
             blocking.append(f"{path}: electrical power overflowed")
             continue
-        if not math.isfinite(power) or power > case.available_electrical_power_w:
-            blocking.append(f"{path}: available electrical power exceeded")
+        if not math.isfinite(power):
+            blocking.append(f"{path}: electrical power overflowed")
             continue
+        if power > case.available_electrical_power_w:
+            infeasible.append({"category": "infeasible_limits", "code": "available_power_exceeded",
+                               "detail": f"{path}: available electrical power exceeded",
+                               "actual_w": power, "limit_w": case.available_electrical_power_w})
         energy = power * case.duration_s
-        if not math.isfinite(energy) or energy > usable_energy_j:
-            blocking.append(f"{path}: usable energy insufficient at the stated operating point")
+        if not math.isfinite(energy):
+            blocking.append(f"{path}: energy overflowed")
             continue
+        if energy > usable_energy_j:
+            infeasible.append({"category": "infeasible_limits", "code": "usable_energy_exceeded",
+                               "detail": f"{path}: usable energy insufficient at the stated operating point",
+                               "actual_j": energy, "limit_j": usable_energy_j})
+        horizontal = np.sum([*forces, body_force], axis=0)[:2]
+        scale_n = max(1.0, sum(float(np.linalg.norm(f)) for f in [*forces, body_force]))
+        if np.linalg.norm(horizontal) > 1e-9 * scale_n:
+            unsupported.append({"category": "unsupported_scope", "code": "horizontal_balance_unresolved",
+                                "detail": f"{path}: horizontal force balance requires trim",
+                                "residual_n": horizontal.tolist(), "numerical_tolerance_n": 1e-9 * scale_n})
         try:
             net_z = math.fsum([*(float(force[2]) for force in forces), float(body_force[2])])
         except OverflowError:
@@ -212,7 +234,16 @@ def capacity_from_cases(mass: MassSummary, declared_case_ids: Sequence[str],
     if blocking:
         return CapacityReport(None, None, tuple(calculated), empty_mass,
                               AircraftStatus.INPUTS_INCOMPLETE, tuple(dict.fromkeys(blocking)),
-                              "Capacity unavailable until every declared case and operating limit is complete.")
+                              "Capacity unavailable until every declared case and operating limit is complete.",
+                              "inputs_incomplete", tuple([{"category": "inputs_incomplete", "code": "missing_or_invalid_input",
+                                                           "detail": item} for item in dict.fromkeys(blocking)] + infeasible + unsupported))
+    if infeasible or unsupported:
+        reasons = tuple(infeasible + unsupported)
+        outcome = "infeasible_limits" if infeasible else "unsupported_scope"
+        status = AircraftStatus.REQUIREMENT_NOT_MET if infeasible else AircraftStatus.INPUTS_INCOMPLETE
+        return CapacityReport(None, None, tuple(calculated), empty_mass, status,
+                              tuple(reason["detail"] for reason in reasons),
+                              "No capacity is published for infeasible limits or unresolved trim.", outcome, reasons)
     limiting = min(calculated, key=lambda item: item.raw_payload_margin_kg)
     status = (AircraftStatus.REQUIREMENT_NOT_MET if limiting.raw_payload_margin_kg < 0
               else AircraftStatus.SCREENING_ONLY)

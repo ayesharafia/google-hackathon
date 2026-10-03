@@ -69,3 +69,33 @@ def test_browser_number_roundtrip_does_not_invalidate_snapshot_approval(tmp_path
     body['project']['units_and_frames']['cad_transform']['scale'] = 1
     response = client.post('/api/drone/screening', headers=AUTH, json=body)
     assert response.json()['status'] == 'screening_only'
+
+
+def test_complete_inputs_with_insufficient_energy_have_an_infeasible_reason(tmp_path):
+    client, _ = fixture(tmp_path)
+    body = example_request(ArtifactStore(tmp_path/'artifacts'), hover_duration_s=600)
+    result = client.post('/api/drone/screening', headers=AUTH, json=body).json()
+    assert result['max_payload_kg'] is None
+    assert result['status'] == 'requirement_not_met' and result['outcome'] == 'infeasible_limits'
+    assert result['reasons'][0]['code'] == 'usable_energy_exceeded'
+    assert result['reasons'][0]['actual_j'] == 14_400_000
+    assert result['reasons'][0]['limit_j'] == 11_520_000
+
+
+def test_approved_mass_change_cannot_keep_old_usable_energy(tmp_path):
+    from physimesh.drone.snapshot_hash import snapshot_sha256
+    client, body = fixture(tmp_path)
+    body['project']['masses']['items'][2]['mass_kg'] = 10
+    body['approved_design_sha256'] = snapshot_sha256(body['project'])
+    result = client.post('/api/drone/screening', headers=AUTH, json=body).json()
+    assert result['max_payload_kg'] is None and result['pack_consistency']['status'] == 'inconsistent'
+    assert result['reasons'][0]['code'] == 'pack_energy_consistency'
+
+
+def test_tilted_approved_case_does_not_publish_a_trim_unchecked_number(tmp_path):
+    from physimesh.drone.snapshot_hash import snapshot_sha256
+    client, body = fixture(tmp_path)
+    body['project']['mission']['cases'][0]['attitude_deg_zyx'][1] = 10
+    body['approved_design_sha256'] = snapshot_sha256(body['project'])
+    result = client.post('/api/drone/screening', headers=AUTH, json=body).json()
+    assert result['max_payload_kg'] is None and result['outcome'] == 'unsupported_scope'
