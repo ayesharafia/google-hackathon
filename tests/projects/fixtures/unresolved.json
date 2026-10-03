@@ -4,19 +4,19 @@
     "schema_version": "aircraft_study_spec_v1",
     "organization_id": "EXAMPLE-org",
     "project_id": "EXAMPLE-project",
-    "design_revision_sha256": "f2a98a2b81654c78adb5dfac3e9a12bdfa8be73a6b6b54728187bf6d6a37127c",
+    "design_revision_sha256": "7a97f48b815e29302f65ed32563e0e3d40df1726402e6de69fee1a8e1e78f3f8",
     "mission": {
       "schema_version": "mission_definition_v1",
       "cases": [
         {
           "case_id": "hover",
           "required": true,
-          "conditions_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          "conditions_sha256": "ed106f9e21622be79fc7652a36565c81e2ff8a08bb5cc5c9138b8e7df646f2d8"
         },
         {
           "case_id": "climb",
           "required": true,
-          "conditions_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          "conditions_sha256": "760e4e90ae2a1e9441231f5ab370d07929c2e5ef94daa3e9efba2b4244930ff4"
         }
       ],
       "sequence": [],
@@ -40,10 +40,10 @@
   "publication_state": "published",
   "publication": {
     "schema_version": "publication_identity_v1",
-    "study_id": "4c036152a2dbc4fd",
-    "study_sha256": "4c036152a2dbc4fde270aeed63a86735781ed0ea73ff75f04baec95cf67aeb3a",
-    "payload_manifest_sha256": "026fcdb6de24ca06885c4d42ca5d359678592218103947e2ede3d2e22412936a",
-    "package_revision_sha256": "96df6bcb4c6c25c1a53e840e9eac085ffe74187e91205011c2aa6474c5b9fd47"
+    "study_id": "f8babb7dab738148",
+    "study_sha256": "f8babb7dab738148c8973c68cd55f4dbd55092c9eb7d085022699ecd60ff6845",
+    "payload_manifest_sha256": "0884bf160ce8606bef3b4141f825bf466996b5bd19688a8545ee9c3b6aa44058",
+    "package_revision_sha256": "a0b50322f187ca4c61991ab07b3e872b56e238926f53745b039e5ab275846a85"
   },
   "cases": [
     {

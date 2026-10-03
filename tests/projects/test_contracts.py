@@ -171,3 +171,47 @@ def test_invalid_calendar_timestamp_is_not_accepted_as_review_provenance():
     value = data('detached_review'); value['created_utc'] = '2026-99-32T25:00:00Z'
     with pytest.raises(ValueError):
         parse(value)
+
+
+def test_feasible_and_unevaluated_statuses_cannot_cross_outcome_or_method_axes():
+    value = feasible(); value['aircraft_status'] = 'requirement_not_met'
+    with pytest.raises(ValueError, match='feasible status'):
+        parse(value)
+    value = feasible(); value.update(aircraft_status='within_validated_envelope',
+                                    evidence='validated_for_case_family',validation_envelope_sha256='9'*64)
+    with pytest.raises(ValueError, match='feasible status'):
+        parse(value)
+    value = feasible(); value.update(execution='queued',physical_outcome='not_evaluated',
+                                    aircraft_status='within_validated_envelope',evidence='validated_for_case_family',
+                                    validation_envelope_sha256='9'*64,payload_lower_bound_kg=None,limiting_case_id=None)
+    with pytest.raises(ValueError, match='uncompleted execution'):
+        parse(value)
+    value.update(execution='completed',evidence='unverified',aircraft_status='screening_only')
+    with pytest.raises(ValueError, match='unevaluated study'):
+        parse(value)
+
+
+@pytest.mark.parametrize('mutation', ['condition', 'required', 'omitted', 'reserve', 'pack', 'sequence'])
+def test_study_mission_cannot_escape_approved_conditions(mutation):
+    revision = parse(data('approved_synthetic_design'))
+    value = data('infeasible')['spec']
+    if mutation == 'condition': value['mission']['cases'][0]['conditions_sha256'] = '0'*64
+    if mutation == 'required': value['mission']['cases'][0]['required'] = False
+    if mutation == 'omitted': value['mission']['cases'].pop()
+    if mutation == 'reserve': value['mission']['reserve_value'] = .1
+    if mutation == 'pack': value['mission']['pack_mode'] = 'sized'
+    if mutation == 'sequence': value['mission']['sequence'] = [
+        {'segment_id':'leg','case_id':'hover','duration_s':300,'approximation':'constant_point','model_sha256':'9'*64}]
+    with pytest.raises(ValueError, match='mission differs'):
+        parse(value).assert_design_binding(revision)
+
+
+def test_approved_revision_cannot_bind_conflicting_typed_and_raw_mission():
+    from physimesh.drone.provenance import canonical_json
+    from physimesh.drone.snapshot_hash import snapshot_sha256
+    value = data('approved_synthetic_design')
+    snapshot = json.loads(value['snapshot_json'])
+    snapshot['mission']['cases'][0]['duration_s'] = 600
+    value.update(snapshot_json=canonical_json(snapshot),snapshot_sha256=snapshot_sha256(snapshot))
+    with pytest.raises(ValueError, match='condition digest'):
+        parse(value)

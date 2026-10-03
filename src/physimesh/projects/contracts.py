@@ -136,6 +136,8 @@ class DesignRevisionV1(Record):
             raise ValueError('approved revision requires complete readiness and detached attestation reference')
         if self.approval == 'approved' and not readiness(project_from_mapping(data), self.readiness_purpose).ready:
             raise ValueError('approved revision has incomplete method-specific inputs')
+        if self.approval == 'approved':
+            bound_mission(data)
         return self
 
     def revision_sha256(self) -> str:
@@ -182,6 +184,38 @@ class MissionDefinitionV1(Record):
         return sha256_record(self.model_dump(mode='json'))
 
 
+def bound_mission(snapshot: dict) -> MissionDefinitionV1:
+    """Resolve the typed mission INSIDE the approved physical snapshot.
+
+    Conditions use the existing versioned SI numeric scheme. The typed mission
+    binds sequence/required flags, while explicit legacy reserve/pack declarations
+    must agree, preventing two contradictory views of the approved inputs.
+    """
+    raw = snapshot['mission']
+    declaration = raw.get('contract_definition')
+    if declaration is None:
+        raise ValueError('approved revision requires an explicit typed mission declaration')
+    mission = MissionDefinitionV1.model_validate_json(canonical_json(declaration))
+    actual = raw.get('cases', [])
+    if not isinstance(actual, list) or any(not isinstance(case, dict) for case in actual):
+        raise ValueError('approved operating conditions must be a list of records')
+    by_name = {case.get('name'): case for case in actual}
+    if len(by_name) != len(actual) or set(by_name) != {case.case_id for case in mission.cases}:
+        raise ValueError('typed mission cases differ from approved operating conditions')
+    for case in mission.cases:
+        condition = by_name[case.case_id]
+        if case.conditions_sha256 != snapshot_sha256(condition) or case.required is not condition.get('required', True):
+            raise ValueError('typed mission condition digest or required flag differs from approved snapshot')
+    reserve = raw.get('reserve_policy', {})
+    energy = raw.get('energy_system', {})
+    if not isinstance(reserve, dict) or not isinstance(energy, dict):
+        raise ValueError('explicit reserve and energy records required')
+    if (reserve.get('convention') != mission.reserve_convention or reserve.get('value') != mission.reserve_value
+            or energy.get('pack_mode') != mission.pack_mode):
+        raise ValueError('typed mission reserve or pack mode differs from approved snapshot')
+    return mission
+
+
 class StudySpecV1(Record):
     schema_version: Literal['aircraft_study_spec_v1'] = 'aircraft_study_spec_v1'
     organization_id: Identifier
@@ -212,6 +246,8 @@ class StudySpecV1(Record):
                 or self.design_revision_sha256 != revision.revision_sha256()
                 or revision.approval != 'approved' or revision.readiness_purpose != purpose):
             raise ValueError('study does not bind an approved same-project revision with applicable readiness')
+        if self.mission != bound_mission(parse_snapshot(revision.snapshot_json)):
+            raise ValueError('study mission differs from approved design revision')
 
 
 class CaseResultV2(Record):
@@ -273,6 +309,11 @@ class AircraftStudyV2(Record):
             raise ValueError('validated evidence requires scoped validation envelope')
         if self.aircraft_status == 'within_validated_envelope' and self.evidence != 'validated_for_case_family':
             raise ValueError('validated aircraft status requires validated evidence')
+        if self.execution != 'completed' and self.evidence != 'unverified':
+            raise ValueError('uncompleted execution cannot claim achieved numerical or validation evidence')
+        if self.physical_outcome == 'not_evaluated' and (
+                self.aircraft_status != 'inputs_incomplete' or self.evidence != 'unverified'):
+            raise ValueError('unevaluated study must retain incomplete status and unverified evidence')
         if self.physical_outcome == 'feasible':
             if self.execution != 'completed' or not required <= by_name.keys():
                 raise ValueError('feasible result requires all required cases and complete execution')
@@ -280,6 +321,12 @@ class AircraftStudyV2(Record):
                 raise ValueError('required case is not feasible')
             if self.spec.mission.sequence and self.sequence_energy_evidence_sha256 is None:
                 raise ValueError('chronological mission needs separate sequence energy evidence')
+            allowed = ('screening_only',) if self.spec.method == 'supplied_point_screening' else (
+                'validation_pending', 'within_validated_envelope')
+            if self.aircraft_status not in allowed:
+                raise ValueError('feasible status must match the declared method and validation scope')
+            if self.spec.method == 'supplied_point_screening' and self.evidence != 'unverified':
+                raise ValueError('supplied-point screening cannot establish numerical or validated aircraft evidence')
         if self.physical_outcome in ('unsupported', 'unresolved', 'infeasible') and not self.reasons:
             raise ValueError('nonfeasible aircraft outcome requires structured reasons')
         if self.physical_outcome == 'unsupported' and self.aircraft_status != 'inputs_incomplete':
