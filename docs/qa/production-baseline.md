@@ -73,7 +73,7 @@ The first full unit run detected an architecture violation when the verifier was
 
 The retained JUnit/XML and detailed local receipts live under `.backend/p00-*`; their fingerprints and counts are in the committed checks record. The existing Starlette/httpx TestClient deprecation warning remains. This task does not replace the dependency stack merely to suppress that warning.
 
-Original fresh-clone evidence is [recorded separately](fresh_clone_reproduction.md): three actual sphere runs/reuse at `58a9596`, plus Linux pinned backend fixtures at `73ee812`. Those historical records are not reported as a fresh solver campaign at this task revision. The current new tooling's fresh-checkout exercise is recorded below after execution.
+Original fresh-clone evidence is [recorded separately](fresh_clone_reproduction.md): three actual sphere runs/reuse at `58a9596`, plus Linux pinned backend fixtures at `73ee812`. Those historical records are not reported as a fresh solver campaign at this task revision. For the new tooling, an independent local Git clone at `2a1371a` was created with a new virtual environment and separately installed locked dependencies/package. Exact copies of the reviewed root, three native case directories and vendor archive verified successfully. The clone was then updated to `26e7f77`; full retained-byte verification, the reviewed preset and 26 baseline/architecture tests passed again, including the single-group guard. Its imported verification module was confirmed to come from the cloned source, not the original installation. This was copied-evidence reproduction, not a new solve or presentation rehearsal. The machine checks record retains the exact final checkout commit.
 
 ## Local use and reproducibility
 
@@ -104,7 +104,7 @@ For a complete original-evidence handover, transfer the reviewed data root, the 
 
 | Gate | Status |
 |---|---|
-| P00.1 baseline identification and read-only checks | Implemented; independent software review pending |
+| P00.1 baseline identification and read-only checks | Complete; both software review axes passed at `26e7f77` |
 | Claude bounded MVP physics review | PASS at `f19cbeb`; scoped external report, not machine attestation |
 | Remaining F4-F11/N1 corrections and general contracts | P00.2 and later tasks pending |
 | Real geometry, rotor maps, mass/CG/pack and mission | Missing; real aircraft capacity remains unavailable |
@@ -114,7 +114,7 @@ For a complete original-evidence handover, transfer the reviewed data root, the 
 | Playable backup recording and inspected playback | Pending under P09.3 |
 | Private hosted deployment/security/recovery | Planned; not provided by this local launcher |
 
-The next task is P00.2. Its physics/result-semantic changes require independent review of their own candidate and must not inherit this baseline's PASS. Presentation-only work and missing real-aircraft data do not block independent software tasks.
+The [two-axis software review](production-baseline-review.md) found no standards or spec issues. The next task is P00.2. Its physics/result-semantic changes require independent review of their own candidate and must not inherit this baseline's PASS. Presentation-only work and missing real-aircraft data do not block independent software tasks.
 
 ## Design-law recheck
 

@@ -30,7 +30,7 @@ Use these references when implementing:
 3. Implement a complete vertical slice: persisted input, domain behavior, server interface, visible behavior, and relevant verification. Do not build disconnected screens or mark a shell as a working feature.
 4. Test the public behavior with meaningful positive, negative and failure cases. Physics changes require an independent derivation or reference and review appropriate to their risk. Reuse established fixtures rather than testing a formula against a copy of itself.
 5. Record changed files, data/model versions, test results, reviewer and remaining limits. Update this task's checkbox only after its acceptance criteria and evidence are met.
-6. Commit a small, reviewable change on a `codex/` branch. Open a PR against the repository's confirmed default branch. Do not assume `main` exists: at the baseline, the default is `drone/wp03-geometry`.
+6. Commit a small, reviewable change on a `codex/` branch. Open a PR against the repository's confirmed default branch. When a task starts from an unmerged reviewed MVP branch, stack its PR on that baseline and record the parent so the task diff stays reviewable. Do not assume `main` exists: at the baseline, the default is `drone/wp03-geometry`.
 7. Keep previously published snapshots and result packages readable. Changes to semantics require a versioned migration and compatibility tests. Promote through staging and the applicable gate before production.
 
 Task completion, software release approval, design approval and physics validation are separate decisions. A passing software test cannot promote aircraft evidence. Do not merge or tag a physics release without its required independent review and human engineering acceptance. The current Claude PASS covers the stated MVP scope; it does not pre-approve future changes.
@@ -328,13 +328,15 @@ CFD turnaround targets are established after the real geometry benchmark. The MV
 
 ## 10. Phased task backlog
 
-**All boxes below are future work at this baseline.** Existing behavior is described in Section 2, not retroactively checked here. Dependencies use task IDs. `Existing:` paths identify current code; `New:` paths describe proposed additions. Evidence paths are proposed deliverables. Task owners are roles to assign, not people already committed.
+**Boxes track verified progress from this baseline.** Existing behavior is described in Section 2, not retroactively checked here. A task is checked only after its acceptance checks and review are recorded. Dependencies use task IDs. `Existing:` paths identify current code; `New:` paths describe proposed additions. Task owners are roles to assign, not people already committed.
 
 Owner roles: **APP** application engineer; **PHY** rotorcraft/physics engineer; **PLAT** platform engineer; **UX** product/frontend engineer; **QA** test/release engineer. A named human engineering owner is required for validation tolerances and operational aircraft claims.
 
 ### Phase P00: close the baseline and make evidence unambiguous
 
-#### P00.1 [ ] Freeze the current evidence and reconcile release status
+#### P00.1 [x] Freeze the current evidence and reconcile release status
+
+**Completed 3 October 2026:** [baseline record](docs/qa/production-baseline.md), [machine inventory](docs/qa/production-baseline.json), [performed checks](docs/qa/production-baseline-checks.json) and [software review](docs/qa/production-baseline-review.md). Original physics/UI/evidence bytes remain unchanged. Human release approval, rehearsals, recording and real-aircraft validation remain pending.
 
 **Dependencies:** none. **Owner:** APP + QA; PHY reviews scope.
 **Existing:** QA docs, demo scripts, `api/results.py`, `postpro/result_contract.py`.
@@ -875,7 +877,7 @@ For each release deliver:
 - Security findings, recovery/load evidence, service targets, cost/resource policy and operational ownership.
 - Updated repository guide and the existing Notion technical guide, with links to the accepted code/results rather than future promises.
 
-The immediate work order is **P00.1, P00.2, then P01.1**. Hosting and real-data decisions should be collected before their dependent tasks. The release outcome is a private client workspace that explains an approved design's supported payload capability with evidence the client can inspect and the engineering team can reproduce.
+P00.1 is complete. The next work order is **P00.2, then P01.1**. Hosting and real-data decisions should be collected before their dependent tasks. The release outcome is a private client workspace that explains an approved design's supported payload capability with evidence the client can inspect and the engineering team can reproduce.
 
 ## 16. Plan self-review and design-law audit obligations
 

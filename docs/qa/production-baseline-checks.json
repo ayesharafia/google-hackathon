@@ -18,10 +18,11 @@
   "checked_on": "2026-10-03",
   "fresh_checkout": {
     "checked_on": "2026-10-03",
-    "checkout_commit": "2a1371a1484435a83167337912d11ec29d077d9a",
+    "checkout_commit": "26e7f77984073135752a239a010182ce1d8b6a36",
     "clone_method": "git clone --no-local from local repository; independent checkout and new virtual environment",
     "copied_evidence": "Exact reviewed published/supporting data, three native case directories and vendor archive; original paths unchanged in retained JSON",
     "dependencies": "committed requirements.lock; separately installed editable package",
+    "final_single_group_guard_exercised": true,
     "module_loaded_from_fresh_checkout": true,
     "new_cfd_campaign": false,
     "new_tool_and_architecture_tests_passed": 26,

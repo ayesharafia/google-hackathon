@@ -30,8 +30,8 @@ Backend tests need Docker and a confirmed, immutable OpenFOAM image pin.
 No CFD capability or aircraft feasibility is established by unit tests. Missing
 design inputs remain unknown and block dependent work. [M§2, M§26, M§27]
 
-Continue with the task dependencies and release gates in [plan.md](plan.md),
-starting at P00.1. Historical equation IDs and old plan section/task references
+Continue with the task dependencies and release gates in [plan.md](plan.md).
+P00.1 is complete; P00.2 is next. Historical equation IDs and old plan section/task references
 resolve to the archived master plan. The separate 2D PhysiMesh product remains
 untouched; integration is through a versioned export contract.
 
