@@ -31,7 +31,7 @@ No CFD capability or aircraft feasibility is established by unit tests. Missing
 design inputs remain unknown and block dependent work. [M§2, M§26, M§27]
 
 Continue with the task dependencies and release gates in [plan.md](plan.md).
-P00.1 and P00.2 are complete within their bounded scopes; P01.1 contracts and the local [Pilot-1](docs/pilots/pilot-1.md) path are next. Historical equation IDs and old plan section/task references
+P00.1, P00.2 and [P01.1 contracts](docs/contracts/production-data.md) are complete within their bounded scopes. [Contract acceptance](docs/qa/production-contracts-review.md) records final Claude review and checks. The local [Pilot-1](docs/pilots/pilot-1.md) fixture path is next. Historical equation IDs and old plan section/task references
 resolve to the archived master plan. The separate 2D PhysiMesh product remains
 untouched; integration is through a versioned export contract.
 
@@ -69,6 +69,8 @@ identity. An exact copy of the frozen published package, examples and source
 objects can be selected with `--data-root /path/to/copied-demo-reviewed` for
 verification/presentation. The optional native/vendor checks additionally need
 the inventory's repository-relative files. Published bytes remain immutable.
+
+The frozen checker deliberately rejects changed source in a later checkout. Its original inventory/launcher is preserved; I03 tracks separate evidence-only verification and exact-commit source reproduction. Use the current commands below for a new qualified study.
 
 ## Run the labelled MVP demo
 

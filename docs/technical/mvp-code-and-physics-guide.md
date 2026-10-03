@@ -1,7 +1,9 @@
 # PhysiCore Drone MVP: code, backend and physics guide
 
-Version: 2026-10-02. Implementation branch: `mvp/3day`.
-Repository: https://github.com/PhysiCoreEngine12/Drone-Project/tree/mvp/3day
+Version: 2026-10-03. Implementation branch: `codex/production-contracts`, code candidate `831dd2e`.
+Repository: https://github.com/PhysiCoreEngine12/Drone-Project/tree/codex/production-contracts
+
+P00.2 is complete within its bounded correction scope. P01.1 contracts are accepted after final bounded Claude PASS; evidence is recorded in [production-contracts-review.md](../qa/production-contracts-review.md). Hosted production and real aircraft validation remain pending. Historical MVP test/run records below retain their original commit and scope.
 
 ## 1. What the software does today
 
@@ -9,8 +11,9 @@ The MVP connects STL intake, a controlled OpenFOAM verification study, native
 load integration, numerical checks, plots, evidence packaging and a browser
 results desk. A separate payload screening endpoint calculates a vertical-force
 ceiling from a declared aircraft mass ledger and retained rotor/body performance
-at supplied operating limits. The headline is the lowest ceiling across every
-declared mission case. There is no fixed 750 kg target.
+at supplied operating limits. The headline is the lowest eligible ceiling across every
+required alternative case, subject to completeness. These points are not a
+chronological mission or trimmed aircraft capacity. There is no fixed 750 kg target.
 
 Two examples are deliberately separate:
 
@@ -234,8 +237,9 @@ $$
 
 The limiting case is selected using the raw margin, preserving evidence that the
 empty aircraft cannot be supported. A negative margin yields
-`requirement_not_met` and a zero ceiling. Missing, inconsistent, nonfinite,
-unsupported or over-limit inputs yield `inputs_incomplete` and a null headline,
+`requirement_not_met` and a zero ceiling. Missing, inconsistent, nonfinite
+or unsupported inputs yield `inputs_incomplete` and a null headline. Complete
+power/energy limit failures yield `requirement_not_met` and no headline,
 with explicit blocking reasons. Passing screening yields `screening_only`.
 
 Mission cases currently represent alternative operating conditions. Their
@@ -254,19 +258,19 @@ All force/performance/limit sources are explicitly synthetic.
 | Hover | 4 × 350 N | −40 N | 0 m/s² | 1360 N | `1360/9.80665 − 65 = 73.68 kg` |
 | Climb | 4 × 320 N | −60 N | 0.6 m/s² | 1220 N | `1220/10.40665 − 65 = 52.23 kg` |
 
-Hover power is 24 kW for 300 s, requiring 7.20 MJ. Climb power is 22.4 kW for
-180 s, requiring 4.032 MJ. The example usable energy is 11.52 MJ, computed from
+Hover power is 24 kW for 300 s, requiring 7.20 MJ. The retained case ID
+`climb` now describes a two-second instantaneous acceleration margin:
+22.4 kW × 2 s = 44,800 J. It is not a simulated climb trajectory. The adapter
+refuses longer acceleration margins; its illustrative two-second cap does not
+establish physical trajectory validity. Usable energy is 11.52 MJ, computed from
 20 kg × 250 Wh/kg × 3600 J/Wh × 0.8 usable fraction × 0.8 reserve allowance.
-Here reserve is a fraction of usable pack energy. The separate battery exercise
-below instead multiplies mission energy by `(1 + reserve_fraction)`; these
-conventions are distinct. The API accepts the approved usable-energy declaration
-and does not derive it from pack mass. Electrical power is also supplied data;
-limit and energy checks do not establish its physical validity. Isolated ideal
-hover power is a diagnostic, not a general installed-rotor power gate. The
-example's acceleration is an instantaneous force margin. The 180 s duration
-checks constant-point energy; it does not integrate an accelerating trajectory.
-Both cases satisfy the illustrative limits. The headline is **52.23 kg**, limited
-by climb. Removing climb data blocks the headline rather than showing hover alone.
+Here reserve is held usable energy; the separate battery exercise below uses
+additional mission demand. The approved pack declaration is cross-checked against
+its mass-ledger items. Supplied power/load validity remains an external model
+assumption. Both illustrative points pass: the headline is **52.23 kg**.
+Missing climb data blocks the headline. A complete 600 s hover variant needs
+14.4 MJ and is distinctly infeasible. Tilt and horizontal-force cases are refused
+by this vertical-only screening adapter.
 
 ## 8. Separate battery-mass fixed-point exercise
 
@@ -432,8 +436,11 @@ component must satisfy:
 
 `|independent − native| ≤ relative_tolerance × |native| + absolute_tolerance`.
 
-The sphere values are relative tolerance 1e−3 and absolute tolerance 1e−6 in
-that quantity's units. Every original mesh passes. Exact repeated adjacent final
+Relative tolerance remains 1e−3. Force uses an absolute floor of 1e−6 N and
+Cd uses 1e−6 dimensionless. Moment uses 1e−9 × q × A_ref × D, where
+q=0.5ρU²: 3.926990817e−10 N·m for this gauge-pressure sphere. This comparison
+floor is not an accuracy estimate. A non-symmetric analytic fixture detects
+sign, magnitude and actual-origin mutations. Every original mesh passes. Exact repeated adjacent final
 rows caused by the backend end callback are collapsed; conflicting duplicate
 history rows are refused.
 
@@ -490,16 +497,23 @@ units and signedness. Supported demo fields include gauge pressure, velocity
 magnitude, in-plane velocity, y-vorticity, wall shear, Cd history, solver residuals,
 wake-axis Ux and per-mesh Cd.
 
-The fifteen retained plots comprise three speed/pressure/vorticity contours per
-mesh, fine vectors, fine in-plane streamlines, wake profile, Cd history, fine
-residual history and mesh Cd. Signed pressure and vorticity use shared symmetric
+The original archive retains fifteen plots. The P00.2 replay publishes eleven:
+coarse vorticity and all three medium slices are withheld by the unchanged
+stability policy; refusal messages explain them. Fine vectors/streamlines,
+eligible coarse/fine contours, wake profile, Cd history, residual history and mesh
+Cd remain. Signed pressure and vorticity use shared symmetric
 zero-centred diverging ranges. Magnitudes use shared nonnegative ranges. Legends
 retain display limits, true extrema, clipped fraction and invalid/masked counts.
 
 The nominal y=0 samples have small native coordinate deviations, up to roughly
-9.28e−6 m in the original medium case. The cause is unresolved. The visual
-projection explicitly permits 1e−5 D and records the observed deviation. It is
-not used for integration. Slice interpolation uses linear SciPy `griddata` on a
+9.28e−6 m in the original medium case. The cause is unresolved. The fixed visual policy permits 1e−5 D and compares 1e−6 D and 5e−6 D
+subsets over the same grid, requiring 99% supported external coverage and normalized
+RMS/peak change at most 1%/5%. Velocity compares the full world vector, including
+direction; scalars retain signed changes. Nonfinite metrics refuse. Native-source
+recomputation prevents fabricated eligibility bypasses. Original runs retain
+retrospective qualification. Prospective v3 binds the complete operators while
+v1/v2 byte identities remain readable; see [contracts](../contracts/production-data.md).
+This is visualization stability, never accuracy or integration. Slice interpolation uses linear SciPy `griddata` on a
 180×360 grid; sphere interior and unsupported samples are masked. Vectors show
 Ux/Uz, and background colour is |U|. In-plane streamlines are not 3D particle
 trajectories or a transient flow prediction.
@@ -531,6 +545,14 @@ Each refusal includes a practical next action. These are actual capability
 results, not decorative warnings.
 
 ## 13. Evidence, hashes and status
+
+P00.2 adds `publication_identity_v1` beside unchanged sphere `ResultsV1`.
+The full package revision binds envelope version, full study digest and exact
+payload manifest. The study ID alone cannot identify evolved package bytes.
+Old archives derive this envelope without rewriting retained evidence.
+Accepted replay revision: `75967364f6d48556874bc369ac0175f92ebe3b6fc902e38df71e834ac9b071f1`.
+API ZIP SHA-256: `04efb390c8c2b69b21519bf997766cb08f2e906a2c704405a6f6824140d49c0b`,
+2,261,416 bytes and 27 manifest members. Identity does not imply review approval.
 
 `ArtifactStore` keeps raw bytes at content-addressed paths. Job events and
 metadata connect those bytes to execution. Native-file hashes are ordinary
@@ -698,6 +720,18 @@ overwrite curated evidence documents.
 
 ## 17. Known limits and next work
 
+P00.2 code `0bc092f` passed bounded Claude review and 365 unit, 118 reference
+and three actual backend tests, with browser corrections recorded in
+[the closure](../qa/baseline-findings-closure.md). Original 174 native files,
+three run records and 33 original payload members remain byte-identical.
+No new browser-saved archive is claimed; the accepted API bytes were checked.
+The client is the engineering owner; named engineer/approver and real data remain
+pending. The [one-page request](../client/aircraft-data-request.md) is prepared,
+not sent. [Pilot-1](../pilots/pilot-1.md) brings the local fixture-driven mass/map/
+mission/limiting-case path before hosting. React migration is deferred. I01 native
+regular-grid sampling, I02 controlled domain/refinement and I03 evidence/source
+verification separation remain pending investigations. Thresholds are not loosened.
+
 The current payload number is a screening ceiling at supplied sustained limits.
 To analyze an actual approved design, provide:
 
@@ -722,7 +756,9 @@ are resolved; low findings remain as recorded in
 `docs/qa/independent_physics_review.md`. Claude disclosed prior authorship of the
 plans/reference code. This software review does not certify aircraft physics.
 
-For this retained presentation, serve `.backend/demo-reviewed`. Earlier roots
+For the historical MVP presentation, serve `.backend/demo-reviewed`. The
+accepted P00.2 replay uses `.backend/p00-findings-accepted` on port 8767; its full
+revision and API ZIP digest are recorded above. Earlier roots
 are preserved and share the run-group ID, so cite the data root and ZIP digest
 as well as the run-group ID. Fresh README commands generate the corrected
 artifacts; do not point them at an already-published obsolete package. Machine
@@ -735,6 +771,42 @@ QuickTime recording controls could not be exposed through available automation;
 no backup video is claimed. See `docs/demo/presenter-guide.md` for the concrete
 walkthrough and blank actual rehearsal record. No merge or release tag follows
 from software tests. Current evidence is in `docs/qa/mvp_gates.md`.
+
+## 17.1 Versioned production contracts (P01.1)
+
+`projects/contracts.py` defines immutable drafts, design revisions, missions,
+studies, result revisions and detached review records. `projects/serialization.py`
+dispatches exact versions, rejects unknown/duplicate/nonfinite JSON and revalidates
+on export. Seven labelled schema fixtures cover historical sphere, incomplete
+draft, approved synthetic design, infeasible/unsupported/unresolved results and
+review; synthetic digests do not authenticate approval.
+
+Approved revisions bind the typed mission inside the physical snapshot. Every
+actual case hash/required flag, reserve kind/convention/units, pack declaration and ordered sequence
+must agree. `StudySpecV1.assert_design_binding` resolves the exact full revision
+and its approved mission before execution. Changing a mission cannot silently
+remove its limiting case. Result validators keep execution, outcome, evidence,
+validation and publication separate; screening never claims numerical/validated
+aircraft evidence. A feasible headline must equal the minimum across required
+case bounds and identify an attaining case. Sequential energy needs a separate
+evidence binding. Detached reviews apply only to the exact project, study and
+package revision.
+
+`GET /api/drone/contracts` and `GET /api/drone/contracts/{version}` expose
+read-only schema discovery under existing local bearer authentication. They do
+not persist projects or authenticate engineering approval. Full versions, units,
+canonical encoding, migration declarations, status rules and policy digests are
+in [production-data.md](../contracts/production-data.md). The registry retains
+v1/v2 exact bytes; prospective slice v3 defines grid/comparison operators and
+captures NumPy/SciPy versions. Independent noncoincident analytic vector/scalar
+cases give RMS=peak=2 for complete reversal under each version. No new aircraft
+solver or production authentication is claimed.
+
+Final code candidate `831dd2e` passed 410 unit tests, 118 retained reference tests,
+three actual pinned-container backend tests and lint. The v3 policy registration
+is retained in a new 20-iteration sphere smoke. Existing native/archive/accepted
+API ZIP hashes remain unchanged. Review/acceptance is recorded separately in
+[production-contracts-review.md](../qa/production-contracts-review.md).
 
 ## 18. Reading map and primary references
 

@@ -379,7 +379,7 @@ I01-I03 are pending investigations, not completed capabilities or a reason to de
 
 ### Phase P01: durable private project foundation
 
-#### P01.1 [ ] Define versioned project and result contracts
+#### P01.1 [x] Define versioned project and result contracts
 
 **Dependencies:** P00.2. **Owner:** APP; PHY reviews semantics.
 **Existing:** `drone/models.py`, snapshot hash, `ResultsV1`. **New:** project revision and aircraft-study schemas.
@@ -388,7 +388,7 @@ I01-I03 are pending investigations, not completed capabilities or a reason to de
 2. Define `AircraftStudyV2` (proposed name), structured reason codes, field units, compatibility and publication states. Keep sphere `ResultsV1` unchanged.
 3. Specify migrations, canonical serialization and unknown/null semantics; distinguish draft completeness from approved readiness.
 
-**Acceptance/evidence:** schema fixtures for old sphere, incomplete draft, approved synthetic design, infeasible/unsupported/unresolved aircraft result and detached review all round-trip; `docs/contracts/production-data.md` records versions and migrations.
+**Acceptance/evidence:** schema fixtures for old sphere, incomplete draft, approved synthetic design, infeasible/unsupported/unresolved aircraft result and detached review all round-trip; `docs/contracts/production-data.md` records versions and migrations. Accepted at `831dd2e`: 415 unit, 118 retained reference and three actual pinned backend checks; final Claude PASS with C1/C2/R1 closed and no actionable standards/spec findings. See `docs/qa/production-contracts-review.md` and `docs/qa/production-contracts-checks.json`. This completes contracts only, not persistence/authentication or Pilot-1 physics.
 
 #### P01.2 [ ] Add PostgreSQL metadata and private artifact adapters
 
@@ -891,7 +891,7 @@ For each release deliver:
 - Security findings, recovery/load evidence, service targets, cost/resource policy and operational ownership.
 - Updated repository guide and the existing Notion technical guide, with links to the accepted code/results rather than future promises.
 
-P00.1 and P00.2 are complete within their bounded software/evidence scopes. The P00.2 corrections and final independent review are recorded in `docs/qa/baseline-findings-closure.md`. The active work order is **P01.1, then the local Pilot-1 fixture path**, with I01-I03 investigations and hosting adapters tracked separately. Before prospective production slice registration, bind the full metric definition into the policy and support historical policy versions; see the closure constraints. Hosting and real-data decisions should be collected before their dependent tasks. The release outcome is a private client workspace that explains an approved design's supported payload capability with evidence the client can inspect and the engineering team can reproduce.
+P00.1 and P00.2 are complete within their bounded software/evidence scopes. The P00.2 corrections and final independent review are recorded in `docs/qa/baseline-findings-closure.md`. P01.1 is complete at `831dd2e` within its contract scope. The active work order is **the local Pilot-1 fixture path**, with I01-I03 investigations and hosting adapters tracked separately. Prospective slice v3 now binds the complete metric operators; historical v1/v2 bytes remain supported with unchanged thresholds. No prospective three-grid validation or external signed registration is claimed; see the P01.1 acceptance constraints. Hosting and real-data decisions should be collected before their dependent tasks. The release outcome is a private client workspace that explains an approved design's supported payload capability with evidence the client can inspect and the engineering team can reproduce.
 
 ## 16. Plan self-review and design-law audit obligations
 

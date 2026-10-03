@@ -1,6 +1,6 @@
 # P01.1: production data contracts
 
-Status: implemented contracts and labelled schema fixtures; task acceptance awaits final independent review. This does not deliver persistence, hosted authentication, rotor-map inference, trim/search or production readiness. Runtime modules are `projects/contracts.py`, `projects/serialization.py` and the read-only `api/contracts.py` endpoint.
+Status: implemented contracts and labelled schema fixtures; accepted at `831dd2e` after final Claude PASS and standards/spec review. See [acceptance and receipts](../qa/production-contracts-review.md). This does not deliver persistence, hosted authentication, rotor-map inference, trim/search or production readiness. Runtime modules are `projects/contracts.py`, `projects/serialization.py` and the read-only `api/contracts.py` endpoint.
 
 ## Versions and public boundaries
 
