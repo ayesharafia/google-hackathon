@@ -61,3 +61,16 @@ def test_policy_version_is_pinned_and_cannot_silently_admit_more_views(tmp_path,
     monkeypatch.setattr(module, 'POLICY_PATH', changed)
     with pytest.raises(ValueError, match='changed under its version'):
         registered_policy()
+
+
+def test_velocity_reversal_cannot_hide_behind_identical_speed():
+    on_plane = np.array([[-100, 0, -100], [100, 0, -100], [0, 0, 100]], float)
+    off_plane = on_plane.copy()
+    off_plane[:, 1] = 8e-6
+    samples = np.concatenate([off_plane, on_plane])
+    velocity = np.array([[-1, 0, 0]]*3+[[1, 0, 0]]*3, float)
+    grid, report = evaluate_slice(samples, velocity, diameter_m=1)
+    assert grid is None and report['status'] == 'refused'
+    assert report['compared_quantity'] == 'world_velocity_vector'
+    assert all(item['external_coverage'] == 1 for item in report['sensitivity'])
+    assert all(item['normalized_peak_change'] > .05 for item in report['sensitivity'])

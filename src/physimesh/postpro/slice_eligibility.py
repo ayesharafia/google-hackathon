@@ -70,10 +70,16 @@ def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float
         report['reasons'].append('baseline slice lacks supported external coverage')
     if not finite.any():
         return None, report
-    field = baseline['values'][finite]
-    scale = max(float(np.ptp(field)), float(np.max(np.abs(field)))*np.finfo(float).eps,
-                np.finfo(float).tiny)
+    # Velocity eligibility covers its direction as well as speed. A norm-only
+    # comparison could approve a complete reversal for vector/streamline views.
+    vector = 'vector_world' in baseline
+    field = baseline['vector_world'][finite] if vector else baseline['values'][finite]
+    span = float(np.linalg.norm(np.ptp(field, axis=0))) if vector else float(np.ptp(field))
+    magnitude = float(np.max(np.linalg.norm(field, axis=-1))) if vector else float(np.max(np.abs(field)))
+    scale = span if span > 64*np.finfo(float).eps*magnitude else max(magnitude, np.finfo(float).tiny)
     report['normalization_scale'] = scale
+    report['compared_quantity'] = 'world_velocity_vector' if vector else 'scalar_field'
+    report['normalization'] = 'field span (Euclidean component-span norm for vectors); constant-field magnitude fallback'
     for fraction in policy['sensitivity_tolerances_d']:
         tolerance = fraction*diameter_m
         keep = np.abs(samples[:, 1]) <= tolerance
@@ -84,7 +90,8 @@ def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float
             subset_coverage = float((external & np.isfinite(subset['values'])).sum()/external.sum())
             if not overlap.any():
                 raise ValueError('no supported common external grid nodes')
-            difference = subset['values'][overlap]-baseline['values'][overlap]
+            difference = (np.linalg.norm(subset['vector_world'][overlap]-baseline['vector_world'][overlap], axis=-1)
+                          if vector else subset['values'][overlap]-baseline['values'][overlap])
             rms = float(np.sqrt(np.mean(difference**2))/scale)
             peak = float(np.max(np.abs(difference))/scale)
             item.update(external_coverage=subset_coverage, normalized_rms_change=rms, normalized_peak_change=peak)

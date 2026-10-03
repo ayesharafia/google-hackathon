@@ -200,5 +200,5 @@ def resample_slice(samples: np.ndarray, values: np.ndarray, *, bounds: tuple[flo
     if grid.ndim == 3:
         if grid.shape[-1] != 3:
             raise ValueError('vector slice must contain world Ux,Uy,Uz')
-        result.update(u=grid[:, :, 0], w=grid[:, :, 2], values=np.linalg.norm(grid, axis=-1))
+        result.update(u=grid[:, :, 0], w=grid[:, :, 2], vector_world=grid, values=np.linalg.norm(grid, axis=-1))
     return result
