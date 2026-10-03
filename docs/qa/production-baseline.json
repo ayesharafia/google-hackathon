@@ -1,0 +1,1383 @@
+{
+  "aircraft_validation": "not_established",
+  "backup_recording": "pending",
+  "claude_reviewed_commit": "f19cbebddffaf788df76f8a5cd35adf8b99d3cea",
+  "claude_verdict": "pass_bounded_mvp",
+  "human_release_approval": "pending",
+  "image_digest": "opencfd/openfoam-run@sha256:4229997e74defb81548222d511b8e3b95b98305e5df41b8e88b031813fe47eeb",
+  "native_cases": [
+    {
+      "inputs": {
+        "0/U": "182c8e7fd5788c74f2242b489304de8224e9b022cd97ee49aae287b7f45f0db4",
+        "0/include/fixedInlet": "74e2ff4605b519a3e648d4013bd710b95f79492a447174597113fc09345b466c",
+        "0/include/frontBackUpperPatches": "8b6c755aa2d5eb63b0b32f18efab33d3037a3eb4693099c68bcc91f5ea20b4bd",
+        "0/include/initialConditions": "b39a13d14ef5086e8ebfb3ed1ce7764ec07aff6c835cb345a03790a350f1119c",
+        "0/p": "cf82dbacee89ccec39dc81accf2d5f0990aa8f1a5c24f9832d44406ddd629ae1",
+        "constant/transportProperties": "953636fee959c4eddbfba496b49fda277a9a1985cf56cdf114c4d67d44fb532e",
+        "constant/triSurface/sphere.stl": "5e79912df01d91ea029f4a4539870861c1c37b900495a723386ee8e9d75331fa",
+        "constant/turbulenceProperties": "578ef58727ac9e5646e6130cdb8d9031ef66e9a9af9494169d96ffb712dd0809",
+        "system/blockMeshDict": "b873fe1c79a7d22987f99bd8f7bf888d113f58453ab2de9e8480c81195b71be1",
+        "system/controlDict": "2eabf4de113e2ae84d7214840b577eaef2bea7f0e5a1b9eb1bc863e52dc28a66",
+        "system/cuttingPlane": "f96db1353f2750ae9ac2baefe215d2c2b40420e21145d0ba3fbb9610c4e9589f",
+        "system/forceCoeffs": "59eeadc6fdfdd79a08ccc04ec9397f8caa3b19fcc259abd3caf18c7666f8f7f2",
+        "system/forces": "e153a683e1c040a480406c9e9e2585a96629c37cc69de6af3b1820fcbb13ec56",
+        "system/fvSchemes": "0412a47c49b665587142e7e7d6e8e7fd57d952ceca4be2bb81f4b741fb72866e",
+        "system/fvSolution": "f5f8404f5a9ccb8465bd34e316ed70df2c4919b4a94415fa06ad46c1271fe9dd",
+        "system/meshQualityDict": "42be7e056f1be71757be680638573dcb9db90be3eff80ff318cbb7edfb029fdd",
+        "system/runTimeControls": "e70b78ff36cf02259d89247d95df8cbe298510deec46a468ab6594b1a3d1dcf0",
+        "system/snappyHexMeshDict": "bb38e48e0d4d33c36b9d58529f36155eaef86410e5db982877cce703b46ca4eb",
+        "system/solverInfo": "234d70c85fe43fade7a406dea724300e84b43ec58b8ad012442789e6c1b2e889",
+        "system/vorticity": "34da60194a1514386a763af6e8d9fc1228b8c93955fae0885edb689b7a340102",
+        "system/wakeLine": "ec5fa9ea820f8c543a2f9ce9356fe7c2398665942384e801809963a185709ece",
+        "system/wallShearStress": "b9c8bf53700991f4e2080e0256a895a1c7b8b63570f3599792651456e6924c29",
+        "translated_settings.json": "cc898253a1e202eaad4ac2e5144b8571eaf97e7e76df571db9792cb63d9adabc"
+      },
+      "level": "coarse",
+      "outputs": {
+        "0/cellLevel": {
+          "bytes": 162331,
+          "sha256": "2a0a4bf6c6ec887f4cf203685b2c71054df7bdd30c42ba3f4a755cbedfd4dfa7"
+        },
+        "0/pointLevel": {
+          "bytes": 181170,
+          "sha256": "1d633bfc9519158334d862b56a01248780be424af0a82c0a3659a533ec5ecb2c"
+        },
+        "812/U": {
+          "bytes": 4249263,
+          "sha256": "04e0b1419cd3eaf34c7201fe3ba6aa2984aa658983ca72b37e28c85e02464d29"
+        },
+        "812/p": {
+          "bytes": 1450197,
+          "sha256": "890d867b438dfcbded1113928d38ef290971fe54d82ee5c3005ea57298522790"
+        },
+        "812/phi": {
+          "bytes": 4167790,
+          "sha256": "eb8a0d9dc91ab6c2c1d0efe005e1fa976635dad80c745723eec4fd15fe4eb0e7"
+        },
+        "812/uniform/cumulativeContErr": {
+          "bytes": 1004,
+          "sha256": "16f67a6b0149b28cc0d8f94ebf4f21ac63a5940a0d5597e9e0b7ac23310f7556"
+        },
+        "812/uniform/functionObjects/functionObjectProperties": {
+          "bytes": 6495,
+          "sha256": "d0875dcd4caa03f43224a355775d619d7c0dbb6c3fe05284f23c302988ab0dca"
+        },
+        "812/uniform/time": {
+          "bytes": 1010,
+          "sha256": "6a41e84d8d180882c240e71db8c823d76a7c25e09d3313fe01d0e67a706c5d53"
+        },
+        "812/vorticity": {
+          "bytes": 5144524,
+          "sha256": "92127841a64a79bcfb3dc865b69c7153dd68e3ceaee463c61a14fa2d7b6cd3c1"
+        },
+        "812/wallShearStress": {
+          "bytes": 95546,
+          "sha256": "2d23e6eed887229d64fdcd3bb2676abbfb291ac593849a5488015dc0cd41c23b"
+        },
+        "blockMesh.log": {
+          "bytes": 2626,
+          "sha256": "cf46e0f2f0d93e86e60124bef8765c9a80fdb80c0ae643a8a05ea0dc899e6b54"
+        },
+        "checkMesh.log": {
+          "bytes": 4072,
+          "sha256": "2144219fc6a18f5e06d6adb499b5038859c6e79600a5985499a6805075b4a843"
+        },
+        "constant/polyMesh/boundary": {
+          "bytes": 1675,
+          "sha256": "ac474795a879d329d5f1197ea79099cd1f123f7fc6378441533d0cdc3199c9ee"
+        },
+        "constant/polyMesh/cellLevel": {
+          "bytes": 161870,
+          "sha256": "bca0ac4ea5b4ebacd8d8cad4b39cf4d7b947340d5816b3a967320518b86d1ec9"
+        },
+        "constant/polyMesh/cellZones": {
+          "bytes": 918,
+          "sha256": "fa1cd3380c03f73dabbdac0fbc9a20454db6d010eae641b3a58974bea41fa9d8"
+        },
+        "constant/polyMesh/faceZones": {
+          "bytes": 918,
+          "sha256": "1e9d0804e3b1f782b50589458e579ba70d5f079d738657ff5e2dfd0ce661966d"
+        },
+        "constant/polyMesh/faces": {
+          "bytes": 6672687,
+          "sha256": "da272000a8e44a8f045d8a7bb2fed1246890efae14e83528f9bf682227332953"
+        },
+        "constant/polyMesh/level0Edge": {
+          "bytes": 991,
+          "sha256": "a0c25e280dbd515f514a0601c1eb42abb0f8c4339d1fecc1e1a1436bbac79b23"
+        },
+        "constant/polyMesh/neighbour": {
+          "bytes": 1400354,
+          "sha256": "5791145b954effb41930c15c69676d0d0508b52151da37e5a65ed4e30cbd844d"
+        },
+        "constant/polyMesh/owner": {
+          "bytes": 1464910,
+          "sha256": "54d3d0bce624496a833236ad4affcb9cf807e95f3c5a96f2d72f3e4629dfd648"
+        },
+        "constant/polyMesh/pointLevel": {
+          "bytes": 180719,
+          "sha256": "d539e4e24d4a406555707340cb2941506f1039b07312434526f4cf61100645d3"
+        },
+        "constant/polyMesh/pointZones": {
+          "bytes": 1069,
+          "sha256": "a60c8b352094a766afd1b9b7f8d74e52eb69cd15b15d85a898e88e79dd8a16a8"
+        },
+        "constant/polyMesh/points": {
+          "bytes": 3480343,
+          "sha256": "c619c8c5d3b7aa02362a4349295f7ceebd085500497b7296ff5d58ed76499bb1"
+        },
+        "constant/polyMesh/surfaceIndex": {
+          "bytes": 749657,
+          "sha256": "bd5e4b2615514eaadaa914755f22426788295dcaa9caa506e2b8d872c24ba199"
+        },
+        "postProcessing/cuttingPlane/812/U_yNormal.raw": {
+          "bytes": 284579,
+          "sha256": "aa27a2d888a6b3242ec7cbc57c5fcac747edb630e2895ba1f36c716cba44bd55"
+        },
+        "postProcessing/cuttingPlane/812/p_yNormal.raw": {
+          "bytes": 186634,
+          "sha256": "a1ad5dd7dc337085237aa2130130833217215582dc9cce75c87c8f6e8bed87ac"
+        },
+        "postProcessing/cuttingPlane/812/vorticity_yNormal.raw": {
+          "bytes": 297967,
+          "sha256": "e4492d355e5b545850413d50f141de36d1c5ed7ea2da2b99284796532f0a52be"
+        },
+        "postProcessing/forceCoeffs1/0/coefficient.dat": {
+          "bytes": 206108,
+          "sha256": "f66250464061c2f1b962795d463d1e99adb7206bff929f51e55a2dcbfd2b54f3"
+        },
+        "postProcessing/forces/0/force.dat": {
+          "bytes": 158112,
+          "sha256": "fbea95fc30a1b44851a03d23d583a26f977c2040a55b79205d300ebf73dbd670"
+        },
+        "postProcessing/forces/0/moment.dat": {
+          "bytes": 158828,
+          "sha256": "83786c6ba0539a46e74b801ec97342c401c59b944166ebd0378b9acd21da30cf"
+        },
+        "postProcessing/sample1/812/centreLine_p_U.xy": {
+          "bytes": 16028,
+          "sha256": "6ec5fb08eeb3b95d22b571abc5538e6d447c9fb4f28387b3a39b4ad379dd8499"
+        },
+        "postProcessing/solverInfo1/0/solverInfo.dat": {
+          "bytes": 171108,
+          "sha256": "4ea86a17111eb2bfc042085200d336037f23818c410d0d9e98ae812cd88407ab"
+        },
+        "postProcessing/wallShearStress/0/wallShearStress.dat": {
+          "bytes": 254,
+          "sha256": "2ffd47d8ab6e84be602b0682defa6be3740124b8a899f698e5f637e339b5c7b2"
+        },
+        "simpleFoam.log": {
+          "bytes": 1386456,
+          "sha256": "04604394b88ac78f2bd0f94e76743395ab5c6f6522b9b7c4f8da2925b41826ab"
+        },
+        "snappyHexMesh.log": {
+          "bytes": 41534,
+          "sha256": "3cadd2489a0b6578c3bb532c77cfa5a3b6a94f57c7668b3b19ff5ef0af52c129"
+        }
+      },
+      "path": ".backend/demo-load-history/runs/78d9495dd48b4b528746f73b2768848b",
+      "record": {
+        "bytes": 8803,
+        "sha256": "a5b90a1c289c5df4542a2ec6ea6535ea8dd16f9fa5efb06ee2503c248cc612c3"
+      }
+    },
+    {
+      "inputs": {
+        "0/U": "182c8e7fd5788c74f2242b489304de8224e9b022cd97ee49aae287b7f45f0db4",
+        "0/include/fixedInlet": "74e2ff4605b519a3e648d4013bd710b95f79492a447174597113fc09345b466c",
+        "0/include/frontBackUpperPatches": "8b6c755aa2d5eb63b0b32f18efab33d3037a3eb4693099c68bcc91f5ea20b4bd",
+        "0/include/initialConditions": "b39a13d14ef5086e8ebfb3ed1ce7764ec07aff6c835cb345a03790a350f1119c",
+        "0/p": "cf82dbacee89ccec39dc81accf2d5f0990aa8f1a5c24f9832d44406ddd629ae1",
+        "constant/transportProperties": "953636fee959c4eddbfba496b49fda277a9a1985cf56cdf114c4d67d44fb532e",
+        "constant/triSurface/sphere.stl": "5e79912df01d91ea029f4a4539870861c1c37b900495a723386ee8e9d75331fa",
+        "constant/turbulenceProperties": "578ef58727ac9e5646e6130cdb8d9031ef66e9a9af9494169d96ffb712dd0809",
+        "system/blockMeshDict": "da2026c8b0017a90ca00a583ee61608952ad88b46da2b73b91a75932cba8e9e4",
+        "system/controlDict": "2eabf4de113e2ae84d7214840b577eaef2bea7f0e5a1b9eb1bc863e52dc28a66",
+        "system/cuttingPlane": "f96db1353f2750ae9ac2baefe215d2c2b40420e21145d0ba3fbb9610c4e9589f",
+        "system/forceCoeffs": "59eeadc6fdfdd79a08ccc04ec9397f8caa3b19fcc259abd3caf18c7666f8f7f2",
+        "system/forces": "e153a683e1c040a480406c9e9e2585a96629c37cc69de6af3b1820fcbb13ec56",
+        "system/fvSchemes": "0412a47c49b665587142e7e7d6e8e7fd57d952ceca4be2bb81f4b741fb72866e",
+        "system/fvSolution": "f5f8404f5a9ccb8465bd34e316ed70df2c4919b4a94415fa06ad46c1271fe9dd",
+        "system/meshQualityDict": "42be7e056f1be71757be680638573dcb9db90be3eff80ff318cbb7edfb029fdd",
+        "system/runTimeControls": "e70b78ff36cf02259d89247d95df8cbe298510deec46a468ab6594b1a3d1dcf0",
+        "system/snappyHexMeshDict": "bb38e48e0d4d33c36b9d58529f36155eaef86410e5db982877cce703b46ca4eb",
+        "system/solverInfo": "234d70c85fe43fade7a406dea724300e84b43ec58b8ad012442789e6c1b2e889",
+        "system/vorticity": "34da60194a1514386a763af6e8d9fc1228b8c93955fae0885edb689b7a340102",
+        "system/wakeLine": "ec5fa9ea820f8c543a2f9ce9356fe7c2398665942384e801809963a185709ece",
+        "system/wallShearStress": "b9c8bf53700991f4e2080e0256a895a1c7b8b63570f3599792651456e6924c29",
+        "translated_settings.json": "824bf5ee9950116e3e7a79d73c2582cd433634f7c0839b454fd44237243ef660"
+      },
+      "level": "medium",
+      "outputs": {
+        "0/cellLevel": {
+          "bytes": 503770,
+          "sha256": "dd605d90656178c04bd30531e57d08737d0555063038756d31fc79a039d5518e"
+        },
+        "0/pointLevel": {
+          "bytes": 542981,
+          "sha256": "3bd65b376c5ef4f2a43bf00d09934fdf455fd9855ed727da1a6efe8915d4f6f6"
+        },
+        "812/U": {
+          "bytes": 13270031,
+          "sha256": "409bee10b647a56464564241b8c47dc1fc706b485a9dbe2aa8495d56a5ffb39d"
+        },
+        "812/p": {
+          "bytes": 4565350,
+          "sha256": "f3bbe4cc17b9b2831a0dc326e3450694af2f9093da18c229b974395a2e09f648"
+        },
+        "812/phi": {
+          "bytes": 12986513,
+          "sha256": "d43ffa4d9376449c85495ecce6018e54e34f6c1575202efe02b9e032b0937744"
+        },
+        "812/uniform/cumulativeContErr": {
+          "bytes": 1004,
+          "sha256": "549b391d1e0c88838b9966737aae69d1866717935d0e40de18926233ef549dae"
+        },
+        "812/uniform/functionObjects/functionObjectProperties": {
+          "bytes": 6498,
+          "sha256": "505a54d860e1015a93a0cc2fee99e2d69dae30369f2b318251a58114130b5dcf"
+        },
+        "812/uniform/time": {
+          "bytes": 1010,
+          "sha256": "6a41e84d8d180882c240e71db8c823d76a7c25e09d3313fe01d0e67a706c5d53"
+        },
+        "812/vorticity": {
+          "bytes": 15585343,
+          "sha256": "1566fa3c457a340e7038d297ea00e092b333abb0ef280b034f5003459a60b7fd"
+        },
+        "812/wallShearStress": {
+          "bytes": 209967,
+          "sha256": "c45b56682d8edea9280ef24c973c52688eb100baa3710d879af693f1f0d4c154"
+        },
+        "blockMesh.log": {
+          "bytes": 2683,
+          "sha256": "457f8d37b5b0d1819cba4e7c01f5e03e72b171d3b7d03a292e7f1b085c2ee388"
+        },
+        "checkMesh.log": {
+          "bytes": 4079,
+          "sha256": "825ac1e8d5d627c9566bb4d170d3325cdf13d89e6fc612e617b7e3f37c8191ea"
+        },
+        "constant/polyMesh/boundary": {
+          "bytes": 1675,
+          "sha256": "fc48bea8237cdce98a28931d53fb818c48358f24993bebe0149f6779e63658a5"
+        },
+        "constant/polyMesh/cellLevel": {
+          "bytes": 503309,
+          "sha256": "b4530f51a368ecd022b8ef06de0b6091955da6f8dd0684775ac300684dcc5e74"
+        },
+        "constant/polyMesh/cellZones": {
+          "bytes": 918,
+          "sha256": "fa1cd3380c03f73dabbdac0fbc9a20454db6d010eae641b3a58974bea41fa9d8"
+        },
+        "constant/polyMesh/faceZones": {
+          "bytes": 918,
+          "sha256": "1e9d0804e3b1f782b50589458e579ba70d5f079d738657ff5e2dfd0ce661966d"
+        },
+        "constant/polyMesh/faces": {
+          "bytes": 22737762,
+          "sha256": "66b30b483045d13269ac7927c767767bd888b30bf33616adb204a89afe5d372a"
+        },
+        "constant/polyMesh/level0Edge": {
+          "bytes": 998,
+          "sha256": "bf575e03c08e5196c4b462406cae77da7655bda57bfb83d1b7a667599032c5f3"
+        },
+        "constant/polyMesh/neighbour": {
+          "bytes": 4896239,
+          "sha256": "fff4fa6790247d3cf75cf9f514660117f12fe3711e7a644dfc16735bef4babdb"
+        },
+        "constant/polyMesh/owner": {
+          "bytes": 5056637,
+          "sha256": "ca870cd0cbd1a28005a049261484865da8091eb7d2f848a1575911abae770d3b"
+        },
+        "constant/polyMesh/pointLevel": {
+          "bytes": 542530,
+          "sha256": "785d2e6872dd19f3106afc1c0a32e9118e6e2c9ea175b55525c514ab7644ea31"
+        },
+        "constant/polyMesh/pointZones": {
+          "bytes": 1069,
+          "sha256": "a60c8b352094a766afd1b9b7f8d74e52eb69cd15b15d85a898e88e79dd8a16a8"
+        },
+        "constant/polyMesh/points": {
+          "bytes": 11127484,
+          "sha256": "d109260f66204783c811583aee6ffd4c23144591eae6a756df3f178a4621c9a7"
+        },
+        "constant/polyMesh/surfaceIndex": {
+          "bytes": 2312704,
+          "sha256": "835c24448a9f60b4f39c888ef20e9939477df745efc69802854fadbbd50d5988"
+        },
+        "postProcessing/cuttingPlane/812/U_yNormal.raw": {
+          "bytes": 641731,
+          "sha256": "9dbceed01bd524a5484d100fc94da822243567bcde91b7d1a1e8a6444ea3400a"
+        },
+        "postProcessing/cuttingPlane/812/p_yNormal.raw": {
+          "bytes": 423219,
+          "sha256": "c2a29598ff55f78bfdff13fa3727c6c26ec2b4282593e785471d0f4c2d86b95b"
+        },
+        "postProcessing/cuttingPlane/812/vorticity_yNormal.raw": {
+          "bytes": 671290,
+          "sha256": "c81e125caddc47e2af0a779d634e4cc6f1c5b97bf08d79e93048ba1062977c43"
+        },
+        "postProcessing/forceCoeffs1/0/coefficient.dat": {
+          "bytes": 209157,
+          "sha256": "2c3caccae543ba5d11af72db3bf4414cfa6eaec41d0e04c8a471b33814cb0543"
+        },
+        "postProcessing/forces/0/force.dat": {
+          "bytes": 160003,
+          "sha256": "532cd9acc5360fba1aa1e2d4d5ab9deef4bfd3ccde8c659c5ff189927589beb0"
+        },
+        "postProcessing/forces/0/moment.dat": {
+          "bytes": 161318,
+          "sha256": "139ce0ee3a1451bd2803d0015ee4dec1f80342a0bb9a37012b2459fd064da4cc"
+        },
+        "postProcessing/sample1/812/centreLine_p_U.xy": {
+          "bytes": 15679,
+          "sha256": "29f06a38f20e373d631dbd53a2124a5df35ac6ec744228d372edfa07bc8e349f"
+        },
+        "postProcessing/solverInfo1/0/solverInfo.dat": {
+          "bytes": 171108,
+          "sha256": "466a51750298f7e54942c4aa592f75ab3a255218b71be94c2359333f25029c4c"
+        },
+        "postProcessing/wallShearStress/0/wallShearStress.dat": {
+          "bytes": 254,
+          "sha256": "5801bf8615689c000ccb085dd9217178b0e4b89cd7e21646aeaa2af0270725a3"
+        },
+        "simpleFoam.log": {
+          "bytes": 1391998,
+          "sha256": "6320d5408ea4410b52b44d49ae55d3be73a053ba99e678a66e9633c3f0501569"
+        },
+        "snappyHexMesh.log": {
+          "bytes": 41945,
+          "sha256": "a284c06b43c92436703f09afe571f62974c896f049352df734aa88a340dc839a"
+        }
+      },
+      "path": ".backend/demo-load-history/runs/1854860400c44eb38cb281724a654fb8",
+      "record": {
+        "bytes": 8813,
+        "sha256": "1fcfe5947173b1f69095e1823388f1c0f9d535d59f5655e6241c11e27ab70472"
+      }
+    },
+    {
+      "inputs": {
+        "0/U": "182c8e7fd5788c74f2242b489304de8224e9b022cd97ee49aae287b7f45f0db4",
+        "0/include/fixedInlet": "74e2ff4605b519a3e648d4013bd710b95f79492a447174597113fc09345b466c",
+        "0/include/frontBackUpperPatches": "8b6c755aa2d5eb63b0b32f18efab33d3037a3eb4693099c68bcc91f5ea20b4bd",
+        "0/include/initialConditions": "b39a13d14ef5086e8ebfb3ed1ce7764ec07aff6c835cb345a03790a350f1119c",
+        "0/p": "cf82dbacee89ccec39dc81accf2d5f0990aa8f1a5c24f9832d44406ddd629ae1",
+        "constant/transportProperties": "953636fee959c4eddbfba496b49fda277a9a1985cf56cdf114c4d67d44fb532e",
+        "constant/triSurface/sphere.stl": "5e79912df01d91ea029f4a4539870861c1c37b900495a723386ee8e9d75331fa",
+        "constant/turbulenceProperties": "578ef58727ac9e5646e6130cdb8d9031ef66e9a9af9494169d96ffb712dd0809",
+        "system/blockMeshDict": "93f387f34d782a663f6282c665a992510b007a56bfaa7d8dab25c4273e72db91",
+        "system/controlDict": "2eabf4de113e2ae84d7214840b577eaef2bea7f0e5a1b9eb1bc863e52dc28a66",
+        "system/cuttingPlane": "f96db1353f2750ae9ac2baefe215d2c2b40420e21145d0ba3fbb9610c4e9589f",
+        "system/forceCoeffs": "59eeadc6fdfdd79a08ccc04ec9397f8caa3b19fcc259abd3caf18c7666f8f7f2",
+        "system/forces": "e153a683e1c040a480406c9e9e2585a96629c37cc69de6af3b1820fcbb13ec56",
+        "system/fvSchemes": "0412a47c49b665587142e7e7d6e8e7fd57d952ceca4be2bb81f4b741fb72866e",
+        "system/fvSolution": "f5f8404f5a9ccb8465bd34e316ed70df2c4919b4a94415fa06ad46c1271fe9dd",
+        "system/meshQualityDict": "42be7e056f1be71757be680638573dcb9db90be3eff80ff318cbb7edfb029fdd",
+        "system/runTimeControls": "e70b78ff36cf02259d89247d95df8cbe298510deec46a468ab6594b1a3d1dcf0",
+        "system/snappyHexMeshDict": "bb38e48e0d4d33c36b9d58529f36155eaef86410e5db982877cce703b46ca4eb",
+        "system/solverInfo": "234d70c85fe43fade7a406dea724300e84b43ec58b8ad012442789e6c1b2e889",
+        "system/vorticity": "34da60194a1514386a763af6e8d9fc1228b8c93955fae0885edb689b7a340102",
+        "system/wakeLine": "ec5fa9ea820f8c543a2f9ce9356fe7c2398665942384e801809963a185709ece",
+        "system/wallShearStress": "b9c8bf53700991f4e2080e0256a895a1c7b8b63570f3599792651456e6924c29",
+        "translated_settings.json": "0da126efdabc4b9566a41ebb69095b60cd7b3d330e2db3dc2f2b95dedf08416c"
+      },
+      "level": "fine",
+      "outputs": {
+        "0/cellLevel": {
+          "bytes": 1609946,
+          "sha256": "61b00b0dd8bc158a91788ff69d6683d06f8a4dfb120e5ff90c7b87e8e9cf56ac"
+        },
+        "0/pointLevel": {
+          "bytes": 1692189,
+          "sha256": "f3190cbf89e6d695841d162336704d733720e937ceee7712f3ccd6ecf6dca7fb"
+        },
+        "812/U": {
+          "bytes": 42493470,
+          "sha256": "a376673c2952db97b7dbecbed411b5e00a57c215ad2984eb9533dc4116c01ad7"
+        },
+        "812/p": {
+          "bytes": 14711813,
+          "sha256": "8fcb1176b97b5a039ba32e3e8243ed97abac6c68ef318d37d44daf38c5ed4df4"
+        },
+        "812/phi": {
+          "bytes": 42253129,
+          "sha256": "d5d5daa525bd2ef2dc98eb3e55a5683f7e57d442d6ad76ff7d9aff011c98f860"
+        },
+        "812/uniform/cumulativeContErr": {
+          "bytes": 1004,
+          "sha256": "4667ba0c4e822c76640a1ea3b5d6d861721c7d8dee2185c892e862d23c5b5c19"
+        },
+        "812/uniform/functionObjects/functionObjectProperties": {
+          "bytes": 6502,
+          "sha256": "33a51e8d185aa108e08274cd85161505e1dd9cb90b1ad5895c9fefe49b43d582"
+        },
+        "812/uniform/time": {
+          "bytes": 1010,
+          "sha256": "6a41e84d8d180882c240e71db8c823d76a7c25e09d3313fe01d0e67a706c5d53"
+        },
+        "812/vorticity": {
+          "bytes": 48767727,
+          "sha256": "dfd89ec1e774a600186263260b0ea5630407895598c354b1fdf32c03a25b184a"
+        },
+        "812/wallShearStress": {
+          "bytes": 465995,
+          "sha256": "50c60766283f933da7230cd24a9b42b120eac11618ec17f7c3dea78eff762f9a"
+        },
+        "blockMesh.log": {
+          "bytes": 2693,
+          "sha256": "c4363f208dd9643d1e703e66e8f88cb6bdaa5bd922f6f39f405721ba5f827b0d"
+        },
+        "checkMesh.log": {
+          "bytes": 4106,
+          "sha256": "f3e96ce42f71cc378359984e6134054b096ff63ca04bf8fb2f1931cb23cd3a4e"
+        },
+        "constant/polyMesh/boundary": {
+          "bytes": 1684,
+          "sha256": "2b7072eba4ab4573af8134a95a835a4518a9cd91def25576dfdfd8c6b6a0d617"
+        },
+        "constant/polyMesh/cellLevel": {
+          "bytes": 1609485,
+          "sha256": "78cc4ce00f953414454add5b90e7f4044564f03069eea7141854b83ec442febc"
+        },
+        "constant/polyMesh/cellZones": {
+          "bytes": 918,
+          "sha256": "fa1cd3380c03f73dabbdac0fbc9a20454db6d010eae641b3a58974bea41fa9d8"
+        },
+        "constant/polyMesh/faceZones": {
+          "bytes": 918,
+          "sha256": "1e9d0804e3b1f782b50589458e579ba70d5f079d738657ff5e2dfd0ce661966d"
+        },
+        "constant/polyMesh/faces": {
+          "bytes": 74893469,
+          "sha256": "04a27e8fde59d9aadcefc76606da53264416b218bbcc2bcd9a1bcde3075bcc59"
+        },
+        "constant/polyMesh/level0Edge": {
+          "bytes": 998,
+          "sha256": "f291a54974d1addb13b6bdbf9430b0d196762e7bf14c4c737f00c3cf52d91f0a"
+        },
+        "constant/polyMesh/neighbour": {
+          "bytes": 16426843,
+          "sha256": "e8d024e85113fc9abbcda94d6e7da8c97949a7701ba6954dc024f1574cf80f76"
+        },
+        "constant/polyMesh/owner": {
+          "bytes": 16803363,
+          "sha256": "83ddc987d7c9dc6250f8f588a4a3d806c609d07e2ff42ccb1934feea94aaa0a5"
+        },
+        "constant/polyMesh/pointLevel": {
+          "bytes": 1691738,
+          "sha256": "825b4a82130b59e18419c0870aa80312f9f2f583a455ca8af55c8138ecb0b09b"
+        },
+        "constant/polyMesh/pointZones": {
+          "bytes": 1069,
+          "sha256": "a60c8b352094a766afd1b9b7f8d74e52eb69cd15b15d85a898e88e79dd8a16a8"
+        },
+        "constant/polyMesh/points": {
+          "bytes": 36420097,
+          "sha256": "1284efbe841df296480c761a5bea99d5da2551f506d619dce4de7013825f3d99"
+        },
+        "constant/polyMesh/surfaceIndex": {
+          "bytes": 7346285,
+          "sha256": "ca310a281d67999cf826f99137c8cf64fc6739678053321084a60bcc732ed2e7"
+        },
+        "postProcessing/cuttingPlane/812/U_yNormal.raw": {
+          "bytes": 1358716,
+          "sha256": "bc9635b7e026ed6d4036e28f33063bd7a510c84de0800a06b3d047129e424b36"
+        },
+        "postProcessing/cuttingPlane/812/p_yNormal.raw": {
+          "bytes": 902841,
+          "sha256": "2df3cbace21635180a9f367167598c0937b65998a276e756f3eaeb5698a1228b"
+        },
+        "postProcessing/cuttingPlane/812/vorticity_yNormal.raw": {
+          "bytes": 1421351,
+          "sha256": "e01796951877799995ae02d026ce51c7633a6ca7d419673b33a01473583a624c"
+        },
+        "postProcessing/forceCoeffs1/0/coefficient.dat": {
+          "bytes": 205097,
+          "sha256": "5b9fa8cf38e75a7f4c2fc4fed85bacf9a4b1178ce17d3f11aa8bb0dce2f9c40e"
+        },
+        "postProcessing/forces/0/force.dat": {
+          "bytes": 156388,
+          "sha256": "ef6c319ef1f327ce810ffed65c66d268d943619e691f40767b3e98b3c77ee12b"
+        },
+        "postProcessing/forces/0/moment.dat": {
+          "bytes": 160316,
+          "sha256": "195b2c577d4ae4076fb40108625b37eeff8917bb2b21bcc4744c300121920b3e"
+        },
+        "postProcessing/sample1/812/centreLine_p_U.xy": {
+          "bytes": 16032,
+          "sha256": "500b476ad46084a955dc32d556aadab5dbe39cacd7bf1e4005470f5c01368ef2"
+        },
+        "postProcessing/solverInfo1/0/solverInfo.dat": {
+          "bytes": 171108,
+          "sha256": "cc4370973a4c111c28f78851555c39e2bc75bba7b462da7616e74251b056c90a"
+        },
+        "postProcessing/wallShearStress/0/wallShearStress.dat": {
+          "bytes": 254,
+          "sha256": "a0995be4f913c80a8dab357917995c09a12c640b299e723f239ae12e8f4265cf"
+        },
+        "simpleFoam.log": {
+          "bytes": 1380849,
+          "sha256": "4afe71b5ea4ff2351b4ed25f83f81944d190058b7aa292bafcf0bbd7f503772d"
+        },
+        "snappyHexMesh.log": {
+          "bytes": 41218,
+          "sha256": "de04df9d38ba61bc22a4fe2ad86c4c1dc02ef372a0223ad38e880fe4cfd7b7ac"
+        }
+      },
+      "path": ".backend/demo-load-history/runs/506e5b5f3e834f31a4441024d8e6a2cc",
+      "record": {
+        "bytes": 8822,
+        "sha256": "7cd926633ea7733c935fd3db6c55c9fef67eed9edc5edcdccca13b43d0602899"
+      }
+    }
+  ],
+  "package": {
+    "data_root": ".backend/demo-reviewed",
+    "evidence": "unverified",
+    "files": {
+      "plots/cd_history.png": {
+        "bytes": 65447,
+        "sha256": "73f4b7ba11e1775ffc1a63feabcf430a97d9230358302455cc3405a35c44348d"
+      },
+      "plots/coarse_pressure.png": {
+        "bytes": 88779,
+        "sha256": "5cefcfe34eecc1e40152225d6b8947d63d8c7fe558d2f43d1511d29d4883e434"
+      },
+      "plots/coarse_speed.png": {
+        "bytes": 108626,
+        "sha256": "59750bdb6f99febff91410023bc792e01b8cdd59dbebb60ca96dcea26674790e"
+      },
+      "plots/coarse_vorticity.png": {
+        "bytes": 73776,
+        "sha256": "27378369be89a36f6124d37180abd49a542b23c8237ba80d645dee1af56795b2"
+      },
+      "plots/fine_pressure.png": {
+        "bytes": 87686,
+        "sha256": "16cbb454cd3b88746e598ec7e6d13e43b57444e8248dd638e4614c4f1c0435f3"
+      },
+      "plots/fine_residuals.png": {
+        "bytes": 153350,
+        "sha256": "a1c7cad825a91940be562f9f9d471d9fb0891c056f1c93564af986afd73fb0a3"
+      },
+      "plots/fine_speed.png": {
+        "bytes": 104580,
+        "sha256": "7722b01bf1d388dc9185ffb44e79119a799244822e899b6a6cce7414b34eb0c4"
+      },
+      "plots/fine_streamlines.png": {
+        "bytes": 202594,
+        "sha256": "254fde5133abdaa2bd6d2d9ce53d091b4661cd83855c9ae8c10c303d3cc40da1"
+      },
+      "plots/fine_vectors.png": {
+        "bytes": 195038,
+        "sha256": "a51ff42eed2001f700a9a8aea8c6dc738cd0c2de23a56a52c3a7ef0f13960709"
+      },
+      "plots/fine_vorticity.png": {
+        "bytes": 73546,
+        "sha256": "0cfdeb957efd18cc965f08df6676b28050c250784891f0dec2d2215ce3df4247"
+      },
+      "plots/medium_pressure.png": {
+        "bytes": 88078,
+        "sha256": "4af2d4442df9bf99d54122dc6a68f14246d1ebaf20614eec6ba508368690fcc6"
+      },
+      "plots/medium_speed.png": {
+        "bytes": 105223,
+        "sha256": "6d7d0c6150a48079aadf08e6fd70b0840997fe0d74b65db94b61e4788bb29682"
+      },
+      "plots/medium_vorticity.png": {
+        "bytes": 74148,
+        "sha256": "293959e8f63f5b52665ffb98496d2ba56c30b429b2710ec82404ac8c91c349d1"
+      },
+      "plots/mesh_cd.png": {
+        "bytes": 71012,
+        "sha256": "e1ae5e9b25a0ce8cacd2a68e52d224d1e4bff50fe8f34a3551fcf7f4ffd0f33e"
+      },
+      "plots/wake_axis.png": {
+        "bytes": 91351,
+        "sha256": "e150189b986638a0688ecc1a4ae06333d1433e425de4849fa031394068d72a1b"
+      },
+      "recipes/cd_history.json": {
+        "bytes": 4610,
+        "sha256": "b672ab129c69b5aadaad40a9d996b99763de06a21f1b1025cc993c7c813e7eb2"
+      },
+      "recipes/coarse_pressure.json": {
+        "bytes": 3400,
+        "sha256": "d4a800c05789f0eba414ca4730b267fbd6c4f86f34df7bc88eb1fa2bda6b337e"
+      },
+      "recipes/coarse_speed.json": {
+        "bytes": 3357,
+        "sha256": "ccec849144a0db3789a9372f90c43e2341412c5095a1a20182bef677969ee2cd"
+      },
+      "recipes/coarse_vorticity.json": {
+        "bytes": 3375,
+        "sha256": "e4738864175fb133a695d16ec085fec1aee1da661727b0839b60d6fef857fb33"
+      },
+      "recipes/fine_pressure.json": {
+        "bytes": 3398,
+        "sha256": "b2476d53fb4d61de206411a359d0277dcf1d31d40f389635c7d96a7edb1da78a"
+      },
+      "recipes/fine_residuals.json": {
+        "bytes": 2933,
+        "sha256": "2038186a4872a8f7236363773d9e38a2500bf9be1579f8453282f7369bc6303c"
+      },
+      "recipes/fine_speed.json": {
+        "bytes": 3355,
+        "sha256": "cbe7d5f12e21957c25a7279f1d577bc63f67028c8194501999955f2582785825"
+      },
+      "recipes/fine_streamlines.json": {
+        "bytes": 3346,
+        "sha256": "3956460d67c39fbc1ce250217183a0b9eb239a967effa0bab2c6e4983614772a"
+      },
+      "recipes/fine_vectors.json": {
+        "bytes": 3330,
+        "sha256": "d25a6c6bf18ada5198ce341f6bbac82f3c21d1edfa4c74ca5213238d3bebbbb5"
+      },
+      "recipes/fine_vorticity.json": {
+        "bytes": 3370,
+        "sha256": "35b97c41285923a4ad3368ac103aacdc2780e535da59234b49c4a1d8ed4a78ec"
+      },
+      "recipes/medium_pressure.json": {
+        "bytes": 3400,
+        "sha256": "7337e5cbde2c5125437ea89873f0129d377495d177c4e66d277a4f99ccbe6807"
+      },
+      "recipes/medium_speed.json": {
+        "bytes": 3356,
+        "sha256": "91d9684c5b058ec637111231640dbb4344c935ba8b82c24cdedf1268c38ac4fb"
+      },
+      "recipes/medium_vorticity.json": {
+        "bytes": 3373,
+        "sha256": "da7e584f3136ca4009ca00168f5ca53e1e60c45cff0fe4f4956eaecdf126802b"
+      },
+      "recipes/mesh_cd.json": {
+        "bytes": 4808,
+        "sha256": "1b5f15e06130ee2543a667b8f0105f5e4fd961bf80457922737eada030547653"
+      },
+      "recipes/wake_axis.json": {
+        "bytes": 4609,
+        "sha256": "b5652d0365c3784f8b590a9bf00bef7bf47b2a99afb042af288705d03a1e8826"
+      },
+      "results.json": {
+        "bytes": 85804,
+        "sha256": "d4db8ef0b88e7df234eea38b18231e83edc87ece30e2793eab06f5f254df1701"
+      },
+      "run_group.json": {
+        "bytes": 4293,
+        "sha256": "acd1b8716144aeaa045019515bdf377018ae4a74ce3a0403cf50c52da007ff6a"
+      },
+      "surfaces/fine_sphere.json": {
+        "bytes": 10436760,
+        "sha256": "75e87969bfe94fe78c0b54e9e5674443ed1e9e09956b6332d97fe24ea0522c70"
+      }
+    },
+    "group_id": "acd1b8716144aeaa",
+    "machine_review": "pending",
+    "manifest": {
+      "bytes": 3223,
+      "sha256": "e5c2a75cca8b009aa69fce0205fced8e74442bab12aa26f0a42a5a335348cbc9"
+    },
+    "solver_code_commit": "4798f8434610e48f170ef9bc1abbfba5f6e1b2a2"
+  },
+  "presentation_rehearsals": "pending",
+  "records": [
+    {
+      "fingerprint": {
+        "bytes": 28073,
+        "sha256": "243f26535774de9eaa6f96ae6005662bbbf4bca8d43d52cec82d41b997f2fcdd"
+      },
+      "name": "Claude independent review",
+      "path": "docs/qa/independent_physics_review.md",
+      "scope": "Follow-up PASS for bounded MVP at f19cbeb; no aircraft validation or human release approval.",
+      "status": "recorded"
+    },
+    {
+      "fingerprint": {
+        "bytes": 4009,
+        "sha256": "3feb4223fb262f17d602e3690e0d206edd5172f8e368a2d0c57f32ba9ed0243c"
+      },
+      "name": "Historical fresh-clone reproduction",
+      "path": "docs/qa/fresh_clone_reproduction.md",
+      "scope": "Three retained sphere solves and verified reuse at 58a9596; Linux pinned backend fixtures at 73ee812. Not a new run at the planning baseline.",
+      "status": "recorded"
+    },
+    {
+      "fingerprint": {
+        "bytes": 5755,
+        "sha256": "a1c0f5e6126f014436d2e9ab1f889df993fe3d2a426f6c37cad5d1456388a949"
+      },
+      "name": "Recorded software and browser checks",
+      "path": "docs/qa/mvp_gates.md",
+      "scope": "Recorded unit/reference/browser/export checks; pending presentation and human product gates remain separate.",
+      "status": "recorded"
+    },
+    {
+      "fingerprint": {
+        "bytes": 19422,
+        "sha256": "7a11c34738614d334f9608b3ca341d11bee6261f8676b4b3a6b382156ed82e7c"
+      },
+      "name": "Backend pin audit",
+      "path": "docs/audit/backend_pin.md",
+      "scope": "Exact runtime/source pin and measured execution capability; not aircraft validation.",
+      "status": "recorded"
+    }
+  ],
+  "schema_version": "production_baseline_v1",
+  "source": {
+    "commit": "d17f97a6d37d4458e08f005a20ecf5db870b3235",
+    "files": {
+      "pyproject.toml": {
+        "bytes": 961,
+        "sha256": "48dd19a38d576a4633d2f3f4c3b7acde4d9b1da6fc14348ab819fd9118fabe59"
+      },
+      "reference_impl/README.md": {
+        "bytes": 2534,
+        "sha256": "3e02ee69a8dd53cb011b85b4aeeacf2cc335b32c965f805a1401c8550cc05264"
+      },
+      "reference_impl/pytest.ini": {
+        "bytes": 44,
+        "sha256": "d6e3e89cc6aab7944c11e4a14fb0a4db51c9ae36606bf263f47b7a9378f6de65"
+      },
+      "reference_impl/src/physimesh/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/src/physimesh/api/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/src/physimesh/api/app.py": {
+        "bytes": 1130,
+        "sha256": "8e6a4d0f72f9cce321c7cb4869b7bed45f0ef74e5e1433e77dd32817df40449c"
+      },
+      "reference_impl/src/physimesh/api/settings.py": {
+        "bytes": 1010,
+        "sha256": "73f57089edc1a229c33014dc7b9e7d9db0078c9fd77a3102e962cd148f955ee4"
+      },
+      "reference_impl/src/physimesh/core/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/src/physimesh/core/artifacts.py": {
+        "bytes": 2077,
+        "sha256": "5a21f022489ed97dfaddd6b4652373370b0c84335ae0a689769122bf4c5d0b0c"
+      },
+      "reference_impl/src/physimesh/core/container.py": {
+        "bytes": 869,
+        "sha256": "9f7317c312fb21a7f1eef3a6d841e9e745fa5447e516ffb8d2ba471e10532a82"
+      },
+      "reference_impl/src/physimesh/core/jobs.py": {
+        "bytes": 4145,
+        "sha256": "b511ac84eda36175cd894a18587c98257b14d7810ca9899e2da6c9cea27fa2e8"
+      },
+      "reference_impl/src/physimesh/drone/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/src/physimesh/drone/allocation.py": {
+        "bytes": 3748,
+        "sha256": "3e35ca0d5334ddcf9edd83626446c3975bba8a76f7162b787088bd8d11cfa0eb"
+      },
+      "reference_impl/src/physimesh/drone/atmosphere.py": {
+        "bytes": 4114,
+        "sha256": "ff78672ab9b73e539f4a9774581b389de7e72a3499847e2b88747f50bbe45774"
+      },
+      "reference_impl/src/physimesh/drone/bem.py": {
+        "bytes": 7315,
+        "sha256": "7abc775a19c29c54bcdef6ad6e0e90b8bb5c04788c30ac905eb97df9871cbace"
+      },
+      "reference_impl/src/physimesh/drone/frames.py": {
+        "bytes": 2943,
+        "sha256": "39321d756204ddb866657e156bcd383abda6faa224cb6bdb560ca23bb45b160a"
+      },
+      "reference_impl/src/physimesh/drone/geometry.py": {
+        "bytes": 5194,
+        "sha256": "22665c20f00199c033739f7a14998d64d7278ede1a325fc8d46937831cdd9abd"
+      },
+      "reference_impl/src/physimesh/drone/mass.py": {
+        "bytes": 3285,
+        "sha256": "3c272ff4e4db3528a032806d3292538368e1cb2c8fd782473f907d8db86e6fa2"
+      },
+      "reference_impl/src/physimesh/drone/mission.py": {
+        "bytes": 2384,
+        "sha256": "63c612f852f1bfbe7fb71b6ec1b954426ccf935edc91fa9538ffbca00726e680"
+      },
+      "reference_impl/src/physimesh/drone/propulsion.py": {
+        "bytes": 4111,
+        "sha256": "7c2a4aab245be9f789b4fcf19b70b2d9bcfab3694a31da7978f64f3a073057e7"
+      },
+      "reference_impl/src/physimesh/drone/provenance.py": {
+        "bytes": 1352,
+        "sha256": "71a3f81efbb111f0793cc9cd3e34c84a31f3a268517358e025a25cde888867b2"
+      },
+      "reference_impl/src/physimesh/drone/stl_import.py": {
+        "bytes": 4031,
+        "sha256": "c3ad96fcbe0567761fb9e1d82b73b21faffa49dfd5813631b7dd8b31fc3d4aa6"
+      },
+      "reference_impl/src/physimesh/drone/symmetry.py": {
+        "bytes": 8379,
+        "sha256": "aca745b506eb28149213f0684b1281e0aca180caea048f07fa2850697eb1ecd6"
+      },
+      "reference_impl/src/physimesh/drone/units.py": {
+        "bytes": 2027,
+        "sha256": "cd92e9a224f548301a9796546c3f3780d399fa71840fb9cc54b27a7ddc2512f3"
+      },
+      "reference_impl/src/physimesh/postpro/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/src/physimesh/postpro/contour_rules.py": {
+        "bytes": 9297,
+        "sha256": "080341938a3be9437c62330655f6f2b8a2f76960f3e98b67aa0486dab8ec4597"
+      },
+      "reference_impl/src/physimesh/postpro/loads3d.py": {
+        "bytes": 7351,
+        "sha256": "692a038c83b8a6c05b7932ccbf6162b596fe949c14636cb50263408f5e1a8488"
+      },
+      "reference_impl/src/physimesh/postpro/statistics.py": {
+        "bytes": 3225,
+        "sha256": "5f97b299b10bef041ec8a0deecba57dc1242ccc4f240f23301891decca550ec7"
+      },
+      "reference_impl/tests/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/tests/api/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/tests/api/test_app.py": {
+        "bytes": 786,
+        "sha256": "73c40ba7f7b9fe87b09ad66b4503a8ae202b2a3941b45176da8f382da76f621a"
+      },
+      "reference_impl/tests/core/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/tests/core/test_artifacts.py": {
+        "bytes": 592,
+        "sha256": "9da9d63b7d2ed5b692a666630350d11c30ef200aa5231fddb50228afb87311bf"
+      },
+      "reference_impl/tests/core/test_container.py": {
+        "bytes": 762,
+        "sha256": "bc182b49fc36ea730f694f6bb13940c80649726b41d51f0406436dafbbdb0871"
+      },
+      "reference_impl/tests/core/test_jobs.py": {
+        "bytes": 1546,
+        "sha256": "4ce68459190074ea2062d4e60301c263bde041823a0a82d194a6248461a9d568"
+      },
+      "reference_impl/tests/drone/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/tests/drone/conftest.py": {
+        "bytes": 1345,
+        "sha256": "4b4e7890bd50006d9e16a06b8eb2426ead37330df0af65c36aed05c0d0e48b0e"
+      },
+      "reference_impl/tests/drone/test_wp02_foundations.py": {
+        "bytes": 5925,
+        "sha256": "a3f804ae1b4933f7f54ee7ad473dff98f0e638b35ec1b21c65e7ea8637702c49"
+      },
+      "reference_impl/tests/drone/test_wp03_stl_geometry.py": {
+        "bytes": 3685,
+        "sha256": "2912c0d15b5e0ca95bcb27e863f23069ffbfb5cb664f44ed1beea31f98943c83"
+      },
+      "reference_impl/tests/drone/test_wp06_rotor.py": {
+        "bytes": 4388,
+        "sha256": "ad669d299bb6c2b482ddc14b4120974008f6de5f7ee756db6e4d055733cd868f"
+      },
+      "reference_impl/tests/drone/test_wp08_symmetry.py": {
+        "bytes": 4869,
+        "sha256": "b8f79a574e1e08efd52c7924486620939a6dc9853456121ed923a5515271f801"
+      },
+      "reference_impl/tests/drone/test_wp12_trim_mission.py": {
+        "bytes": 3025,
+        "sha256": "7d4de4068667782ce2e7540468afbca4024f678731f9360bb88b7e99ff5967e7"
+      },
+      "reference_impl/tests/postpro/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "reference_impl/tests/postpro/test_wp05_loads.py": {
+        "bytes": 6470,
+        "sha256": "ce0010438db76e77c737c2e9bd2c8b796ec35874cf8a94e4e41636f165a8348b"
+      },
+      "reference_impl/tests/postpro/test_wp09_wp11_postpro.py": {
+        "bytes": 4784,
+        "sha256": "a4e4a186ab8222b48db359b607c608cf6ba94a09e1a30c678581f7aae573dc8b"
+      },
+      "requirements.lock": {
+        "bytes": 627,
+        "sha256": "24d5ba4a16226b292398f75dcc244e912855612f0e5148d505a42f49c4467d09"
+      },
+      "scripts/demo_assemble.py": {
+        "bytes": 5509,
+        "sha256": "2f039c47eecb4725a35ee48d4163763c50db8f283faadef99adac0529969218c"
+      },
+      "scripts/demo_loads.py": {
+        "bytes": 4104,
+        "sha256": "25bcc76b37857bb4c12a83125ffd5fb8f4cd4402661b077cc1b091a8d5bbe375"
+      },
+      "scripts/demo_plots.py": {
+        "bytes": 9912,
+        "sha256": "1711039b9dc7166f98fea0c96a5487a7ab00ea10578cf224a120490a47819fca"
+      },
+      "scripts/demo_run.py": {
+        "bytes": 9436,
+        "sha256": "e68b26c884c82d81ef3178e4d628e311e9770c9b5e04dd0121c24546164c3ddd"
+      },
+      "scripts/demo_seed.py": {
+        "bytes": 1418,
+        "sha256": "d51055b89d1d3cf2ef57e4ac12a6733bc97b00e6c9f003bfc77ddeb8bcc29250"
+      },
+      "scripts/demo_surface.py": {
+        "bytes": 3302,
+        "sha256": "abe5a1bcc4f316aa5727d036ac5a1b472324913655a4244a73b6095b71624209"
+      },
+      "src/physimesh/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "src/physimesh/api/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "src/physimesh/api/app.py": {
+        "bytes": 3537,
+        "sha256": "c9dedfc7228389780128aefcc247550537f3d0b0a4c32b893110287728746c9b"
+      },
+      "src/physimesh/api/results.py": {
+        "bytes": 5999,
+        "sha256": "91f2f830f537f6a1ae3cd7b3c0726d2d9b0f3c6396ae1502e43926b66f6c2896"
+      },
+      "src/physimesh/api/screening.py": {
+        "bytes": 8981,
+        "sha256": "51f2d41dafb3f1bf315ffa7b47f731eb579873ef0528ea885b81b9c165bc576c"
+      },
+      "src/physimesh/api/settings.py": {
+        "bytes": 2129,
+        "sha256": "2fa180167c65cd81c8fba9776c1a284651c52375b5549b96871bceb40950410c"
+      },
+      "src/physimesh/core/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "src/physimesh/core/artifacts.py": {
+        "bytes": 2906,
+        "sha256": "1b1b69d9f06352370c240ee4aec98a7e89a17d6b7b979f5a8e238dc5ffe0314e"
+      },
+      "src/physimesh/core/container.py": {
+        "bytes": 1685,
+        "sha256": "9f919a89a2d1f523ec9925d4e4b0510fe7cd6501d0d6e2402b76a593253a56f8"
+      },
+      "src/physimesh/core/jobs.py": {
+        "bytes": 6548,
+        "sha256": "9898a23581a829b9eecd0835769e989073ad8bcb1337a984c534c01dadab4e67"
+      },
+      "src/physimesh/drone/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "src/physimesh/drone/api.py": {
+        "bytes": 7718,
+        "sha256": "3b6930bbdfc9e4e61010721503b63ccaad09fdaf7dc52e06a4396dd13481c0df"
+      },
+      "src/physimesh/drone/atmosphere.py": {
+        "bytes": 4657,
+        "sha256": "a836a44453a9d63ee0e2818c43cb2c931003892a61b039de46bbf130ff59cdf8"
+      },
+      "src/physimesh/drone/demo_geometry.py": {
+        "bytes": 3202,
+        "sha256": "cf0e0b1f1a3b28b186727b875b32e21414366fc5bfa30acd2f75c51a1cdf31c3"
+      },
+      "src/physimesh/drone/demo_screening.py": {
+        "bytes": 6678,
+        "sha256": "442815f4cc27c07692996d34ce8a081d2ecdca5d05beb1f68f1fbd6edef6cf03"
+      },
+      "src/physimesh/drone/frames.py": {
+        "bytes": 4079,
+        "sha256": "75660b022d29415a3a69f8a12cf8686f1d99d508f065cf03c299d1559992bb27"
+      },
+      "src/physimesh/drone/geometry.py": {
+        "bytes": 20944,
+        "sha256": "aff588040b6c1f7248c1a5ae033b9f3a231e60eae1b23e5d8dc32de79db0e0cd"
+      },
+      "src/physimesh/drone/mass.py": {
+        "bytes": 4956,
+        "sha256": "d58661c4a8db5e853ac5924567b09864c50fb5c2aac79e9c630441e5c749f70d"
+      },
+      "src/physimesh/drone/mission.py": {
+        "bytes": 3881,
+        "sha256": "d240c1b3618007effee7f0ce185c5ba4202211f1d752a4b65d8deb87d7cf6fd6"
+      },
+      "src/physimesh/drone/models.py": {
+        "bytes": 16646,
+        "sha256": "0c3f304bf492a5fde536d3dab667c4f12efb537482b95b63d496a317b6c7a1db"
+      },
+      "src/physimesh/drone/provenance.py": {
+        "bytes": 1435,
+        "sha256": "600256ec921d698baf7df7248d26088787a39048f984f1d6958fb68f790a3713"
+      },
+      "src/physimesh/drone/schema/drone_manifest_v1.yaml": {
+        "bytes": 4503,
+        "sha256": "6f45d6347115f32da8ebebfdfc591ef5ea3ce729401f2c684ae6c5e0ada61c94"
+      },
+      "src/physimesh/drone/screening.py": {
+        "bytes": 9749,
+        "sha256": "bd5c5c5800766a776148e40641008a926821d673386f1e93d09c9d28d53b64ef"
+      },
+      "src/physimesh/drone/screening_diagnostics.py": {
+        "bytes": 3419,
+        "sha256": "9c59950cd3db3b62e4f2561bc56f4b7e0c2b4800b5967d1100f979284de886fb"
+      },
+      "src/physimesh/drone/snapshot_hash.py": {
+        "bytes": 1132,
+        "sha256": "d1c64764b23e24b6c68589329cec9c8f8c8bfa2ccce991b0ccedea3c03111e94"
+      },
+      "src/physimesh/drone/stl_import.py": {
+        "bytes": 4285,
+        "sha256": "5f49c09e6828c82860a58bf24601bbf3e77bf47cd7e261f1913269a56f7f837c"
+      },
+      "src/physimesh/drone/units.py": {
+        "bytes": 2700,
+        "sha256": "4d9078f82d71a4d29c32b63b4c57b1473f1a93e39e198c5079d9977510dbae76"
+      },
+      "src/physimesh/postpro/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "src/physimesh/postpro/contour_rules.py": {
+        "bytes": 10697,
+        "sha256": "b25a84adc1ed61dcfd26ccf665a781c6f3ae8b5372a0f29c75ddbab0dc13704a"
+      },
+      "src/physimesh/postpro/field_registry.py": {
+        "bytes": 2235,
+        "sha256": "3b0881bb7e6f6124be82ca203a3c08782135ff01933ad75b5108a42d17845a9b"
+      },
+      "src/physimesh/postpro/interpretation.py": {
+        "bytes": 3912,
+        "sha256": "c01b81981ff1db17fab71f4bcab4d3c917467df82fe3fd282a8c6fe66c1e9d34"
+      },
+      "src/physimesh/postpro/loads3d.py": {
+        "bytes": 7478,
+        "sha256": "f765be92966ece854ae89d200782eb9b08e69e480bab222d445c948e580ff4d6"
+      },
+      "src/physimesh/postpro/plots.py": {
+        "bytes": 11414,
+        "sha256": "ff500175bf90bf0ecfd1f3f83952d5e4c11170aa0bef45145929377d6f248b2d"
+      },
+      "src/physimesh/postpro/recipes.py": {
+        "bytes": 472,
+        "sha256": "2c84203436fa0bcb17bf14456f462504d5a06f38f91bb7711ba88b2077e5da35"
+      },
+      "src/physimesh/postpro/refusals.py": {
+        "bytes": 1921,
+        "sha256": "8df6df248ed957b70b19bddfdc5e3dd57f1632026c09c2e245376fa9de2c460a"
+      },
+      "src/physimesh/postpro/result_contract.py": {
+        "bytes": 4871,
+        "sha256": "1c1b4d41b44db6c9feb9199606dea6a35186fefc2092383ba430a12675fb7968"
+      },
+      "src/physimesh/postpro/results.py": {
+        "bytes": 7501,
+        "sha256": "f3a60fe7670557ba1b14ee0b227946550119c5f19472ea6609962d8c4d80bb5c"
+      },
+      "src/physimesh/postpro/schema/results_v1.schema.json": {
+        "bytes": 3569,
+        "sha256": "fe1e22b89e4d4e026a9dcc40939ec14977709458e0b59f84b4f2a73dc643a61c"
+      },
+      "src/physimesh/postpro/statistics.py": {
+        "bytes": 6326,
+        "sha256": "072142edf4602d9c8ef9ec154edde0e257d9e0fb14fa9196ab7102b732e86dbb"
+      },
+      "src/physimesh/solver/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "src/physimesh/solver/foam_ascii.py": {
+        "bytes": 12130,
+        "sha256": "e3f7fc100ea4eb4ec4ccf11ae17752499aed6a1c6281d43a69683a589f110692"
+      },
+      "src/physimesh/solver/openfoam_cases.py": {
+        "bytes": 13438,
+        "sha256": "007d191817d0af3f429c0b831b52586737f9f9824eb8e652892bdd22c80e1cca"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/0/U": {
+        "bytes": 1564,
+        "sha256": "5545f53b0d768499b948e168239b9bd941e121089e3eb3b5cd4363968dfe994b"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/0/include/fixedInlet": {
+        "bytes": 875,
+        "sha256": "74e2ff4605b519a3e648d4013bd710b95f79492a447174597113fc09345b466c"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/0/include/frontBackUpperPatches": {
+        "bytes": 890,
+        "sha256": "8b6c755aa2d5eb63b0b32f18efab33d3037a3eb4693099c68bcc91f5ea20b4bd"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/0/include/initialConditions": {
+        "bytes": 933,
+        "sha256": "a4397d3cdfa0802221f32bc23bd780438aec6d43a95900d51c5504646fd1c966"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/0/p": {
+        "bytes": 1512,
+        "sha256": "6a2acdcbda9da135469484afdcbbe1b602451532eb4b678f8cb0de0dc250378b"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/SOURCES.json": {
+        "bytes": 4174,
+        "sha256": "30e660fd2a5aa88c08e9d20026bd485c85fedd066ad19748fa2a82db53b2019a"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/constant/transportProperties": {
+        "bytes": 1077,
+        "sha256": "3780bf304c8ad0e89355528b3276a1e93e6dbe1a2ba15c1470939a2f0fab6ebd"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/constant/turbulenceProperties": {
+        "bytes": 1140,
+        "sha256": "8a74aebbeb1566d5f28fe847a7d85d9696f17765aee1971573213a4b835a2ba8"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/blockMeshDict": {
+        "bytes": 1776,
+        "sha256": "6fd92ba0f67c190fff515f43a072f13abacaf5edecd2a806f9e2936f66822ddb"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/controlDict": {
+        "bytes": 1479,
+        "sha256": "5d0301520be715ea857d3346a629e8e9682151764769bb2e2a9a7abfb4fb89a4"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/cuttingPlane": {
+        "bytes": 1209,
+        "sha256": "77630a7497326e92c627bce7336ae40e394fa62390c4d52d7ceeea6dd4e7e7a9"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/forceCoeffs": {
+        "bytes": 1945,
+        "sha256": "f076d814ff7bb19de476fdcdd0a5df672129d696cb68184cad9d7e0eee03fd4a"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/forces": {
+        "bytes": 1123,
+        "sha256": "ce99e5d6f0c76e60bd3d15bd25b22ab1b58ec27d8ff01190dbba5973de9affab"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/fvSchemes": {
+        "bytes": 1620,
+        "sha256": "0412a47c49b665587142e7e7d6e8e7fd57d952ceca4be2bb81f4b741fb72866e"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/fvSolution": {
+        "bytes": 2013,
+        "sha256": "f5f8404f5a9ccb8465bd34e316ed70df2c4919b4a94415fa06ad46c1271fe9dd"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/lineSource": {
+        "bytes": 2208,
+        "sha256": "ad9a629f29cafe9d35cb58914f7f9a63b946a4d28c1c04f653c82a7b53c61c7c"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/meshQualityDict": {
+        "bytes": 1157,
+        "sha256": "42be7e056f1be71757be680638573dcb9db90be3eff80ff318cbb7edfb029fdd"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/residualSource": {
+        "bytes": 1619,
+        "sha256": "a0553c32e434443d8a53a7218601472c2660c61ad6bf7db68bb1e11987661ee7"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/runTimeControls": {
+        "bytes": 1364,
+        "sha256": "b0c0940bad8c40e63a3632bea2324cecc7c0a4f4ddbaaf347804df2684c62ad3"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/shearSource": {
+        "bytes": 2966,
+        "sha256": "83fb760a9fa4b104ef6481d21fa37e2d5b7fb340c1e7fe373133c2f5a7672459"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/snappyHexMeshDict": {
+        "bytes": 9848,
+        "sha256": "ac320ea8768ce2cc6bab46d13f345fe6f1e60678b1b521834d9f94e73c141db6"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/solverInfo": {
+        "bytes": 1009,
+        "sha256": "234d70c85fe43fade7a406dea724300e84b43ec58b8ad012442789e6c1b2e889"
+      },
+      "src/physimesh/solver/openfoam_templates/v2606/external_steady/system/vorticity": {
+        "bytes": 1265,
+        "sha256": "af0bfd85a86b5723a961906bcff7c42a8d809ee53b2531e78d373d6a0853dfcf"
+      },
+      "src/physimesh/solver/runner.py": {
+        "bytes": 7504,
+        "sha256": "a4c08e3844c8202718b48402e0898d77a2ef5fb60a69e5b43003ac5f9cfb9782"
+      },
+      "web/css/results.css": {
+        "bytes": 6526,
+        "sha256": "1a2fda496f8ba05a644afc66572823b2ffc0170ea30643d3e6eb368cb0cb491d"
+      },
+      "web/index.html": {
+        "bytes": 8940,
+        "sha256": "8037dae2b85ba5a8bce9ab39e0ab96807f62dcc076e04e86b154384c8f08b8d0"
+      },
+      "web/js/app.js": {
+        "bytes": 7490,
+        "sha256": "5bf53c888f0de1f789c0a17044ff9b9d0fceeedbc07f557dc1dfa961b7e13c03"
+      },
+      "web/js/results.js": {
+        "bytes": 10684,
+        "sha256": "5c77d67c1a99f5161db90238ee0a39c9a738ddb12431386dbde74bdd1ba29300"
+      },
+      "web/js/viewer3d.js": {
+        "bytes": 3584,
+        "sha256": "2d5265e2a12d64e07172a2ad8b30bb371d02b75b387a001766f05062585294e4"
+      },
+      "web/results.html": {
+        "bytes": 6574,
+        "sha256": "1ba773e7d117bcd11d8d7765850961b78500d7986af0c4928a32fc449ed64e9e"
+      },
+      "web/vendor/OrbitControls.js": {
+        "bytes": 38703,
+        "sha256": "b97879c748170baadeb3fb84cea1ffdf4674e283dc06042f34e2acb95a76042c"
+      },
+      "web/vendor/SOURCES.md": {
+        "bytes": 1283,
+        "sha256": "19cec29167d3d469ee5f6ec1459e709844ca523115054aedc2ab9f65ef5b36ea"
+      },
+      "web/vendor/STLLoader.js": {
+        "bytes": 10715,
+        "sha256": "023ed97f848b633d8bcd53d4db3b996d29d0c644088700691297c552257d480b"
+      },
+      "web/vendor/THREE-LICENSE": {
+        "bytes": 1081,
+        "sha256": "bfe119ea4fd413f5f7ca3fcd63adb0c4a073ed39daa2fe7d3e6b769e21272601"
+      },
+      "web/vendor/three.core.min.js": {
+        "bytes": 381124,
+        "sha256": "61ba0df005b05991361d040d8ff670e1aadfd0ce7aeebd1fdb0725957a8957de"
+      },
+      "web/vendor/three.module.min.js": {
+        "bytes": 338908,
+        "sha256": "e2b5ee6bccd38fd6d8a2428546b83c5f2426d84b152ef82be8055556e3b40eb6"
+      }
+    }
+  },
+  "superseded_roots": [
+    ".backend/demo-final"
+  ],
+  "supporting_files": {
+    "artifacts/meta/1f0c5d818f4826964444bba184d6e910827a993be79c8c51d1dae36f273d32d6.json": {
+      "bytes": 111,
+      "sha256": "aebd0acaf14e16fe44efb9b16736da3ff1d51696895a419ca756cf4aadc44e41"
+    },
+    "artifacts/meta/31a5a4c2cb837bcdf2f172966ff225294793763ad5558c37d11f977396e82633.json": {
+      "bytes": 118,
+      "sha256": "cc90393353c098da1f9ae45599c115d9d7422d8d60cd57aefce39a99c5b81665"
+    },
+    "artifacts/meta/37b51c002ac450aeb9a1e8d919e20ee3d6e897ebc597c062e63ab973ce094972.json": {
+      "bytes": 118,
+      "sha256": "cc90393353c098da1f9ae45599c115d9d7422d8d60cd57aefce39a99c5b81665"
+    },
+    "artifacts/meta/3f15fda753523f7f788dbd52f86152c74b69662200a7f3b21ea889f82546ff76.json": {
+      "bytes": 118,
+      "sha256": "cc90393353c098da1f9ae45599c115d9d7422d8d60cd57aefce39a99c5b81665"
+    },
+    "artifacts/meta/5c935b3a654c743cc923262c997bae490be3c2c1c9e88a277360a5e5f421f9d7.json": {
+      "bytes": 116,
+      "sha256": "b19ffa26657cc69cf684a91ee1871ede6353c0a2e74c62432b8561a468e8c7d9"
+    },
+    "artifacts/meta/65df8371a70f76923ee73b2a8637997a3106943606fd23ec77b0c305ffae2fe7.json": {
+      "bytes": 116,
+      "sha256": "b19ffa26657cc69cf684a91ee1871ede6353c0a2e74c62432b8561a468e8c7d9"
+    },
+    "artifacts/meta/8c48d28e75ebc624421c66357c680406a1e1d1483494296ef906dce0d59bf3aa.json": {
+      "bytes": 118,
+      "sha256": "cc90393353c098da1f9ae45599c115d9d7422d8d60cd57aefce39a99c5b81665"
+    },
+    "artifacts/meta/9499a60dcd7b6621242e5972ba6116e94a2c59263b9a1ea440f0a6fa329ee99e.json": {
+      "bytes": 118,
+      "sha256": "cc90393353c098da1f9ae45599c115d9d7422d8d60cd57aefce39a99c5b81665"
+    },
+    "artifacts/meta/9c00acf830ea692ba8e2319efce05ed40457171e3436f8827c097e57bb77d984.json": {
+      "bytes": 111,
+      "sha256": "aebd0acaf14e16fe44efb9b16736da3ff1d51696895a419ca756cf4aadc44e41"
+    },
+    "artifacts/meta/b8dd8c0a933ba0f14456b4f12ecddbc5e0b7d8da3fed2c0e928cc4ea7c4caa15.json": {
+      "bytes": 118,
+      "sha256": "cc90393353c098da1f9ae45599c115d9d7422d8d60cd57aefce39a99c5b81665"
+    },
+    "artifacts/meta/c48e62845ad4884936e1ecc4056bebcb0e01c029ab2a1c3cec132addfa98eeb4.json": {
+      "bytes": 116,
+      "sha256": "b19ffa26657cc69cf684a91ee1871ede6353c0a2e74c62432b8561a468e8c7d9"
+    },
+    "artifacts/meta/c8b12e5e130a1aa3a47450b387392af88c50e78eff9894266b70a9154182de6f.json": {
+      "bytes": 116,
+      "sha256": "b19ffa26657cc69cf684a91ee1871ede6353c0a2e74c62432b8561a468e8c7d9"
+    },
+    "artifacts/meta/d6086a70fa3da01e9f1e1c89b878b272ef73388714553219a47bbd3edfa8b737.json": {
+      "bytes": 118,
+      "sha256": "cc90393353c098da1f9ae45599c115d9d7422d8d60cd57aefce39a99c5b81665"
+    },
+    "artifacts/meta/dfede60436802dccc5ce92be092760827d3939d8231ba111b5673a4b4252b954.json": {
+      "bytes": 124,
+      "sha256": "b5ae47611c1c5d827f289d6da99dcbfaca19e267f12519358be03a8afcf0ab64"
+    },
+    "artifacts/meta/e9f19f00b50cfd06bed750a62e03d72a068b6dfbbd4523f85f70135448c7d2b6.json": {
+      "bytes": 118,
+      "sha256": "cc90393353c098da1f9ae45599c115d9d7422d8d60cd57aefce39a99c5b81665"
+    },
+    "artifacts/objects/1f/1f0c5d818f4826964444bba184d6e910827a993be79c8c51d1dae36f273d32d6": {
+      "bytes": 296,
+      "sha256": "1f0c5d818f4826964444bba184d6e910827a993be79c8c51d1dae36f273d32d6"
+    },
+    "artifacts/objects/31/31a5a4c2cb837bcdf2f172966ff225294793763ad5558c37d11f977396e82633": {
+      "bytes": 340,
+      "sha256": "31a5a4c2cb837bcdf2f172966ff225294793763ad5558c37d11f977396e82633"
+    },
+    "artifacts/objects/37/37b51c002ac450aeb9a1e8d919e20ee3d6e897ebc597c062e63ab973ce094972": {
+      "bytes": 340,
+      "sha256": "37b51c002ac450aeb9a1e8d919e20ee3d6e897ebc597c062e63ab973ce094972"
+    },
+    "artifacts/objects/3f/3f15fda753523f7f788dbd52f86152c74b69662200a7f3b21ea889f82546ff76": {
+      "bytes": 340,
+      "sha256": "3f15fda753523f7f788dbd52f86152c74b69662200a7f3b21ea889f82546ff76"
+    },
+    "artifacts/objects/5c/5c935b3a654c743cc923262c997bae490be3c2c1c9e88a277360a5e5f421f9d7": {
+      "bytes": 247,
+      "sha256": "5c935b3a654c743cc923262c997bae490be3c2c1c9e88a277360a5e5f421f9d7"
+    },
+    "artifacts/objects/65/65df8371a70f76923ee73b2a8637997a3106943606fd23ec77b0c305ffae2fe7": {
+      "bytes": 247,
+      "sha256": "65df8371a70f76923ee73b2a8637997a3106943606fd23ec77b0c305ffae2fe7"
+    },
+    "artifacts/objects/8c/8c48d28e75ebc624421c66357c680406a1e1d1483494296ef906dce0d59bf3aa": {
+      "bytes": 340,
+      "sha256": "8c48d28e75ebc624421c66357c680406a1e1d1483494296ef906dce0d59bf3aa"
+    },
+    "artifacts/objects/94/9499a60dcd7b6621242e5972ba6116e94a2c59263b9a1ea440f0a6fa329ee99e": {
+      "bytes": 340,
+      "sha256": "9499a60dcd7b6621242e5972ba6116e94a2c59263b9a1ea440f0a6fa329ee99e"
+    },
+    "artifacts/objects/9c/9c00acf830ea692ba8e2319efce05ed40457171e3436f8827c097e57bb77d984": {
+      "bytes": 296,
+      "sha256": "9c00acf830ea692ba8e2319efce05ed40457171e3436f8827c097e57bb77d984"
+    },
+    "artifacts/objects/b8/b8dd8c0a933ba0f14456b4f12ecddbc5e0b7d8da3fed2c0e928cc4ea7c4caa15": {
+      "bytes": 340,
+      "sha256": "b8dd8c0a933ba0f14456b4f12ecddbc5e0b7d8da3fed2c0e928cc4ea7c4caa15"
+    },
+    "artifacts/objects/c4/c48e62845ad4884936e1ecc4056bebcb0e01c029ab2a1c3cec132addfa98eeb4": {
+      "bytes": 247,
+      "sha256": "c48e62845ad4884936e1ecc4056bebcb0e01c029ab2a1c3cec132addfa98eeb4"
+    },
+    "artifacts/objects/c8/c8b12e5e130a1aa3a47450b387392af88c50e78eff9894266b70a9154182de6f": {
+      "bytes": 247,
+      "sha256": "c8b12e5e130a1aa3a47450b387392af88c50e78eff9894266b70a9154182de6f"
+    },
+    "artifacts/objects/d6/d6086a70fa3da01e9f1e1c89b878b272ef73388714553219a47bbd3edfa8b737": {
+      "bytes": 340,
+      "sha256": "d6086a70fa3da01e9f1e1c89b878b272ef73388714553219a47bbd3edfa8b737"
+    },
+    "artifacts/objects/df/dfede60436802dccc5ce92be092760827d3939d8231ba111b5673a4b4252b954": {
+      "bytes": 186,
+      "sha256": "dfede60436802dccc5ce92be092760827d3939d8231ba111b5673a4b4252b954"
+    },
+    "artifacts/objects/e9/e9f19f00b50cfd06bed750a62e03d72a068b6dfbbd4523f85f70135448c7d2b6": {
+      "bytes": 340,
+      "sha256": "e9f19f00b50cfd06bed750a62e03d72a068b6dfbbd4523f85f70135448c7d2b6"
+    },
+    "examples/screening.json": {
+      "bytes": 19686,
+      "sha256": "c315b42a5dca99cd0e1964bd60b270c76a4daa7e15ff7dc223a56e20930e6975"
+    }
+  },
+  "vendor": {
+    "bytes": 69422947,
+    "sha256": "2a1310e3ed192cc4c521e1d22dcc176f57bec61160c878dc4348f21d6672294d"
+  },
+  "vendor_path": ".backend/vendor/v2606/OpenFOAM-v2606.tgz"
+}

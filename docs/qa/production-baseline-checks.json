@@ -1,0 +1,119 @@
+{
+  "api_check": {
+    "checked_on": "2026-10-03",
+    "evidence": "unverified",
+    "export_bytes": 2579327,
+    "export_sha256": "c3fe646f64e44a80d2ecb176aef374fcf475e08ff7b7fda31f8043ed193bf6c7",
+    "historical_revision_refused": true,
+    "machine_review": "pending",
+    "manifest_members_verified": 33,
+    "missing_case_no_headline": true,
+    "retained_result_status": "numerical_checks_passed",
+    "schema_version": "baseline_api_receipt_v1",
+    "scope": "API and retained-byte checks only; no new CFD campaign, browser rehearsal or aircraft validation.",
+    "synthetic_payload_kg": 52.232730994123955,
+    "tampered_copy_refused": true,
+    "unauthenticated_status": 401
+  },
+  "checked_on": "2026-10-03",
+  "inventory_sha256": "a7f96c610b80e7f37db027b2fee9a511e974e48ecf8da4f03ebbc22910f291be",
+  "launcher_check": {
+    "checked_on": "2026-10-03",
+    "frozen_backend_selected": true,
+    "inherited_wrong_root_ignored": true,
+    "loopback_http_startup": true,
+    "schema_version": "baseline_launcher_receipt_v1",
+    "scope": "HTTP smoke check only; not a pointer/keyboard browser rehearsal.",
+    "selected_reviewed_package": true,
+    "web_route_http_status": 200
+  },
+  "not_performed": [
+    "New three-mesh CFD campaign at this code revision",
+    "Full narrated presentation rehearsals",
+    "Backup recording and playback",
+    "Real-aircraft validation",
+    "Human product/release approval"
+  ],
+  "retained_verification": {
+    "aircraft_validation": "not_established",
+    "backup_recording": "pending",
+    "claude_verdict": "pass_bounded_mvp",
+    "evidence": "unverified",
+    "human_release_approval": "pending",
+    "machine_review": "pending",
+    "native_checked": true,
+    "native_outputs_checked": 105,
+    "package_files_checked": 33,
+    "package_id": "acd1b8716144aeaa",
+    "package_manifest_sha256": "e5c2a75cca8b009aa69fce0205fced8e74442bab12aa26f0a42a5a335348cbc9",
+    "presentation_rehearsals": "pending",
+    "schema_version": "baseline_verification_v1",
+    "source_commit": "d17f97a6d37d4458e08f005a20ecf5db870b3235",
+    "source_files_checked": 130,
+    "supporting_files_checked": 31,
+    "vendor_checked": true
+  },
+  "schema_version": "production_baseline_checks_v1",
+  "source_baseline_commit": "d17f97a6d37d4458e08f005a20ecf5db870b3235",
+  "test_runs": [
+    {
+      "command": ".venv/bin/python -m pytest -q -m 'not backend'",
+      "duration_s": 7.355,
+      "errors": 0,
+      "failures": 0,
+      "passed": 315,
+      "receipt_fingerprint": {
+        "bytes": 38817,
+        "sha256": "c24ae45bc6a79b46a818f95de9e5968b88dea61cb6275a16456d2f72a2a2ac27"
+      },
+      "retained_local_receipt": ".backend/p00-unit.xml",
+      "skipped": 0,
+      "suite": "unit",
+      "tests": 315
+    },
+    {
+      "command": "reference_impl: ../.venv/bin/python -m pytest -q",
+      "duration_s": 0.67,
+      "errors": 0,
+      "failures": 0,
+      "passed": 118,
+      "receipt_fingerprint": {
+        "bytes": 13901,
+        "sha256": "36720bb895140b40312576ee636c65b5db721dcc4957c51eca630d52773f65b3"
+      },
+      "retained_local_receipt": ".backend/p00-reference.xml",
+      "skipped": 0,
+      "suite": "reference",
+      "tests": 118
+    },
+    {
+      "command": "PHYSIMESH_OPENFOAM_TUTORIALS=<verified tutorials> .venv/bin/python -m pytest -q -m backend",
+      "duration_s": 13.158,
+      "errors": 0,
+      "failures": 0,
+      "passed": 3,
+      "receipt_fingerprint": {
+        "bytes": 610,
+        "sha256": "a280ce7f330af5cd43feef95f7291d0ea717c8d076fc48eb2eaf3736e361d415"
+      },
+      "retained_local_receipt": ".backend/p00-backend.xml",
+      "skipped": 0,
+      "suite": "pinned_backend",
+      "tests": 3
+    }
+  ],
+  "tool_files": {
+    "scripts/verify_baseline.py": {
+      "bytes": 3382,
+      "sha256": "352d45a78647b6c277d9c9e2a9875fb418f7481a9987956a0341b46d8340503a"
+    },
+    "src/physimesh/postpro/baseline.py": {
+      "bytes": 10486,
+      "sha256": "4bde9a37d5e95a751825331d325ba792e615405df9aa2a785da836c242839310"
+    },
+    "tests/postpro/test_baseline.py": {
+      "bytes": 10426,
+      "sha256": "3b254cac041a6fd48f5aa70ba9ed4350124e10c21aa67e902244ba8159309a06"
+    }
+  }
+}

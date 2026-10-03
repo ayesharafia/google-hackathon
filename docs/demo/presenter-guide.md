@@ -20,13 +20,24 @@ tabs, the desktop, notifications and other applications. Use no microphone
 unless the presenter intends to narrate. Keep the evidence ZIP alongside the
 recording so reviewers can inspect the numbers without a running server.
 
-For the reviewed retained demonstration on this machine, use data root
-`.backend/demo-reviewed`; its current local server is on port 8766. Historical
-packages under `demo-final` share the run-group ID but predate the corrections.
-Identify this revision by its data root and exported ZIP SHA-256
+For the frozen reviewed demonstration, run
+`.venv/bin/python scripts/verify_baseline.py demo --check-only`, then
+`.venv/bin/python scripts/verify_baseline.py demo`. The launcher checks the
+inventory-bound preset before starting on localhost, default port 8766; use
+`--port` for an available alternative. It selects `.backend/demo-reviewed`
+regardless of an inherited data-root/image/bind-host setting. Historical
+packages under `demo-final` share the run-group ID but predate the corrections
+and are refused by this preset. The verified manifest SHA-256 is
+`e5c2a75cca8b009aa69fce0205fced8e74442bab12aa26f0a42a5a335348cbc9`.
+Identify the exported revision by ZIP SHA-256
 `c3fe646f64e44a80d2ecb176aef374fcf475e08ff7b7fda31f8043ed193bf6c7`.
 Fresh README commands rebuild with the corrected code; use a fresh publishing
 root rather than an existing historical immutable package.
+
+The frozen inventory and [production baseline record](../qa/production-baseline.md)
+distinguish original solver, review and source revisions. These checks preserve
+the old evidence; they do not attest to a future changed calculation, perform a
+presentation rehearsal, or upgrade the envelope's pending review field.
 
 Claude's independent code review passes the bounded MVP at f19cbeb (see §6 of
 `docs/qa/independent_physics_review.md`). The retained envelope's review-pending

@@ -35,6 +35,39 @@ starting at P00.1. Historical equation IDs and old plan section/task references
 resolve to the archived master plan. The separate 2D PhysiMesh product remains
 untouched; integration is through a versioned export contract.
 
+## Verify the frozen production baseline
+
+[P00.1 evidence and release status](docs/qa/production-baseline.md) and the
+[machine-readable inventory](docs/qa/production-baseline.json) bind the original
+source snapshot, reviewed package, native files and exact vendor archive.
+After setup, verify the retained baseline on the machine that holds it:
+
+```sh
+.venv/bin/python scripts/verify_baseline.py verify --native --vendor
+.venv/bin/python scripts/verify_baseline.py demo --check-only
+```
+
+Start the explicitly selected reviewed demo on localhost:
+
+```sh
+.venv/bin/python scripts/verify_baseline.py demo
+```
+
+The launcher requests a session token privately, or uses `PHYSIMESH_API_TOKEN`
+if already set. It selects `.backend/demo-reviewed`, the frozen image and
+`127.0.0.1`, and verifies every selected package/example/source byte before
+starting. Its preset binds the inventory hash. It refuses the superseded
+`demo-final` report even though that report shares the same short study ID.
+Use `--port` to select a free local port. This is a local demonstration, not
+the planned hosted production application.
+
+Retained `.backend` files are not included in GitHub. A fresh clone can reproduce
+a new study with the commands below; it cannot claim the original frozen package
+identity. An exact copy of the frozen published package, examples and source
+objects can be selected with `--data-root /path/to/copied-demo-reviewed` for
+verification/presentation. The optional native/vendor checks additionally need
+the inventory's repository-relative files. Published bytes remain immutable.
+
 ## Run the labelled MVP demo
 
 The retained sphere is a software verification case. The drone panel uses
