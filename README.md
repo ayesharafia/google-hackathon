@@ -1,8 +1,12 @@
 # PhysiCore Drone
 
-Greenfield implementation of the drone module specified in [plan.md](plan.md)
-and the retained manifest. Python 3.11; FastAPI orchestration; OpenFOAM solves
-flow equations. Payload lift capacity is calculated from the entered design and operating case; no aircraft capacity is assumed.
+Drone engineering module with a verified MVP foundation and a
+[production development plan](plan.md) for a private hosted web app. The
+[original master plan](docs/plans/2026-10-02-master-plan.md) and manifest are
+retained as historical references. Python 3.11; FastAPI orchestration;
+OpenFOAM solves flow equations. The current labelled example calculates a
+supplied-point payload ceiling; the production plan adds trim, rotor-performance
+search and mission constraints. No aircraft capacity is assumed.
 [M§0, M§4]
 
 ## Setup
@@ -26,9 +30,10 @@ Backend tests need Docker and a confirmed, immutable OpenFOAM image pin.
 No CFD capability or aircraft feasibility is established by unit tests. Missing
 design inputs remain unknown and block dependent work. [M§2, M§26, M§27]
 
-Work follows plan §10 in order, on a branch per work package. The separate 2D
-PhysiMesh product remains untouched; integration is through the planned export
-contract. [plan §2.5, §9.4]
+Continue with the task dependencies and release gates in [plan.md](plan.md),
+starting at P00.1. Historical equation IDs and old plan section/task references
+resolve to the archived master plan. The separate 2D PhysiMesh product remains
+untouched; integration is through a versioned export contract.
 
 ## Run the labelled MVP demo
 
@@ -80,7 +85,10 @@ The approved design and mission snapshots use `si_numeric_snapshot_v1`: numeric
 file SHA-256 hashes retain their exact byte semantics.
 
 [QA and remaining release gates](docs/qa/results_page_checklist.md) distinguish
-implemented behavior from pending independent physics review and release approval.
+implemented behavior from outstanding presentation and release work. The
+[Claude physics review](docs/qa/independent_physics_review.md) passed for the
+bounded MVP scope; real-aircraft validation and human engineering acceptance
+remain separate requirements.
 
 [Presenter guide and rehearsal log](docs/demo/presenter-guide.md) give the actual
 demo steps, claim limits and outstanding presentation checks.
