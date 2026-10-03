@@ -74,3 +74,17 @@ def test_velocity_reversal_cannot_hide_behind_identical_speed():
     assert report['compared_quantity'] == 'world_velocity_vector'
     assert all(item['external_coverage'] == 1 for item in report['sensitivity'])
     assert all(item['normalized_peak_change'] > .05 for item in report['sensitivity'])
+
+
+def test_extreme_finite_velocity_refuses_overflow_without_nonfinite_report():
+    import json
+
+    on_plane = np.array([[-1.5, 0, -1.5], [4, 0, -1.5], [-1.5, 0, 1.5], [4, 0, 1.5]])
+    off_plane = on_plane.copy()
+    off_plane[:, 1] = 8e-6
+    velocities = np.c_[np.where(on_plane[:, 0] < 0, -1e154, 1e154), np.zeros((4, 2))]
+    grid, report = evaluate_slice(np.concatenate([off_plane, on_plane]),
+                                  np.concatenate([velocities, -velocities]), diameter_m=1)
+    assert grid is None and report['status'] == 'refused'
+    assert report['reasons'] == ['nonfinite sensitivity normalization']
+    json.dumps(report, allow_nan=False)

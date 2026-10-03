@@ -74,8 +74,12 @@ def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float
     # comparison could approve a complete reversal for vector/streamline views.
     vector = 'vector_world' in baseline
     field = baseline['vector_world'][finite] if vector else baseline['values'][finite]
-    span = float(np.linalg.norm(np.ptp(field, axis=0))) if vector else float(np.ptp(field))
-    magnitude = float(np.max(np.linalg.norm(field, axis=-1))) if vector else float(np.max(np.abs(field)))
+    with np.errstate(over='ignore', invalid='ignore'):
+        span = float(np.linalg.norm(np.ptp(field, axis=0))) if vector else float(np.ptp(field))
+        magnitude = float(np.max(np.linalg.norm(field, axis=-1))) if vector else float(np.max(np.abs(field)))
+    if not np.isfinite([span, magnitude]).all():
+        report['reasons'].append('nonfinite sensitivity normalization')
+        return None, report
     scale = span if span > 64*np.finfo(float).eps*magnitude else max(magnitude, np.finfo(float).tiny)
     report['normalization_scale'] = scale
     report['compared_quantity'] = 'world_velocity_vector' if vector else 'scalar_field'
@@ -90,10 +94,13 @@ def evaluate_slice(samples: np.ndarray, values: np.ndarray, *, diameter_m: float
             subset_coverage = float((external & np.isfinite(subset['values'])).sum()/external.sum())
             if not overlap.any():
                 raise ValueError('no supported common external grid nodes')
-            difference = (np.linalg.norm(subset['vector_world'][overlap]-baseline['vector_world'][overlap], axis=-1)
-                          if vector else subset['values'][overlap]-baseline['values'][overlap])
-            rms = float(np.sqrt(np.mean(difference**2))/scale)
-            peak = float(np.max(np.abs(difference))/scale)
+            with np.errstate(over='ignore', invalid='ignore', divide='ignore'):
+                difference = (np.linalg.norm(subset['vector_world'][overlap]-baseline['vector_world'][overlap], axis=-1)
+                              if vector else subset['values'][overlap]-baseline['values'][overlap])
+                rms = float(np.sqrt(np.mean(difference**2))/scale)
+                peak = float(np.max(np.abs(difference))/scale)
+            if not np.isfinite(difference).all() or not np.isfinite([rms, peak]).all():
+                raise ValueError('nonfinite sensitivity change')
             item.update(external_coverage=subset_coverage, normalized_rms_change=rms, normalized_peak_change=peak)
             failures = []
             if subset_coverage < policy['minimum_external_coverage']:
