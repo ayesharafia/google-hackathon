@@ -6,3 +6,5 @@
 #layout-view{height:310px;background:#d9e4d9;display:grid;place-items:center;overflow:hidden;margin:14px 0}#layout-view canvas{width:100%;height:100%;display:block}#layout-note{font-size:13px;color:var(--muted)}.table-scroll{overflow:auto;margin:20px 0}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:10px 14px;vertical-align:top}thead{background:var(--paper)}tbody tr:nth-child(even){background:#e0e9df}.payload-value{font:400 48px/1.2 var(--display);margin:18px 0 10px}.study-binding{font-weight:600}#study-report{overflow-wrap:anywhere}#calculate,#export-study{margin:16px 0}#studies:empty::after{content:'No retained studies yet.';font-size:14px}#study-report:empty::after{content:'No study loaded for this draft.';font-size:14px}
 
 aside{align-self:start;position:sticky;top:24px}@media(max-width:800px){aside{position:static}}
+
+#input-editors p{overflow-wrap:anywhere}

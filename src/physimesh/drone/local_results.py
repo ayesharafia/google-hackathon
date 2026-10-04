@@ -40,6 +40,17 @@ class ResidualPolicy(Record):
     qualification: str
 
 
+class BoundOrigin(Record):
+    lower: Literal['physical', 'coverage', 'analyst_domain', 'fixed_candidate']
+    upper: Literal['physical', 'coverage', 'analyst_domain', 'fixed_candidate']
+
+
+class BoundDependency(Record):
+    variable_index: int = Field(ge=0)
+    side: Literal['lower', 'upper']
+    origin: Literal['coverage', 'analyst_domain']
+
+
 class Certificate(Record):
     kind: Literal['bounded_nonnegative_linear_combination']
     gap: float = Field(gt=0)
@@ -48,6 +59,9 @@ class Certificate(Record):
     row_scaling: tuple[float, ...]
     minimum_over_variable_bounds: float
     combined_upper_bound: float
+    bound_origins: tuple[BoundOrigin, ...] = ()
+    nonphysical_bound_dependencies: tuple[BoundDependency, ...] = ()
+    qualification: str | None = None
 
 
 class CaseEvidence(Record):
@@ -73,6 +87,8 @@ class CaseEvidence(Record):
                 raise ValueError('moment residual exceeds policy')
         if self.outcome == 'infeasible' and self.certificate is None:
             raise ValueError('infeasible local case requires certificate')
+        if self.outcome == 'infeasible' and self.certificate.nonphysical_bound_dependencies:
+            raise ValueError('coverage/domain certificate cannot claim physical infeasibility')
         return self
 
 
@@ -120,6 +136,7 @@ class LocalCapacityV2(Record):
     aggregate_limit: Literal['sequence_energy'] | None = None
     cases: tuple[CaseEvidence, ...] = Field(min_length=1, max_length=8)
     headline_candidate_checks: tuple[CaseEvidence, ...] = ()
+    participating_case_bounds: tuple[CaseEvidence, ...] = ()
     engineering_approval: Literal['pending']
     data_scope: Literal['analytic_fixture', 'client_unvalidated'] | None
     map_source_kinds: tuple[Literal['analytic_fixture', 'measured'], ...]
@@ -144,6 +161,10 @@ class LocalCapacityV2(Record):
         if self.outcome != 'feasible':
             if self.payload_lower_bound_kg is not None:
                 raise ValueError('failed study cannot publish a payload headline')
+            if self.outcome == 'infeasible' and not (
+                    any(case.required and case.outcome == 'infeasible' for case in self.cases)
+                    or self.certificate and not self.certificate.nonphysical_bound_dependencies):
+                raise ValueError('infeasible aggregate requires a supported certificate')
             return self
         if self.payload_lower_bound_kg is None or not self.headline_candidate_checks:
             raise ValueError('headline needs independently checked common candidate')
@@ -151,6 +172,10 @@ class LocalCapacityV2(Record):
         if len(checks) != len(self.headline_candidate_checks):
             raise ValueError('duplicate common candidate checks')
         required = {case.case_id for case in self.cases if case.required}
+        for case in self.cases:
+            if case.required and (case.outcome != 'feasible'
+                                  or self.payload_lower_bound_kg > case.candidate.payload_kg+1e-7):
+                raise ValueError('headline exceeds a required feasible case bound')
         if not required <= checks.keys():
             raise ValueError('required candidate check missing')
         for case in checks.values():
@@ -164,8 +189,19 @@ class LocalCapacityV2(Record):
                     raise ValueError('sequence segment candidate check missing')
                 if abs(segment.electrical_power_w-checks[segment.case_id].candidate.electrical_power_w) > 1e-7:
                     raise ValueError('sequence power differs from recomputed candidate')
-        if self.aggregate_limit is None and self.limiting_case_id not in required:
-            raise ValueError('alternative headline requires a required limiting case')
+        participating = required | ({s.case_id for s in self.sequence_evidence.segments}
+                                    if self.sequence_evidence else set())
+        if self.aggregate_limit is None and self.limiting_case_id not in participating:
+            raise ValueError('headline requires a participating limiting case')
         if self.aggregate_limit is not None and self.sequence_evidence is None:
             raise ValueError('aggregate limit needs sequence evidence')
+        if self.aggregate_limit is not None and (self.limiting_case_id is not None
+                or abs(self.sequence_evidence.remaining_usable_energy_j) > self.sequence_evidence.energy_tolerance_j):
+            raise ValueError('aggregate energy limit must bind without an invented limiting case')
+        if self.aggregate_limit is None:
+            bounds = self.participating_case_bounds if self.sequence_evidence else self.cases
+            attaining = next((case for case in bounds if case.case_id == self.limiting_case_id), None)
+            if attaining is None or attaining.outcome != 'feasible' or abs(
+                    attaining.candidate.payload_kg-self.payload_lower_bound_kg) > 1e-7:
+                raise ValueError('limiting case must attain the common headline bound')
         return self

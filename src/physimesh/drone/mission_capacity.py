@@ -9,7 +9,36 @@ import math
 import numpy as np
 from scipy.optimize import linprog
 
-from .trim import constraints, infeasibility_certificate, number, solve_hover
+from .trim import (
+    bound_origins,
+    classify_certificate,
+    constraints,
+    infeasibility_certificate,
+    number,
+    prepare_hover,
+    solve_hover,
+)
+
+
+def sequence_case_inputs(snapshot: dict, maps: dict, inputs: dict) -> dict:
+    """Required standalone duty and optional segment duty have distinct durations."""
+    declared = snapshot['mission']['cases']; segments = snapshot['mission'].get('sequence')
+    if not isinstance(segments, list) or any(not isinstance(s, dict) for s in segments):
+        raise ValueError('sequence must be an ordered list of segment mappings')
+    selected = {}
+    for case in declared:
+        name = case['name']; durations = [number(s.get('duration_s'), 'segment duration', positive=True)
+                                         for s in segments if s.get('case_id') == name]
+        if case.get('required', True):
+            if name not in inputs:
+                raise ValueError('required sequence case is not eligible: '+name)
+            selected[name] = inputs[name]
+        elif durations:
+            original = number(case.get('duration_s'), 'case duration', positive=True)
+            if max(durations) > original:
+                raise ValueError('segment duration exceeds its declared case duration')
+            selected[name] = prepare_hover(snapshot, {**case, 'duration_s': max(durations)}, maps)
+    return selected
 
 
 def prepare_sequence(snapshot: dict, inputs: dict) -> list[dict]:
@@ -29,7 +58,8 @@ def prepare_sequence(snapshot: dict, inputs: dict) -> list[dict]:
         case = inputs.get(segment.get('case_id'))
         if case is None:
             raise ValueError('sequence requires an eligible case: ' + str(segment.get('case_id')))
-        if segment.get('power_profile') != 'constant' or not segment.get('source_note'):
+        if (segment.get('power_profile') != 'constant' or not isinstance(segment.get('source_note'), str)
+                or not segment['source_note'].strip()):
             raise ValueError('sequence needs explicitly sourced constant-condition segments')
         duration = number(segment.get('duration_s'), 'sequence duration', positive=True)
         if duration > case.duration_s:
@@ -81,7 +111,12 @@ def solve_sequence(inputs: dict, sequence: list[dict]) -> dict:
         return {'outcome': 'unresolved', 'reason': 'joint numerical allocation failed: ' + str(exc)}
     if not solved.success or solved.x is None:
         certificate = infeasibility_certificate(eq, rhs, a, b, bounds) if solved.status == 2 else None
-        return {'outcome': 'infeasible' if certificate else 'unresolved', 'reason': solved.message,
+        origins = [o for case in inputs.values() for o in bound_origins(case)[:-1]]
+        origins.append({'lower': 'physical' if bounds[-1][0] == 0 else 'analyst_domain', 'upper': 'analyst_domain'})
+        outcome = classify_certificate(certificate, eq, a, bounds, origins) if certificate else 'unresolved'
+        return {'outcome': outcome,
+                'reason': ('Coverage or analyst-domain bounds prevent this sequence; physical infeasibility is not established.'
+                           if outcome == 'unsupported' else solved.message),
                 'certificate': certificate}
     if not np.isfinite(solved.x).all() or any(v < lo or v > hi for v, (lo, hi)
                                                            in zip(solved.x, bounds, strict=True)):

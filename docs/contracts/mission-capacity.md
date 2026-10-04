@@ -10,6 +10,10 @@ For a chronological mission, the typed successor supports a lower aggregate boun
 
 `feasible` identifies a numerically checked point inside the declared restricted model. `infeasible` needs a checked bounded linear-combination certificate. Solver failure, time limit or a failed recomputation is `unresolved`. Missing or uncovered physics/data is `unsupported`. None establishes installed-aircraft validation or an operational payload allowance. All local records have `engineering_approval=pending`.
 
+Certificate bound provenance distinguishes declared physical limits, map coverage, analyst payload domains and fixed candidate queries. A certificate relying on coverage/domain endpoints is retained as `unsupported`, not physical infeasibility. A failed certificate calculation remains `unresolved`. Sequence-only optional cases use their explicit segment duration for energy/duty, while required standalone cases retain their declared duration. Participating-case bounds establish an attaining case when aggregate energy does not bind.
+
+Local records are immutable observations, including unresolved outcomes. Wall-clock limits can make a fresh execution differ under machine load; the first accepted association wins for repeated submission. This is not a deterministic execution guarantee or a recoverable-attempt protocol. IP15 will provide explicit attempts/retry semantics. Saving/freezing a new draft version currently creates another revision association.
+
 Retained local V1 bytes remain readable and are never migrated in place. V2 adds chronological energy. An older model fingerprint remains associated with the old study; rerunning changed code creates another specification hash. The fingerprint is a local source/library identity, not an immutable deployment attestation.
 
 The initial profile excludes variable-power trajectories, nonzero inflow, maneuvers, thermal/sag state and battery resizing. Constant-power integration is exact (`P*duration`); it needs no numerical quadrature. Variable-power quadrature and independently reviewed uncertainty scenarios remain separate IP11/IP12 extensions.

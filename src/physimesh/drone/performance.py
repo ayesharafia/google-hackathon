@@ -58,6 +58,8 @@ class RotorMapV1(Record):
         for low, high in self.covered_intervals_rpm:
             if not rpms[0] <= low < high <= rpms[-1]:
                 raise ValueError('covered intervals must be inside the retained RPM range')
+            if low not in rpms or high not in rpms:
+                raise ValueError('each covered interval boundary must be a retained sample; interpolation cannot bridge holes')
         ordered = sorted(self.covered_intervals_rpm)
         if any(b[0] < a[1] for a, b in pairwise(ordered)):
             raise ValueError('covered intervals overlap')

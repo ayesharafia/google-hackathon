@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import re
 
-from .mission_capacity import prepare_sequence, solve_sequence
+from .mission_capacity import prepare_sequence, sequence_case_inputs, solve_sequence
 from .trim import MODEL_VERSION, prepare_hover, solve_hover
 
 
@@ -23,12 +23,12 @@ def hover_readiness(snapshot: dict, maps: dict, source_errors=()) -> dict:
         blocking.append('mission.cases.required: explicit boolean required')
     if not any(isinstance(c, dict) and c.get('required', True) is True for c in cases):
         blocking.append('mission.cases: at least one required case')
-    records = []
+    records, prepared = [], {}
     for case in cases:
         try:
             if not isinstance(case, dict):
                 raise TypeError('case must be a mapping')
-            prepare_hover(snapshot, case, maps)
+            prepared[case['name']] = prepare_hover(snapshot, case, maps)
             records.append({'case_id': case.get('name'), 'eligible': True, 'blocking': []})
         except (ValueError, TypeError, KeyError, OverflowError) as exc:
             reason = str(exc)
@@ -39,8 +39,7 @@ def hover_readiness(snapshot: dict, maps: dict, source_errors=()) -> dict:
                 blocking.append(reason)
     if snapshot['mission'].get('sequence'):
         try:
-            prepared = {c['name']: prepare_hover(snapshot, c, maps) for c in cases}
-            prepare_sequence(snapshot, prepared)
+            prepare_sequence(snapshot, sequence_case_inputs(snapshot, maps, prepared))
         except (ValueError, TypeError, KeyError, OverflowError) as exc:
             blocking.append(str(exc))
     return {'method': MODEL_VERSION, 'eligible': not blocking, 'blocking': blocking,
@@ -86,7 +85,8 @@ def capacity_from_snapshot(snapshot: dict, maps: dict) -> dict:
     sequence = None
     if snapshot['mission'].get('sequence'):
         try:
-            sequence = prepare_sequence(snapshot, inputs)
+            selected = sequence_case_inputs(snapshot, maps, inputs)
+            sequence = prepare_sequence(snapshot, selected)
         except (ValueError, TypeError, KeyError, OverflowError) as exc:
             return {**report, 'outcome': 'unsupported', 'reasons': [str(exc)]}
     if failures:
@@ -95,8 +95,6 @@ def capacity_from_snapshot(snapshot: dict, maps: dict) -> dict:
         return {**report, 'outcome': outcome, 'reasons': [r.get('reason') for r in failures]}
     if sequence is not None:
         try:
-            selected = {case['name']: inputs[case['name']] for case in declared
-                        if case.get('required', True) or any(s['case_id'] == case['name'] for s in sequence)}
             result = solve_sequence(selected, sequence)
         except (ValueError, TypeError, KeyError, OverflowError) as exc:
             return {**report, 'outcome': 'unsupported', 'reasons': [str(exc)]}
@@ -104,12 +102,17 @@ def capacity_from_snapshot(snapshot: dict, maps: dict) -> dict:
             return {**report, **result, 'reasons': [result['reason']]}
         evidence = result['sequence_evidence']
         aggregate_binds = abs(evidence['remaining_usable_energy_j']) <= evidence['energy_tolerance_j']
-        individual = min(needed, key=lambda record: record['candidate']['payload_kg'])
+        participating = [{'case_id': name, **solve_hover(case)} for name, case in selected.items()]
+        if any(record['outcome'] != 'feasible' for record in participating):
+            return {**report, 'outcome': 'unresolved', 'participating_case_bounds': participating,
+                    'reasons': ['Participating case bounds are not independently established.']}
+        individual = min(participating, key=lambda record: record['candidate']['payload_kg'])
         return {**report, 'outcome': 'feasible', 'mission_semantics': 'required_cases_and_ordered_sequence',
                 'payload_lower_bound_kg': result['payload_kg'],
                 'limiting_case_id': None if aggregate_binds else individual['case_id'],
                 'aggregate_limit': 'sequence_energy' if aggregate_binds else None,
                 'headline_candidate_checks': result['headline_candidate_checks'],
+                'participating_case_bounds': participating,
                 'sequence_evidence': evidence, 'reasons': []}
     limiting = min(needed, key=lambda record: record['candidate']['payload_kg'])
     payload = limiting['candidate']['payload_kg']

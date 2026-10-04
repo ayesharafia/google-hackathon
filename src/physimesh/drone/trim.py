@@ -61,13 +61,23 @@ class HoverInputs:
 
 def prepare_hover(snapshot: dict, case: dict, sources: dict[str, RotorMapV1]) -> HoverInputs:
     frames = snapshot['units_and_frames']
+    if not isinstance(frames, dict) or not isinstance(snapshot['fidelity'], dict):
+        raise TypeError('frames and fidelity must be explicit mappings')
+    allowed_case = {'name', 'kind', 'required', 'duration_s', 'attitude_deg_zyx', 'velocity_world_m_s',
+                    'acceleration_target_m_s2', 'air_relative_velocity_body_m_s', 'angular_velocity_body_rad_s',
+                    'angular_acceleration_body_rad_s2', 'source_note', 'body_force_body_n',
+                    'body_moment_origin_body_nm', 'body_load_source', 'atmosphere', 'ground_clearance_m', 'mass_state'}
+    if set(case)-allowed_case or case.get('ground_clearance_m') is not None or case.get('mass_state') is not None:
+        raise ValueError('case has unsupported physical declarations; initial profile uses explicit static ledger inputs')
     if frames.get('body_frame') != 'x_forward_y_left_z_up' or frames.get('world_frame') != 'ENU_z_up':
         raise ValueError('static profile requires the declared z-up body/world conventions')
     for key in ('attitude_deg_zyx', 'velocity_world_m_s', 'acceleration_target_m_s2',
-                'air_relative_velocity_body_m_s'):
+                'air_relative_velocity_body_m_s', 'angular_velocity_body_rad_s',
+                'angular_acceleration_body_rad_s2'):
         if np.any(vector(case.get(key), key) != 0):
             raise ValueError(key + ': nonzero conditions outside static-hover profile')
-    if case.get('kind') != 'hover' or not case.get('source_note'):
+    if (case.get('kind') != 'hover' or not isinstance(case.get('source_note'), str)
+            or not case['source_note'].strip()):
         raise ValueError('declare a sourced static hover case')
     body_force = vector(case.get('body_force_body_n'), 'body_force_body_n')
     body_moment = vector(case.get('body_moment_origin_body_nm'), 'body_moment_origin_body_nm')
@@ -125,6 +135,8 @@ def prepare_hover(snapshot: dict, case: dict, sources: dict[str, RotorMapV1]) ->
         if duration > model.max_continuous_duration_s:
             raise ValueError('case exceeds map continuous-duration coverage')
         declared = rotor.get('sustained_limits', {})
+        if not isinstance(declared, dict):
+            raise TypeError('sustained_limits must be an explicit mapping')
         maximum_rpm = min(number(declared.get('max_rpm'), 'continuous RPM limit', positive=True),
                           model.points[-1].rpm)
         if maximum_rpm < model.points[0].rpm:
@@ -166,10 +178,42 @@ def constraints(inputs: HoverInputs, *, payload_kg=None):
     upper.extend((inputs.pack_limit_w-inputs.auxiliary_w,
                   inputs.usable_j/inputs.duration_s-inputs.auxiliary_w))
     names.extend(('pack_power_or_current', 'case_energy'))
-    bounds = inputs.thrust_bounds + [(0, min(limit, float(profile['power'][-1])))
-                                    for limit, profile in zip(inputs.rotor_limits_w, inputs.profiles, strict=True)]
+    bounds = inputs.thrust_bounds + [(0, limit) for limit in inputs.rotor_limits_w]
     bounds.append(inputs.payload_bounds if payload_kg is None else (payload_kg, payload_kg))
     return eq, rhs, np.array(inequalities), np.array(upper), bounds, names
+
+
+def bound_origins(inputs: HoverInputs, *, fixed_payload=False):
+    origins = [{'lower': 'physical' if lo == 0 else 'coverage',
+                'upper': ('physical' if rotor['sustained_limits']['max_rpm'] <= model.points[-1].rpm
+                          else 'coverage')}
+               for rotor, model, (lo, _hi) in zip(inputs.rotors, inputs.maps, inputs.thrust_bounds, strict=True)]
+    origins += [{'lower': 'physical', 'upper': 'physical'} for _ in inputs.rotors]
+    origins += [{'lower': ('fixed_candidate' if fixed_payload else 'physical'
+                           if inputs.payload_bounds[0] == 0 else 'analyst_domain'),
+                 'upper': 'fixed_candidate' if fixed_payload else 'analyst_domain'}]
+    return origins
+
+
+def classify_certificate(certificate, eq, inequalities, bounds, origins):
+    """A bounded-model contradiction is not necessarily a physical-limit decision."""
+    size = len(bounds); base = len(inequalities)+2*len(eq)
+    weights = np.array(certificate['multipliers'])/np.array(certificate['row_scaling'])
+    rows = np.vstack((inequalities, eq, -eq, np.eye(size), -np.eye(size)))
+    combined = weights @ rows
+    dependencies = []
+    for i, (origin, (lo, hi)) in enumerate(zip(origins, bounds, strict=True)):
+        for side, row in [('upper', base+i), ('lower', base+size+i)]:
+            if origin[side] in ('coverage', 'analyst_domain') and weights[row] > 0:
+                dependencies.append({'variable_index': i, 'side': side, 'origin': origin[side]})
+        side = 'lower' if combined[i] >= 0 else 'upper'
+        if (origin[side] in ('coverage', 'analyst_domain')
+                and abs(combined[i])*(hi-lo) > certificate['rounding_guard']):
+            dependencies.append({'variable_index': i, 'side': side, 'origin': origin[side]})
+    certificate['bound_origins'] = origins
+    certificate['nonphysical_bound_dependencies'] = dependencies
+    certificate['qualification'] = 'Contradiction within the declared model, with bound provenance retained.'
+    return 'unsupported' if dependencies else 'infeasible'
 
 
 def infeasibility_certificate(eq, rhs, inequalities, upper, bounds):
@@ -179,9 +223,12 @@ def infeasibility_certificate(eq, rhs, inequalities, upper, bounds):
     b = np.concatenate((upper, rhs, -rhs, [hi for lo, hi in bounds], [-lo for lo, hi in bounds]))
     scale = np.maximum(1, np.maximum(np.max(np.abs(a), axis=1), np.abs(b)))
     a = a/scale[:, None]; b = b/scale
-    dual = linprog(np.zeros(len(b)), A_eq=np.vstack((a.T, b)),
-                   b_eq=np.concatenate((np.zeros(size), [-1.])), bounds=(0, None), method='highs',
-                   options={'time_limit': 1., 'maxiter': 10000})
+    try:
+        dual = linprog(np.zeros(len(b)), A_eq=np.vstack((a.T, b)),
+                       b_eq=np.concatenate((np.zeros(size), [-1.])), bounds=(0, None), method='highs',
+                       options={'time_limit': 1., 'maxiter': 10000})
+    except (ValueError, RuntimeError):
+        return None
     if not dual.success or dual.x is None or not np.isfinite(dual.x).all():
         return None
     multipliers = np.maximum(dual.x, 0)
@@ -234,8 +281,13 @@ def solve_hover(inputs: HoverInputs, *, payload_kg=None) -> dict:
         return {'outcome': 'unresolved', 'reason': 'numerical allocation failed: ' + str(exc)}
     if not solved.success or solved.x is None:
         certificate = infeasibility_certificate(eq, rhs, a, b, bounds) if solved.status == 2 else None
-        return {'outcome': 'infeasible' if certificate is not None else 'unresolved',
-                'reason': solved.message, 'certificate': certificate, 'solver_status': int(solved.status)}
+        outcome = (classify_certificate(certificate, eq, a, bounds,
+                                       bound_origins(inputs, fixed_payload=payload_kg is not None))
+                   if certificate else 'unresolved')
+        return {'outcome': outcome,
+                'reason': ('Coverage or analyst-domain bounds prevent this study; physical infeasibility is not established.'
+                           if outcome == 'unsupported' else solved.message),
+                'certificate': certificate, 'solver_status': int(solved.status)}
     if not np.isfinite(solved.x).all():
         return {'outcome': 'unresolved', 'reason': 'solver returned nonfinite commands'}
     # Reject instead of silently clamping an out-of-domain command.

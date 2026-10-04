@@ -25,6 +25,7 @@ def create_hover_example(projects):
     snapshot['mission']['cases'] = [{'name': name, 'kind': 'hover', 'required': True, 'duration_s': seconds,
         'attitude_deg_zyx': [0, 0, 0], 'velocity_world_m_s': [0, 0, 0],
         'acceleration_target_m_s2': [0, 0, 0], 'air_relative_velocity_body_m_s': [0, 0, 0],
+        'angular_velocity_body_rad_s': [0, 0, 0], 'angular_acceleration_body_rad_s2': [0, 0, 0],
         'source_note': 'Synthetic duration case for software verification', 'body_force_body_n': [0, 0, 0],
         'body_moment_origin_body_nm': [0, 0, 0], 'body_load_source': 'Explicit analytic zero-load fixture'}
         for name, seconds in [('hover_short', 60.), ('hover_long', 300.)]]
