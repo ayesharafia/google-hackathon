@@ -86,13 +86,21 @@ def test_sequence_contract_refuses_missing_or_changed_aggregate_evidence(tmp_pat
     assert report['schema_version'] == 'local_mission_capacity_v2'
     assert report['payload_lower_bound_kg'] == pytest.approx(460800/360/10/G0-12)
     LocalCapacityV2.model_validate_json(json.dumps(report))
+    changed = json.loads(json.dumps(report))
+    changed['participating_case_bounds'][0]['candidate']['payload_kg'] = 0.
+    with pytest.raises(ValueError, match='participating feasible case bound'):
+        LocalCapacityV2.model_validate_json(json.dumps(changed))
+    changed = json.loads(json.dumps(report))
+    changed['participating_case_bounds'].append(changed['participating_case_bounds'][0])
+    with pytest.raises(ValueError, match='unique bound'):
+        LocalCapacityV2.model_validate_json(json.dumps(changed))
     for key in ('sequence_evidence', 'headline_candidate_checks'):
         changed = dict(report); changed.pop(key)
         with pytest.raises(ValueError):
             LocalCapacityV2.model_validate_json(json.dumps(changed))
     report['sequence_evidence']['total_energy_j'] += 1.
     with pytest.raises(ValueError, match='aggregate energy'):
-        LocalCapacityV2.model_validate_json(json.dumps(report))
+            LocalCapacityV2.model_validate_json(json.dumps(report))
 
 
 def test_corrupt_retained_result_refuses_export(tmp_path):

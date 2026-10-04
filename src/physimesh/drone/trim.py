@@ -312,7 +312,10 @@ def solve_hover(inputs: HoverInputs, *, payload_kg=None) -> dict:
     # Reject instead of silently clamping an out-of-domain command.
     if any(value < lo or value > hi for value, (lo, hi) in zip(solved.x, bounds, strict=True)):
         return {'outcome': 'unresolved', 'reason': 'solver command outside declared bounds'}
-    report = recompute(inputs, float(solved.x[-1]), solved.x[:n])
+    try:
+        report = recompute(inputs, float(solved.x[-1]), solved.x[:n])
+    except (ValueError, TypeError, KeyError, OverflowError, RuntimeError) as exc:
+        return {'outcome': 'unresolved', 'reason': 'candidate recomputation failed: ' + str(exc)}
     force_scale = max(1., report['total_mass_kg']*G0, float(np.linalg.norm(inputs.body_force)))
     length = max(1., *(float(np.linalg.norm(np.array(r['center_body_m'])-report['cg_body_m']))
                       for r in inputs.rotors))
@@ -326,9 +329,11 @@ def solve_hover(inputs: HoverInputs, *, payload_kg=None) -> dict:
         violations.append('moment residual')
     if power > min(inputs.pack_limit_w, inputs.usable_j/inputs.duration_s) + 1e-7:
         violations.append('pack power/current or case energy')
-    for command, limit in zip(report['commands'], inputs.rotor_limits_w, strict=True):
+    for command, limit, rotor in zip(report['commands'], inputs.rotor_limits_w, inputs.rotors, strict=True):
         if command['electrical_power_w'] > limit+1e-7:
             violations.append('rotor continuous power/current')
+        if command['rpm'] > rotor['sustained_limits']['max_rpm']:
+            violations.append('recomputed rotor RPM exceeds declared maximum')
     if violations:
         return {'outcome': 'unresolved', 'reason': '; '.join(violations), 'candidate': report}
     active = []

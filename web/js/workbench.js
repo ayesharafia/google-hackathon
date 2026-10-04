@@ -1,6 +1,6 @@
 import {mountEditors} from './input-editors.js';
 import {createViewer} from './viewer3d.js';
-import {renderStudy} from './study-view.js';
+import {renderStudy,renderComparison} from './study-view.js';
 const $ = id => document.getElementById(id);
 let token = '', current = null, dirty = false, busy = false, generation = 0, study = null, viewer = null;
 const editControls = ['snapshot', 'save', 'reload', 'freeze', 'export-draft'];
@@ -12,6 +12,8 @@ function controls() {
   $('example').disabled = !token || busy;
   $('calculate').disabled = !current || busy || dirty || !token || !current.revisions.some(r=>r.draft_version===current.draft_version);
   $('export-study').disabled = !study || busy || !token;
+  $('export-pdf').disabled = !study || busy || !token;
+  ['compare-before','compare-after','compare'].forEach(id=>{$(id).disabled=busy||!token||!current?.studies?.length;});
   document.querySelectorAll('#input-editors input,#input-editors select,#input-editors button').forEach(input => { input.disabled = busy || !current || !token; });
   editControls.forEach(id => { $(id).disabled = !current || !token || busy || (id === 'freeze' && dirty); });
   document.querySelectorAll('.revision-button').forEach(button => { button.disabled = busy || !token; });
@@ -63,7 +65,12 @@ function render(project) {
   $('studies').replaceChildren(...(project.studies||[]).map(record=>{
     const li=document.createElement('li'),button=document.createElement('button');button.type='button';button.className='revision-button';button.textContent='Study '+record.study_sha256.slice(0,12);
     button.addEventListener('click',()=>action(async()=>{study=await api(`/projects/${current.project_id}/studies/${record.study_sha256}`);showStudy();}));li.append(button);return li;
-  }));layout();controls();
+  }));
+  ['compare-before','compare-after'].forEach(id=>$(id).replaceChildren(...(project.studies||[]).map(record=>{
+    const option=document.createElement('option');option.value=record.study_sha256;option.textContent=record.created_utc+' · '+record.study_sha256.slice(0,12);return option;
+  })));
+  if(project.studies?.length>1)$('compare-before').selectedIndex=1;
+  $('comparison-report').replaceChildren();layout();controls();
 }
 function currentStudy(){return !dirty&&current?.revisions.some(r=>r.draft_version===current.draft_version&&r.revision_sha256===study?.specification.revision_sha256);}
 function showStudy(){if(study)renderStudy($('study-report'),study,currentStudy());}
@@ -94,6 +101,7 @@ $('connection').addEventListener('submit', event => {
   $('project-record').textContent = 'No project open.'; $('revision-detail').hidden = true;
   $('revisions').replaceChildren();
   $('studies').replaceChildren();study=null;$('study-report').replaceChildren();
+  $('compare-before').replaceChildren();$('compare-after').replaceChildren();$('comparison-report').replaceChildren();
   if(viewer)viewer.showRotorLayout({rotors:[]},null);$('reset-layout').disabled=true;
   action(async () => { try { await inventory(); message('Connected to the local workspace. Select or create a project.'); }
     catch (error) { token = ''; throw error; } });
@@ -125,5 +133,16 @@ $('export-draft').addEventListener('click', () => {
 window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
 $('example').addEventListener('click',()=>{if(!preserveEdits())return;action(async()=>{const project=await api('/projects/examples/hover',payload('POST',{}));++generation;render(project);await inventory(project.project_id);message('Illustrative design created. Save/freeze and evaluate; no real aircraft data is used.');});});
 $('calculate').addEventListener('click',()=>action(async()=>{const revision=current.revisions.find(r=>r.draft_version===current.draft_version);message('Evaluating covered maps, force/moment balance and every required case…');const result=await api(`/projects/${current.project_id}/studies`,payload('POST',{revision_sha256:revision.revision_sha256}));render(await api('/projects/'+current.project_id));study=result;showStudy();layout();message('Local hover study retained. Engineering approval and real-aircraft validation remain pending.');}));
-$('export-study').addEventListener('click',()=>action(async()=>{const response=await fetch(`/api/drone/projects/${current.project_id}/studies/${study.study_sha256}/export`,{headers:{Authorization:'Bearer '+token},signal:AbortSignal.timeout(60000)});if(!response.ok)throw new Error('Study export failed: '+response.status);const url=URL.createObjectURL(await response.blob());const a=document.createElement('a');a.href=url;a.download='hover-study-'+study.study_sha256+'.json';a.click();URL.revokeObjectURL(url);message('Exact retained study bytes exported, including source and revision bindings.');}));
+async function downloadStudy(kind){
+  const response=await fetch(`/api/drone/projects/${current.project_id}/studies/${study.study_sha256}/${kind==='pdf'?'pdf':'export'}`,{headers:{Authorization:'Bearer '+token},signal:AbortSignal.timeout(60000)});
+  if(!response.ok){let detail;try{detail=(await response.json()).detail;}catch{}throw new Error(typeof detail==='string'?detail:'Study export failed: '+response.status);}
+  const url=URL.createObjectURL(await response.blob()),a=document.createElement('a');a.href=url;a.download='hover-study-'+study.study_sha256+'.'+kind;a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);
+  message(kind==='pdf'?'PDF download requested. The report identifies the exact retained JSON and frozen inputs.':'Exact retained JSON download requested, including source and revision bindings.');
+}
+$('export-study').addEventListener('click',()=>action(()=>downloadStudy('json')));
+$('export-pdf').addEventListener('click',()=>action(()=>downloadStudy('pdf')));
+$('compare').addEventListener('click',()=>action(async()=>{
+  const report=await api(`/projects/${current.project_id}/comparisons`,payload('POST',{before:$('compare-before').value,after:$('compare-after').value}));
+  renderComparison($('comparison-report'),report);message('Retained studies compared. Current unsaved inputs do not change either record.');
+}));
 $('reset-layout').addEventListener('click',()=>viewer?.reset());

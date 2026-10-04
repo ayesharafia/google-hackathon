@@ -40,6 +40,12 @@ class RunStudy(BaseModel):
     revision_sha256: str = Field(pattern=r'^[0-9a-f]{64}$')
 
 
+class CompareStudies(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    before: str = Field(pattern=r'^[0-9a-f]{64}$')
+    after: str = Field(pattern=r'^[0-9a-f]{64}$')
+
+
 @router.post('/examples/hover', status_code=201)
 def example(request: Request):
     from physimesh.projects.examples import create_hover_example
@@ -138,3 +144,18 @@ def study(request: Request, project_id: str, study: str):
 def export_study(request: Request, project_id: str, study: str):
     raw = operation(lambda: request.app.state.studies.export(project_id, study))
     return Response(raw, media_type='application/json', headers={'Content-Disposition': 'attachment; filename=study.json'})
+
+
+@router.get('/{project_id}/studies/{study}/pdf')
+def pdf_study(request: Request, project_id: str, study: str):
+    raw, receipt = operation(lambda: request.app.state.studies.pdf(project_id, study))
+    return Response(raw, media_type='application/pdf', headers={
+        'Content-Disposition': 'attachment; filename=physicore-local-study.pdf',
+        'X-Study-JSON-SHA256': receipt['study_json_sha256'], 'X-PDF-SHA256': receipt['pdf_sha256'],
+        'X-Report-Renderer': receipt['renderer_version'],
+        'X-Report-Renderer-SHA256': receipt['renderer_source_sha256']})
+
+
+@router.post('/{project_id}/comparisons')
+def compare_studies(request: Request, project_id: str, body: CompareStudies):
+    return operation(lambda: request.app.state.studies.compare(project_id, body.before, body.after))

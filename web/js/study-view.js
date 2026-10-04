@@ -12,3 +12,15 @@ export function renderStudy(container,report,isCurrent){
   container.append(el('p',report.qualification),el('p','Frozen revision '+report.specification.revision_sha256));
   const detail=el('details');detail.append(el('summary','Exact result, sources and residual evidence'),el('pre',JSON.stringify(report,null,2)));container.append(detail);
 }
+
+export function renderComparison(container, report){
+  container.replaceChildren(el('p',report.qualification));
+  const table=el('table'),head=el('thead'),body=el('tbody'),row=el('tr');
+  ['Recorded quantity','Before','After'].forEach(label=>row.append(el('th',label)));head.append(row);
+  [['Outcome','outcome'],['Payload lower bound, kg','payload_lower_bound_kg'],['Limiting case','limiting_case_id'],['Aggregate limit','aggregate_limit'],['Data scope','data_scope'],['Study SHA-256','study_sha256']].forEach(([label,key])=>{
+    const tr=el('tr');[label,report.before[key]??'Unavailable',report.after[key]??'Unavailable'].forEach(value=>tr.append(el('td',String(value))));body.append(tr);
+  });table.append(head,body);const wrap=el('div');wrap.className='table-scroll';wrap.append(table);container.append(wrap);
+  container.append(el('p',report.comparable_numeric_results?'Recorded payload change: '+report.payload_change_kg+' kg.':'Numeric comparison withheld: result method, scope, semantics or outcome differs.'));
+  if(!report.input_changes.length)container.append(el('p','Frozen inputs are identical.'));
+  report.input_changes.forEach(change=>{const details=el('details');details.append(el('summary',change.path+' ('+change.kind+')'),el('pre',JSON.stringify(change,null,2)));container.append(details);});
+}

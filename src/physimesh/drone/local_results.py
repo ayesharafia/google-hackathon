@@ -199,6 +199,13 @@ class LocalCapacityV2(Record):
                     raise ValueError('sequence power differs from recomputed candidate')
         participating = required | ({s.case_id for s in self.sequence_evidence.segments}
                                     if self.sequence_evidence else set())
+        if self.sequence_evidence:
+            bounds = {case.case_id: case for case in self.participating_case_bounds}
+            if len(bounds) != len(self.participating_case_bounds) or bounds.keys() != participating:
+                raise ValueError('unique bound for every participating case required')
+            if any(case.outcome != 'feasible' or self.payload_lower_bound_kg > case.candidate.payload_kg+1e-7
+                   for case in bounds.values()):
+                raise ValueError('headline exceeds a participating feasible case bound')
         if self.aggregate_limit is None and self.limiting_case_id not in participating:
             raise ValueError('headline requires a participating limiting case')
         if self.aggregate_limit is not None and self.sequence_evidence is None:

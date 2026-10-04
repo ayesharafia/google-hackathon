@@ -1,7 +1,7 @@
 # PhysiCore Drone: implementation work order
 
 **Date:** 4 October 2026. **Starting snapshot:** `b524340048b284e3ce7c1b3447342345e9354a93`, on GitHub `main`.
-**Status:** proposed delivery sequence for the approved production direction. Every task below is pending. This document delivers planning, not new implementation or engineering acceptance.
+**Status:** approved delivery sequence with scoped local implementation underway. The broad slices remain open where acceptance or independent dependencies are outstanding; see section 9 for actual progress.
 **Authority:** [root production plan](../../plan.md), [Pilot-1 acceptance](../pilots/pilot-1.md) and the user's decisions. This document breaks that roadmap into executable slices without replacing its release gates. New paths/API names below are proposals.
 
 ## 1. Recommended development path
@@ -272,4 +272,6 @@ Local repository/API/workbench, fixed-pack mass authoring, retained maps, restri
 3. **IP02/IP03:** mass/placement/fixed-pack editor and independent fixtures, then required cases/readiness.
 4. **IP04-IP09:** maps, electrical constraints, wrench ledger, supported trim, bounded search and complete Pilot-1, in dependency order.
 
-I03 can run at a suitable evidence-tooling boundary. Hosted decisions/adapters can advance once their inputs exist. Creating this plan delivers no application changes.
+**5 October progress:** retained input/method-aware comparison and bound JSON/PDF export are implemented as a local IP16 subset. See [report checks](../qa/local-reports.md). Claude accepted the corrected static-hover candidate `3f9b01d` as `PASS_BOUNDED_LOCAL`, with precise fixture limits in [its receipt](../reviews/2026-10-05-local-hover-claude.md). Follow-up numerical robustness changes retain unresolved recomputation/bound disagreements and strengthen participating-case consistency; these require their own candidate review. They do not expand the physical model. Browser acceptance is still underway. None of this completes hosted or real-aircraft gates.
+
+Next: finish current browser acceptance and reviews, then deterministic scenarios, independent retained-evidence/source verification, general assembly authoring and local job recovery in reviewable slices. Hosted adapters/deployment and real-aircraft validation remain dependent on their explicit inputs.

@@ -379,3 +379,56 @@ def test_rotor_identifiers_refuse_at_readiness(rotor_id):
     assert capacity_from_snapshot(snapshot,maps)['outcome'] == 'unsupported'
     snapshot, _, maps = fixture(); snapshot['mission']['cases'][0]['rotor_out_ids'] = ['r0']
     assert capacity_from_snapshot(snapshot, maps)['outcome'] == 'unsupported'
+
+
+def test_recompute_boundary_failure_is_unresolved_not_unsupported(monkeypatch):
+    def failure(*args, **kwargs):
+        raise ValueError('inverse interpolation fell outside source coverage')
+    snapshot, _, maps = fixture()
+    monkeypatch.setattr('physimesh.drone.trim.recompute', failure)
+    report = capacity_from_snapshot(snapshot, maps)
+    assert report['outcome'] == 'unresolved' and report['payload_lower_bound_kg'] is None
+    assert 'recomputation' in report['cases'][0]['reason']
+
+
+def test_recomputed_rpm_limit_is_checked_again(monkeypatch):
+    from physimesh.drone import trim
+    recompute = trim.recompute
+    def changed(*args, **kwargs):
+        candidate = recompute(*args, **kwargs)
+        candidate['commands'][0]['rpm'] = 1000.+1e-8
+        return candidate
+    snapshot, _, maps = fixture()
+    monkeypatch.setattr(trim, 'recompute', changed)
+    report = capacity_from_snapshot(snapshot, maps)
+    assert report['outcome'] == 'unresolved'
+    assert 'RPM' in report['cases'][0]['reason']
+
+
+def test_sequence_participating_failure_and_bound_disagreement_retain_unresolved(monkeypatch):
+    from physimesh.drone import capacity
+    snapshot, _, maps = fixture()
+    snapshot['mission']['sequence'] = [{'segment_id':'first','case_id':'hover','duration_s':1.,
+                                      'power_profile':'constant','source_note':'Analytic'}]
+    original = capacity.solve_hover
+    calls = 0
+    def fail_after_initial(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        if calls > 1:
+            raise RuntimeError('participating numerical failure')
+        return original(*args, **kwargs)
+    monkeypatch.setattr(capacity, 'solve_hover', fail_after_initial)
+    report = capacity_from_snapshot(snapshot, maps)
+    assert report['outcome'] == 'unresolved' and report['payload_lower_bound_kg'] is None
+    assert report['participating_case_bounds'][0]['outcome'] == 'unresolved'
+    monkeypatch.setattr(capacity, 'solve_hover', original)
+    joint = capacity.solve_sequence
+    def mismatched(*args, **kwargs):
+        result = joint(*args, **kwargs)
+        result['payload_kg'] -= 1e-5
+        return result
+    monkeypatch.setattr(capacity, 'solve_sequence', mismatched)
+    report = capacity_from_snapshot(snapshot, maps)
+    assert report['outcome'] == 'unresolved' and report['payload_lower_bound_kg'] is None
+    assert 'do not agree' in report['reasons'][0]

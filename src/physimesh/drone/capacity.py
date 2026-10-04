@@ -7,6 +7,14 @@ from .mission_capacity import prepare_sequence, sequence_case_inputs, solve_sequ
 from .trim import MODEL_VERSION, prepare_hover, solve_hover
 
 
+def allocation(case, *, payload_kg=None):
+    """Inputs are already eligible. Unexpected solver/recompute failures stay unresolved."""
+    try:
+        return solve_hover(case, payload_kg=payload_kg)
+    except (ValueError, TypeError, KeyError, OverflowError, RuntimeError) as exc:
+        return {'outcome': 'unresolved', 'reason': 'allocation failed after input eligibility: ' + str(exc)}
+
+
 def hover_readiness(snapshot: dict, maps: dict, source_errors=()) -> dict:
     """Eligibility only, without allocating rotor commands or claiming feasibility."""
     cases = snapshot['mission'].get('cases', [])
@@ -66,7 +74,7 @@ def capacity_from_snapshot(snapshot: dict, maps: dict) -> dict:
         try:
             prepared = prepare_hover(snapshot, case, maps)
             inputs[case['name']] = prepared
-            result = solve_hover(prepared)
+            result = allocation(prepared)
         except (ValueError, TypeError, KeyError, OverflowError) as exc:
             result = {'outcome': 'unsupported', 'reason': str(exc)}
         records.append({'case_id': case['name'], 'required': case.get('required', True), **result})
@@ -96,17 +104,22 @@ def capacity_from_snapshot(snapshot: dict, maps: dict) -> dict:
     if sequence is not None:
         try:
             result = solve_sequence(selected, sequence)
-        except (ValueError, TypeError, KeyError, OverflowError) as exc:
-            return {**report, 'outcome': 'unsupported', 'reasons': [str(exc)]}
+        except (ValueError, TypeError, KeyError, OverflowError, RuntimeError) as exc:
+            return {**report, 'outcome': 'unresolved', 'reasons': ['joint allocation failed: ' + str(exc)]}
         if result['outcome'] != 'feasible':
             return {**report, **result, 'reasons': [result['reason']]}
         evidence = result['sequence_evidence']
         aggregate_binds = abs(evidence['remaining_usable_energy_j']) <= evidence['energy_tolerance_j']
-        participating = [{'case_id': name, **solve_hover(case)} for name, case in selected.items()]
+        participating = [{'case_id': name, **allocation(case)} for name, case in selected.items()]
         if any(record['outcome'] != 'feasible' for record in participating):
             return {**report, 'outcome': 'unresolved', 'participating_case_bounds': participating,
                     'reasons': ['Participating case bounds are not independently established.']}
         individual = min(participating, key=lambda record: record['candidate']['payload_kg'])
+        if (result['payload_kg'] > individual['candidate']['payload_kg']+1e-7
+                or not aggregate_binds and abs(result['payload_kg']-individual['candidate']['payload_kg']) > 1e-7):
+            return {**report, 'outcome': 'unresolved', 'participating_case_bounds': participating,
+                    'headline_candidate_checks': result['headline_candidate_checks'],
+                    'reasons': ['Joint payload and independently attained case bounds do not agree.']}
         return {**report, 'outcome': 'feasible', 'mission_semantics': 'required_cases_and_ordered_sequence',
                 'payload_lower_bound_kg': result['payload_kg'],
                 'limiting_case_id': None if aggregate_binds else individual['case_id'],
@@ -120,7 +133,7 @@ def capacity_from_snapshot(snapshot: dict, maps: dict) -> dict:
     # Minimum individual maxima can be below another case's feasible interval.
     # Verify a compatible headline at the same candidate instead of assuming a prefix.
     for case in required:
-        result = solve_hover(inputs[case['name']], payload_kg=payload)
+        result = allocation(inputs[case['name']], payload_kg=payload)
         checks.append({'case_id': case['name'], **result})
     if any(result['outcome'] != 'feasible' for result in checks):
         return {**report, 'outcome': 'unresolved', 'headline_candidate_checks': checks,

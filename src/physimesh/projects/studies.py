@@ -77,3 +77,28 @@ class LocalStudies:
 
     def read(self, project_id: str, study: str) -> dict:
         return json.loads(self.export(project_id, study))
+
+    def report_inputs(self, project_id: str, study: str) -> tuple[bytes, str]:
+        raw = self.export(project_id, study)
+        spec = json.loads(raw)['specification']
+        revision = self.projects.repository.revision(project_id, spec['revision_sha256'])
+        if revision.snapshot_sha256 != spec['snapshot_sha256']:
+            raise ValueError('study frozen input association failed')
+        return raw, revision.snapshot_json
+
+    def pdf(self, project_id: str, study: str) -> tuple[bytes, dict]:
+        from .reports import render_pdf, report_identity
+        raw, snapshot = self.report_inputs(project_id, study)
+        receipt = report_identity(raw, snapshot)
+        pdf = render_pdf(raw, snapshot)
+        digest = self.projects.artifacts.put_bytes(pdf, kind='retained_local_study_pdf_v1', meta=receipt)
+        if self._bytes(digest) != pdf:
+            raise ValueError('retained PDF integrity failed')
+        return pdf, {**receipt, 'pdf_sha256': digest}
+
+    def compare(self, project_id: str, before: str, after: str) -> dict:
+        from .reports import compare_records
+        before_raw, before_snapshot = self.report_inputs(project_id, before)
+        after_raw, after_snapshot = self.report_inputs(project_id, after)
+        return compare_records(json.loads(before_raw), json.loads(after_raw),
+                               json.loads(before_snapshot), json.loads(after_snapshot))
