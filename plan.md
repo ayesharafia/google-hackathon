@@ -4,6 +4,8 @@
 **Deployment decision:** private hosted web app for the team and invited clients.
 **Document status:** development specification and work order. Future tasks are uncompleted; this document does not establish production readiness or aircraft validation.
 
+**Current implementation work order:** [4 October implementation plan](docs/plans/2026-10-04-implementation-plan.md), starting from GitHub `main` at `b524340`. P00.1/P00.2/P01.1 are accepted within their recorded scopes. Next: transactional local project persistence and authoring (IP01), then the fixture-driven Pilot-1 path. The original planning baseline above remains historical; `main` is now the confirmed default branch.
+
 The product must answer a practical question: **given this approved aircraft design, how much payload can it carry across the required mission?** It must show which condition limits that payload, what evidence supports the answer, and which assumptions could change it. The client should be able to inspect the design, compare revisions, and leave with an understandable, reproducible engineering report.
 
 There is no fixed payload target. The previous 750 kg requirement has been removed by the user. Geometry alone does not establish thrust, aircraft mass, electrical capability, or flight feasibility. An incomplete design gets a precise request for missing information, with no invented capacity.
@@ -30,7 +32,7 @@ Use these references when implementing:
 3. Implement a complete vertical slice: persisted input, domain behavior, server interface, visible behavior, and relevant verification. Do not build disconnected screens or mark a shell as a working feature.
 4. Test the public behavior with meaningful positive, negative and failure cases. Physics changes require an independent derivation or reference and review appropriate to their risk. Reuse established fixtures rather than testing a formula against a copy of itself.
 5. Record changed files, data/model versions, test results, reviewer and remaining limits. Update this task's checkbox only after its acceptance criteria and evidence are met.
-6. Commit a small, reviewable change on a `codex/` branch. Open a PR against the repository's confirmed default branch. When a task starts from an unmerged reviewed MVP branch, stack its PR on that baseline and record the parent so the task diff stays reviewable. Do not assume `main` exists: at the baseline, the default is `drone/wp03-geometry`.
+6. Commit a small, reviewable change on a `codex/` branch. Open a PR against the repository's confirmed default branch, now `main` as of the 4 October implementation baseline. When a task starts from an unmerged reviewed branch, stack its PR on that baseline and record the parent so the task diff stays reviewable. The historical planning baseline used `drone/wp03-geometry`; it is no longer the default.
 7. Keep previously published snapshots and result packages readable. Changes to semantics require a versioned migration and compatibility tests. Promote through staging and the applicable gate before production.
 
 Task completion, software release approval, design approval and physics validation are separate decisions. A passing software test cannot promote aircraft evidence. Do not merge or tag a physics release without its required independent review and human engineering acceptance. The current Claude PASS covers the stated MVP scope; it does not pre-approve future changes.
@@ -338,7 +340,7 @@ Owner roles: **APP** application engineer; **PHY** rotorcraft/physics engineer; 
 
 ### Active work order and client-review follow-up
 
-1. P01.1 first: contracts, full versioned slice metric and historical-version compatibility.
+1. P01.1 is accepted: contracts, full versioned slice metric and historical-version compatibility. Execute [IP01 onward in the implementation plan](docs/plans/2026-10-04-implementation-plan.md#9-immediate-implementation-order): local saved projects, then mass/mission authoring and the fixture-driven physics path. Local adapters complete only the accepted local subset of P01.2/P01.4.
 2. Build the local Pilot-1 domain path with validated fixture inputs: the local portions of P02.2/P02.3, then P03.1/P03.2 and P04.1/P04.2. Hosted persistence/identity work can progress independently; it must not block pure fixture-driven physics. Full task checkboxes still require their authoring/UI acceptance, not only a domain helper.
 3. I01: separately versioned regular-grid native sampling experiment. Retain raw native samples, compare supported coverage and vector/scalar sensitivity; preserve existing refusal policy and original artifacts.
 4. I02: preregister the cheap sphere domain/surface-refinement matrix, retain exact job/source/resource/load evidence and investigate the +2.65% gap without assigning a cause in advance. Independent review determines what the experiment supports.

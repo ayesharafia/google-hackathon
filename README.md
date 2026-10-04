@@ -30,7 +30,9 @@ Backend tests need Docker and a confirmed, immutable OpenFOAM image pin.
 No CFD capability or aircraft feasibility is established by unit tests. Missing
 design inputs remain unknown and block dependent work. [M§2, M§26, M§27]
 
-Continue with the task dependencies and release gates in [plan.md](plan.md).
+Continue with the task dependencies and release gates in [plan.md](plan.md). The
+[4 October implementation work order](docs/plans/2026-10-04-implementation-plan.md)
+details saved projects, authoring, rotor maps, trim, capacity, energy and hosted delivery.
 P00.1, P00.2 and [P01.1 contracts](docs/contracts/production-data.md) are complete within their bounded scopes. [Contract acceptance](docs/qa/production-contracts-review.md) records final Claude review and checks. The local [Pilot-1](docs/pilots/pilot-1.md) fixture path is next. Historical equation IDs and old plan section/task references
 resolve to the archived master plan. The separate 2D PhysiMesh product remains
 untouched; integration is through a versioned export contract.
