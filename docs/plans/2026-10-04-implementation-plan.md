@@ -263,6 +263,10 @@ Calendar commitments need team capacity and real-data coverage. Estimate the nex
 
 ## 9. Immediate implementation order
 
+**4 October user decision:** keep execution local for now. IP13/IP14/IP17 hosted deployment and invited access are deferred. The future private-hosted goal remains in the root plan. Local authoring, physics fixtures, evidence inspection and reporting continue; no cloud/provider account is assumed.
+
+Local repository/API/workbench, fixed-pack mass authoring, retained maps, restricted hover trim and constant-segment aggregate energy are implemented on `codex/local-project-workbench`, with acceptance review underway. See [model scope](../decisions/ADR-0003-static-hover-profile.md), [local contract](../contracts/mission-capacity.md) and [performed physics checks](../validation/local-hover-and-energy.md). This is progress through scoped IP01-IP11 work, not completion of all slices: general assembly authoring, measured map validation, the approved aircraft successor, variable-power integration, uncertainty, recoverable jobs and the remaining evidence investigations still need implementation/acceptance. Master task boxes remain authoritative.
+
 1. **IP01 repository/service:** transactional local persistence, expected-version conflicts and immutable freeze. Verify independent connections and restart; retain existing packages.
 2. **IP01 API/browser:** create/open/save/reopen, conflict recovery and stale-response handling. Complete interaction audit before accepting IP01.
 3. **IP02/IP03:** mass/placement/fixed-pack editor and independent fixtures, then required cases/readiness.
