@@ -51,6 +51,11 @@ class BoundDependency(Record):
     origin: Literal['coverage', 'analyst_domain']
 
 
+class SourceDomainGap(Record):
+    rotor_id: Identifier
+    gap: Literal['below_retained_rpm', 'above_retained_rpm']
+
+
 class Certificate(Record):
     kind: Literal['bounded_nonnegative_linear_combination']
     gap: float = Field(gt=0)
@@ -61,6 +66,7 @@ class Certificate(Record):
     combined_upper_bound: float
     bound_origins: tuple[BoundOrigin, ...] = ()
     nonphysical_bound_dependencies: tuple[BoundDependency, ...] = ()
+    source_domain_gaps: tuple[SourceDomainGap, ...] = ()
     qualification: str | None = None
 
 
@@ -87,7 +93,8 @@ class CaseEvidence(Record):
                 raise ValueError('moment residual exceeds policy')
         if self.outcome == 'infeasible' and self.certificate is None:
             raise ValueError('infeasible local case requires certificate')
-        if self.outcome == 'infeasible' and self.certificate.nonphysical_bound_dependencies:
+        if self.outcome == 'infeasible' and (self.certificate.nonphysical_bound_dependencies
+                                            or self.certificate.source_domain_gaps):
             raise ValueError('coverage/domain certificate cannot claim physical infeasibility')
         return self
 
@@ -163,7 +170,8 @@ class LocalCapacityV2(Record):
                 raise ValueError('failed study cannot publish a payload headline')
             if self.outcome == 'infeasible' and not (
                     any(case.required and case.outcome == 'infeasible' for case in self.cases)
-                    or self.certificate and not self.certificate.nonphysical_bound_dependencies):
+                    or self.certificate and not (self.certificate.nonphysical_bound_dependencies
+                                                  or self.certificate.source_domain_gaps)):
                 raise ValueError('infeasible aggregate requires a supported certificate')
             return self
         if self.payload_lower_bound_kg is None or not self.headline_candidate_checks:

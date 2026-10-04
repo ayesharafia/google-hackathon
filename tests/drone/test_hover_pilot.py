@@ -357,5 +357,25 @@ def test_optional_standalone_coverage_does_not_override_segment_duty():
         'power_profile':'constant','source_note':'Analytic short duty'}]
     assert hover_readiness(snapshot,maps)['eligible']
     assert capacity_from_snapshot(snapshot,maps)['outcome'] == 'feasible'
+
+
+def test_source_curve_contradiction_with_unknown_operating_states_is_unsupported():
+    snapshot, data, _ = fixture()
+    data['points'] = [{'rpm':500.,'thrust_n':0.,'shaft_torque_nm':0.,'power_w':1000.},
+                      {'rpm':1000.,'thrust_n':100.,'shaft_torque_nm':2.,'power_w':2000.}]
+    data['covered_intervals_rpm'] = [[500.,1000.]]
+    for r in snapshot['rotors']:
+        r['sustained_limits']['max_rpm'] = 2000.
+    snapshot['mission']['energy_system']['max_electrical_power_w'] = 3000.
+    report = capacity_from_snapshot(snapshot, {'fixture':parse_map(json.dumps(data).encode())})
+    assert report['outcome'] == 'unsupported'
+    assert report['cases'][0]['certificate']['source_domain_gaps']
+
+
+@pytest.mark.parametrize('rotor_id',[None,'','bad id',[]])
+def test_rotor_identifiers_refuse_at_readiness(rotor_id):
+    snapshot, _, maps = fixture(); snapshot['rotors'][0]['rotor_id'] = rotor_id
+    assert not hover_readiness(snapshot,maps)['eligible']
+    assert capacity_from_snapshot(snapshot,maps)['outcome'] == 'unsupported'
     snapshot, _, maps = fixture(); snapshot['mission']['cases'][0]['rotor_out_ids'] = ['r0']
     assert capacity_from_snapshot(snapshot, maps)['outcome'] == 'unsupported'

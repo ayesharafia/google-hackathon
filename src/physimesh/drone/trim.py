@@ -5,6 +5,7 @@ ADR-0003 defines coverage. Solver status alone never establishes feasibility.
 from __future__ import annotations
 
 import math
+import re
 from dataclasses import dataclass
 
 import numpy as np
@@ -117,7 +118,10 @@ def prepare_hover(snapshot: dict, case: dict, sources: dict[str, RotorMapV1]) ->
     density = number(atmosphere.get('pressure_pa'), 'absolute Pa', positive=True) / (
         R_AIR * number(atmosphere.get('temperature_k'), 'temperature K', positive=True))
     rotors = snapshot['rotors']
-    if not 1 <= len(rotors) <= 16 or len({r.get('rotor_id') for r in rotors}) != len(rotors):
+    if (not isinstance(rotors, list) or not 1 <= len(rotors) <= 16
+            or any(not isinstance(r, dict) or not isinstance(r.get('rotor_id'), str)
+                   or re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,79}', r['rotor_id']) is None for r in rotors)
+            or len({r['rotor_id'] for r in rotors}) != len(rotors)):
         raise ValueError('1-16 uniquely identified rotors required')
     maps, profiles, limits, bounds = [], [], [], []
     for rotor in rotors:
@@ -195,7 +199,17 @@ def bound_origins(inputs: HoverInputs, *, fixed_payload=False):
     return origins
 
 
-def classify_certificate(certificate, eq, inequalities, bounds, origins):
+def source_domain_gaps(inputs: HoverInputs):
+    gaps = []
+    for rotor, model in zip(inputs.rotors, inputs.maps, strict=True):
+        if model.points[0].rpm > 0:
+            gaps.append({'rotor_id': rotor['rotor_id'], 'gap': 'below_retained_rpm'})
+        if rotor['sustained_limits']['max_rpm'] > model.points[-1].rpm:
+            gaps.append({'rotor_id': rotor['rotor_id'], 'gap': 'above_retained_rpm'})
+    return gaps
+
+
+def classify_certificate(certificate, eq, inequalities, bounds, origins, source_gaps=()):
     """A bounded-model contradiction is not necessarily a physical-limit decision."""
     size = len(bounds); base = len(inequalities)+2*len(eq)
     weights = np.array(certificate['multipliers'])/np.array(certificate['row_scaling'])
@@ -212,8 +226,12 @@ def classify_certificate(certificate, eq, inequalities, bounds, origins):
             dependencies.append({'variable_index': i, 'side': side, 'origin': origin[side]})
     certificate['bound_origins'] = origins
     certificate['nonphysical_bound_dependencies'] = dependencies
+    certificate['source_domain_gaps'] = list(source_gaps)
     certificate['qualification'] = 'Contradiction within the declared model, with bound provenance retained.'
-    return 'unsupported' if dependencies else 'infeasible'
+    # Map-derived power/torque rows can prove contradictions without assigning a
+    # multiplier to their coverage bound. With unknown admissible RPM states,
+    # no such source-equation certificate establishes physical infeasibility.
+    return 'unsupported' if dependencies or source_gaps else 'infeasible'
 
 
 def infeasibility_certificate(eq, rhs, inequalities, upper, bounds):
@@ -282,7 +300,8 @@ def solve_hover(inputs: HoverInputs, *, payload_kg=None) -> dict:
     if not solved.success or solved.x is None:
         certificate = infeasibility_certificate(eq, rhs, a, b, bounds) if solved.status == 2 else None
         outcome = (classify_certificate(certificate, eq, a, bounds,
-                                       bound_origins(inputs, fixed_payload=payload_kg is not None))
+                                       bound_origins(inputs, fixed_payload=payload_kg is not None),
+                                       source_domain_gaps(inputs))
                    if certificate else 'unresolved')
         return {'outcome': outcome,
                 'reason': ('Coverage or analyst-domain bounds prevent this study; physical infeasibility is not established.'

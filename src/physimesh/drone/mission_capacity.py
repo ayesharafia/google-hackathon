@@ -17,6 +17,7 @@ from .trim import (
     number,
     prepare_hover,
     solve_hover,
+    source_domain_gaps,
 )
 
 
@@ -113,7 +114,8 @@ def solve_sequence(inputs: dict, sequence: list[dict]) -> dict:
         certificate = infeasibility_certificate(eq, rhs, a, b, bounds) if solved.status == 2 else None
         origins = [o for case in inputs.values() for o in bound_origins(case)[:-1]]
         origins.append({'lower': 'physical' if bounds[-1][0] == 0 else 'analyst_domain', 'upper': 'analyst_domain'})
-        outcome = classify_certificate(certificate, eq, a, bounds, origins) if certificate else 'unresolved'
+        gaps = [gap for case in inputs.values() for gap in source_domain_gaps(case)]
+        outcome = classify_certificate(certificate, eq, a, bounds, origins, gaps) if certificate else 'unresolved'
         return {'outcome': outcome,
                 'reason': ('Coverage or analyst-domain bounds prevent this sequence; physical infeasibility is not established.'
                            if outcome == 'unsupported' else solved.message),
