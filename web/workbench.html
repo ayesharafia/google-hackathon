@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PhysiCore | Design workbench</title>
+<link rel="stylesheet" href="/web/css/workbench.css">
+<script type="importmap">{"imports":{"three":"/web/vendor/three.module.min.js"}}</script>
+<script type="module" src="/web/js/workbench.js"></script>
+</head>
+<body>
+<header><a class="brand" href="/web/">PhysiCore</a><span>Local design workbench</span><a href="/web/results.html">Evidence desk</a></header>
+<main>
+<h1>Keep the design with the decision.</h1>
+<p class="intro">Save inputs, retain revisions and inspect what is still missing. Local revision freezing does not approve an aircraft.</p>
+<noscript><p>Enable JavaScript to edit and save a project. Your saved data stays on the local server.</p></noscript>
+<form id="connection" class="connection"><label>Local API token<input id="token" type="password" required autocomplete="off"></label><button type="submit" disabled>Connect</button></form>
+<p id="message" role="status" aria-live="polite">Loading workspace controls.</p>
+<div class="workbench">
+<aside>
+<h2>Projects</h2>
+<form id="create-project"><label>New project name<input id="project-title" maxlength="160" required disabled></label><button id="create" disabled>Create project</button></form>
+<button id="example" type="button" disabled>Create labelled hover example</button>
+<label>Saved projects<select id="projects" disabled><option value="">Connect to see projects</option></select></label>
+<button id="open" type="button" disabled>Open saved project</button>
+<p id="project-record">No project open.</p>
+<h2>Retained revisions</h2><ul id="revisions"><li>No revision selected.</li></ul>
+<h2>Study history</h2><ul id="studies"><li>No study selected.</li></ul>
+</aside>
+<section class="editor" aria-labelledby="design-title">
+<h2 id="design-title">Open a project to begin.</h2>
+<p id="save-state">Missing physical inputs stay unknown.</p>
+<section aria-labelledby="layout-title"><h3 id="layout-title">Declared rotor layout</h3><div id="layout-view"><p>No rotor positions loaded.</p></div><p id="layout-note">Centres, axes and radii from the input. Drag to orbit when a layout is available.</p><button id="reset-layout" type="button" disabled>Reset layout view</button></section>
+<div id="input-editors"></div>
+<details><summary>Design input JSON</summary><label for="snapshot">Complete versioned snapshot</label><textarea id="snapshot" spellcheck="false" disabled rows="18"></textarea></details>
+<div class="actions"><button id="save" type="button" disabled>Save draft</button><button id="reload" type="button" disabled>Reload saved draft</button><button id="freeze" type="button" disabled>Freeze saved revision</button><button id="export-draft" type="button" disabled>Export draft JSON</button></div>
+<section aria-labelledby="study-title"><h3 id="study-title">Bounded static-hover study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen hover design</button><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
+<section aria-labelledby="comparison-title"><h3 id="comparison-title">Compare retained studies</h3><p>Compare frozen inputs and recorded outcomes. A changed input does not establish the cause of a capacity change.</p><div class="fields"><label>Before study<select id="compare-before" disabled></select></label><label>After study<select id="compare-after" disabled></select></label></div><button id="compare" type="button" disabled>Compare studies</button><div id="comparison-report" aria-live="polite"></div></section>
+<section id="revision-detail" hidden><h3>Frozen revision</h3><p id="revision-summary"></p><pre id="revision-json"></pre></section>
+</section>
+</div>
+</main>
+<footer>Local single-operator workspace. Real aircraft inputs and engineering approval remain pending.</footer>
+</body>
+</html>

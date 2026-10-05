@@ -1,7 +1,7 @@
 # PhysiCore Drone: implementation work order
 
 **Date:** 4 October 2026. **Starting snapshot:** `b524340048b284e3ce7c1b3447342345e9354a93`, on GitHub `main`.
-**Status:** proposed delivery sequence for the approved production direction. Every task below is pending. This document delivers planning, not new implementation or engineering acceptance.
+**Status:** approved delivery sequence with scoped local implementation underway. The broad slices remain open where acceptance or independent dependencies are outstanding; see section 9 for actual progress.
 **Authority:** [root production plan](../../plan.md), [Pilot-1 acceptance](../pilots/pilot-1.md) and the user's decisions. This document breaks that roadmap into executable slices without replacing its release gates. New paths/API names below are proposals.
 
 ## 1. Recommended development path
@@ -263,9 +263,19 @@ Calendar commitments need team capacity and real-data coverage. Estimate the nex
 
 ## 9. Immediate implementation order
 
+**4 October user decision:** keep execution local for now. IP13/IP14/IP17 hosted deployment and invited access are deferred. The future private-hosted goal remains in the root plan. Local authoring, physics fixtures, evidence inspection and reporting continue; no cloud/provider account is assumed.
+
+Local repository/API/workbench, fixed-pack mass authoring, retained maps, restricted hover trim and constant-segment aggregate energy are implemented on `codex/local-project-workbench`, with acceptance review underway. See [model scope](../decisions/ADR-0003-static-hover-profile.md), [local contract](../contracts/mission-capacity.md) and [performed physics checks](../validation/local-hover-and-energy.md). This is progress through scoped IP01-IP11 work, not completion of all slices: general assembly authoring, measured map validation, the approved aircraft successor, variable-power integration, uncertainty, recoverable jobs and the remaining evidence investigations still need implementation/acceptance. Master task boxes remain authoritative.
+
 1. **IP01 repository/service:** transactional local persistence, expected-version conflicts and immutable freeze. Verify independent connections and restart; retain existing packages.
 2. **IP01 API/browser:** create/open/save/reopen, conflict recovery and stale-response handling. Complete interaction audit before accepting IP01.
 3. **IP02/IP03:** mass/placement/fixed-pack editor and independent fixtures, then required cases/readiness.
 4. **IP04-IP09:** maps, electrical constraints, wrench ledger, supported trim, bounded search and complete Pilot-1, in dependency order.
 
-I03 can run at a suitable evidence-tooling boundary. Hosted decisions/adapters can advance once their inputs exist. Creating this plan delivers no application changes.
+**5 October progress:** retained input/method-aware comparison and bound JSON/PDF export are implemented as a local IP16 subset. See [report checks](../qa/local-reports.md). Claude accepted the corrected static-hover candidate `3f9b01d` as `PASS_BOUNDED_LOCAL`, with precise fixture limits in [its receipt](../reviews/2026-10-05-local-hover-claude.md). Follow-up numerical robustness changes retain unresolved recomputation/bound disagreements and strengthen participating-case consistency; these require their own candidate review. They do not expand the physical model. Browser acceptance is still underway. None of this completes hosted or real-aircraft gates.
+
+I03 now has independent evidence-byte and historical Git-source scopes with tamper/portability checks; see [performed byte verification](../qa/retained-evidence-verification.md). The original P00.1 checker and inventory remain unchanged. Local V3 preserves older V2 reads while applying stronger checks only to new results.
+
+Next: finish current browser acceptance and reviews, then deterministic scenarios, general assembly authoring and local job recovery in reviewable slices. Hosted adapters/deployment and real-aircraft validation remain dependent on their explicit inputs.
+
+**5 October reviewed checkpoint:** exact known-producer historical policy dispatch was accepted by Claude within local fixture scope. The workbench's expanded authoring, histories, saved/frozen evaluation, invalid-JSON recovery, real rotor orbit/zoom/reset and mobile keyboard-scroll tables were exercised; [the audit](../qa/local-workbench-design-audit.md) records remaining browser-host download/zoom/conflict-dialog checks. A [current backend and formula guide](../technical/local-workbench-and-physics-guide.md) covers these modules and their limits. No full IP01/IP16 or production acceptance is asserted. Next independent model work remains IP12; assembly/repair, recoverable execution, historical-source numerical reproduction and real-data/human gates are still outstanding.

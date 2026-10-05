@@ -29,5 +29,24 @@ export function createViewer(container) {
   }
   function showSurface(data){clear();surface=data;geometry=new THREE.BufferGeometry();geometry.setAttribute('position',new THREE.Float32BufferAttribute(data.positions,3));const material=new THREE.MeshBasicMaterial({vertexColors:true,side:THREE.DoubleSide});group.add(new THREE.Mesh(geometry,material));const range=setField(field);fit();return range;}
   function showStl(buffers,scale){clear();surface=null;const loader=new STLLoader();buffers.forEach(buffer=>{const geom=loader.parse(buffer);geom.scale(scale,scale,scale);const material=new THREE.MeshStandardMaterial({color:'#728d78',roughness:.8,metalness:.1,side:THREE.DoubleSide,flatShading:true});group.add(new THREE.Mesh(geom,material));});fit();}
-  resize();return {showSurface,setField,showStl,reset};
+  function showRotorLayout(snapshot,cg){
+    clear();surface=null;
+    const valid=(v)=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
+    let count=0;
+    (snapshot.rotors||[]).forEach(rotor=>{
+      if(!valid(rotor.center_body_m)||!valid(rotor.axis_body))return;
+      const pos=new THREE.Vector3(...rotor.center_body_m),axis=new THREE.Vector3(...rotor.axis_body);
+      if(Math.abs(axis.length()-1)>1e-9)return;
+      if(Number.isFinite(rotor.radius_m)&&rotor.radius_m>0){
+        const disk=new THREE.Mesh(new THREE.CircleGeometry(rotor.radius_m,48),new THREE.MeshStandardMaterial({color:rotor.rotation_sign===1?'#728d78':'#a4b8a6',side:THREE.DoubleSide,roughness:.85}));
+        disk.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,1),axis);disk.position.copy(pos);group.add(disk);
+        group.add(new THREE.ArrowHelper(axis,pos,rotor.radius_m*2,0x20382c,rotor.radius_m*.3,rotor.radius_m*.15));count++;
+      }
+    });
+    if(valid(cg)){const marker=new THREE.Mesh(new THREE.SphereGeometry(.04,16,12),new THREE.MeshStandardMaterial({color:'#20382c',roughness:.9}));marker.position.set(...cg);group.add(marker);}
+    if(count)fit();else{centre.set(0,0,0);distance=2.8;reset();resize();}
+    renderer.domElement.setAttribute('aria-label','Declared rotor disks, axes and CG point. Drag to orbit; scroll to zoom.');
+    return count;
+  }
+  resize();return {showSurface,setField,showStl,showRotorLayout,reset};
 }

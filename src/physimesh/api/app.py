@@ -9,9 +9,14 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
+from ..core.artifacts import ArtifactStore
 from ..drone.api import router as drone_router
 from ..drone.models import project_from_mapping, readiness
+from ..projects.service import ProjectService
+from ..projects.sqlite import SQLiteProjects
+from ..projects.studies import LocalStudies
 from .contracts import router as contracts_router
+from .projects import router as projects_router
 from .results import router as results_router
 from .screening import router as screening_router
 from .settings import Settings, load_settings
@@ -21,10 +26,14 @@ def create_app(settings: Settings) -> FastAPI:
     """Create the API and source-checkout web shell; no physical inputs are defaulted."""
     app = FastAPI(title="PhysiCore Drone", version="0.1.0")
     app.state.settings = settings
+    app.state.projects = ProjectService(SQLiteProjects(settings.db_path.parent / 'projects.sqlite'),
+                                        ArtifactStore(settings.data_root / 'artifacts'))
+    app.state.studies = LocalStudies(app.state.projects)
     app.include_router(drone_router)
     app.include_router(results_router)
     app.include_router(contracts_router)
     app.include_router(screening_router)
+    app.include_router(projects_router)
 
     @app.middleware("http")
     async def protect_drone_routes(request: Request, call_next):

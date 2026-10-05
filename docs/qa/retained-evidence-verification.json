@@ -1,0 +1,40 @@
+{
+  "performed_date": "2026-10-05",
+  "implementation_parent_commit": "2abc8016f4933b698b3e66ff9996fac4342ca499",
+  "command": ".venv/bin/python scripts/verify_evidence.py both --native --vendor",
+  "qualification": "Read-only byte check. Native files inspected, solver not rerun.",
+  "result": {
+    "evidence": {
+      "schema_version": "retained_evidence_verification_v1",
+      "recorded_source_commit": "d17f97a6d37d4458e08f005a20ecf5db870b3235",
+      "current_source_checked": false,
+      "package_id": "acd1b8716144aeaa",
+      "package_manifest_sha256": "e5c2a75cca8b009aa69fce0205fced8e74442bab12aa26f0a42a5a335348cbc9",
+      "documentary_records_checked": 4,
+      "package_files_checked": 33,
+      "supporting_files_checked": 31,
+      "native_outputs_checked": 105,
+      "native_checked": true,
+      "vendor_checked": true,
+      "solver_rerun": false,
+      "evidence": "unverified",
+      "machine_review": "pending",
+      "recorded_claude_review": {
+        "commit": "f19cbebddffaf788df76f8a5cd35adf8b99d3cea",
+        "verdict": "pass_bounded_mvp",
+        "verification": "document bytes only"
+      },
+      "aircraft_validation": "not_established",
+      "human_release_approval": "pending",
+      "qualification": "Retained evidence identity only. No current-source reproduction, solver execution, new physics acceptance or aircraft validation."
+    },
+    "historical_source": {
+      "schema_version": "historical_source_verification_v1",
+      "source_commit": "d17f97a6d37d4458e08f005a20ecf5db870b3235",
+      "source_files_checked": 130,
+      "current_source_checked": false,
+      "solver_rerun": false,
+      "qualification": "Exact historical Git source bytes checked. Source was not executed; environment and numerical reproduction are not established. Current checkout is not certified."
+    }
+  }
+}
