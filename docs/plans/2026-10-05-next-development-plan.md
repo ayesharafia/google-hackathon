@@ -1,5 +1,7 @@
 # PhysiCore Drone: state review and next development plan
 
+**Historical specification / reviewed snapshot.** Current slice status and execution order live only in [plan.md](../../plan.md#active-slice-status). The acceptance details below remain applicable; their snapshot status is not a current work queue.
+
 **Date:** 5 October 2026. **Reviewed snapshot:** `main` @ `ec51c2b` (PR #6 merged). Working tree clean apart from `.DS_Store`.
 **Reviewer:** Claude Opus 5.5. **Status:** proposal for the user's decision. It reorders and adds to the open work in [plan.md](../../plan.md) and the [4 October work order](2026-10-04-implementation-plan.md). It does not replace their release gates, check any boxes or claim any validation.
 

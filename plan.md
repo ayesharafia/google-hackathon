@@ -4,7 +4,52 @@
 **Deployment decision:** private hosted web app for the team and invited clients.
 **Document status:** development specification and work order. Future tasks are uncompleted; this document does not establish production readiness or aircraft validation.
 
-**Current implementation work order:** [4 October implementation plan](docs/plans/2026-10-04-implementation-plan.md). Its original starting point was GitHub `main` at `b524340`; that baseline remains historical. On 5 October, [PR #5](https://github.com/PhysiCoreEngine12/Drone-Project/pull/5) merged the reviewed local workbench checkpoint `f6fc497` into `main` at `8fe3cf7`. Saved projects/revisions, local authoring, retained maps, restricted hover capacity, constant-segment fixed-pack energy, comparisons and reports now exist within their recorded synthetic scope. Next independent model slice: IP12 deterministic correlated scenarios and sourced allowable limits. Remaining browser download/zoom/conflict-dialog checks, assembly/repair, recoverable jobs and evidence investigations stay open. See [the current backend and formula guide](docs/technical/local-workbench-and-physics-guide.md) and [checkpoint receipt](docs/qa/local-workbench-merge.md). No full master task or production gate is completed by these local subsets.
+**Active roadmap:** the table below is the single source of current slice status. Sections 1–16 retain the broader development specifications and release gates. The dated plans are historical specifications, not competing work queues. The user authorized execution of the 5 October direction; real client inputs and a named engineering owner are still unavailable (confirmed 5 October).
+
+## Active slice status
+
+States distinguish implementation from acceptance: **local subset** is historical scoped behavior; **review pending** is implemented/tested but not independently accepted; **blocked** requires an external input; **conditional** requires the stated trigger. No status here promotes aircraft evidence or completes a broader release gate.
+
+| ID | State | Evidence/specification | Blocker or next action |
+|---|---|---|---|
+| N0.1 | blocked | [Scope proposal](docs/plans/2026-10-05-next-development-plan.md) | Client scope agreement and named engineer; no invented ADR-0004 decision |
+| N0.2 | blocked | [Data request](docs/client/aircraft-data-request.md) | Recipient and explicit sending instruction; no message sent |
+| N0.3 | implemented | This table | Review with roadmap changes |
+| N0.4 | pending | [Browser audit](docs/qa/local-workbench-design-audit.md) | Actual download, 200% zoom, conflict-dialog journey |
+| N0.5 | pending | [Semantic identity specification](docs/plans/2026-10-05-next-development-plan.md) | Model-module closure, compatibility verification, independent review |
+| N1.1 | in progress | [Conditioning specification](docs/plans/2026-10-05-next-development-plan.md) | Versioned conservative power/torque policy and independent review |
+| N1.2 | conditional | [MILP option](docs/plans/2026-10-05-next-development-plan.md) | First real map exceeds declared conditioning tolerance; retain LP default |
+| N1.3 | pending | [Realistic fixture specification](docs/plans/2026-10-05-next-development-plan.md) | Labelled noisy CT/CQ fixture and full API/report journey |
+| N1.4 | pending | [Shaft basis specification](docs/plans/2026-10-05-next-development-plan.md) | Varying-torque conditioning; efficiency applied once |
+| N2.1 | pending | [Motor-out specification](docs/plans/2026-10-05-next-development-plan.md) | Failed-rotor six-component allocation and independent review |
+| N2.2 | pending | [Climb specification](docs/plans/2026-10-05-next-development-plan.md) | Exact inflow coverage, declared loads and independent review |
+| N2.3 | pending | [IP12 specification](docs/plans/2026-10-04-implementation-plan.md#ip12-deterministic-uncertainty-and-allowable-limits) | Correlated scenarios, sourced caps and independent review |
+| N2.4 | conditional | [Variable-power specification](docs/plans/2026-10-05-next-development-plan.md) | Client mission demonstrates need; constant-power transitions already supported |
+| N3.1 | pending | [Assembly signature specification](docs/plans/2026-10-05-next-development-plan.md) | Declared-unit geometry, rotor position round-trip and highlighted limits |
+| N3.2 | pending | [Comparison specification](docs/plans/2026-10-05-next-development-plan.md) | Input and active-constraint changes with non-causal qualification |
+| N3.3 | pending | [Presenter guide](docs/demo/presenter-guide.md) | Two recorded rehearsals and backup recording |
+| N4.1 | blocked | [Client intake request](docs/client/aircraft-data-request.md) | D04–D06 and named client engineer |
+| N4.2 | blocked | [Validation specification](docs/plans/2026-10-05-next-development-plan.md) | Real held-out measurements and engineer-owned tolerances |
+| N4.3 | blocked | [Report specification](docs/plans/2026-10-05-next-development-plan.md) | Real inputs, independent review and human scope acceptance |
+| N5 / IP13–IP15 / IP17 | blocked | [Hosted specifications](docs/plans/2026-10-04-implementation-plan.md#ip13-hosted-metadata-and-private-artifact-adapters) | D01–D03; staging scale also D07 |
+| IP01 | local subset | [Local checkpoint](docs/qa/local-workbench-merge.md) | Hosted authoring/permissions remain outside this subset |
+| IP02 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Real approved mass ledger unavailable |
+| IP03 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Broader case eligibility tracked in N2 |
+| IP04 | local subset | [Model scope](docs/decisions/ADR-0003-static-hover-profile.md) | Measured-map acceptance tracked in N1 |
+| IP05 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Sag/thermal/real sustained limits unavailable |
+| IP06 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Only declared supported wrench inputs |
+| IP07 | local subset | [Independent bounded review](docs/reviews/2026-10-05-local-hover-claude.md) | Extensions tracked in N1/N2 |
+| IP08 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Restricted LP model; no general aircraft optimum |
+| IP09 | local subset | [Browser audit](docs/qa/local-workbench-design-audit.md) | N0.4 and real-data gates |
+| IP10 | local subset | [Historical compatibility review](docs/reviews/2026-10-05-historical-contract-claude.md) | New semantics require versioned successor |
+| IP11 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Constant segments only; N2.4 conditional |
+| IP12 | pending | N2.3 above | One shared implementation/status |
+| IP16 | local subset | [Report evidence](docs/qa/local-reports.md) | Assembly N3.1; hosted client review depends on N5 |
+| IP18 | blocked | N4 above | D04–D06, real validation and hosted release gates |
+| I01 | pending | [Investigation specification](docs/plans/2026-10-04-implementation-plan.md#6-claude-follow-up-investigations) | Exact-image sampling capability probe; preserve historical refusals |
+| I02 | pending | [Investigation specification](docs/plans/2026-10-04-implementation-plan.md#6-claude-follow-up-investigations) | Preregister controlled domain/surface campaign before executing |
+
+Immediate engineering sequence: N0.3 → N1.1/N1.3/N1.4 → N2.1 → N0.4/N0.5 → N3.1/N3.2 → N2.2/N2.3. Keep release review gates and external dependencies explicit.
 
 The product must answer a practical question: **given this approved aircraft design, how much payload can it carry across the required mission?** It must show which condition limits that payload, what evidence supports the answer, and which assumptions could change it. The client should be able to inspect the design, compare revisions, and leave with an understandable, reproducible engineering report.
 
