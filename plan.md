@@ -15,19 +15,19 @@ States distinguish implementation from acceptance: **local subset** is historica
 | N0.1 | blocked | [Scope proposal](docs/plans/2026-10-05-next-development-plan.md) | Client scope agreement and named engineer; no invented ADR-0004 decision |
 | N0.2 | blocked | [Data request](docs/client/aircraft-data-request.md) | Recipient and explicit sending instruction; no message sent |
 | N0.3 | implemented | This table | Review with roadmap changes |
-| N0.4 | pending | [Browser audit](docs/qa/local-workbench-design-audit.md) | Actual download, 200% zoom, conflict-dialog journey |
-| N0.5 | pending | [Semantic identity specification](docs/plans/2026-10-05-next-development-plan.md) | Model-module closure, compatibility verification, independent review |
-| N1.1 | in progress | [Conditioning specification](docs/plans/2026-10-05-next-development-plan.md) | Versioned conservative power/torque policy and independent review |
+| N0.4 | browser checked | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Native 200% zoom, real downloads, 409 preservation; broader/client UX pending |
+| N0.5 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Semantic module closure and historical compatibility tests pass; independent review |
+| N1.1 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Versioned retained conservative envelope/torque bands pass fixtures; independent review |
 | N1.2 | conditional | [MILP option](docs/plans/2026-10-05-next-development-plan.md) | First real map exceeds declared conditioning tolerance; retain LP default |
-| N1.3 | pending | [Realistic fixture specification](docs/plans/2026-10-05-next-development-plan.md) | Labelled noisy CT/CQ fixture and full API/report journey |
-| N1.4 | pending | [Shaft basis specification](docs/plans/2026-10-05-next-development-plan.md) | Varying-torque conditioning; efficiency applied once |
-| N2.1 | pending | [Motor-out specification](docs/plans/2026-10-05-next-development-plan.md) | Failed-rotor six-component allocation and independent review |
-| N2.2 | pending | [Climb specification](docs/plans/2026-10-05-next-development-plan.md) | Exact inflow coverage, declared loads and independent review |
-| N2.3 | pending | [IP12 specification](docs/plans/2026-10-04-implementation-plan.md#ip12-deterministic-uncertainty-and-allowable-limits) | Correlated scenarios, sourced caps and independent review |
+| N1.3 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | 60 noise seeds plus API/browser/report/restart fixtures; real maps unavailable |
+| N1.4 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Varying-torque shaft/electrical equivalence; efficiency once; independent review |
+| N2.1 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Quad certificate and feasible octo/zero commands; independent review |
+| N2.2 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Exact matching-inflow climb and unsupported sign/coverage tests; independent review |
+| N2.3 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Joint scenarios, common-candidate energy and separately sourced caps; independent review |
 | N2.4 | conditional | [Variable-power specification](docs/plans/2026-10-05-next-development-plan.md) | Client mission demonstrates need; constant-power transitions already supported |
-| N3.1 | pending | [Assembly signature specification](docs/plans/2026-10-05-next-development-plan.md) | Declared-unit geometry, rotor position round-trip and highlighted limits |
-| N3.2 | pending | [Comparison specification](docs/plans/2026-10-05-next-development-plan.md) | Input and active-constraint changes with non-causal qualification |
-| N3.3 | pending | [Presenter guide](docs/demo/presenter-guide.md) | Two recorded rehearsals and backup recording |
+| N3.1 | local subset | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Declared-mm airframe, numeric rotor/link round trip, governing-limit preview; real geometry pending |
+| N3.2 | implemented | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Retained input/constraint comparison; JSON numeric round-trip fix; standard review pending |
+| N3.3 | local subset | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Two timed automated journeys and retained recording; human presenter rehearsals pending |
 | N4.1 | blocked | [Client intake request](docs/client/aircraft-data-request.md) | D04–D06 and named client engineer |
 | N4.2 | blocked | [Validation specification](docs/plans/2026-10-05-next-development-plan.md) | Real held-out measurements and engineer-owned tolerances |
 | N4.3 | blocked | [Report specification](docs/plans/2026-10-05-next-development-plan.md) | Real inputs, independent review and human scope acceptance |
@@ -43,13 +43,13 @@ States distinguish implementation from acceptance: **local subset** is historica
 | IP09 | local subset | [Browser audit](docs/qa/local-workbench-design-audit.md) | N0.4 and real-data gates |
 | IP10 | local subset | [Historical compatibility review](docs/reviews/2026-10-05-historical-contract-claude.md) | New semantics require versioned successor |
 | IP11 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Constant segments only; N2.4 conditional |
-| IP12 | pending | N2.3 above | One shared implementation/status |
+| IP12 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | N2.3 implementation shares evidence; independent acceptance pending |
 | IP16 | local subset | [Report evidence](docs/qa/local-reports.md) | Assembly N3.1; hosted client review depends on N5 |
 | IP18 | blocked | N4 above | D04–D06, real validation and hosted release gates |
-| I01 | pending | [Investigation specification](docs/plans/2026-10-04-implementation-plan.md#6-claude-follow-up-investigations) | Exact-image sampling capability probe; preserve historical refusals |
-| I02 | pending | [Investigation specification](docs/plans/2026-10-04-implementation-plan.md#6-claude-follow-up-investigations) | Preregister controlled domain/surface campaign before executing |
+| I01 | capability only | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Exact-image regular-point p/U/vorticity probe; independent accuracy/direction/refinement review pending |
+| I02 | preregistered | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Controlled domain/surface protocol retained before probe; full campaign unrun |
 
-Immediate engineering sequence: N0.3 → N1.1/N1.3/N1.4 → N2.1 → N0.4/N0.5 → N3.1/N3.2 → N2.2/N2.3. Keep release review gates and external dependencies explicit.
+Next acceptance sequence: independent cross-family model/contract review → human fixture presentation → real client intake and engineer-owned tolerances when available. Conditional MILP/variable-power work remains untriggered. Hosting depends on D01–D03. No new physics merge or release tag precedes the required review and engineering acceptance.
 
 The product must answer a practical question: **given this approved aircraft design, how much payload can it carry across the required mission?** It must show which condition limits that payload, what evidence supports the answer, and which assumptions could change it. The client should be able to inspect the design, compare revisions, and leave with an understandable, reproducible engineering report.
 

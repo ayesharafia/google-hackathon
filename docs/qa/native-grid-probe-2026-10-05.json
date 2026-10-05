@@ -1,0 +1,199 @@
+{
+  "status": "capability_only",
+  "recipe_sha256": "0cfdbc0298fd6e45252e573b294ec571cd3b1188947660e818c03d0594527c47",
+  "wall_time_s": 3.9670422460003465,
+  "outputs": [
+    {
+      "path": "postProcessing/gridCapabilityProbe/20/labelled_grid_p_U_vorticity.xy",
+      "sha256": "8b8803dbe65ecc46a23ee23228c196b03b1147795e326de4f1813e0adac58e8a",
+      "shape": [
+        25,
+        10
+      ],
+      "scalar_and_vector_column_min": [
+        -0.110204193245,
+        -0.0525132029718,
+        -0.000179021815859,
+        -0.0885340163289,
+        -0.00259371946301,
+        -2.69376597813,
+        0.000118248236255
+      ],
+      "scalar_and_vector_column_max": [
+        0.0129519602954,
+        0.797272813281,
+        0.000258600179482,
+        0.0887448683166,
+        0.00232390049208,
+        2.69399309923,
+        0.00367136541523
+      ]
+    }
+  ],
+  "runtime_evidence": ".backend/investigations/i01/5e42ffa70cf1495c8dcc1d5b287040f2",
+  "log_sha256": "4491e66661ea365e4a8d26e5f3214694d45503a46751ba285febac5c812b820e",
+  "recipe": {
+    "command": [
+      "bash",
+      "-lc",
+      "cd /case && postProcess -time 20 -fields '(p U vorticity)' -func gridCapabilityProbe"
+    ],
+    "protocol": "native_declared_regular_grid_probe_v1",
+    "image": "opencfd/openfoam-run@sha256:4229997e74defb81548222d511b8e3b95b98305e5df41b8e88b031813fe47eeb",
+    "source_case": ".backend/sphere-smoke/runs/837875c91780422d85dd607bc14228cc",
+    "source_fields_and_mesh": {
+      "20/wallShearStress": "840a23dd1d5c6d3cabd71b8400fa28c6d2a2cb795f2a9e1908ce13db2a1f5dcf",
+      "20/p": "234c6b898595e3b18b6bf0b9d4655ba31a7c705bb2400f39e5c052abbba52b15",
+      "20/U": "f63b62e7e005ae1e9602d0fec266083be99b6c3596fa6c018e86ab7907af8cc0",
+      "20/phi": "014c1f0e1f183f8d7e44df65352430193b1cbaada1472fcc7b0ce5efced62f17",
+      "20/vorticity": "995e234a0e6cf2a13c93d2f98d9129ce2c2d5d77a535a95d0352742886c0e27a",
+      "20/uniform/cumulativeContErr": "626bd9acf1dbe0fcb20c1a81365ff9451a1642b7ad247ab33924785ba854ca92",
+      "20/uniform/time": "e1d7f4bc79fbcd0dd87bcb56848e12129150e94bf78d5b256ce075b6ae8cbcb4",
+      "20/uniform/functionObjects/functionObjectProperties": "fdd14d68dbee12257edfb124a7d7b9b3d63cad316ba1635a1ec337d40c8bf62f",
+      "constant/polyMesh/faceZones": "1e9d0804e3b1f782b50589458e579ba70d5f079d738657ff5e2dfd0ce661966d",
+      "constant/polyMesh/cellLevel": "bca0ac4ea5b4ebacd8d8cad4b39cf4d7b947340d5816b3a967320518b86d1ec9",
+      "constant/polyMesh/faces": "da272000a8e44a8f045d8a7bb2fed1246890efae14e83528f9bf682227332953",
+      "constant/polyMesh/owner": "54d3d0bce624496a833236ad4affcb9cf807e95f3c5a96f2d72f3e4629dfd648",
+      "constant/polyMesh/cellZones": "fa1cd3380c03f73dabbdac0fbc9a20454db6d010eae641b3a58974bea41fa9d8",
+      "constant/polyMesh/neighbour": "5791145b954effb41930c15c69676d0d0508b52151da37e5a65ed4e30cbd844d",
+      "constant/polyMesh/boundary": "ac474795a879d329d5f1197ea79099cd1f123f7fc6378441533d0cdc3199c9ee",
+      "constant/polyMesh/level0Edge": "a0c25e280dbd515f514a0601c1eb42abb0f8c4339d1fecc1e1a1436bbac79b23",
+      "constant/polyMesh/pointZones": "a60c8b352094a766afd1b9b7f8d74e52eb69cd15b15d85a898e88e79dd8a16a8",
+      "constant/polyMesh/pointLevel": "d539e4e24d4a406555707340cb2941506f1039b07312434526f4cf61100645d3",
+      "constant/polyMesh/points": "1e955a990a1b62282e4da0578f106c2f53b46cfce67b155bf20f824216721e54",
+      "constant/polyMesh/surfaceIndex": "bd5e4b2615514eaadaa914755f22426788295dcaa9caa506e2b8d872c24ba199"
+    },
+    "dictionary_sha256": "39ca1cf8c7675cc7e341ddb95c1fdd964a61c2758ab0e48b74bb975d8a54966e",
+    "coordinates": [
+      [
+        0.6,
+        0.0,
+        -0.5
+      ],
+      [
+        0.6,
+        0.0,
+        -0.25
+      ],
+      [
+        0.6,
+        0.0,
+        0.0
+      ],
+      [
+        0.6,
+        0.0,
+        0.25
+      ],
+      [
+        0.6,
+        0.0,
+        0.5
+      ],
+      [
+        1.1,
+        0.0,
+        -0.5
+      ],
+      [
+        1.1,
+        0.0,
+        -0.25
+      ],
+      [
+        1.1,
+        0.0,
+        0.0
+      ],
+      [
+        1.1,
+        0.0,
+        0.25
+      ],
+      [
+        1.1,
+        0.0,
+        0.5
+      ],
+      [
+        1.6,
+        0.0,
+        -0.5
+      ],
+      [
+        1.6,
+        0.0,
+        -0.25
+      ],
+      [
+        1.6,
+        0.0,
+        0.0
+      ],
+      [
+        1.6,
+        0.0,
+        0.25
+      ],
+      [
+        1.6,
+        0.0,
+        0.5
+      ],
+      [
+        2.1,
+        0.0,
+        -0.5
+      ],
+      [
+        2.1,
+        0.0,
+        -0.25
+      ],
+      [
+        2.1,
+        0.0,
+        0.0
+      ],
+      [
+        2.1,
+        0.0,
+        0.25
+      ],
+      [
+        2.1,
+        0.0,
+        0.5
+      ],
+      [
+        2.6,
+        0.0,
+        -0.5
+      ],
+      [
+        2.6,
+        0.0,
+        -0.25
+      ],
+      [
+        2.6,
+        0.0,
+        0.0
+      ],
+      [
+        2.6,
+        0.0,
+        0.25
+      ],
+      [
+        2.6,
+        0.0,
+        0.5
+      ]
+    ],
+    "coordinate_sha256": "89d28d6d52922dcf18f231af567a83e8040adca0b3b3a59aa6a2f89af2432b3b",
+    "registration_commit": "1e58cd8",
+    "qualification": "20 iterations; no converged field or sampling-accuracy claim"
+  },
+  "remaining": "Independent interpolation/direction/refinement validation; historical four slices remain refused."
+}
