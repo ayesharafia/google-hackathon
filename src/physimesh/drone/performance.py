@@ -67,7 +67,7 @@ class RotorMapV1(Record):
             raise ValueError('source description cannot be blank')
         return self
 
-    def evaluate(self, rpm: float, *, density: float, inflow: float, pitch: float) -> dict:
+    def check_query(self, rpm: float, *, density: float, inflow: float, pitch: float) -> None:
         if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)
                for v in (rpm, density, inflow, pitch)):
             raise ValueError('query values must be finite numbers')
@@ -79,6 +79,9 @@ class RotorMapV1(Record):
             raise ValueError('pitch outside map coverage')
         if not any(low <= rpm <= high for low, high in self.covered_intervals_rpm):
             raise ValueError('RPM query outside explicitly covered intervals')
+
+    def evaluate(self, rpm: float, *, density: float, inflow: float, pitch: float) -> dict:
+        self.check_query(rpm, density=density, inflow=inflow, pitch=pitch)
         x = [point.rpm for point in self.points]
         power = float(np.interp(rpm, x, [point.power_w for point in self.points]))
         torque = float(np.interp(rpm, x, [p.shaft_torque_nm for p in self.points]))

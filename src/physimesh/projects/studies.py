@@ -9,21 +9,31 @@ import numpy as np
 import scipy
 
 from physimesh.drone.capacity import capacity_from_snapshot
-from physimesh.drone.local_results import LocalCapacityV2, LocalCapacityV3
+from physimesh.drone.local_results import LocalCapacityV2, LocalCapacityV3, LocalCapacityV4
 from physimesh.drone.provenance import canonical_json, sha256_record
-from physimesh.drone.trim import MODEL_VERSION
+from physimesh.drone.trim import EXTENDED_MODEL_VERSION, MODEL_VERSION
 
 from .contracts import parse_snapshot
-from .performance import load_map
+from .performance import load_map, performance_refs
+
+MODEL_MODULES = (
+    'drone/performance.py', 'drone/conditioning.py', 'drone/trim.py', 'drone/capacity.py',
+    'drone/mission_capacity.py', 'drone/scenarios.py', 'drone/authoring.py', 'drone/atmosphere.py', 'drone/mass.py',
+    'drone/screening_scope.py', 'drone/models.py', 'drone/frames.py', 'drone/units.py',
+    'drone/provenance.py', 'drone/snapshot_hash.py', 'drone/local_results.py',
+    'projects/contracts.py', 'projects/performance.py',
+)
 
 
-def model_identity() -> dict:
-    root = Path(__file__).parents[1]
-    files = {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
-             for path in sorted(root.rglob('*.py'))}
-    return {'model_version': MODEL_VERSION, 'source_fingerprint_sha256': sha256_record(files),
+def model_identity(root: Path | None = None) -> dict:
+    root = root or Path(__file__).parents[1]
+    files = {name: hashlib.sha256((root/name).read_bytes()).hexdigest() for name in MODEL_MODULES}
+    fingerprint = {'policy': 'semantic_model_identity_v1', 'modules': files}
+    return {'model_version': MODEL_VERSION, 'source_fingerprint_sha256': sha256_record(fingerprint),
+            'fingerprint_policy': 'semantic_model_identity_v1', 'model_module_sha256': files,
             'numpy_version': np.__version__, 'scipy_version': scipy.__version__,
-            'qualification': 'Local source fingerprint and library versions; not an immutable deployed build.'}
+            'qualification': 'Explicit numerical-model dependency closure and library versions; '
+                             'historical full-tree identities remain historical. Not an immutable deployed build.'}
 
 
 class LocalStudies:
@@ -35,7 +45,7 @@ class LocalStudies:
     def run(self, project_id: str, revision_sha256: str) -> dict:
         revision = self.projects.repository.revision(project_id, revision_sha256)
         snapshot = parse_snapshot(revision.snapshot_json)
-        refs = {rotor.get('map_ref') for rotor in snapshot['rotors'] if rotor.get('map_ref')}
+        refs = performance_refs(snapshot)
         sources = {}
         source_errors = []
         for digest in sorted(refs):
@@ -43,17 +53,20 @@ class LocalStudies:
                 sources[digest] = load_map(self.projects.artifacts, digest)
             except (KeyError, ValueError, TypeError) as exc:
                 source_errors.append(str(exc))
+        extended = snapshot['fidelity'].get('local_pilot', {}).get('model_version') == EXTENDED_MODEL_VERSION
+        schema = 'local_mission_capacity_v4' if extended else 'local_mission_capacity_v3'
+        identity = {**self.model_identity, 'model_version': EXTENDED_MODEL_VERSION if extended else MODEL_VERSION}
         spec = {'project_id': project_id, 'revision_sha256': revision_sha256,
-                'snapshot_sha256': revision.snapshot_sha256, 'model': self.model_identity,
+                'snapshot_sha256': revision.snapshot_sha256, 'model': identity,
                 'performance_source_sha256': sorted(refs), 'engineering_approval': 'pending'}
-        spec['result_schema_version'] = 'local_mission_capacity_v3'
+        spec['result_schema_version'] = schema
         study = sha256_record(spec)
         if source_errors:
             raise ValueError('retained performance source unavailable or corrupt: ' + '; '.join(source_errors))
         result = {**capacity_from_snapshot(snapshot, sources), 'study_sha256': study, 'specification': spec}
         raw = canonical_json(result).encode()
-        LocalCapacityV3.model_validate_json(raw)
-        digest = self.projects.artifacts.put_bytes(raw, kind='local_mission_capacity_v3', meta={'study_sha256': study})
+        (LocalCapacityV4 if extended else LocalCapacityV3).model_validate_json(raw)
+        digest = self.projects.artifacts.put_bytes(raw, kind=schema, meta={'study_sha256': study})
         accepted = self.projects.repository.retain_study(project_id, revision_sha256, study, digest)
         return json.loads(self._bytes(accepted))
 
@@ -68,7 +81,9 @@ class LocalStudies:
         digest = self.projects.repository.study_digest(project_id, study)
         raw = self._bytes(digest)
         data = json.loads(raw)
-        if data.get('schema_version') == 'local_mission_capacity_v3':
+        if data.get('schema_version') == 'local_mission_capacity_v4':
+            LocalCapacityV4.model_validate_json(raw)
+        elif data.get('schema_version') == 'local_mission_capacity_v3':
             LocalCapacityV3.model_validate_json(raw)
         elif data.get('schema_version') == 'local_mission_capacity_v2':
             LocalCapacityV2.model_validate_json(raw)

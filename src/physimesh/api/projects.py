@@ -6,6 +6,7 @@ from fastapi.responses import Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from physimesh.drone.authoring import inspect_inputs
+from physimesh.drone.conditioning import ConditionedMap, ConditioningPolicyV1
 from physimesh.drone.models import project_from_mapping, readiness
 from physimesh.projects.contracts import parse_snapshot
 from physimesh.projects.repository import DraftConflict, ProjectMissing
@@ -35,6 +36,11 @@ class ImportMap(BaseModel):
     dataset_json: str = Field(max_length=500_000)
 
 
+class ConditionMap(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    policy: ConditioningPolicyV1
+
+
 class RunStudy(BaseModel):
     model_config = ConfigDict(extra='forbid', strict=True)
     revision_sha256: str = Field(pattern=r'^[0-9a-f]{64}$')
@@ -52,6 +58,18 @@ def example(request: Request):
     return operation(lambda: create_hover_example(request.app.state.projects))
 
 
+@router.post('/examples/realistic', status_code=201)
+def realistic_example(request: Request):
+    from physimesh.projects.realistic import create_realistic_example
+    return operation(lambda: create_realistic_example(request.app.state.projects))
+
+
+@router.post('/examples/motorout', status_code=201)
+def motorout_example(request: Request):
+    from physimesh.projects.realistic import create_realistic_example
+    return operation(lambda: create_realistic_example(request.app.state.projects, motorout=True))
+
+
 @router.post('/performance-sources', status_code=201)
 def import_map(request: Request, body: ImportMap):
     from physimesh.projects.performance import retain_map
@@ -61,7 +79,36 @@ def import_map(request: Request, body: ImportMap):
 @router.get('/performance-sources/{digest}')
 def source(request: Request, digest: str):
     from physimesh.projects.performance import load_map
-    return operation(lambda: load_map(request.app.state.projects.artifacts, digest).model_dump(mode='json'))
+    def read():
+        model = load_map(request.app.state.projects.artifacts, digest)
+        if isinstance(model, ConditionedMap):
+            return {'schema_version': 'rotor_map_conditioned_v1', 'dataset': model.raw.model_dump(mode='json'),
+                    'conditioning': model.evidence()}
+        return model.model_dump(mode='json')
+    return operation(read)
+
+
+@router.post('/performance-sources/{digest}/condition', status_code=201)
+def condition_source(request: Request, digest: str, body: ConditionMap):
+    from physimesh.projects.performance import retain_conditioned_map
+    return operation(lambda: retain_conditioned_map(request.app.state.projects.artifacts, digest, body.policy))
+
+
+@router.get('/geometry-sources/{digest}')
+def geometry_source(request: Request, digest: str):
+    def read():
+        import hashlib
+
+        from physimesh.drone.stl_import import parse_stl
+        settings = request.app.state.settings
+        with request.app.state.projects.artifacts.open(digest) as stream:
+            raw = stream.read(settings.max_upload_bytes+1)
+        if len(raw) > settings.max_upload_bytes or hashlib.sha256(raw).hexdigest() != digest:
+            raise ValueError('geometry source byte integrity or size check failed')
+        parse_stl(raw, max_bytes=settings.max_upload_bytes, max_triangles=settings.max_triangles)
+        return raw
+    return Response(operation(read), media_type='application/octet-stream',
+                    headers={'X-Geometry-Source-SHA256': digest})
 
 
 def operation(action):
@@ -100,15 +147,13 @@ def inspection(request: Request, project_id: str):
         report = inspect_inputs(snapshot)
         ready = readiness(project_from_mapping(snapshot), 'screening')
         from physimesh.drone.capacity import hover_readiness
-        from physimesh.projects.performance import load_map
+        from physimesh.projects.performance import load_map, performance_refs
         sources, errors = {}, []
-        for rotor in snapshot['rotors']:
-            digest = rotor.get('map_ref')
-            if digest:
-                try:
-                    sources[digest] = load_map(request.app.state.projects.artifacts, digest)
-                except (ValueError, KeyError, TypeError) as exc:
-                    errors.append(str(exc))
+        for digest in performance_refs(snapshot):
+            try:
+                sources[digest] = load_map(request.app.state.projects.artifacts, digest)
+            except (ValueError, KeyError, TypeError) as exc:
+                errors.append(str(exc))
         return {**report, 'draft_version': project['draft_version'],
                 'hover_readiness': hover_readiness(snapshot, sources, errors),
                 'screening_readiness': {'ready': ready.ready, 'blocking': ready.blocking}}

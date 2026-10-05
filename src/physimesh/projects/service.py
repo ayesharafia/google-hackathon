@@ -34,13 +34,12 @@ class ProjectService:
         if project['draft_version'] != expected_version:
             raise DraftConflict(project['draft_version'])
         snapshot = parse_snapshot(project['snapshot_json'])
-        from .performance import load_map
-        for rotor in snapshot['rotors']:
-            if rotor.get('map_ref'):
-                try:
-                    load_map(self.artifacts, rotor['map_ref'])
-                except KeyError as exc:
-                    raise ValueError('rotor-map source is not retained') from exc
+        from .performance import load_map, performance_refs
+        for digest in performance_refs(snapshot):
+            try:
+                load_map(self.artifacts, digest)
+            except KeyError as exc:
+                raise ValueError('rotor-map source is not retained') from exc
         # Imported geometry references are byte identities, not inferred source claims.
         for component in snapshot['assembly'].get('components', []):
             digest = component.get('source_sha256')
