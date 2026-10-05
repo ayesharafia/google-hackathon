@@ -28,3 +28,15 @@ New studies use local V3. Historical V2 sequence bytes produced from exact commi
 The PDF now embeds its renderer source SHA-256 as well as its version. A source-only identity change changes the PDF digest; retained artifact metadata and HTTP renderer/source headers agree for both outputs. Responsive checks found unequal export-button heights and squeezed mobile table columns. Both were corrected; final expanded-control/visual acceptance remains in progress.
 
 The initial broad V2 adapter failed a Claude follow-up. Historical policies now dispatch only for exact known source fingerprints from 07b9f19, 0db6bb0 and 3f9b01d. Unknown/later V2 records must satisfy the stronger checks. Regression tests refuse contradictory required bounds/outcomes, nonattaining labels, uncertified infeasibility and nonbinding aggregate labels for those stronger-policy reads. V3 never selects a weaker policy based on historical source metadata. Source fingerprints are documentary identity, not authenticated engineering approval.
+
+## Final local checkpoint
+
+The historical correction at `2cbbe3c` received `PASS_BOUNDED_LOCAL` in [Claude's follow-up](../reviews/2026-10-05-historical-contract-claude.md). The f0e4c62 original validator was inspected independently: it already requires the strongest participating-bound checks, so no weaker dispatch entry is necessary. Unknown edited-tree producers remain fail-closed and are not promised universal historical readability.
+
+Fresh final fixture study `ea62a1f7ee46d8c8f549e74bceafcd1e5a6b0033728a397089689d3c3bef21f9` exported a 34,220-byte PDF with SHA-256 `62735a251288a033a861762a3780e2936806f04c7be9866f1230330d88429ade`. Its JSON SHA-256 is `bc2480b33ba890df8333e015290b75181e2316c84b37c0748f11d8cc852c0344`; renderer SHA-256 is `ffd433aae70635a90a7eb64255764d2017de284f94a73cbd84b585d26fe21884`. Response headers agree with the retrieved bytes. All 22 pages were rendered/inspected in overviews; first two pages were additionally inspected at larger resolution. Heading pagination was corrected so ordered mission energy starts with its content.
+
+The current historical PDF for study `d64a47b42477ee0dbed18d432ef33a6bf286aa1ef3aaf2d5f1f62f71edb43c4e` has SHA-256 `5cca688ed228e7ee9ad8cf2dcb7caf88f00f1bc18cd3859daa53bb4730474093`. Poppler text extraction confirms the historical qualifier and “Reported historical payload bound” wording. These hashes apply to this renderer observation, not an earlier PDF.
+
+The in-app browser reported PDF download start followed by cancellation with zero received bytes; a direct native save-link experiment was also canceled and was removed. API retrieval and render verification do not substitute for a completed browser file-save. Standard-browser download acceptance remains pending. The [complete workbench audit](local-workbench-design-audit.md) records actual controls, responsiveness, fixed issues and remaining browser scope.
+
+Final software checks: 490 tests passed with three backend tests deselected; focused reports passed after heading pagination changed, plus Ruff and JavaScript syntax checks. No new native OpenFOAM execution or aircraft validation is claimed.

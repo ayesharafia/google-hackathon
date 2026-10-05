@@ -1,7 +1,7 @@
 """Versioned local studies, separate from approved AircraftStudyV2.
 
-V1/V2 remain historical reads. V3 adds stronger participating-bound consistency;
-old bytes are not retroactively subjected to successor acceptance rules.
+V1/V2 remain historical reads. Exact known V2 producers retain their original
+policies; unknown producers must satisfy stronger V3 consistency checks.
 """
 from typing import Literal
 

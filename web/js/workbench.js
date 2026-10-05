@@ -34,7 +34,7 @@ async function action(work) {
 function preserveEdits() { return !dirty || confirm('Discard the unsaved edits and open the saved design?'); }
 async function inventory(selected = '') {
   const data = await api('/projects');
-  $('projects').replaceChildren(...data.projects.map(project => { const option = document.createElement('option'); option.value = project.project_id; option.textContent = project.title; return option; }));
+  $('projects').replaceChildren(...data.projects.map(project => { const option = document.createElement('option'); option.value = project.project_id; option.textContent = project.title + ' · ' + project.project_id.slice(-8); return option; }));
   if (selected) $('projects').value = selected;
 }
 function render(project) {
@@ -127,7 +127,7 @@ $('freeze').addEventListener('click', () => action(async () => {
 $('export-draft').addEventListener('click', () => {
   try { const raw = JSON.stringify(JSON.parse($('snapshot').value), null, 2), url = URL.createObjectURL(new Blob([raw], { type: 'application/json' }));
     const a = document.createElement('a'); a.href = url; a.download = current.project_id + (dirty ? '-unsaved' : '-v' + current.draft_version) + '.json'; a.click(); URL.revokeObjectURL(url);
-    message(dirty ? 'Exported unsaved input JSON. This is not a retained revision.' : 'Exported saved draft inputs.');
+    message(dirty ? 'Unsaved input JSON download requested. This is not a retained revision.' : 'Saved draft JSON download requested.');
   } catch (error) { message('Invalid JSON: ' + error.message, true); }
 });
 window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
@@ -146,3 +146,5 @@ $('compare').addEventListener('click',()=>action(async()=>{
   renderComparison($('comparison-report'),report);message('Retained studies compared. Current unsaved inputs do not change either record.');
 }));
 $('reset-layout').addEventListener('click',()=>viewer?.reset());
+controls();
+message('Connect with the token used to start this local server. It is held in memory for this page only.');

@@ -185,7 +185,11 @@ def test_later_v2_producers_cannot_select_weaker_policy_by_omitting_evidence(tmp
         else:
             bad.update(outcome='infeasible', payload_lower_bound_kg=None, limiting_case_id=None,
                        headline_candidate_checks=[], certificate=None)
-        with pytest.raises(ValueError):
+        expected = {'required_bound': 'required feasible case bound',
+                    'required_outcome': 'required feasible case bound',
+                    'attainment': 'must attain',
+                    'infeasible_certificate': 'supported certificate'}
+        with pytest.raises(ValueError, match=expected[mutation]):
             LocalCapacityV2.model_validate_json(json.dumps(bad))
     # An unrecognized source cannot claim first-producer semantics by dropping bounds.
     from pathlib import Path
@@ -248,3 +252,23 @@ def test_known_corrected_v2_generation_preserves_pre_minimum_policy_without_weak
     record['schema_version'] = 'local_mission_capacity_v3'
     with pytest.raises(ValueError, match='participating feasible case bound'):
         LocalCapacityV3.model_validate_json(json.dumps(record))
+
+
+@pytest.mark.parametrize('source', [
+    '5ea15ad323a3630b35d3b8d4428ea5b86b0ba4df80d78059cd0a7125c44a69b2',
+    '0940847e403ea7c9e42dada54e7cb7642ea06bdea43afd2623e4043971812310',
+    'b77a023e87cb59f9b2fcd6b295329303ceab8d591eb1bb2600e562093e4fe789'])
+def test_known_historical_v2_policy_still_requires_every_common_candidate_check(source):
+    from pathlib import Path
+
+    from physimesh.drone.local_results import LocalCapacityV2
+    from physimesh.drone.provenance import sha256_record
+
+    fixture = json.loads((Path(__file__).parent/'fixtures/retained-v2-sequence.json').read_text())
+    record = json.loads(fixture['original_result_json'])
+    record['specification']['model']['source_fingerprint_sha256'] = source
+    record['study_sha256'] = sha256_record(record['specification'])
+    LocalCapacityV2.model_validate_json(json.dumps(record))
+    record['headline_candidate_checks'].pop()
+    with pytest.raises(ValueError, match='required candidate check missing'):
+        LocalCapacityV2.model_validate_json(json.dumps(record))

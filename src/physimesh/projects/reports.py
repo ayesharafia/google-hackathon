@@ -101,7 +101,8 @@ def render_pdf(raw: bytes, snapshot_raw: str) -> bytes:
                           leading=15, textColor=ink, spaceAfter=7)
     title = ParagraphStyle('ReportTitle', parent=body, fontSize=24, leading=29, spaceAfter=18)
     payload_style = ParagraphStyle('Payload', parent=body, fontSize=34, leading=42, spaceAfter=10)
-    heading = ParagraphStyle('ReportHeading', parent=body, fontSize=15, leading=20, spaceBefore=14)
+    heading = ParagraphStyle('ReportHeading', parent=body, fontSize=15, leading=20,
+                             spaceBefore=14, keepWithNext=True)
     mono = ParagraphStyle('Evidence', parent=body, fontName='Courier', fontSize=7.5, leading=11,
                           spaceAfter=1, splitLongWords=True, alignment=TA_LEFT)
     def text(value):
