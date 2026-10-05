@@ -58,7 +58,8 @@ inspect, freeze and evaluate it; change a design input and retain a second study
 for comparison. Opening the HTML with `file://` cannot provide the project API.
 
 Keep the data directory to retain projects, revisions, maps and results across
-restarts. It is not included in GitHub. Execution is local and synchronous;
+restarts. The tracked `.gitignore` excludes `.backend/` from normal Git staging;
+project data is not distributed with the code. Execution is local and synchronous;
 individual identity, recoverable jobs and engineering approval remain pending.
 See [the current backend/formula guide](docs/technical/local-workbench-and-physics-guide.md)
 for model eligibility, outcome semantics, reports and exact limitations. The
