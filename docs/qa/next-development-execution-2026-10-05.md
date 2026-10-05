@@ -134,3 +134,17 @@ pending. GitHub `main` remained at `802c63a` when checked; new physics stays on
 the review branch. Repository setup/install/start instructions are already saved
 in the cloud environment draft and continue to support the unchanged dependency
 set. That saved draft is not a public app deployment.
+
+Delivery verification: all implementation/evidence commits were pushed to
+[`codex/next-development-plan`](https://github.com/PhysiCoreEngine12/Drone-Project/tree/codex/next-development-plan).
+Draft PR creation was attempted with `gh pr create --draft --base main`; the
+runtime returned `Post "https://api.github.com/graphql": Forbidden`. No PR was
+created or claimed. The [comparison](https://github.com/PhysiCoreEngine12/Drone-Project/compare/main...codex/next-development-plan)
+contains the full reviewable change. `api.github.com` was added to the saved
+cloud network draft, preserving the three existing explicit tunnel destinations;
+the platform returned `status=saved`, `requires_publish=true`. This saved draft
+does not change current connectivity, provide API authentication or publish an
+app. Apply/publish the environment settings and retry the API operation before
+claiming PR delivery. Git push is already verified; no new credentials were
+requested or exposed. Required model/client review remains separate from that
+network prerequisite.
