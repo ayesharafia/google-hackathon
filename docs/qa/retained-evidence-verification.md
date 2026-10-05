@@ -19,3 +19,5 @@ Performed 5 October 2026: `both --native --vendor` verified 130 historical sourc
 These are byte-identity checks. `solver_rerun=false`, current source is unchecked, evidence remains `unverified`, machine review remains `pending`, aircraft validation remains `not_established` and human release approval remains `pending`. The retained Claude review is checked as documentary bytes, not a newly performed physics review. No cause is assigned to the retained correlation discrepancy.
 
 Tests exercise changed current source, unchanged original-checker refusal, document/support/package/native/vendor corruption, unexpected members, escaping symlinks, relocation, unchecked scopes, exact historical Git reads, missing commits/paths, wrong hashes, non-regular Git objects, CLI selection/refusal and unchanged checkout state. Tests do not execute a solver.
+
+Exact historical-source execution and numerical reproduction remain pending. The source-commit command only completes the byte-inspection part of I03. A fresh isolated environment, pinned dependencies/backend, bounded execution budget and retained comparison receipt are required for a reproduction claim.

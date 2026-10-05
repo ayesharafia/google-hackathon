@@ -159,3 +159,92 @@ def test_historical_v2_sequence_reads_exports_and_reports_original_bytes_after_r
     assert pdf.status_code == 200
     assert pdf.headers['X-Study-JSON-SHA256'] == fixture['result_sha256']
     assert c.get(route+'/export', headers=AUTH).content == raw
+
+
+def test_later_v2_producers_cannot_select_weaker_policy_by_omitting_evidence(tmp_path):
+    import copy
+
+    from physimesh.drone.local_results import LocalCapacityV2
+    from physimesh.drone.provenance import sha256_record
+
+    c = client(tmp_path)
+    project = c.post('/api/drone/projects/examples/hover', headers=AUTH).json()
+    base = '/api/drone/projects/'+project['project_id']
+    frozen = c.post(base+'/revisions', headers=AUTH, json={'expected_version': 1}).json()
+    record = c.post(base+'/studies', headers=AUTH, json={'revision_sha256': frozen['revision_sha256']}).json()
+    record['schema_version'] = 'local_mission_capacity_v2'
+    LocalCapacityV2.model_validate_json(json.dumps(record))
+    for mutation in ('required_bound', 'required_outcome', 'attainment', 'infeasible_certificate'):
+        bad = copy.deepcopy(record)
+        if mutation == 'required_bound':
+            next(case for case in bad['cases'] if case['case_id'] == bad['limiting_case_id'])['candidate']['payload_kg'] = 0.
+        elif mutation == 'required_outcome':
+            bad['cases'][0].update(outcome='unsupported', candidate=None)
+        elif mutation == 'attainment':
+            next(case for case in bad['cases'] if case['case_id'] == bad['limiting_case_id'])['candidate']['payload_kg'] += 1.
+        else:
+            bad.update(outcome='infeasible', payload_lower_bound_kg=None, limiting_case_id=None,
+                       headline_candidate_checks=[], certificate=None)
+        with pytest.raises(ValueError):
+            LocalCapacityV2.model_validate_json(json.dumps(bad))
+    # An unrecognized source cannot claim first-producer semantics by dropping bounds.
+    from pathlib import Path
+    legacy = json.loads((Path(__file__).parent/'fixtures/retained-v2-sequence.json').read_text())
+    bad = json.loads(legacy['original_result_json'])
+    bad['specification']['model']['source_fingerprint_sha256'] = 'f'*64
+    bad['study_sha256'] = sha256_record(bad['specification'])
+    with pytest.raises(ValueError, match='every participating case'):
+        LocalCapacityV2.model_validate_json(json.dumps(bad))
+
+
+def test_later_v2_aggregate_requires_binding_energy_and_no_invented_case():
+    import copy
+    from pathlib import Path
+
+    from physimesh.drone.local_results import LocalCapacityV2
+    from physimesh.drone.provenance import sha256_record
+
+    fixture = json.loads((Path(__file__).parent/'fixtures/retained-v2-sequence.json').read_text())
+    record = json.loads(fixture['original_result_json'])
+    record['specification']['model']['source_fingerprint_sha256'] = 'f'*64
+    record['study_sha256'] = sha256_record(record['specification'])
+    record['participating_case_bounds'] = copy.deepcopy(record['cases'])
+    LocalCapacityV2.model_validate_json(json.dumps(record))
+    bad = copy.deepcopy(record); bad['limiting_case_id'] = 'hover_long'
+    with pytest.raises(ValueError, match='aggregate energy limit'):
+        LocalCapacityV2.model_validate_json(json.dumps(bad))
+    bad = copy.deepcopy(record)
+    for case in bad['headline_candidate_checks']:
+        case['candidate']['electrical_power_w'] -= 1.
+    seq = bad['sequence_evidence']; consumed = 0.
+    for segment in seq['segments']:
+        segment['electrical_power_w'] -= 1.
+        segment['energy_required_j'] = segment['electrical_power_w']*segment['duration_s']
+        consumed += segment['energy_required_j']
+        segment['remaining_usable_energy_j'] = seq['usable_energy_j']-consumed
+    seq.update(total_energy_j=consumed, remaining_usable_energy_j=seq['usable_energy_j']-consumed)
+    with pytest.raises(ValueError, match='aggregate energy limit'):
+        LocalCapacityV2.model_validate_json(json.dumps(bad))
+
+
+@pytest.mark.parametrize('source', [
+    '0940847e403ea7c9e42dada54e7cb7642ea06bdea43afd2623e4043971812310',
+    'b77a023e87cb59f9b2fcd6b295329303ceab8d591eb1bb2600e562093e4fe789'])
+def test_known_corrected_v2_generation_preserves_pre_minimum_policy_without_weakening_v3(source):
+    import copy
+    from pathlib import Path
+
+    from physimesh.drone.local_results import LocalCapacityV2
+    from physimesh.drone.provenance import sha256_record
+
+    fixture = json.loads((Path(__file__).parent/'fixtures/retained-v2-sequence.json').read_text())
+    record = json.loads(fixture['original_result_json'])
+    record['specification']['model']['source_fingerprint_sha256'] = source
+    record['study_sha256'] = sha256_record(record['specification'])
+    record['participating_case_bounds'] = copy.deepcopy(record['cases'])
+    # Manufactured acceptance-policy regression, not a genuine historical result.
+    record['participating_case_bounds'][0]['candidate']['payload_kg'] = 0.
+    LocalCapacityV2.model_validate_json(json.dumps(record))
+    record['schema_version'] = 'local_mission_capacity_v3'
+    with pytest.raises(ValueError, match='participating feasible case bound'):
+        LocalCapacityV3.model_validate_json(json.dumps(record))

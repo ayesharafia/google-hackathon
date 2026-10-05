@@ -163,6 +163,9 @@ class LocalCapacityV3(_CapacityRecord):
 
     @model_validator(mode='after')
     def headline(self):
+        return self.check_headline()
+
+    def check_headline(self, *, require_participating_bounds=True):
         from physimesh.drone.provenance import sha256_record
         if sha256_record(self.specification) != self.study_sha256:
             raise ValueError('study specification digest mismatch')
@@ -203,7 +206,7 @@ class LocalCapacityV3(_CapacityRecord):
                     raise ValueError('sequence power differs from recomputed candidate')
         participating = required | ({s.case_id for s in self.sequence_evidence.segments}
                                     if self.sequence_evidence else set())
-        if self.sequence_evidence:
+        if self.sequence_evidence and require_participating_bounds:
             bounds = {case.case_id: case for case in self.participating_case_bounds}
             if len(bounds) != len(self.participating_case_bounds) or bounds.keys() != participating:
                 raise ValueError('unique bound for every participating case required')
@@ -226,42 +229,64 @@ class LocalCapacityV3(_CapacityRecord):
         return self
 
 
+# Exact source fingerprint of commit 07b9f192d55fd79c0cb209ece063bd029ce3d93e,
+# computed from the same source-file manifest used by LocalStudies.model_identity.
+# Its earlier acceptance policy is retained for history, never new production.
+FIRST_V2_SOURCE_SHA256 = '5ea15ad323a3630b35d3b8d4428ea5b86b0ba4df80d78059cd0a7125c44a69b2'
+# Corrected V2 generations before all participating minima became mandatory.
+PRE_MINIMUM_V2_SOURCES = frozenset({
+    '0940847e403ea7c9e42dada54e7cb7642ea06bdea43afd2623e4043971812310',  # 0db6bb0
+    'b77a023e87cb59f9b2fcd6b295329303ceab8d591eb1bb2600e562093e4fe789',  # 3f9b01d
+})
+
+
 class LocalCapacityV2(_CapacityRecord):
-    """Historical V2 reads, not requalification under current V3 evidence policy."""
+    """Historical reads. Known producer fingerprints select their earlier policies."""
     schema_version: Literal['local_mission_capacity_v2']
 
     @model_validator(mode='after')
     def historical_consistency(self):
+        model = self.specification.get('model', {})
+        source = model.get('source_fingerprint_sha256') if isinstance(model, dict) else None
+        if source in PRE_MINIMUM_V2_SOURCES:
+            return LocalCapacityV3.check_headline(self, require_participating_bounds=False)
+        if source != FIRST_V2_SOURCE_SHA256:
+            # Later/unknown producers must satisfy the strengthened evidence rules.
+            # Missing legacy evidence is not sufficient to select a weaker policy.
+            return LocalCapacityV3.check_headline(self)
+        # Original 07b9f19 headline policy. Earlier attribution limitations stay
+        # historical and visibly qualified; reading is not current requalification.
         from physimesh.drone.provenance import sha256_record
         if sha256_record(self.specification) != self.study_sha256:
-            raise ValueError('historical study specification digest mismatch')
+            raise ValueError('study specification digest mismatch')
         names = [case.case_id for case in self.cases]
         if len(set(names)) != len(names) or not any(case.required for case in self.cases):
-            raise ValueError('historical unique cases and a required case are necessary')
+            raise ValueError('unique cases and a required case are necessary')
         if self.outcome != 'feasible':
             if self.payload_lower_bound_kg is not None:
-                raise ValueError('failed historical study cannot publish a payload headline')
+                raise ValueError('failed study cannot publish a payload headline')
             return self
         if self.payload_lower_bound_kg is None or not self.headline_candidate_checks:
-            raise ValueError('historical headline needs candidate evidence')
+            raise ValueError('headline needs independently checked common candidate')
         checks = {case.case_id: case for case in self.headline_candidate_checks}
+        if len(checks) != len(self.headline_candidate_checks):
+            raise ValueError('duplicate common candidate checks')
         required = {case.case_id for case in self.cases if case.required}
-        if len(checks) != len(self.headline_candidate_checks) or not required <= checks.keys():
-            raise ValueError('historical required candidate checks missing or duplicated')
+        if not required <= checks.keys():
+            raise ValueError('required candidate check missing')
         for case in checks.values():
             if case.outcome != 'feasible' or case.candidate.payload_kg != self.payload_lower_bound_kg:
-                raise ValueError('historical common candidate evidence inconsistent')
-        participating = set(required)
+                raise ValueError('common candidate is not feasible in every checked case')
         if self.mission_semantics == 'required_cases_and_ordered_sequence':
             if self.sequence_evidence is None:
-                raise ValueError('historical sequence headline needs aggregate evidence')
+                raise ValueError('sequence headline needs aggregate evidence')
             for segment in self.sequence_evidence.segments:
-                participating.add(segment.case_id)
-                if segment.case_id not in checks or abs(
-                        segment.electrical_power_w-checks[segment.case_id].candidate.electrical_power_w) > 1e-7:
-                    raise ValueError('historical segment candidate evidence inconsistent')
-        if self.aggregate_limit is None and self.limiting_case_id not in participating:
-            raise ValueError('historical limiting case must participate')
+                if segment.case_id not in checks:
+                    raise ValueError('sequence segment candidate check missing')
+                if abs(segment.electrical_power_w-checks[segment.case_id].candidate.electrical_power_w) > 1e-7:
+                    raise ValueError('sequence power differs from recomputed candidate')
+        if self.aggregate_limit is None and self.limiting_case_id not in required:
+            raise ValueError('alternative headline requires a required limiting case')
         if self.aggregate_limit is not None and self.sequence_evidence is None:
-            raise ValueError('historical aggregate limit needs sequence evidence')
+            raise ValueError('aggregate limit needs sequence evidence')
         return self
