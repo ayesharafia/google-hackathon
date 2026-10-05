@@ -4,9 +4,10 @@ Drone engineering module with a verified MVP foundation and a
 [production development plan](plan.md) for a private hosted web app. The
 [original master plan](docs/plans/2026-10-02-master-plan.md) and manifest are
 retained as historical references. Python 3.11; FastAPI orchestration;
-OpenFOAM solves flow equations. The current labelled example calculates a
-supplied-point payload ceiling; the production plan adds trim, rotor-performance
-search and mission constraints. No aircraft capacity is assumed.
+OpenFOAM solves flow equations. The saved-design workbench now calculates
+restricted static-hover payload bounds and fixed-pack constant-segment energy
+from retained rotor maps. The original supplied-point screening example remains
+available. Synthetic examples do not establish a real aircraft capacity.
 [M§0, M§4]
 
 ## Setup
@@ -33,9 +34,37 @@ design inputs remain unknown and block dependent work. [M§2, M§26, M§27]
 Continue with the task dependencies and release gates in [plan.md](plan.md). The
 [4 October implementation work order](docs/plans/2026-10-04-implementation-plan.md)
 details saved projects, authoring, rotor maps, trim, capacity, energy and hosted delivery.
-P00.1, P00.2 and [P01.1 contracts](docs/contracts/production-data.md) are complete within their bounded scopes. [Contract acceptance](docs/qa/production-contracts-review.md) records final Claude review and checks. The local [Pilot-1](docs/pilots/pilot-1.md) fixture path is next. Historical equation IDs and old plan section/task references
+P00.1, P00.2 and [P01.1 contracts](docs/contracts/production-data.md) are complete within their bounded scopes. [Contract acceptance](docs/qa/production-contracts-review.md) records final Claude review and checks. The local [Pilot-1](docs/pilots/pilot-1.md) fixture path has scoped implementation; [checkpoint acceptance](docs/qa/local-workbench-merge.md) records its remaining limits. Next independent model work is deterministic scenarios and sourced allowable limits. Historical equation IDs and old plan section/task references
 resolve to the archived master plan. The separate 2D PhysiMesh product remains
 untouched; integration is through a versioned export contract.
+
+## Run the local saved-design workbench
+
+After setup, run the API with a persistent local data directory and a token of
+your choosing. This path does not require Docker or an OpenFOAM solve:
+
+```sh
+export PHYSIMESH_DATA_ROOT="$PWD/.backend/local-workbench"
+read -s 'PHYSIMESH_API_TOKEN?Choose a local session token: '
+export PHYSIMESH_API_TOKEN
+.venv/bin/python -m uvicorn physimesh.api.app:app_from_environment --factory --host 127.0.0.1 --port 8768
+```
+
+The token prompt uses zsh; in bash use
+`read -s -p 'Choose a local session token: ' PHYSIMESH_API_TOKEN`.
+Open [the workbench](http://127.0.0.1:8768/web/workbench.html) through the HTTP
+server, connect with that token, and create the labelled hover example. Save,
+inspect, freeze and evaluate it; change a design input and retain a second study
+for comparison. Opening the HTML with `file://` cannot provide the project API.
+
+Keep the data directory to retain projects, revisions, maps and results across
+restarts. The tracked `.gitignore` excludes `.backend/` from normal Git staging;
+project data is not distributed with the code. Execution is local and synchronous;
+individual identity, recoverable jobs and engineering approval remain pending.
+See [the current backend/formula guide](docs/technical/local-workbench-and-physics-guide.md)
+for model eligibility, outcome semantics, reports and exact limitations. The
+[browser audit](docs/qa/local-workbench-design-audit.md) records the in-app host's
+canceled downloads and remaining browser acceptance.
 
 ## Verify the frozen production baseline
 

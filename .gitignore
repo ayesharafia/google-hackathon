@@ -1,0 +1,14 @@
+# Local project data, retained artifacts and execution outputs
+/.backend/
+
+# Local Python environment and generated build/test files
+/.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+/build/
+
+# Finder metadata
+.DS_Store
