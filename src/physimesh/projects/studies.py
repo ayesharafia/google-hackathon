@@ -9,7 +9,7 @@ import numpy as np
 import scipy
 
 from physimesh.drone.capacity import capacity_from_snapshot
-from physimesh.drone.local_results import LocalCapacityV2
+from physimesh.drone.local_results import LocalCapacityV2, LocalCapacityV3
 from physimesh.drone.provenance import canonical_json, sha256_record
 from physimesh.drone.trim import MODEL_VERSION
 
@@ -46,13 +46,14 @@ class LocalStudies:
         spec = {'project_id': project_id, 'revision_sha256': revision_sha256,
                 'snapshot_sha256': revision.snapshot_sha256, 'model': self.model_identity,
                 'performance_source_sha256': sorted(refs), 'engineering_approval': 'pending'}
+        spec['result_schema_version'] = 'local_mission_capacity_v3'
         study = sha256_record(spec)
         if source_errors:
             raise ValueError('retained performance source unavailable or corrupt: ' + '; '.join(source_errors))
         result = {**capacity_from_snapshot(snapshot, sources), 'study_sha256': study, 'specification': spec}
         raw = canonical_json(result).encode()
-        LocalCapacityV2.model_validate_json(raw)
-        digest = self.projects.artifacts.put_bytes(raw, kind='local_mission_capacity_v2', meta={'study_sha256': study})
+        LocalCapacityV3.model_validate_json(raw)
+        digest = self.projects.artifacts.put_bytes(raw, kind='local_mission_capacity_v3', meta={'study_sha256': study})
         accepted = self.projects.repository.retain_study(project_id, revision_sha256, study, digest)
         return json.loads(self._bytes(accepted))
 
@@ -67,7 +68,9 @@ class LocalStudies:
         digest = self.projects.repository.study_digest(project_id, study)
         raw = self._bytes(digest)
         data = json.loads(raw)
-        if data.get('schema_version') == 'local_mission_capacity_v2':
+        if data.get('schema_version') == 'local_mission_capacity_v3':
+            LocalCapacityV3.model_validate_json(raw)
+        elif data.get('schema_version') == 'local_mission_capacity_v2':
             LocalCapacityV2.model_validate_json(raw)
         elif data.get('schema_version') != 'local_hover_capacity_v1':
             raise ValueError('unsupported retained local result schema')

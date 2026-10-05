@@ -1,6 +1,6 @@
 # Local mission capacity contract
 
-The first local implementation uses `local_mission_capacity_v2`, validated by `drone/local_results.py`. This is a separate local draft-study contract. Existing approved-package `AircraftStudyV1`/`AircraftStudyV2` and sphere `ResultsV1` remain unchanged. A general approved aircraft V3 remains pending under IP10; local consistency validation cannot provide authenticated engineering approval.
+New local studies use `local_mission_capacity_v3`, validated by `drone/local_results.py`. This is a separate local draft-study contract. Existing approved-package `AircraftStudyV1`/`AircraftStudyV2` and sphere `ResultsV1` remain unchanged. A general approved aircraft V3 remains pending under IP10; local consistency validation cannot provide authenticated engineering approval.
 
 Every new study binds its frozen project revision, canonical snapshot hash, retained performance-source byte hashes, model source fingerprint and NumPy/SciPy versions. The canonical result bytes are retained as an artifact. Export returns those same bytes. Repeated submission retains one winning result association; old revisions and studies survive draft edits and restart.
 
@@ -14,6 +14,6 @@ Certificate bound provenance distinguishes declared physical limits, map coverag
 
 Local records are immutable observations, including unresolved outcomes. Wall-clock limits can make a fresh execution differ under machine load; the first accepted association wins for repeated submission. This is not a deterministic execution guarantee or a recoverable-attempt protocol. IP15 will provide explicit attempts/retry semantics. Saving/freezing a new draft version currently creates another revision association.
 
-Retained local V1 bytes remain readable and are never migrated in place. V2 adds chronological energy. An older model fingerprint remains associated with the old study; rerunning changed code creates another specification hash. The fingerprint is a local source/library identity, not an immutable deployment attestation.
+Retained local V1/V2 bytes remain readable and are never migrated in place. V2 introduced chronological energy. V3 adds mandatory individual bounds for every participating case, consistent aggregate attribution and common-candidate checks. Historical V2 reads retain their original acceptance semantics, with a visible historical qualifier in browser/PDF; reading them does not requalify earlier physics under V3. The specification of each new study also binds its result schema version. An older model fingerprint remains associated with the old study; rerunning changed code creates another specification hash. The fingerprint is a local source/library identity, not an immutable deployment attestation.
 
 The initial profile excludes variable-power trajectories, nonzero inflow, maneuvers, thermal/sag state and battery resizing. Constant-power integration is exact (`P*duration`); it needs no numerical quadrature. Variable-power quadrature and independently reviewed uncertainty scenarios remain separate IP11/IP12 extensions.

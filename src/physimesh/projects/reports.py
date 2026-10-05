@@ -117,10 +117,15 @@ def render_pdf(raw: bytes, snapshot_raw: str) -> bytes:
                   else 'Client inputs are unvalidated; this report is not an aircraft approval.'),
              para(data.get('qualification', 'Qualification unavailable in historical record.')),
              para('Result', heading), para('Outcome: ' + data['outcome'])]
+    historical = data.get('schema_version') != 'local_mission_capacity_v3'
+    if historical:
+        story.append(para('Historical local result with earlier acceptance semantics. Preserved as recorded; '
+                          'not reassessed under current V3 rules. Re-evaluate a saved design for current evidence.'))
     value = data.get('payload_lower_bound_kg')
     if data['outcome'] == 'feasible' and value is not None:
         story += [para(f'{math.floor(value*100)/100:.2f} kg', payload_style),
-                  para('Verified local payload lower bound, rounded down. Exact retained value: ' + repr(value) + ' kg.'),
+                  para(('Reported historical payload bound' if historical else 'Verified local payload lower bound')
+                       + ', rounded down. Exact retained value: ' + repr(value) + ' kg.'),
                   para('Reported limiting constraint: ' + str(data.get('aggregate_limit')
                                                             or data.get('limiting_case_id')))]
     else:
@@ -132,6 +137,7 @@ def render_pdf(raw: bytes, snapshot_raw: str) -> bytes:
     story += [para('Record identity', heading)]
     identity = [('Study', data['study_sha256']), ('Revision', data['specification']['revision_sha256']),
                 ('Retained JSON SHA-256', source_digest), ('Renderer', REPORT_VERSION),
+                ('Renderer source SHA-256', RENDERER_SOURCE_SHA256),
                 ('ReportLab version', reportlab.Version)]
     for label, value in identity:
         story += [para(label), para(value, mono)]

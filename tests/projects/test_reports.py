@@ -109,3 +109,21 @@ def test_pdf_refusal_unicode_and_markup_are_visible_as_text(tmp_path):
     assert render_pdf(json.dumps(record).encode(), '{}').startswith(b'%PDF-')
     with pytest.raises(ValueError, match='bounded PDF'):
         render_pdf(json.dumps(record).encode(), json.dumps({'oversize': 'x'*1_000_001}))
+
+
+def test_renderer_source_change_changes_pdf_bytes_and_retained_metadata_agrees(tmp_path, monkeypatch):
+    c = client(tmp_path)
+    _, base, report = retained(c)
+    route = base+'/studies/'+report['study_sha256']+'/pdf'
+    first = c.get(route, headers=AUTH)
+    monkeypatch.setattr('physimesh.projects.reports.RENDERER_SOURCE_SHA256', 'f'*64)
+    second = c.get(route, headers=AUTH)
+    assert first.content != second.content
+    assert first.headers['X-PDF-SHA256'] != second.headers['X-PDF-SHA256']
+    for response in (first, second):
+        assert response.status_code == 200
+        digest = response.headers['X-PDF-SHA256']
+        metadata = c.app.state.projects.artifacts.meta(digest)
+        assert metadata['renderer_source_sha256'] == response.headers['X-Report-Renderer-SHA256']
+        assert metadata['study_json_sha256'] == response.headers['X-Study-JSON-SHA256']
+        assert hashlib.sha256(response.content).hexdigest() == digest

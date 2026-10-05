@@ -3,6 +3,7 @@ export function renderStudy(container,report,isCurrent){
   container.replaceChildren();
   const status=el('p',isCurrent?'Study applies to this saved revision.':'Retained study belongs to an earlier revision. Re-freeze and evaluate the edited design.');status.className='study-binding';container.append(status);
   container.append(el('p',report.data_scope==='analytic_fixture'?'ILLUSTRATIVE INPUTS: analytic software fixture. No client aircraft performance claim.':'Client inputs remain unvalidated; engineering approval pending.'));
+  if(report.schema_version!=='local_mission_capacity_v3')container.append(el('p','Historical local record: earlier acceptance semantics, preserved as recorded. Re-evaluate a frozen design for current V3 evidence.'));
   if(report.payload_lower_bound_kg!==null){const value=el('p',(Math.floor(report.payload_lower_bound_kg*100)/100).toFixed(2)+' kg');value.className='payload-value';container.append(value,el('p','Supported payload lower bound within the declared model. Display rounded down; exact value retained below.'),el('p',report.aggregate_limit?'Aggregate limit: '+report.aggregate_limit:'Limiting case: '+report.limiting_case_id));}
   else container.append(el('h4','Payload unavailable: '+report.outcome),...report.reasons.map(reason=>el('p',reason)));
   const table=el('table'),head=el('thead'),row=el('tr');['Case','Required','Outcome','Feasible bound, kg','Binding limits'].forEach(text=>row.append(el('th',text)));head.append(row);const body=el('tbody');

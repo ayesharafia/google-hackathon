@@ -80,7 +80,7 @@ def capacity_from_snapshot(snapshot: dict, maps: dict) -> dict:
         records.append({'case_id': case['name'], 'required': case.get('required', True), **result})
     needed = [record for record in records if record['required']]
     failures = [record for record in needed if record['outcome'] != 'feasible']
-    report = {'schema_version': 'local_mission_capacity_v2', 'model_version': MODEL_VERSION,
+    report = {'schema_version': 'local_mission_capacity_v3', 'model_version': MODEL_VERSION,
               'payload_lower_bound_kg': None, 'limiting_case_id': None, 'cases': records,
               'engineering_approval': 'pending',
               'data_scope': ('analytic_fixture' if any(m.source_kind == 'analytic_fixture' for m in maps.values())

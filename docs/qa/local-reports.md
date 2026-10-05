@@ -20,3 +20,9 @@ Printed QA: rendered all 22 pages of the labelled sequence report with Poppler. 
 Automated evidence at this checkpoint: 465 local tests passed with three backend tests deselected; 118 reference tests passed; Ruff and JavaScript syntax checks passed. Native OpenFOAM was not rerun for these changes. Tests cover authorization, same-project scope, deterministic output, source/result/PDF corruption, unchanged retained comparisons after draft edits, numeric-comparison refusal and bounded rendering.
 
 Full IP16 remains pending: assembly editing, repair/undo journeys, authenticated sharing/review, two presentation rehearsals and a backup recording. Responsive and full design-law acceptance of the expanded workbench remains pending the ongoing browser audit.
+
+## Compatibility and renderer correction
+
+New studies use local V3. Historical V2 sequence bytes produced from exact commit `07b9f192d55fd79c0cb209ece063bd029ce3d93e` are preserved in a labelled compatibility fixture. A regression seeds their exact artifact/revision associations, restarts the service, reads/exports the unchanged bytes and generates a qualified historical PDF without invoking the current model. The fixture was generated now from historical code; it is not a historical measured observation. V3 refuses the same sequence without participating bounds.
+
+The PDF now embeds its renderer source SHA-256 as well as its version. A source-only identity change changes the PDF digest; retained artifact metadata and HTTP renderer/source headers agree for both outputs. Final responsive/visual acceptance remains pending.

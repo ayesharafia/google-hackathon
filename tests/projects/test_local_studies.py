@@ -7,7 +7,7 @@ from fastapi.testclient import TestClient
 from physimesh.api.app import create_app
 from physimesh.api.settings import Settings
 from physimesh.drone.atmosphere import G0
-from physimesh.drone.local_results import LocalCapacityV2
+from physimesh.drone.local_results import LocalCapacityV3
 
 AUTH = {'Authorization': 'Bearer test-token'}
 
@@ -83,24 +83,24 @@ def test_sequence_contract_refuses_missing_or_changed_aggregate_evidence(tmp_pat
     response = c.post(base+'/studies', headers=AUTH, json={'revision_sha256':frozen['revision_sha256']})
     assert response.status_code == 200
     report = response.json()
-    assert report['schema_version'] == 'local_mission_capacity_v2'
+    assert report['schema_version'] == 'local_mission_capacity_v3'
     assert report['payload_lower_bound_kg'] == pytest.approx(460800/360/10/G0-12)
-    LocalCapacityV2.model_validate_json(json.dumps(report))
+    LocalCapacityV3.model_validate_json(json.dumps(report))
     changed = json.loads(json.dumps(report))
     changed['participating_case_bounds'][0]['candidate']['payload_kg'] = 0.
     with pytest.raises(ValueError, match='participating feasible case bound'):
-        LocalCapacityV2.model_validate_json(json.dumps(changed))
+        LocalCapacityV3.model_validate_json(json.dumps(changed))
     changed = json.loads(json.dumps(report))
     changed['participating_case_bounds'].append(changed['participating_case_bounds'][0])
     with pytest.raises(ValueError, match='unique bound'):
-        LocalCapacityV2.model_validate_json(json.dumps(changed))
+        LocalCapacityV3.model_validate_json(json.dumps(changed))
     for key in ('sequence_evidence', 'headline_candidate_checks'):
         changed = dict(report); changed.pop(key)
         with pytest.raises(ValueError):
-            LocalCapacityV2.model_validate_json(json.dumps(changed))
+            LocalCapacityV3.model_validate_json(json.dumps(changed))
     report['sequence_evidence']['total_energy_j'] += 1.
     with pytest.raises(ValueError, match='aggregate energy'):
-            LocalCapacityV2.model_validate_json(json.dumps(report))
+        LocalCapacityV3.model_validate_json(json.dumps(report))
 
 
 def test_corrupt_retained_result_refuses_export(tmp_path):
@@ -114,3 +114,48 @@ def test_corrupt_retained_result_refuses_export(tmp_path):
     path = tmp_path/'artifacts/objects'/digest[:2]/digest
     path.write_bytes(path.read_bytes()+b' ')
     assert c.get(base+'/studies/'+result['study_sha256']+'/export',headers=AUTH).status_code == 422
+
+
+def test_historical_v2_sequence_reads_exports_and_reports_original_bytes_after_restart(tmp_path, monkeypatch):
+    """Old producer fixture is read with its contract, never rewritten as current V3."""
+    import sqlite3
+    from pathlib import Path
+
+    from physimesh.drone.local_results import LocalCapacityV2
+    from physimesh.drone.provenance import canonical_json
+    from physimesh.projects.contracts import DesignRevisionV1
+
+    fixture = json.loads((Path(__file__).parent/'fixtures/retained-v2-sequence.json').read_text())
+    raw = fixture['original_result_json'].encode()
+    report = json.loads(raw)
+    assert hashlib.sha256(raw).hexdigest() == fixture['result_sha256']
+    assert 'participating_case_bounds' not in report
+    LocalCapacityV2.model_validate_json(raw)
+    upgraded = {**report, 'schema_version': 'local_mission_capacity_v3'}
+    with pytest.raises(ValueError, match='every participating case'):
+        LocalCapacityV3.model_validate_json(json.dumps(upgraded))
+    revision = DesignRevisionV1.model_validate_json(canonical_json(fixture['revision']))
+    pid = revision.project_id; base = '/api/drone/projects/'+pid
+    c = client(tmp_path)
+    assert c.app.state.projects.artifacts.put_bytes(raw, kind='historical_fixture', meta={}) == fixture['result_sha256']
+    with sqlite3.connect(tmp_path/'projects.sqlite') as db:
+        db.execute('INSERT INTO project_meta VALUES(?,?,?,?,?,?)',
+                   (pid, 'Historical-code compatibility fixture', 2, revision.snapshot_json,
+                    revision.created_utc, revision.created_utc))
+        db.execute('INSERT INTO design_revisions VALUES(?,?,?,?,?)',
+                   (pid, 2, revision.readiness_purpose, revision.revision_sha256(),
+                    canonical_json(fixture['revision']).encode()))
+        db.execute('INSERT INTO local_studies VALUES(?,?,?,?,?)',
+                   (pid, revision.revision_sha256(), report['study_sha256'], fixture['result_sha256'],
+                    revision.created_utc))
+    c = client(tmp_path)
+    def refuse(*args, **kwargs):
+        pytest.fail('historical read/report cannot execute current capacity model')
+    monkeypatch.setattr('physimesh.projects.studies.capacity_from_snapshot', refuse)
+    route = base+'/studies/'+report['study_sha256']
+    assert c.get(route, headers=AUTH).json() == report
+    assert c.get(route+'/export', headers=AUTH).content == raw
+    pdf = c.get(route+'/pdf', headers=AUTH)
+    assert pdf.status_code == 200
+    assert pdf.headers['X-Study-JSON-SHA256'] == fixture['result_sha256']
+    assert c.get(route+'/export', headers=AUTH).content == raw

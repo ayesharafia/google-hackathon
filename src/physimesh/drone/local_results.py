@@ -1,7 +1,7 @@
-"""Versioned local study contract, separate from approved AircraftStudyV2.
+"""Versioned local studies, separate from approved AircraftStudyV2.
 
-V1 retained bytes remain readable. V2 carries aggregate energy without inventing
-a limiting case. Typed validation is consistency, not independent approval.
+V1/V2 remain historical reads. V3 adds stronger participating-bound consistency;
+old bytes are not retroactively subjected to successor acceptance rules.
 """
 from typing import Literal
 
@@ -135,8 +135,8 @@ class SequenceEvidence(Record):
         return self
 
 
-class LocalCapacityV2(Record):
-    schema_version: Literal['local_mission_capacity_v2']
+class _CapacityRecord(Record):
+    schema_version: Literal['local_mission_capacity_v2', 'local_mission_capacity_v3']
     model_version: Literal['convex_static_hover_v1']
     payload_lower_bound_kg: float | None = Field(default=None, ge=0)
     limiting_case_id: Identifier | None = None
@@ -156,6 +156,10 @@ class LocalCapacityV2(Record):
     certificate: Certificate | None = None
     study_sha256: Digest
     specification: dict
+
+
+class LocalCapacityV3(_CapacityRecord):
+    schema_version: Literal['local_mission_capacity_v3']
 
     @model_validator(mode='after')
     def headline(self):
@@ -219,4 +223,45 @@ class LocalCapacityV2(Record):
             if attaining is None or attaining.outcome != 'feasible' or abs(
                     attaining.candidate.payload_kg-self.payload_lower_bound_kg) > 1e-7:
                 raise ValueError('limiting case must attain the common headline bound')
+        return self
+
+
+class LocalCapacityV2(_CapacityRecord):
+    """Historical V2 reads, not requalification under current V3 evidence policy."""
+    schema_version: Literal['local_mission_capacity_v2']
+
+    @model_validator(mode='after')
+    def historical_consistency(self):
+        from physimesh.drone.provenance import sha256_record
+        if sha256_record(self.specification) != self.study_sha256:
+            raise ValueError('historical study specification digest mismatch')
+        names = [case.case_id for case in self.cases]
+        if len(set(names)) != len(names) or not any(case.required for case in self.cases):
+            raise ValueError('historical unique cases and a required case are necessary')
+        if self.outcome != 'feasible':
+            if self.payload_lower_bound_kg is not None:
+                raise ValueError('failed historical study cannot publish a payload headline')
+            return self
+        if self.payload_lower_bound_kg is None or not self.headline_candidate_checks:
+            raise ValueError('historical headline needs candidate evidence')
+        checks = {case.case_id: case for case in self.headline_candidate_checks}
+        required = {case.case_id for case in self.cases if case.required}
+        if len(checks) != len(self.headline_candidate_checks) or not required <= checks.keys():
+            raise ValueError('historical required candidate checks missing or duplicated')
+        for case in checks.values():
+            if case.outcome != 'feasible' or case.candidate.payload_kg != self.payload_lower_bound_kg:
+                raise ValueError('historical common candidate evidence inconsistent')
+        participating = set(required)
+        if self.mission_semantics == 'required_cases_and_ordered_sequence':
+            if self.sequence_evidence is None:
+                raise ValueError('historical sequence headline needs aggregate evidence')
+            for segment in self.sequence_evidence.segments:
+                participating.add(segment.case_id)
+                if segment.case_id not in checks or abs(
+                        segment.electrical_power_w-checks[segment.case_id].candidate.electrical_power_w) > 1e-7:
+                    raise ValueError('historical segment candidate evidence inconsistent')
+        if self.aggregate_limit is None and self.limiting_case_id not in participating:
+            raise ValueError('historical limiting case must participate')
+        if self.aggregate_limit is not None and self.sequence_evidence is None:
+            raise ValueError('historical aggregate limit needs sequence evidence')
         return self
