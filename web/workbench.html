@@ -20,6 +20,8 @@
 <h2>Projects</h2>
 <form id="create-project"><label>New project name<input id="project-title" maxlength="160" required disabled></label><button id="create" disabled>Create project</button></form>
 <button id="example" type="button" disabled>Create labelled hover example</button>
+<button id="realistic-example" type="button" disabled>Create synthetic noisy hover/climb</button>
+<button id="motorout-example" type="button" disabled>Create synthetic octo motor-out</button>
 <label>Saved projects<select id="projects" disabled><option value="">Connect to see projects</option></select></label>
 <button id="open" type="button" disabled>Open saved project</button>
 <p id="project-record">No project open.</p>
@@ -29,16 +31,17 @@
 <section class="editor" aria-labelledby="design-title">
 <h2 id="design-title">Open a project to begin.</h2>
 <p id="save-state">Missing physical inputs stay unknown.</p>
-<section aria-labelledby="layout-title"><h3 id="layout-title">Declared rotor layout</h3><div id="layout-view"><p>No rotor positions loaded.</p></div><p id="layout-note">Centres, axes and radii from the input. Drag to orbit when a layout is available.</p><button id="reset-layout" type="button" disabled>Reset layout view</button></section>
+<section aria-labelledby="layout-title"><h3 id="layout-title">Airframe, rotors and governing case</h3><div id="layout-view"><p>No rotor positions loaded.</p></div><p id="layout-note">Centres, axes and radii from the input. Drag to orbit when a layout is available.</p><button id="reset-layout" type="button" disabled>Reset layout view</button></section>
 <div id="input-editors"></div>
 <details><summary>Design input JSON</summary><label for="snapshot">Complete versioned snapshot</label><textarea id="snapshot" spellcheck="false" disabled rows="18"></textarea></details>
 <div class="actions"><button id="save" type="button" disabled>Save draft</button><button id="reload" type="button" disabled>Reload saved draft</button><button id="freeze" type="button" disabled>Freeze saved revision</button><button id="export-draft" type="button" disabled>Export draft JSON</button></div>
-<section aria-labelledby="study-title"><h3 id="study-title">Bounded static-hover study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen hover design</button><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
+<section aria-labelledby="study-title"><h3 id="study-title">Bounded capacity study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen design</button><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
 <section aria-labelledby="comparison-title"><h3 id="comparison-title">Compare retained studies</h3><p>Compare frozen inputs and recorded outcomes. A changed input does not establish the cause of a capacity change.</p><div class="fields"><label>Before study<select id="compare-before" disabled></select></label><label>After study<select id="compare-after" disabled></select></label></div><button id="compare" type="button" disabled>Compare studies</button><div id="comparison-report" aria-live="polite"></div></section>
 <section id="revision-detail" hidden><h3>Frozen revision</h3><p id="revision-summary"></p><pre id="revision-json"></pre></section>
 </section>
 </div>
 </main>
 <footer>Local single-operator workspace. Real aircraft inputs and engineering approval remain pending.</footer>
+<dialog id="draft-conflict" aria-labelledby="conflict-title"><h2 id="conflict-title">Saved draft changed</h2><p id="conflict-message"></p><div class="actions"><button id="conflict-export" type="button">Export my unsaved JSON</button><button id="conflict-keep" type="button">Keep editing</button><button id="conflict-reload" type="button">Replace with latest saved draft</button></div></dialog>
 </body>
 </html>

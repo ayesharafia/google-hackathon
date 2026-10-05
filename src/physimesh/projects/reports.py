@@ -49,10 +49,24 @@ def evidence_lines(value, indent=0):
     return [json.dumps(value, ensure_ascii=True, allow_nan=False)]
 
 
+def same_input(before, after):
+    """Numeric JSON round trips are equal; booleans are distinct declarations."""
+    if (isinstance(before, (int, float)) and not isinstance(before, bool)
+            and isinstance(after, (int, float)) and not isinstance(after, bool)):
+        return before == after
+    if type(before) is not type(after):
+        return False
+    if isinstance(before, dict):
+        return before.keys() == after.keys() and all(same_input(before[k], after[k]) for k in before)
+    if isinstance(before, list):
+        return len(before) == len(after) and all(same_input(a, b) for a, b in zip(before, after, strict=True))
+    return before == after
+
+
 def input_changes(before, after, path='', changes=None):
     """Ordered JSON-pointer changes. Arrays are whole values, never inferred identities."""
     changes = [] if changes is None else changes
-    if canonical_json(before) == canonical_json(after):
+    if same_input(before, after):
         return changes
     if isinstance(before, dict) and isinstance(after, dict):
         for key in sorted(before.keys() | after.keys()):
@@ -79,12 +93,27 @@ def compare_records(before: dict, after: dict, before_snapshot: dict, after_snap
     def summary(record):
         return {key: record.get(key) for key in ('study_sha256', 'outcome', 'payload_lower_bound_kg',
                 'limiting_case_id', 'aggregate_limit', 'mission_semantics', 'data_scope', 'engineering_approval')}
+    before_cases = {case['case_id']: case for case in before.get('cases', [])}
+    after_cases = {case['case_id']: case for case in after.get('cases', [])}
+    constraints = []
+    for name in sorted(before_cases.keys() | after_cases.keys()):
+        left, right = before_cases.get(name, {}), after_cases.get(name, {})
+        old, new = set(left.get('active_constraints', [])), set(right.get('active_constraints', []))
+        left_payload = (left.get('candidate') or {}).get('payload_kg')
+        right_payload = (right.get('candidate') or {}).get('payload_kg')
+        constraints.append({'case_id': name, 'before_outcome': left.get('outcome'),
+            'after_outcome': right.get('outcome'), 'before_active_constraints': sorted(old),
+            'after_active_constraints': sorted(new), 'newly_active': sorted(new-old),
+            'no_longer_active': sorted(old-new),
+            'case_payload_change_kg': right_payload-left_payload
+            if comparable and left_payload is not None and right_payload is not None else None})
     return {'schema_version': 'retained_study_comparison_v1', 'before': summary(before), 'after': summary(after),
             'same_model': same_model, 'same_mission_semantics': same_semantics,
             'comparable_numeric_results': comparable,
             'payload_change_kg': after['payload_lower_bound_kg']-before['payload_lower_bound_kg']
             if comparable else None,
             'input_changes': input_changes(before_snapshot, after_snapshot),
+            'constraint_changes': constraints,
             'qualification': 'Differences between retained local studies. Changed inputs are not causal '
                              'attribution. Numeric change is omitted when model, schema, scope, mission '
                              'semantics or feasible outcomes differ. Engineering approval remains pending.'}
@@ -113,12 +142,13 @@ def render_pdf(raw: bytes, snapshot_raw: str) -> bytes:
         content = text(value)
         return Paragraph(content.replace(' ', '&nbsp;') if style is mono else content, style)
     story = [para('PhysiCore | Retained design study', title),
-             para('Local static-hover model. Engineering approval pending.'),
+             para(('Local static-hover / axial-climb model.' if data.get('schema_version') == 'local_mission_capacity_v4'
+                   else 'Local static-hover model.') + ' Engineering approval pending.'),
              para('Analytic fixture' if data.get('data_scope') == 'analytic_fixture'
                   else 'Client inputs are unvalidated; this report is not an aircraft approval.'),
              para(data.get('qualification', 'Qualification unavailable in historical record.')),
              para('Result', heading), para('Outcome: ' + data['outcome'])]
-    historical = data.get('schema_version') != 'local_mission_capacity_v3'
+    historical = data.get('schema_version') not in ('local_mission_capacity_v3', 'local_mission_capacity_v4')
     if historical:
         story.append(para('Historical local result with earlier acceptance semantics. Preserved as recorded; '
                           'not reassessed under current V3 rules. Re-evaluate a saved design for current evidence.'))
@@ -156,6 +186,27 @@ def render_pdf(raw: bytes, snapshot_raw: str) -> bytes:
                                ('TOPPADDING', (0, 0), (-1, -1), 7),
                                ('BOTTOMPADDING', (0, 0), (-1, -1), 7)]))
     story.append(table)
+    analysis = data.get('scenario_analysis')
+    if analysis:
+        story += [para('Deterministic joint scenarios', heading), para('Envelope status: '+analysis['status']),
+                  para('Supported scenario payload: '+str(analysis['supported_payload_kg'])+' kg.'),
+                  para(analysis['qualification'])]
+        for scenario in analysis['scenarios']:
+            result = scenario['result']
+            story.append(para(scenario['scenario_id']+': '+result['outcome']+', bound '
+                              +str(result['payload_lower_bound_kg'])+' kg. '+scenario['correlation_note']))
+    allowable = data.get('external_allowables')
+    if allowable:
+        story += [para('Declared external allowable limits', heading),
+                  para('Status: '+allowable['status']+'; declared approved cap: '
+                       +str(allowable['declared_approved_cap_kg'])+' kg; checked capped payload: '
+                       +str(allowable['feasible_capped_payload_kg'])+' kg.'), para(allowable['qualification'])]
+    if data.get('conditioning_sources'):
+        story += [para('Conditioned rotor sources', heading)]
+        for digest, profile in data['conditioning_sources'].items():
+            story.append(para('Raw source '+profile['raw_source_sha256']+'; conditioned source '+digest
+                              +'; power hull shift '+repr(profile['power_shift_w'])+' W; torque band ±'
+                              +repr(profile['torque_error_bound_nm'])+' Nm. '+profile['qualification']))
     sequence = data.get('sequence_evidence')
     if sequence:
         story += [para('Ordered mission energy', heading),
