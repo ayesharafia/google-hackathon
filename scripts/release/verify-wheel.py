@@ -17,12 +17,14 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--python', type=Path, required=True)
     args = parser.parse_args()
-    python = args.python.resolve()
+    # Resolving the executable symlink loses its virtual-environment identity.
+    python = args.python.absolute()
     with tempfile.TemporaryDirectory(prefix='physimesh-wheel-') as directory:
         root = Path(directory)
         identity = subprocess.run([str(python), '-c',
-            'import json; from physimesh.platform.release import build_identity; print(json.dumps(build_identity()))'],
-            cwd=root, capture_output=True, text=True, check=True)
+            'import json; from physimesh.platform.release import build_identity; print(json.dumps(build_identity(verify=True)))'],
+            cwd=root, env={k: v for k, v in os.environ.items() if k != 'PYTHONPATH'},
+            capture_output=True, text=True, check=True)
         build = json.loads(identity.stdout)
         assert build.get('build_sha256') and not build.get('dirty'), 'requires a clean release wheel'
         with socket.socket() as listener:
