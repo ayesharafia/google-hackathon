@@ -12,6 +12,11 @@ States distinguish implementation from acceptance: **local subset** is historica
 
 | ID | State | Evidence/specification | Blocker or next action |
 |---|---|---|---|
+| U01 / N0.5 / IP07 / IP10 | in progress | [Production upgrade](docs/production/upgrade.md) | Fresh V4 baseline; packaging; independent current-model review and human acceptance pending |
+| U02 / N3.2 / IP16 | queued | [Production upgrade](docs/production/upgrade.md) | Baseline first, then bounded inventory and verified reuse |
+| U03 / IP13 | queued | [Production upgrade](docs/production/upgrade.md) | Provider-neutral PostgreSQL/private-storage implementation and concurrent-write tests |
+| U04 / IP14–IP15 / IP17 | queued | [Production upgrade](docs/production/upgrade.md) | Authenticated project access, durable fenced jobs and recovery drills |
+| U05 / N2.4 / IP05 / IP11 | review gated | [Production upgrade](docs/production/upgrade.md) | User selected mission/powertrain; current-model review precedes physics extension; analytic fixtures then real-data qualification |
 | N0.1 | blocked | [Scope proposal](docs/plans/2026-10-05-next-development-plan.md) | Client scope agreement and named engineer; no invented ADR-0004 decision |
 | N0.2 | blocked | [Data request](docs/client/aircraft-data-request.md) | Recipient and explicit sending instruction; no message sent |
 | N0.3 | implemented | This table | Review with roadmap changes |
@@ -49,7 +54,7 @@ States distinguish implementation from acceptance: **local subset** is historica
 | I01 | capability only | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Exact-image regular-point p/U/vorticity probe; independent accuracy/direction/refinement review pending |
 | I02 | preregistered | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Controlled domain/surface protocol retained before probe; full campaign unrun |
 
-Next acceptance sequence: independent cross-family model/contract review → human fixture presentation → real client intake and engineer-owned tolerances when available. Conditional MILP/variable-power work remains untriggered. Hosting depends on D01–D03. No new physics merge or release tag precedes the required review and engineering acceptance.
+Next acceptance sequence: independent cross-family model/contract review → human fixture presentation → real client intake and engineer-owned tolerances when available. Mission/powertrain work is now authorized by the 6 October upgrade; current-model review precedes its physics extension. MILP remains data/coverage driven. Hosting depends on D01–D03. No new physics merge or release tag precedes the required review and engineering acceptance.
 
 The product must answer a practical question: **given this approved aircraft design, how much payload can it carry across the required mission?** It must show which condition limits that payload, what evidence supports the answer, and which assumptions could change it. The client should be able to inspect the design, compare revisions, and leave with an understandable, reproducible engineering report.
 
