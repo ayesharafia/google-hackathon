@@ -1,0 +1,5 @@
+recursive-include web *
+recursive-include src/physimesh/solver/openfoam_templates *
+include requirements.lock
+include requirements-platform.lock
+include requirements-runtime.lock
