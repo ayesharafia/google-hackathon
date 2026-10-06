@@ -15,6 +15,7 @@ from physimesh.drone.trim import EXTENDED_MODEL_VERSION, MODEL_VERSION
 
 from .contracts import parse_snapshot
 from .performance import load_map, performance_refs
+from .repository import ProjectMissing
 
 MODEL_MODULES = (
     'drone/performance.py', 'drone/conditioning.py', 'drone/trim.py', 'drone/capacity.py',
@@ -42,7 +43,7 @@ class LocalStudies:
         # Bind source state at application construction, not after a later edit.
         self.model_identity = model_identity()
 
-    def run(self, project_id: str, revision_sha256: str) -> dict:
+    def prepare(self, project_id: str, revision_sha256: str):
         revision = self.projects.repository.revision(project_id, revision_sha256)
         snapshot = parse_snapshot(revision.snapshot_json)
         refs = performance_refs(snapshot)
@@ -63,12 +64,40 @@ class LocalStudies:
         study = sha256_record(spec)
         if source_errors:
             raise ValueError('retained performance source unavailable or corrupt: ' + '; '.join(source_errors))
+        return snapshot, sources, spec, study, extended
+
+    def evaluate(self, project_id: str, revision_sha256: str) -> dict:
+        """Compute an attempt without publishing any result or association."""
+        snapshot, sources, spec, study, extended = self.prepare(project_id, revision_sha256)
+        try:
+            accepted = self.read(project_id, study)
+        except ProjectMissing:
+            accepted = None
+        if accepted is not None:
+            if accepted['specification'] != spec:
+                raise ValueError('retained study specification integrity failed')
+            return accepted
+        result = {**capacity_from_snapshot(snapshot, sources), 'study_sha256': study, 'specification': spec}
+        (LocalCapacityV4 if extended else LocalCapacityV3).model_validate_json(canonical_json(result))
+        return result
+
+    def run(self, project_id: str, revision_sha256: str) -> dict:
+        snapshot, sources, spec, study, extended = self.prepare(project_id, revision_sha256)
+        try:
+            retained = self.read(project_id, study)
+        except ProjectMissing:
+            retained = None
+        if retained is not None:
+            if retained['specification'] != spec:
+                raise ValueError('retained study specification integrity failed')
+            return retained
         result = {**capacity_from_snapshot(snapshot, sources), 'study_sha256': study, 'specification': spec}
         raw = canonical_json(result).encode()
+        schema = spec['result_schema_version']
         (LocalCapacityV4 if extended else LocalCapacityV3).model_validate_json(raw)
         digest = self.projects.artifacts.put_bytes(raw, kind=schema, meta={'study_sha256': study})
-        accepted = self.projects.repository.retain_study(project_id, revision_sha256, study, digest)
-        return json.loads(self._bytes(accepted))
+        self.projects.repository.retain_study(project_id, revision_sha256, study, digest)
+        return self.read(project_id, study)
 
     def _bytes(self, digest: str) -> bytes:
         with self.projects.artifacts.open(digest) as stream:
@@ -104,15 +133,46 @@ class LocalStudies:
             raise ValueError('study frozen input association failed')
         return raw, revision.snapshot_json
 
-    def pdf(self, project_id: str, study: str) -> tuple[bytes, dict]:
-        from .reports import render_pdf, report_identity
+    def cached_pdf(self, project_id: str, study: str) -> tuple[bytes, dict] | None:
+        from .reports import report_identity
         raw, snapshot = self.report_inputs(project_id, study)
         receipt = report_identity(raw, snapshot)
-        pdf = render_pdf(raw, snapshot)
+        stored = self.projects.repository.report_receipt(sha256_record(receipt))
+        if stored is None:
+            return None
+        retained_receipt = json.loads(stored['receipt'])
+        receipt_digest = retained_receipt.pop('receipt_sha256', None)
+        if retained_receipt != receipt or receipt_digest is None:
+            raise ValueError('retained PDF receipt integrity failed')
+        digest = stored['pdf_sha256']
+        receipt_raw = self._bytes(receipt_digest)
+        if json.loads(receipt_raw) != {**receipt, 'pdf_sha256': digest}:
+            raise ValueError('retained PDF receipt artifact association failed')
+        pdf = self._bytes(digest)
+        if not pdf.startswith(b'%PDF-'):
+            raise ValueError('retained PDF integrity failed')
+        return pdf, {**receipt, 'pdf_sha256': digest}
+
+    def retain_pdf(self, project_id, study, pdf, receipt):
+        from .reports import report_identity
+        raw, snapshot = self.report_inputs(project_id, study)
+        if receipt != report_identity(raw, snapshot) or not pdf.startswith(b'%PDF-'):
+            raise ValueError('PDF frozen input/renderer identity failed')
         digest = self.projects.artifacts.put_bytes(pdf, kind='retained_local_study_pdf_v1', meta=receipt)
         if self._bytes(digest) != pdf:
             raise ValueError('retained PDF integrity failed')
-        return pdf, {**receipt, 'pdf_sha256': digest}
+        receipt_digest = self.projects.artifacts.put_bytes(
+            canonical_json({**receipt, 'pdf_sha256': digest}).encode(), kind='verified_report_receipt_v2', meta={})
+        self.projects.repository.retain_report(sha256_record(receipt), digest, {**receipt, 'receipt_sha256': receipt_digest})
+        return self.cached_pdf(project_id, study)
+
+    def pdf(self, project_id: str, study: str) -> tuple[bytes, dict]:
+        from .reports import render_pdf, report_identity
+        cached = self.cached_pdf(project_id, study)
+        if cached is not None:
+            return cached
+        raw, snapshot = self.report_inputs(project_id, study)
+        return self.retain_pdf(project_id, study, render_pdf(raw, snapshot), report_identity(raw, snapshot))
 
     def compare(self, project_id: str, before: str, after: str) -> dict:
         from .reports import compare_records

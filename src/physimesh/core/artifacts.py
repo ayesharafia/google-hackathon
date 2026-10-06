@@ -41,6 +41,11 @@ class ArtifactStore:
             except FileExistsError:
                 pass
             os.unlink(tmp)
+            directory_fd = os.open(target.parent, os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                os.fsync(directory_fd)
+            finally:
+                os.close(directory_fd)
         except BaseException:
             if os.path.exists(tmp):
                 os.unlink(tmp)

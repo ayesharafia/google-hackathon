@@ -5,9 +5,11 @@ import hashlib
 import io
 import json
 import math
+import platform
 from pathlib import Path
 from xml.sax.saxutils import escape
 
+import PIL
 import reportlab
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
@@ -250,8 +252,20 @@ def render_pdf(raw: bytes, snapshot_raw: str) -> bytes:
     return output.getvalue()
 
 
+def renderer_dependencies():
+    from physimesh.platform.release import build_identity
+    identity = build_identity()
+    lock = Path(__file__).parents[3]/'requirements-runtime.lock'
+    dependency_lock = identity.get('dependencies_sha256')
+    if dependency_lock is None and lock.is_file():
+        dependency_lock = hashlib.sha256(lock.read_bytes()).hexdigest()
+    return {'python': platform.python_version(), 'pillow': PIL.__version__,
+            'reportlab': reportlab.Version, 'runtime_lock_sha256': dependency_lock}
+
+
 def report_identity(raw: bytes, snapshot_raw: str) -> dict:
-    return {'renderer_version': REPORT_VERSION,
+    return {'reuse_policy': 'verified_pdf_reuse_v2', 'renderer_dependencies': renderer_dependencies(),
+            'renderer_version': REPORT_VERSION,
             'renderer_source_sha256': RENDERER_SOURCE_SHA256,
             'reportlab_version': reportlab.Version,
             'study_json_sha256': hashlib.sha256(raw).hexdigest(),

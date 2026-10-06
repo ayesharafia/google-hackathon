@@ -29,7 +29,8 @@ class ProjectService:
     def save(self, project_id: str, expected_version: int, raw: str) -> dict:
         return self.repository.save(project_id, expected_version, canonical_snapshot(raw))
 
-    def freeze(self, project_id: str, expected_version: int, purpose: str) -> dict:
+    def freeze(self, project_id: str, expected_version: int, purpose: str, *,
+               organization_id='local', author_identity_id='local_operator') -> dict:
         project = self.repository.get(project_id)
         if project['draft_version'] != expected_version:
             raise DraftConflict(project['draft_version'])
@@ -53,8 +54,8 @@ class ProjectService:
                     raise ValueError('geometry source byte integrity failed')
         report = models.readiness(models.project_from_mapping(snapshot), purpose)
         revision = DesignRevisionV1(
-            organization_id='local', project_id=project_id, snapshot_json=project['snapshot_json'],
-            snapshot_sha256=snapshot_sha256(snapshot), author_identity_id='local_operator',
+            organization_id=organization_id, project_id=project_id, snapshot_json=project['snapshot_json'],
+            snapshot_sha256=snapshot_sha256(snapshot), author_identity_id=author_identity_id,
             created_utc=utc_now(), readiness_purpose=purpose,
             readiness_reasons=tuple(Reason(code='missing_input', field_path='readiness', message=text)
                                     for text in report.blocking), approval='draft')

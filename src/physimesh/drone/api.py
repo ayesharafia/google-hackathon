@@ -8,7 +8,6 @@ from typing import Annotated
 import numpy as np
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 
-from ..core.artifacts import ArtifactStore
 from .frames import rotation_matrix_zyx
 from .geometry import topology, weld
 from .provenance import canonical_json, sha256_record
@@ -57,7 +56,7 @@ async def import_stl(request: Request, source_units: Annotated[str, Form()],
                  "translation_m": translation.tolist()}
     transform_sha = sha256_record(transform)
     rotation_matrix = rotation_matrix_zyx(*np.deg2rad(rotation))
-    store = ArtifactStore(settings.data_root / "artifacts")
+    store = request.app.state.projects.artifacts
     components = []
     all_triangles = []
     issues = []

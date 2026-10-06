@@ -2,7 +2,7 @@
 from typing import Literal
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import Response
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from physimesh.drone.authoring import inspect_inputs
@@ -55,19 +55,19 @@ class CompareStudies(BaseModel):
 @router.post('/examples/hover', status_code=201)
 def example(request: Request):
     from physimesh.projects.examples import create_hover_example
-    return operation(lambda: create_hover_example(request.app.state.projects))
+    return register_project(request, lambda: create_hover_example(request.app.state.projects))
 
 
 @router.post('/examples/realistic', status_code=201)
 def realistic_example(request: Request):
     from physimesh.projects.realistic import create_realistic_example
-    return operation(lambda: create_realistic_example(request.app.state.projects))
+    return register_project(request, lambda: create_realistic_example(request.app.state.projects))
 
 
 @router.post('/examples/motorout', status_code=201)
 def motorout_example(request: Request):
     from physimesh.projects.realistic import create_realistic_example
-    return operation(lambda: create_realistic_example(request.app.state.projects, motorout=True))
+    return register_project(request, lambda: create_realistic_example(request.app.state.projects, motorout=True))
 
 
 @router.post('/performance-sources', status_code=201)
@@ -124,19 +124,28 @@ def operation(action):
 
 
 @router.get('')
-def projects(request: Request):
-    return {'projects': request.app.state.projects.repository.list_projects(),
-            'qualification': 'Local single-operator workspace; invited identity is not configured.'}
+def projects(request: Request, limit: int = 25, after: str = ''):
+    user = request.state.principal.user_id if request.app.state.settings.hosted_mode else None
+    return operation(lambda: request.app.state.projects.repository.page(limit=limit, after=after, user_id=user))
 
 
 @router.post('', status_code=201)
 def create(request: Request, body: CreateProject):
-    return operation(lambda: request.app.state.projects.create(body.title))
+    return register_project(request, lambda: request.app.state.projects.create(body.title))
 
 
 @router.get('/{project_id}')
 def project(request: Request, project_id: str):
-    return operation(lambda: request.app.state.projects.repository.get(project_id))
+    record = operation(lambda: request.app.state.projects.repository.get(project_id))
+    if request.app.state.settings.hosted_mode:
+        record['access_scope'] = 'authenticated_project'
+        record.update(request.state.access)
+    return record
+
+
+@router.get('/{project_id}/history/{kind}')
+def history(request: Request, project_id: str, kind: str, limit: int = 25, after: str = ''):
+    return operation(lambda: request.app.state.projects.repository.history(project_id, kind, limit=limit, after=after))
 
 
 @router.get('/{project_id}/inspection')
@@ -162,12 +171,20 @@ def inspection(request: Request, project_id: str):
 
 @router.put('/{project_id}/draft')
 def save(request: Request, project_id: str, body: SaveDraft):
-    return operation(lambda: request.app.state.projects.save(project_id, body.expected_version, body.snapshot_json))
+    record = operation(lambda: request.app.state.projects.save(project_id, body.expected_version, body.snapshot_json))
+    if request.app.state.settings.hosted_mode:
+        record['access_scope'] = 'authenticated_project'
+        record.update(request.state.access)
+    return record
 
 
 @router.post('/{project_id}/revisions')
 def freeze(request: Request, project_id: str, body: FreezeDraft):
-    return operation(lambda: request.app.state.projects.freeze(project_id, body.expected_version, body.purpose))
+    kwargs = {}
+    if request.app.state.settings.hosted_mode:
+        kwargs = {'organization_id': request.app.state.identity.authorize(request.state.principal, project_id),
+                  'author_identity_id': request.state.principal.user_id}
+    return operation(lambda: request.app.state.projects.freeze(project_id, body.expected_version, body.purpose, **kwargs))
 
 
 @router.get('/{project_id}/revisions/{digest}')
@@ -177,6 +194,13 @@ def revision(request: Request, project_id: str, digest: str):
 
 @router.post('/{project_id}/studies')
 def run_study(request: Request, project_id: str, body: RunStudy):
+    if request.app.state.settings.hosted_mode:
+        operation(lambda: request.app.state.projects.repository.revision(project_id, body.revision_sha256))
+        job = operation(lambda: request.app.state.jobs.submit(project_id, 'study',
+            {'revision_sha256': body.revision_sha256, 'model': request.app.state.studies.model_identity,
+             'application_build': request.app.state.build.get('build_sha256')},
+            submitted_by=request.state.principal.user_id))
+        return JSONResponse(job, status_code=202)
     return operation(lambda: request.app.state.studies.run(project_id, body.revision_sha256))
 
 
@@ -193,7 +217,19 @@ def export_study(request: Request, project_id: str, study: str):
 
 @router.get('/{project_id}/studies/{study}/pdf')
 def pdf_study(request: Request, project_id: str, study: str):
-    raw, receipt = operation(lambda: request.app.state.studies.pdf(project_id, study))
+    if request.app.state.settings.hosted_mode:
+        cached = operation(lambda: request.app.state.studies.cached_pdf(project_id, study))
+        if cached is None:
+            from physimesh.projects.reports import report_identity
+            raw, snapshot = operation(lambda: request.app.state.studies.report_inputs(project_id, study))
+            job = operation(lambda: request.app.state.jobs.submit(project_id, 'report',
+                {'study_sha256': study, 'report_identity': report_identity(raw, snapshot),
+                 'application_build': request.app.state.build.get('build_sha256')},
+                submitted_by=request.state.principal.user_id))
+            return JSONResponse(job, status_code=202)
+        raw, receipt = cached
+    else:
+        raw, receipt = operation(lambda: request.app.state.studies.pdf(project_id, study))
     return Response(raw, media_type='application/pdf', headers={
         'Content-Disposition': 'attachment; filename=physicore-local-study.pdf',
         'X-Study-JSON-SHA256': receipt['study_json_sha256'], 'X-PDF-SHA256': receipt['pdf_sha256'],
@@ -204,3 +240,56 @@ def pdf_study(request: Request, project_id: str, study: str):
 @router.post('/{project_id}/comparisons')
 def compare_studies(request: Request, project_id: str, body: CompareStudies):
     return operation(lambda: request.app.state.studies.compare(project_id, body.before, body.after))
+
+
+def register_project(request, action):
+    if not request.app.state.settings.hosted_mode:
+        return operation(action)
+    from physimesh.platform.identity import Denied
+    from physimesh.platform.scoped_artifacts import CURRENT_SCOPE
+    org = request.headers.get('X-Organization-ID')
+    if not org:
+        raise Denied('select an organization before creating a project')
+    access = request.app.state.identity
+    reservation = access.reserve_project(request.state.principal, org)
+    try:
+        record = operation(action)
+        access.claim_project(request.state.principal, org, record['project_id'], reservation=reservation)
+    finally:
+        access.release_project_reservation(reservation)
+    scope = CURRENT_SCOPE.get()
+    request.app.state.projects.artifacts.bind_pending(scope, record['project_id'])
+    record['access_scope'], record['role'] = 'authenticated_project', 'engineer'
+    record.update(can_invite=True, can_review=True, org_id=org)
+    return record
+
+
+@router.get('/{project_id}/jobs/{job_id}')
+def job(request: Request, project_id: str, job_id: str):
+    if not request.app.state.settings.hosted_mode:
+        raise HTTPException(404, 'durable jobs require hosted mode')
+    from physimesh.platform.worker import accept_publication
+    retained = request.app.state.jobs.get(project_id, job_id)
+    operation(lambda: accept_publication(request.app, retained))
+    return retained
+
+
+@router.post('/{project_id}/jobs/{job_id}/cancel')
+def cancel_job(request: Request, project_id: str, job_id: str):
+    if not request.app.state.settings.hosted_mode:
+        raise HTTPException(404, 'durable jobs require hosted mode')
+    return request.app.state.jobs.cancel(project_id, job_id)
+
+
+@router.post('/{project_id}/jobs/{job_id}/retry')
+def retry_job(request: Request, project_id: str, job_id: str):
+    if not request.app.state.settings.hosted_mode:
+        raise HTTPException(404, 'durable jobs require hosted mode')
+    return operation(lambda: request.app.state.jobs.retry(project_id, job_id))
+
+
+@router.get('/{project_id}/jobs')
+def jobs(request: Request, project_id: str, limit: int = 25, after: str = ''):
+    if not request.app.state.settings.hosted_mode:
+        raise HTTPException(404, 'durable jobs require hosted mode')
+    return operation(lambda: request.app.state.jobs.page(project_id, limit=limit, after=after))

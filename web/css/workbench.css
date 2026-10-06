@@ -16,3 +16,5 @@ aside{align-self:start;position:sticky;top:24px;max-height:calc(100dvh - 48px);o
 #study-report .table-scroll>table{min-width:700px}#study-report th,#study-report td{white-space:nowrap}
 header :focus-visible{outline-color:var(--light)}
 dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;background:var(--light);color:var(--ink);padding:28px;max-height:calc(100dvh - 32px);overflow:auto}dialog::backdrop{background:#20382ca6}dialog h2{margin-bottom:16px}#input-editors>details>label,#input-editors>details>p{overflow-wrap:anywhere}#input-editors fieldset p{grid-column:1/-1;overflow-wrap:anywhere}#input-editors textarea{min-height:180px}
+
+[hidden]{display:none!important}
