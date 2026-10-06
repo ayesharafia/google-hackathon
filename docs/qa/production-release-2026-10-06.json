@@ -1,0 +1,92 @@
+{
+  "schema_version": "production_release_evidence_v1",
+  "tested_source_revision": "84fc72b532796d4837f847295a02a055a8a838a4",
+  "wheel": {
+    "journey": "passed outside checkout",
+    "build_sha256": "69c5b987e209cc63e0ce8801e128b280ccaaf825cc2139116c80fc8de943cb69",
+    "revision": "84fc72b532796d4837f847295a02a055a8a838a4",
+    "startup_s": 1.019408244999795,
+    "pdf_sha256": "a4242754fe888ce728f18305da5485479ed9bb40bb62665d3bf58493afed63ea",
+    "resource_files": 130
+  },
+  "wheel_sha256": "befb0af9c0801f3dc1e2907a8814d31f431a3f74d0d6b31827adce530c5916f0",
+  "wheel_byte_identical_builds": 2,
+  "images": {
+    "revision": "84fc72b532796d4837f847295a02a055a8a838a4",
+    "clean_builder_cache_between_builds": true,
+    "images": {
+      "application": "sha256:6788e4aa0dd971c2dca1235f50f23883ece5194c89c2e8b71b2fd66bc32e0520",
+      "worker": "sha256:a0af038e19cb97d0f966ff90433015310bc8fa8d37c6c364b3a3d1db045c1040"
+    },
+    "result": "identical Docker image configuration and filesystem layer digests"
+  },
+  "restricted_image_journey": {
+    "revision": "84fc72b532796d4837f847295a02a055a8a838a4",
+    "application_build": {
+      "dirty": false,
+      "revision": "84fc72b532796d4837f847295a02a055a8a838a4",
+      "build_sha256": "69c5b987e209cc63e0ce8801e128b280ccaaf825cc2139116c80fc8de943cb69"
+    },
+    "api_startup_s": 2.503897591999703,
+    "installed_image_journey": "passed",
+    "restrictions": "uid 10001, read-only root, no capabilities, bounded CPU/RAM/PIDs/tmpfs, loopback only",
+    "worker_resources": {
+      "application_build": "69c5b987e209cc63e0ce8801e128b280ccaaf825cc2139116c80fc8de943cb69",
+      "cpu_s": 2.6023389999999997,
+      "limits": {
+        "cpu_s": 60,
+        "disk_bytes": 20000000,
+        "rss_bytes": 2147483648,
+        "thread_environment": {
+          "MKL_NUM_THREADS": "1",
+          "OMP_NUM_THREADS": "1",
+          "OPENBLAS_NUM_THREADS": "1"
+        },
+        "virtual_memory_bytes": 2147483648,
+        "wall_s": 120
+      },
+      "peak_sampled_rss_bytes": 146817024,
+      "wall_s": 2.62247684400063
+    },
+    "pdf_sha256": "dae9acbf594ed3f7421d9b2d0124830cdc5fe8fb99ead670571c1e8401acb348",
+    "images": {
+      "application": "sha256:6788e4aa0dd971c2dca1235f50f23883ece5194c89c2e8b71b2fd66bc32e0520",
+      "worker": "sha256:a0af038e19cb97d0f966ff90433015310bc8fa8d37c6c364b3a3d1db045c1040"
+    }
+  },
+  "numerical_sources": {
+    "parent": "5e8cf066eea164398dbd94380175ae7d00a4279c",
+    "modules": {
+      "src/physimesh/drone/performance.py": "10dda284ba369d545ad8cf7a1f83fb4c5e603954bc969434fbebe9cfeacf80bf",
+      "src/physimesh/drone/conditioning.py": "f03b1c97a995b8b30bd2b4465ca45427b97ccd0186bd747b75b14962fd3197bf",
+      "src/physimesh/drone/trim.py": "bfe8052ba5c113ed76534de8b783cc51bf8ccf466bf18b36c66a7ece8e28fcab",
+      "src/physimesh/drone/capacity.py": "73d2a955ae4a6a0a60f053a8634de3a1a13011fdcedece7d7af1a53898fd87a7",
+      "src/physimesh/drone/mission_capacity.py": "d070d3b58164bf4602e326dfd426b0456373bd1cfe06b3bd1ee0b5dfea5e154b",
+      "src/physimesh/drone/scenarios.py": "8076a97fca4039fad99445f7ba611e3d3bf570acb65f3e8b2b7a9c3c65b09783",
+      "src/physimesh/drone/authoring.py": "11d94647d134a020db2cbc8228c9d6a2039024da90d00fe6b9581ed81edddbf9",
+      "src/physimesh/drone/atmosphere.py": "a836a44453a9d63ee0e2818c43cb2c931003892a61b039de46bbf130ff59cdf8",
+      "src/physimesh/drone/mass.py": "d58661c4a8db5e853ac5924567b09864c50fb5c2aac79e9c630441e5c749f70d",
+      "src/physimesh/drone/screening_scope.py": "d8eb45f41b03c01de3ef7b9185f8891626c97357e7624718b238ea45914bf194",
+      "src/physimesh/drone/models.py": "0c3f304bf492a5fde536d3dab667c4f12efb537482b95b63d496a317b6c7a1db",
+      "src/physimesh/drone/frames.py": "75660b022d29415a3a69f8a12cf8686f1d99d508f065cf03c299d1559992bb27",
+      "src/physimesh/drone/units.py": "4d9078f82d71a4d29c32b63b4c57b1473f1a93e39e198c5079d9977510dbae76",
+      "src/physimesh/drone/provenance.py": "600256ec921d698baf7df7248d26088787a39048f984f1d6958fb68f790a3713",
+      "src/physimesh/drone/snapshot_hash.py": "d1c64764b23e24b6c68589329cec9c8f8c8bfa2ccce991b0ccedea3c03111e94",
+      "src/physimesh/drone/local_results.py": "6250387aadc630bde150e20d9efe2b424fa4ff0205d13be61ddf964ada40d1c4",
+      "src/physimesh/projects/contracts.py": "70aab4f43c65185f7b53c3c26155811774a3881a2302571ed3aac09c2e306edf",
+      "src/physimesh/projects/performance.py": "83320aa2ac0e9f7021a2b01cf1d8acb3b063e6199b3cb5cdb2652b82f9057c08"
+    },
+    "count": 18
+  },
+  "pins": {
+    "python": "python:3.11.16-slim@sha256:e41613d42d4891e4930f79523f93f81bbc7632584ec65e36ab055f41a800b41e",
+    "buildkit": "moby/buildkit@sha256:6eceb8971ce4fceb3daca562832642706238b7eea72941fcf9896c93c3c4a53e"
+  },
+  "limits": [
+    "Reproducibility measured on Linux/amd64 in this environment using the retained hash-verified wheelhouse and pinned builder/base; not a cross-architecture or external registry deployment check.",
+    "Full unit/reference/backend/browser suite recorded before release-only helper/metadata changes; see execution report for scopes.",
+    "An initial image journey returned HTTP 500 creating its synthetic project during concurrent image building and severe workspace disk pressure. Its server trace was not retained, so the root cause is unconfirmed. Isolated reruns after release-cache cleanup passed. Production needs separate build/runtime storage and disk-pressure drills.",
+    "Independent model review/human engineering acceptance and provider/identity/confidentiality decisions remain open.",
+    "Image-journey startup/resource figures are functional verification receipts, not replacements for the retained performance baseline."
+  ]
+}

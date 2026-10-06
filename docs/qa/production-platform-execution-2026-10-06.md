@@ -48,7 +48,17 @@ trial save p95 is 582 ms; submission p95 is 592 ms, above the proposed 250 ms ta
 The 303.8-second single-client soak completed 67 distinct study/PDF journeys without
 failures or lost accepted jobs; it does not establish the proposed 24-hour target.
 Clean installed-wheel and restricted application/worker image journeys passed;
-final image reproducibility checks are in progress.
+[Release receipts](production-release-2026-10-06.json) retain two byte-identical
+wheel builds and two clean-cache application/worker image builds with matching
+configuration and filesystem layer digests at source revision `84fc72b`. The
+installed wheel includes 130 verified resources. The actual non-root, read-only,
+resource-bounded API/worker journey runs a private synthetic study and first/cached
+PDF export. All 18 declared numerical-source modules match the parent model branch.
+These are Linux/amd64 local checks; remote CI and production deployment are not
+claimed. An initial journey returned HTTP 500 during concurrent image building
+and severe disk pressure; the trace was unavailable and its cause is unconfirmed.
+Isolated reruns after cache cleanup passed. Separate build/runtime storage and a
+disk-pressure drill remain production follow-ups.
 
 Independent current-model review and human engineering acceptance remain required
 before physics extension/merge/tag; see the [review packet](production-model-review-packet.md).

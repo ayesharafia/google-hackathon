@@ -37,6 +37,7 @@ jobs:
           .backend/release-venv/bin/python -m pip install --no-deps dist/*.whl
           .venv/bin/python scripts/release/verify-wheel.py --python .backend/release-venv/bin/python
           PATH="$PWD/.venv/bin:$PATH" bash scripts/release/build-images.sh
+          .venv/bin/python scripts/release/verify-images.py
       - name: Browser journeys, local and private
         env:
           PHYSIMESH_CHROMIUM_EXECUTABLE: /usr/bin/google-chrome
