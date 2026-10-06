@@ -36,8 +36,7 @@ jobs:
           .backend/release-venv/bin/python -m pip install --no-index --find-links dist/wheelhouse --require-hashes -r requirements-runtime.lock
           .backend/release-venv/bin/python -m pip install --no-deps dist/*.whl
           .venv/bin/python scripts/release/verify-wheel.py --python .backend/release-venv/bin/python
-          docker build --network none --build-arg SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)" --output type=docker,rewrite-timestamp=true --build-arg PYTHON_BASE="$PHYSIMESH_PYTHON_BASE" --target application -t physimesh-application:ci -f deployment/Dockerfile .
-          docker build --network none --build-arg SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)" --output type=docker,rewrite-timestamp=true --build-arg PYTHON_BASE="$PHYSIMESH_PYTHON_BASE" --target worker -t physimesh-worker:ci -f deployment/Dockerfile .
+          PATH="$PWD/.venv/bin:$PATH" bash scripts/release/build-images.sh
       - name: Browser journeys, local and private
         env:
           PHYSIMESH_CHROMIUM_EXECUTABLE: /usr/bin/google-chrome
