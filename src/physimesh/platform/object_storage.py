@@ -18,8 +18,9 @@ class S3Artifacts:
 
     def verify_private_bucket(self):
         acl = self.client.get_bucket_acl(Bucket=self.bucket)
-        if any('URI' in grant.get('Grantee', {}) for grant in acl.get('Grants', [])):
-            raise ValueError('artifact bucket grants public/group access')
+        owner = acl.get('Owner', {}).get('ID')
+        if not owner or any(grant.get('Grantee', {}).get('ID') != owner for grant in acl.get('Grants', [])):
+            raise ValueError('artifact bucket grants non-owner/public access')
         try:
             policy = json.loads(self.client.get_bucket_policy(Bucket=self.bucket)['Policy'])
         except ClientError as exc:

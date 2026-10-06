@@ -51,6 +51,13 @@ def test_s3_http_conditional_publication_integrity_and_private_configuration(s3)
     with pytest.raises(ValueError, match='public'):
         store.verify_private_bucket()
     client.put_bucket_acl(Bucket=bucket, ACL='private')
+    owner = client.get_bucket_acl(Bucket=bucket)['Owner']
+    client.put_bucket_acl(Bucket=bucket, AccessControlPolicy={'Owner': owner, 'Grants': [
+        {'Grantee': {'Type': 'CanonicalUser', 'ID': owner['ID']}, 'Permission': 'FULL_CONTROL'},
+        {'Grantee': {'Type': 'CanonicalUser', 'ID': 'a'*64}, 'Permission': 'READ'}]})
+    with pytest.raises(ValueError, match='non-owner'):
+        store.verify_private_bucket()
+    client.put_bucket_acl(Bucket=bucket, ACL='private')
     policy = {'Version': '2012-10-17', 'Statement': [{'Effect': 'Allow', 'Principal': '*',
         'Action': 's3:GetObject', 'Resource': f'arn:aws:s3:::{bucket}/*'}]}
     client.put_bucket_policy(Bucket=bucket, Policy=json.dumps(policy))
