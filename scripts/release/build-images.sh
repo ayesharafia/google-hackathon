@@ -8,7 +8,7 @@ python scripts/release/download-wheels.py
 python -m build --wheel --no-isolation
 release_revision="$(git rev-parse HEAD)"
 for release_target in application worker; do
-  docker build --platform linux/amd64 --network none --build-arg "PYTHON_BASE=$PHYSIMESH_PYTHON_BASE" --target "$release_target" \
+  docker build --platform linux/amd64 --network none --build-arg "SOURCE_DATE_EPOCH=$SOURCE_DATE_EPOCH" --output type=docker,rewrite-timestamp=true --build-arg "PYTHON_BASE=$PHYSIMESH_PYTHON_BASE" --target "$release_target" \
     --label "org.opencontainers.image.revision=$release_revision" \
     -t "physimesh-$release_target:$release_revision" -f deployment/Dockerfile .
 done

@@ -5,9 +5,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 MPLCONFIGDIR=/tmp/matplotlib XD
 WORKDIR /app
 COPY requirements-runtime.lock /app/requirements-runtime.lock
 COPY dist/wheelhouse /wheels
-RUN python -m pip install --no-cache-dir --no-index --find-links=/wheels --require-hashes -r requirements-runtime.lock && rm -rf /wheels
+RUN python -m pip install --no-compile --no-cache-dir --no-index --find-links=/wheels --require-hashes -r requirements-runtime.lock && rm -rf /wheels
 COPY dist/*.whl /app/
-RUN python -m pip install --no-deps /app/*.whl && rm /app/*.whl
+RUN python -m pip install --no-compile --no-deps /app/*.whl && rm /app/*.whl
 RUN groupadd --gid 10001 physimesh && useradd --uid 10001 --gid 10001 --no-create-home physimesh
 USER 10001:10001
 EXPOSE 8000

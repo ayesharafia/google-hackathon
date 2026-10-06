@@ -18,7 +18,7 @@ Hosted legacy unowned CFD/global-artifact routes deny access. Private CFD job ow
 selected-provider browser OIDC/PKCE, full audit/retention policy and hosted disaster
 recovery remain follow-ons; the deployment template is not an activated deployment.
 
-Performed checks: **528 unit tests**, **118 retained reference tests**, **two real
+Performed checks: **529 unit tests**, **118 retained reference tests**, **two real
 PostgreSQL integration tests**, **one actual pinned sphere backend smoke**, Ruff and
 JavaScript syntax checks. Integration includes 50 independent concurrent saves and
 50 same-version contenders (one succeeds, 49 explicit conflicts). Private-object
@@ -41,10 +41,14 @@ The [fresh pre-change V4 baseline](production-baseline-2026-10-06.md) retains th
 runs per workload at 1/10/25/50 users, five cold starts and six unchanged pinned
 coarse/medium sphere pipelines plus six native postprocessing measurements. The
 baseline archive contains sanitized metrics/request samples, not credentials,
-databases or private service state. Repeated post-change export/PostgreSQL tests,
-clean wheel/image verification and a bounded soak are completing; their actual
-receipts will be recorded before delivery. A short soak cannot establish the
-requested 24-hour target.
+databases or private service state. [The repeat audit](production-performance-2026-10-06.md) retains all local overloads
+and separate cold/warm export and PostgreSQL trials at 1/10/25/50 users. All three
+PostgreSQL save/submission repeats completed without failures. At 50 users, median
+trial save p95 is 582 ms; submission p95 is 592 ms, above the proposed 250 ms target.
+The 303.8-second single-client soak completed 67 distinct study/PDF journeys without
+failures or lost accepted jobs; it does not establish the proposed 24-hour target.
+Clean installed-wheel and restricted application/worker image journeys passed;
+final image reproducibility checks are in progress.
 
 Independent current-model review and human engineering acceptance remain required
 before physics extension/merge/tag; see the [review packet](production-model-review-packet.md).

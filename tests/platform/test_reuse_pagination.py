@@ -111,3 +111,27 @@ def test_detail_histories_bound_and_old_entries_remain_readable(tmp_path):
         after = page['next_cursor']
     assert len(seen) == len(set(seen)) == 101
     assert c.get(base+'/revisions/'+seen[-1], headers=AUTH).status_code == 200
+
+
+def test_changed_model_identity_cannot_receive_an_old_accepted_study(tmp_path, monkeypatch):
+    from physimesh.projects import studies
+    c = client(tmp_path)
+    _, base, original = retained(c)
+    engine = c.app.state.studies
+    revised = {**engine.model_identity, 'source_fingerprint_sha256': 'f'*64}
+    monkeypatch.setattr(engine, 'model_identity', revised)
+    actual, calls = studies.capacity_from_snapshot, []
+    def evaluate(*args, **kwargs):
+        calls.append(1)
+        return actual(*args, **kwargs)
+    monkeypatch.setattr(studies, 'capacity_from_snapshot', evaluate)
+    result = c.post(base+'/studies', headers=AUTH, json={
+        'revision_sha256': original['specification']['revision_sha256']})
+    assert result.status_code == 200, result.text
+    assert calls == [1]
+    assert result.json()['study_sha256'] != original['study_sha256']
+    assert result.json()['specification']['model'] == revised
+    assert c.get(base+'/studies/'+original['study_sha256'], headers=AUTH).json() == original
+    repeated = c.post(base+'/studies', headers=AUTH, json={
+        'revision_sha256': original['specification']['revision_sha256']})
+    assert repeated.json() == result.json() and calls == [1]
