@@ -22,7 +22,7 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
 RUNTIME = ROOT / '.backend' / 'next-development-browser' / secrets.token_hex(4)
-EVIDENCE = ROOT / 'docs/qa/assets/next-development'
+EVIDENCE = Path(os.environ.get('PHYSIMESH_BROWSER_EVIDENCE_DIR', str(ROOT/'docs/qa/assets/next-development')))
 RUNTIME.mkdir(parents=True)
 EVIDENCE.mkdir(parents=True, exist_ok=True)
 TOKEN = secrets.token_urlsafe(32)
@@ -31,7 +31,8 @@ with socket.socket() as sock:
     PORT = sock.getsockname()[1]
 BASE = f'http://127.0.0.1:{PORT}'
 ENV = {**os.environ, 'PHYSIMESH_DATA_ROOT': str(RUNTIME),
-       'PHYSIMESH_API_TOKEN': TOKEN, 'MPLCONFIGDIR': str(ROOT/'.cache/matplotlib'),
+       'PHYSIMESH_API_TOKEN': TOKEN, 'PHYSIMESH_MODE': 'local',
+       'PHYSIMESH_DB_PATH': str(RUNTIME/'jobs.sqlite'), 'MPLCONFIGDIR': str(ROOT/'.cache/matplotlib'),
        'XDG_CACHE_HOME': str(ROOT/'.cache')}
 RECEIPT = {'browser': 'system Chromium', 'data_scope': 'analytic_fixture',
            'checks': [], 'rehearsals_s': [], 'downloads': [], 'screenshots': []}
@@ -104,7 +105,7 @@ with (RUNTIME/'server.log').open('w') as log:
         else:
             raise RuntimeError('Server startup timed out')
         with tempfile.TemporaryDirectory(prefix='physicore-browser-') as profile, sync_playwright() as playwright:
-            context = playwright.chromium.launch_persistent_context(profile, executable_path='/usr/bin/chromium', headless=True,
+            context = playwright.chromium.launch_persistent_context(profile, executable_path=os.environ.get('PHYSIMESH_CHROMIUM_EXECUTABLE', '/usr/bin/chromium'), headless=True,
                 no_viewport=True, reduced_motion='reduce',
                 args=['--no-sandbox', '--disable-dev-shm-usage', '--use-angle=swiftshader', '--enable-unsafe-swiftshader',
                       '--window-size=1440,1000'])

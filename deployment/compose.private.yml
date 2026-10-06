@@ -1,0 +1,45 @@
+# Provider-neutral private deployment TEMPLATE. D01-D03/D07 must be resolved first.
+# Operator provisions private TLS ingress, PostgreSQL, S3/IAM and OIDC; no public ports.
+# Pre-create physimesh-data owned by uid/gid 10001. Secrets belong in an untracked 0600 env file.
+services:
+  api:
+    image: ${PHYSIMESH_APPLICATION_IMAGE:?Use an immutable image digest}
+    user: '10001:10001'
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    cpus: 2
+    mem_limit: 2g
+    pids_limit: 128
+    restart: unless-stopped
+    expose: ['8000']
+    env_file: ${PHYSIMESH_PRIVATE_ENV_FILE:?Operator-owned environment file}
+    environment:
+      PHYSIMESH_MODE: hosted
+      PHYSIMESH_DATA_ROOT: /data
+      PHYSIMESH_DB_PATH: /data/legacy-jobs.sqlite
+      PHYSIMESH_POOL_SIZE: '8'
+    volumes: [platform-data:/data]
+    tmpfs: [/tmp:rw,size=128m,uid=10001,gid=10001]
+  study-worker:
+    image: ${PHYSIMESH_WORKER_IMAGE:?Use the matching immutable worker digest}
+    user: '10001:10001'
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    cpus: 2
+    mem_limit: 2g
+    pids_limit: 128
+    restart: unless-stopped
+    env_file: ${PHYSIMESH_PRIVATE_ENV_FILE:?Operator-owned environment file}
+    environment:
+      PHYSIMESH_MODE: hosted
+      PHYSIMESH_DATA_ROOT: /data
+      PHYSIMESH_DB_PATH: /data/legacy-jobs.sqlite
+      PHYSIMESH_POOL_SIZE: '4'
+    volumes: [platform-data:/data]
+    tmpfs: [/tmp:rw,size=128m,uid=10001,gid=10001]
+volumes:
+  platform-data:
+    external: true
+    name: physimesh-data

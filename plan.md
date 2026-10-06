@@ -12,10 +12,10 @@ States distinguish implementation from acceptance: **local subset** is historica
 
 | ID | State | Evidence/specification | Blocker or next action |
 |---|---|---|---|
-| U01 / N0.5 / IP07 / IP10 | in progress | [Production upgrade](docs/production/upgrade.md) | Fresh V4 baseline; packaging; independent current-model review and human acceptance pending |
-| U02 / N3.2 / IP16 | queued | [Production upgrade](docs/production/upgrade.md) | Baseline first, then bounded inventory and verified reuse |
-| U03 / IP13 | queued | [Production upgrade](docs/production/upgrade.md) | Provider-neutral PostgreSQL/private-storage implementation and concurrent-write tests |
-| U04 / IP14–IP15 / IP17 | queued | [Production upgrade](docs/production/upgrade.md) | Authenticated project access, durable fenced jobs and recovery drills |
+| U01 / N0.5 / IP07 / IP10 | software verified; model review pending | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md), [fresh V4 baseline](docs/qa/production-baseline-2026-10-06.md) | Packaged resources/locked runtime and expanded CI; independent current-model review and human acceptance still gate physics |
+| U02 / N3.2 / IP16 | implemented; repeat audit underway | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md) | Bounded 1,000-project inventory/history; verified immutable PDF receipts and accepted-study reuse; schema cache and performance targets remain separate |
+| U03 / IP13 | local integration verified | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md) | Real PostgreSQL 50-writer/version checks, S3-compatible HTTP fixtures and migrations; production provider/bucket/restore decisions pending |
+| U04 / IP14–IP15 / IP17 | fixture journey and recovery verified | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md), [operations](docs/production/operations.md) | Sessions/roles/invitations/review exports; queued bounded studies/reports and fencing; hosted CFD/IdP flow, long soak and provider recovery remain pending |
 | U05 / N2.4 / IP05 / IP11 | review gated | [Production upgrade](docs/production/upgrade.md) | User selected mission/powertrain; current-model review precedes physics extension; analytic fixtures then real-data qualification |
 | N0.1 | blocked | [Scope proposal](docs/plans/2026-10-05-next-development-plan.md) | Client scope agreement and named engineer; no invented ADR-0004 decision |
 | N0.2 | blocked | [Data request](docs/client/aircraft-data-request.md) | Recipient and explicit sending instruction; no message sent |
@@ -29,14 +29,14 @@ States distinguish implementation from acceptance: **local subset** is historica
 | N2.1 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Quad certificate and feasible octo/zero commands; independent review |
 | N2.2 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Exact matching-inflow climb and unsupported sign/coverage tests; independent review |
 | N2.3 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Joint scenarios, common-candidate energy and separately sourced caps; independent review |
-| N2.4 | conditional | [Variable-power specification](docs/plans/2026-10-05-next-development-plan.md) | Client mission demonstrates need; constant-power transitions already supported |
+| N2.4 | authorized; review gated | [Variable-power specification](docs/plans/2026-10-05-next-development-plan.md) | U05 leads next engineering work after current-model review; real data not required for labelled analytic fixtures |
 | N3.1 | local subset | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Declared-mm airframe, numeric rotor/link round trip, governing-limit preview; real geometry pending |
 | N3.2 | implemented | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Retained input/constraint comparison; JSON numeric round-trip fix; standard review pending |
 | N3.3 | local subset | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Two timed automated journeys and retained recording; human presenter rehearsals pending |
 | N4.1 | blocked | [Client intake request](docs/client/aircraft-data-request.md) | D04–D06 and named client engineer |
 | N4.2 | blocked | [Validation specification](docs/plans/2026-10-05-next-development-plan.md) | Real held-out measurements and engineer-owned tolerances |
 | N4.3 | blocked | [Report specification](docs/plans/2026-10-05-next-development-plan.md) | Real inputs, independent review and human scope acceptance |
-| N5 / IP13–IP15 / IP17 | blocked | [Hosted specifications](docs/plans/2026-10-04-implementation-plan.md#ip13-hosted-metadata-and-private-artifact-adapters) | D01–D03; staging scale also D07 |
+| N5 / IP13–IP15 / IP17 | local subsets implemented | [Hosted specifications](docs/plans/2026-10-04-implementation-plan.md#ip13-hosted-metadata-and-private-artifact-adapters) | U03/U04 local adapters/access/study-report workers verified; D01–D03/D07 gate external deployment |
 | IP01 | local subset | [Local checkpoint](docs/qa/local-workbench-merge.md) | Hosted authoring/permissions remain outside this subset |
 | IP02 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Real approved mass ledger unavailable |
 | IP03 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Broader case eligibility tracked in N2 |
@@ -47,7 +47,7 @@ States distinguish implementation from acceptance: **local subset** is historica
 | IP08 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Restricted LP model; no general aircraft optimum |
 | IP09 | local subset | [Browser audit](docs/qa/local-workbench-design-audit.md) | N0.4 and real-data gates |
 | IP10 | local subset | [Historical compatibility review](docs/reviews/2026-10-05-historical-contract-claude.md) | New semantics require versioned successor |
-| IP11 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Constant segments only; N2.4 conditional |
+| IP11 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Constant segments only; U05/N2.4 authorized after model review |
 | IP12 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | N2.3 implementation shares evidence; independent acceptance pending |
 | IP16 | local subset | [Report evidence](docs/qa/local-reports.md) | Assembly N3.1; hosted client review depends on N5 |
 | IP18 | blocked | N4 above | D04–D06, real validation and hosted release gates |
@@ -173,7 +173,7 @@ flowchart LR
     Worker --> Monitor
 ```
 
-The diagram expresses planned responsibilities. These hosted modules do not yet exist.
+The diagram expresses target responsibilities. U03/U04 now implement local hosted metadata, private artifacts, access and study/report workers; external deployment and hosted CFD remain pending in the active status table.
 
 ### Recommended stack, subject to recorded hosting decisions
 

@@ -112,6 +112,8 @@ def metadata():
         return p.read_text().strip() if p.exists() else None
     return {'utc': datetime.now(UTC).isoformat(),
             'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+            'source_sha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
+                              for p in sorted((ROOT/'src').rglob('*.py'))},
             'python': sys.version, 'platform': platform.platform(), 'visible_cpus': os.cpu_count(),
             'cpu_model': next((s.split(':', 1)[1].strip() for s in Path('/proc/cpuinfo').read_text().splitlines()
                                if s.startswith('model name')), None),
@@ -127,7 +129,7 @@ def metadata():
 
 
 class Server:
-    def __init__(self, data, log_dir):
+    def __init__(self, data, log_dir, *, environment=None):
         self.data = Path(data)
         self.data.mkdir(parents=True, exist_ok=True)
         log_dir = Path(log_dir)
@@ -140,7 +142,8 @@ class Server:
         self.auth = {'Authorization': 'Bearer '+self.token}
         self.env = {**os.environ, 'PHYSIMESH_API_TOKEN': self.token,
                     'PHYSIMESH_DATA_ROOT': str(self.data), 'PHYSIMESH_DB_PATH': str(self.data/'jobs.sqlite'),
-                    'MPLCONFIGDIR': '/workspace/.cache/matplotlib', 'XDG_CACHE_HOME': '/workspace/.cache'}
+                    'MPLCONFIGDIR': '/workspace/.cache/matplotlib', 'XDG_CACHE_HOME': '/workspace/.cache',
+                    **(environment or {})}
         self.log = (log_dir/'server.log').open('ab')
         started = time.perf_counter()
         self.process = subprocess.Popen([str(ROOT/'.venv/bin/python'), '-m', 'uvicorn',
