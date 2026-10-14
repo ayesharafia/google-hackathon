@@ -1,0 +1,50 @@
+{
+  "schema_version": "intake_readiness_receipt_v1",
+  "canonical_packet_sha256": "bcb4188680eac6129394732d7b0837d87928544c936d8142521bd946607e7a85",
+  "inventory_state": "incomplete_declarations",
+  "findings": [
+    {
+      "path": "inventory.geometry.units",
+      "state": "missing"
+    },
+    {
+      "path": "inventory.rotors[0].raw_source_ref",
+      "state": "unknown"
+    },
+    {
+      "path": "inventory.rotors[0].coverage",
+      "state": "unsupported"
+    },
+    {
+      "path": "inventory.mission.segment_ids",
+      "state": "missing"
+    },
+    {
+      "path": "inventory.tolerance_ownership.engineer_name",
+      "state": "missing"
+    }
+  ],
+  "purpose_input_readiness": {
+    "screening": {
+      "state": "inputs_present",
+      "blocking_count": 0,
+      "warning_count": 3
+    },
+    "cfd_run": {
+      "state": "inputs_incomplete",
+      "blocking_count": 14,
+      "warning_count": 3
+    },
+    "feasibility": {
+      "state": "inputs_incomplete",
+      "blocking_count": 17,
+      "warning_count": 3
+    }
+  },
+  "mission_contract": "bound_declaration",
+  "source_verification": "not_performed",
+  "human_ownership": "self_declared_not_authenticated",
+  "model_acceptance": "not_assessed",
+  "engineering_acceptance": "not_assessed",
+  "flight_readiness": "not_assessed"
+}

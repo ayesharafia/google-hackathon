@@ -1,0 +1,405 @@
+{
+  "schema_version": "intake_inventory_v1",
+  "fixture_label": "SYNTHETIC COMPLETE DECLARATIONS ONLY; not validated aircraft inputs",
+  "project": {
+    "identity": {
+      "schema_version": "drone_manifest_v1",
+      "study_id": null,
+      "description": null,
+      "created_utc": null
+    },
+    "units_and_frames": {
+      "source_units": "m",
+      "world_frame": "ENU_z_up",
+      "body_frame": "x_forward_y_left_z_up",
+      "solid_normal": "outward_into_fluid",
+      "cad_transform": {
+        "scale": 1,
+        "rotation_deg_zyx": [
+          0,
+          0,
+          0
+        ],
+        "translation_m": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "mission": {
+      "payload_mass_kg": null,
+      "payload_positions_body_m": null,
+      "cases": [
+        {
+          "name": "synthetic-hover",
+          "kind": "hover",
+          "required": true,
+          "velocity_world_m_s": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "duration_s": null,
+      "energy_system": {
+        "pack_mode": "fixed"
+      },
+      "reserve_policy": {
+        "kind": "fraction",
+        "convention": "held_usable_energy_fraction",
+        "value": 0.1
+      },
+      "contract_definition": {
+        "schema_version": "mission_definition_v1",
+        "cases": [
+          {
+            "case_id": "synthetic-hover",
+            "required": true,
+            "conditions_sha256": "5911a2a5d442a21c339a7ef0125deb8eb50042f3e5b9dfc4ac315eb03bcc0643"
+          }
+        ],
+        "sequence": [
+          {
+            "segment_id": "synthetic-segment",
+            "case_id": "synthetic-hover",
+            "duration_s": 1,
+            "approximation": "constant_point",
+            "model_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+          }
+        ],
+        "reserve_convention": "held_usable_energy_fraction",
+        "reserve_value": 0.1,
+        "pack_mode": "fixed"
+      }
+    },
+    "masses": {
+      "items": [
+        {
+          "name": "payload",
+          "category": "payload",
+          "mass_kg": 0,
+          "cg_body_m": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "structure",
+          "category": "structure",
+          "mass_kg": 100,
+          "cg_body_m": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "propulsion",
+          "category": "propulsion",
+          "mass_kg": 0,
+          "cg_body_m": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "energy",
+          "category": "energy",
+          "mass_kg": 0,
+          "cg_body_m": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "avionics",
+          "category": "avionics",
+          "mass_kg": 0,
+          "cg_body_m": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "other",
+          "category": "other",
+          "mass_kg": 0,
+          "cg_body_m": [
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "atmosphere": {
+      "source": "synthetic-not-measured",
+      "altitude_m": null,
+      "pressure_pa": 101325,
+      "temperature_k": 288.15,
+      "viscosity": {
+        "law": "sutherland"
+      },
+      "humidity_assumption": null,
+      "gamma": 1.4
+    },
+    "assembly": {
+      "geometry_revision_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "components": [
+        {
+          "component_id": "synthetic-body",
+          "role": "body"
+        }
+      ],
+      "topology_tolerance": {
+        "abs_m": null,
+        "rel": null
+      },
+      "min_feature_m": null
+    },
+    "rotors": [
+      {
+        "rotor_id": "synthetic-r1",
+        "radius_m": 1,
+        "map_ref": "synthetic-map-not-measured"
+      }
+    ],
+    "flow": {
+      "pressure_dimensions": null,
+      "compressibility": null,
+      "turbulence_model": null,
+      "pressure_includes_isotropic_turbulent_stress": null,
+      "ambient_turbulence": {
+        "intensity": null,
+        "length_scale_m": null,
+        "reference_speed_m_s": null
+      }
+    },
+    "fidelity": {
+      "initial": null,
+      "requested_question": null,
+      "bem": {
+        "radial_stations": 80,
+        "relative_load_residual": 0.0001,
+        "max_iterations": 200,
+        "induction_relaxation": null,
+        "loss_model": "prandtl_tip",
+        "loss_applies_to": "momentum",
+        "polar_extrapolation": "reject"
+      }
+    },
+    "symmetry": {
+      "execution": "off",
+      "plane": {
+        "x0_m": null,
+        "normal": null
+      },
+      "match_tolerance": {
+        "abs_m": null,
+        "rel": null
+      }
+    },
+    "domain": {
+      "bounds_m": null,
+      "clearances_in_rotor_diameters": null
+    },
+    "mesh": {
+      "global_cell_m": null,
+      "surface_levels": {},
+      "wake_refinement": [],
+      "rotation_zones": {},
+      "layers": {
+        "first_layer_yplus_target": 1,
+        "growth": 1.2,
+        "count": null,
+        "first_height_m": null
+      },
+      "max_cells": null
+    },
+    "numerics": {
+      "steady": {
+        "coupling": "SIMPLE_or_backend_equivalent",
+        "iteration_budget": 3000
+      },
+      "transient": {
+        "coupling": "PIMPLE_or_backend_equivalent",
+        "rotation_per_step_deg": 1,
+        "target_courant": 0.8,
+        "outer_correctors": 2,
+        "pressure_correctors": 2
+      },
+      "linear": {
+        "final_rel_tol": 0,
+        "p_abs_tol": 1e-7,
+        "u_turb_abs_tol": 0.000001
+      },
+      "relaxation": null
+    },
+    "boundaries": {
+      "far_field": null,
+      "outlet": null,
+      "ground_model": null,
+      "walls": null
+    },
+    "convergence": {
+      "startup_discard_revs": 5,
+      "averaging_window_revs": 10,
+      "force_drift_gate": 0.005,
+      "continuity_target": 0.001,
+      "m_dot_scale": null
+    },
+    "postprocessing": {
+      "load_history_cadence": "every_time_step",
+      "full_field_cadence_deg": 5,
+      "intents": []
+    },
+    "validation": {
+      "native_force_reconciliation": {
+        "rel": 0.001,
+        "abs_n": null
+      },
+      "mesh_time_change_target": 0.02,
+      "symmetry_change_target": 0.01,
+      "experimental_targets": {
+        "thrust_rel": 0.05,
+        "torque_rel": 0.1
+      }
+    },
+    "execution": {
+      "backend_name": null,
+      "backend_version": null,
+      "backend_image_digest": null,
+      "cpu_cores": null,
+      "memory_gb": null,
+      "disk_gb": null,
+      "wall_time_limit_s": null,
+      "limits": {
+        "max_upload_bytes": null,
+        "max_triangles": null
+      }
+    }
+  },
+  "inventory": {
+    "geometry": {
+      "source_ref": "synthetic declaration not verified",
+      "revision_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "units": "m",
+      "body_frame": "x_forward_y_left_z_up",
+      "world_frame": "ENU_z_up",
+      "component_roles": [
+        {
+          "component_id": "synthetic-body",
+          "role": "body"
+        }
+      ],
+      "transforms": {
+        "scale": 1,
+        "rotation_deg_zyx": [
+          0,
+          0,
+          0
+        ],
+        "translation_m": [
+          0,
+          0,
+          0
+        ]
+      },
+      "installation_context": "synthetic declaration not verified"
+    },
+    "electrical": {
+      "source_ref": "synthetic declaration not verified",
+      "pack_mode": "fixed",
+      "capacity_energy": "synthetic declaration not verified",
+      "voltage_current_power_limits": "synthetic declaration not verified",
+      "discharge_temperature_limits": "synthetic declaration not verified",
+      "motor_esc_continuous_burst_limits": "synthetic declaration not verified",
+      "efficiency_source_ref": "synthetic declaration not verified",
+      "auxiliary_demand": "synthetic declaration not verified"
+    },
+    "mission": {
+      "source_ref": "synthetic declaration not verified",
+      "case_ids": [
+        "synthetic-hover"
+      ],
+      "segment_ids": [
+        "synthetic-segment"
+      ],
+      "reserve_convention": "held_usable_energy_fraction",
+      "atmosphere_source_ref": "synthetic declaration not verified"
+    },
+    "tolerance_ownership": {
+      "engineer_name": "synthetic declaration not verified",
+      "independent_approver_name": "synthetic declaration not verified",
+      "intended_claim": "synthetic declaration not verified",
+      "model_installation_envelope": "synthetic declaration not verified",
+      "comparison_sources": "synthetic declaration not verified",
+      "tolerance_policy_source_ref": "synthetic declaration not verified",
+      "uncertainty_policy_source_ref": "synthetic declaration not verified"
+    },
+    "rotors": [
+      {
+        "rotor_id": "synthetic-r1",
+        "map_ref": "synthetic-map-not-measured",
+        "raw_source_ref": "synthetic declaration not verified",
+        "conditions": "synthetic declaration not verified",
+        "coverage": "synthetic declaration not verified",
+        "units": "synthetic declaration not verified",
+        "uncertainty": "synthetic declaration not verified",
+        "power_basis": "synthetic declaration not verified",
+        "continuous_burst_duty": "synthetic declaration not verified",
+        "source_rights": "synthetic declaration not verified"
+      }
+    ],
+    "mass_cg": [
+      {
+        "name": "payload",
+        "mass_source_ref": "synthetic declaration not verified",
+        "cg_source_ref": "synthetic declaration not verified",
+        "uncertainty": "synthetic declaration not verified",
+        "placement_envelope": "synthetic declaration not verified"
+      },
+      {
+        "name": "structure",
+        "mass_source_ref": "synthetic declaration not verified",
+        "cg_source_ref": "synthetic declaration not verified",
+        "uncertainty": "synthetic declaration not verified",
+        "placement_envelope": "synthetic declaration not verified"
+      },
+      {
+        "name": "propulsion",
+        "mass_source_ref": "synthetic declaration not verified",
+        "cg_source_ref": "synthetic declaration not verified",
+        "uncertainty": "synthetic declaration not verified",
+        "placement_envelope": "synthetic declaration not verified"
+      },
+      {
+        "name": "energy",
+        "mass_source_ref": "synthetic declaration not verified",
+        "cg_source_ref": "synthetic declaration not verified",
+        "uncertainty": "synthetic declaration not verified",
+        "placement_envelope": "synthetic declaration not verified"
+      },
+      {
+        "name": "avionics",
+        "mass_source_ref": "synthetic declaration not verified",
+        "cg_source_ref": "synthetic declaration not verified",
+        "uncertainty": "synthetic declaration not verified",
+        "placement_envelope": "synthetic declaration not verified"
+      },
+      {
+        "name": "other",
+        "mass_source_ref": "synthetic declaration not verified",
+        "cg_source_ref": "synthetic declaration not verified",
+        "uncertainty": "synthetic declaration not verified",
+        "placement_envelope": "synthetic declaration not verified"
+      }
+    ]
+  }
+}

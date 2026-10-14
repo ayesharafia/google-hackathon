@@ -12,6 +12,7 @@ States distinguish implementation from acceptance: **local subset** is historica
 
 | ID | State | Evidence/specification | Blocker or next action |
 |---|---|---|---|
+| A06 | declaration helper verified; draft integration pending | [Intake scope](docs/qa/intake-readiness.md), [14 October execution](docs/qa/a06-execution-2026-10-14.md) | Issue #14; 101 targeted tests and complete/incomplete synthetic CLI passed; sources, human ownership, model/engineering acceptance and pinned CI remain unverified |
 | A05 | helper verified; draft integration pending | [Drill scope](docs/qa/disk-pressure-drill.md), [14 October execution](docs/qa/a05-execution-2026-10-14.md), [actual observations](docs/qa/a05-observations-2026-10-14.json) | Issue #13; 19 targeted tests and injected storage/retry/fence CLI passed; actual exhaustion/worker/provider/pinned CI remain unverified |
 | A01–A02 | implemented; draft integration pending | [Reconciliation](docs/qa/baseline-reconciliation.md), [model review checklist](docs/qa/model-review-checklist.md), [14 October evidence](docs/qa/roadmap-implementation-2026-10-14.md) | Issue #10; same-family documentation QA/review complete; independent model and human gates remain pending |
 | A03 | helper tested; external profiling pending | [Submission diagnostics](docs/qa/submission-profiling.md), [actual receipt](docs/qa/submission-diagnostics-2026-10-14.json) | Issue #11; 11 targeted tests and six API admissions/cancellations passed in unpinned Python 3.12; pinned CI/PostgreSQL/concurrency unverified |

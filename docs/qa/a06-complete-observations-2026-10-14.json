@@ -1,0 +1,29 @@
+{
+  "schema_version": "intake_readiness_receipt_v1",
+  "canonical_packet_sha256": "9cbb43aa0b707cd1efb3e6539d327aa2c5e6cb7c29e2bd413206757ddeb37e2b",
+  "inventory_state": "complete_declarations",
+  "findings": [],
+  "purpose_input_readiness": {
+    "screening": {
+      "state": "inputs_present",
+      "blocking_count": 0,
+      "warning_count": 3
+    },
+    "cfd_run": {
+      "state": "inputs_incomplete",
+      "blocking_count": 14,
+      "warning_count": 3
+    },
+    "feasibility": {
+      "state": "inputs_incomplete",
+      "blocking_count": 17,
+      "warning_count": 3
+    }
+  },
+  "mission_contract": "bound_declaration",
+  "source_verification": "not_performed",
+  "human_ownership": "self_declared_not_authenticated",
+  "model_acceptance": "not_assessed",
+  "engineering_acceptance": "not_assessed",
+  "flight_readiness": "not_assessed"
+}
