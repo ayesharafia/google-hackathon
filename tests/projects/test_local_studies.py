@@ -57,6 +57,25 @@ def test_missing_or_corrupt_performance_source_refuses_run_and_freeze(tmp_path):
     assert c.post(base+'/studies', headers=AUTH, json={'revision_sha256': frozen['revision_sha256']}).status_code == 422
 
 
+def test_reimport_cannot_report_success_or_repair_corrupt_retained_map(tmp_path):
+    with client(tmp_path) as c:
+        project = c.post('/api/drone/projects/examples/hover', headers=AUTH).json()
+        digest = json.loads(project['snapshot_json'])['rotors'][0]['map_ref']
+        path = tmp_path/'artifacts/objects'/digest[:2]/digest
+        original = path.read_bytes()
+        metadata = c.app.state.projects.artifacts.meta(digest)
+        path.write_bytes(b'corrupt retained evidence')
+        response = c.post('/api/drone/projects/performance-sources', headers=AUTH,
+                          json={'dataset_json': original.decode()})
+        assert response.status_code == 422 and 'byte integrity failed' in response.text
+        assert path.read_bytes() == b'corrupt retained evidence'
+        assert c.app.state.projects.artifacts.meta(digest) == metadata
+        base = '/api/drone/projects/'+project['project_id']
+        assert c.post(base+'/revisions', headers=AUTH,
+                      json={'expected_version': project['draft_version']}).status_code == 422
+        assert c.get(base, headers=AUTH).json()['studies'] == []
+
+
 def test_incomplete_frozen_design_retains_refusal_and_never_capacity(tmp_path):
     c = client(tmp_path)
     project = c.post('/api/drone/projects', headers=AUTH, json={'title':'Unknown aircraft'}).json()

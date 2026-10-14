@@ -20,6 +20,9 @@ def main():
     args.state.mkdir(parents=True, exist_ok=True, mode=0o700)
     state = args.state/'private.json'
     if args.action == 'stop':
+        if not state.exists():
+            print('No disposable PostgreSQL service state; nothing to stop.')
+            return
         record = json.loads(state.read_text())
         subprocess.run(['docker', 'rm', '-f', record['container']], check=True, capture_output=True)
         state.unlink()

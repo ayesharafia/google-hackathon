@@ -28,6 +28,8 @@ def backup_local(data_root: Path, destination: Path):
         raise ValueError('backup destination must be new')
     if destination.resolve().is_relative_to(data_root.resolve()):
         raise ValueError('backup must be outside its live data root')
+    if any(path.is_symlink() for path in (data_root/'projects.sqlite', data_root/'artifacts')):
+        raise ValueError('snapshot source cannot contain symlinks')
     if not (data_root/'projects.sqlite').is_file() or not (data_root/'artifacts').is_dir():
         raise ValueError('platform database and artifact directory must exist')
     if any(path.is_symlink() for path in (data_root/'artifacts').rglob('*')):
@@ -61,6 +63,8 @@ def restore_local(backup: Path, destination: Path, *, manifest_sha256: str):
     if destination.exists():
         raise ValueError('restore destination must be new; never overwrite live data')
     manifest = backup/'manifest.jsonl'
+    if manifest.is_symlink() or any(path.is_symlink() for path in backup.rglob('*')):
+        raise ValueError('snapshot cannot contain symlinks')
     if _digest(manifest) != manifest_sha256:
         raise ValueError('backup manifest integrity failed')
     started, verified = time.perf_counter(), {}
