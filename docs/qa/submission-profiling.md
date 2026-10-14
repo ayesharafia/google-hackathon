@@ -1,0 +1,15 @@
+# Bounded submission diagnostics
+
+`python scripts/qa/submission_profile.py --output .backend/submission-profile-new --repeats 3`
+
+Run from the platform source checkout with its development dependencies installed. The output directory must be new; repeats are limited to 1–20. The harness creates its own temporary SQLite database, private artifact store, synthetic identity and analytic fixture. It does not accept an external service URL, production credentials or aircraft inputs, and starts no worker or solver. Temporary resources are deleted on exit.
+
+Each repeat makes one fresh study submission with instrumentation disabled and one separate fresh submission with diagnostic method spans. Order alternates between repeats. Example creation, revision freeze and cancellation are outside timing. Every accepted job is cancelled; cancellation failures are retained and make the command fail. No completed study is needed, so this measures admission rather than computation.
+
+`results.json` retains every status, full buffered response latency, response byte count, queued acceptance and cancellation outcome, along with model identity, source/schema digest receipts, fixture/revision digests and dependency versions. It omits response bodies, exception messages, credentials, project IDs and input values. File-path keys identify source files only. These are synthetic-fixture receipts, not a mechanism for exporting private designs.
+
+Diagnostic spans observe `identity.session`, `identity.authorize`, `repository.revision`, and `jobs.submit`. They include everything invoked by that method, including database work. They are inclusive, may nest, and **must not be summed** or interpreted as isolated SQL costs. Method wrappers are restored even after exceptions. Diagnostic latency includes instrumentation overhead and must not be pooled with uninstrumented latency. Setup failures occur before a successful measurement campaign and require fixing the environment and selecting a new output directory.
+
+These serial, in-process TestClient observations are diagnostic evidence only. They exclude TCP/TLS, multiple users, PostgreSQL and managed hosting; they do not explain the recorded 50-user PostgreSQL p95 or satisfy the proposed 250 ms goal. Use the existing `scripts/qa/platform_load.py postgres` campaign on explicitly provisioned disposable services for comparable concurrent network measurements. Do not change schema parsing, queue/idempotency/fencing or numerical behavior based on a single diagnostic run. Propose one optimization only after reproducing a measured bottleneck under the relevant workload.
+
+Regression checks: `python -m unittest discover -s tests -p test_submission_profile.py -v`. They verify restoration after failed instrumentation, failure/outcome retention, cancellation refusal, repeat caps and removal of sensitive response/error values. Source and runtime identity receipts are required when sharing a run; package versions in the harness are observations, not dependency pins.
