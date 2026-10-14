@@ -13,7 +13,7 @@ if ! docker buildx inspect "$release_builder" >/dev/null 2>&1; then
   docker buildx create --name "$release_builder" --driver docker-container \
     --driver-opt "image=$buildkit_base,memory=2g,cpu-quota=200000,cpu-period=100000" --bootstrap
 fi
-docker buildx inspect "$release_builder" | rg -q '^Driver:[[:space:]]+docker-container$' || {
+docker buildx inspect "$release_builder" | grep -E '^Driver:[[:space:]]+docker-container$' >/dev/null || {
   echo 'timestamp rewriting requires the dedicated docker-container exporter' >&2; exit 1;
 }
 [[ "$(docker inspect "buildx_buildkit_${release_builder}0" --format '{{.Config.Image}}')" == "$buildkit_base" ]] || {
