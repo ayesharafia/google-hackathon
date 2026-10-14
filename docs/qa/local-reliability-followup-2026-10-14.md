@@ -106,3 +106,33 @@ Docker daemon. The required `docker-container` driver reaches both offline image
 targets; `docker` and `kubernetes` refuse before builds. The lead and peer agent
 each passed **3 tests**, Ruff and shell syntax checks. Full release-image/browser
 CI on the resulting head remains pending; the initial failed run is not a release PASS.
+
+## Final implementation CI receipt
+
+Implementation head **`5f5ffe4a2a39c50502bed8d4c40f92d4c5173d8a`** passed the
+[PR integration run](https://github.com/PhysiCoreEngine12/Drone-Project/actions/runs/38638098734)
+and [branch run](https://github.com/PhysiCoreEngine12/Drone-Project/actions/runs/38638091501).
+The intervening browser-recording failure was missing `/usr/bin/ffmpeg`; the
+background PR-fix helper provisioned it before browser journeys in `5f5ffe4`.
+The recording requirement was retained rather than skipped.
+
+The PR integration run used Python **3.11.16** and tested integration commit
+`92641f93657a07fa9570bad344d8c234c47621ee`. Actual results: **606 unit tests passed,
+5 deselected** (48.68 seconds), **118 reference tests passed** (1.29 seconds),
+Ruff, local worker smoke, real supervisor interruption/recovery, PostgreSQL
+integration, installed-wheel journey, restricted application/worker image
+journey and both local/private browser journeys passed. The pinned sphere-smoke
+job passed. The optional full vendor-backend job was **skipped**, not passed.
+
+CI packaged build identity:
+`ad2d226e2f40e4294f968e13cd2caa47fd9119cfd33a1c9a5bfa94bdfb1a7ace`.
+Verified application image:
+`sha256:2ed6a976c7823de611f02a0ca2a40648b1d812228a02f999b3cd593999fa8c00`;
+worker image:
+`sha256:562cac95a06682afefc2d450d76624de7ee819e1bc237a7fe80eb04857242769`.
+These are tested CI artifacts, not a deployment or production release.
+
+This final receipt and roadmap update change documentation only. No numerical
+module differs from parent `419b0d3`; physics review, named human engineering
+acceptance, real-aircraft validation and the user's later hosting decisions remain
+open. PR #19 remains draft and unmerged.
