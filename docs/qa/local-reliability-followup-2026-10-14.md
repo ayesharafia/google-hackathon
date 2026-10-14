@@ -77,3 +77,32 @@ the link checks do not protect against a concurrent hostile filesystem rewrite.
 The prospective PR uses `main`, the required repository default base, and therefore
 includes the earlier unmerged stack. Review this followup separately from its
 parent commit; the cumulative comparison does not approve those earlier changes.
+
+## Post-commit review and release checks
+
+The same-family peer agent reviewed reliability commit `de9ad401a636fb49ed9fd103ac2c5e50ccdfa72f`
+against its exact parent, found no correctness issues in this subset, and independently
+passed **34 targeted tests** plus Ruff. This is bounded plumbing acceptance, not
+the outstanding cross-family model or human engineering approval.
+
+A clean wheel of that commit passed `scripts/release/verify-wheel.py` in a separate
+runtime virtual environment outside the checkout: **130 verified resources**,
+V4 study/PDF journey passed, **1.64-second local startup**. Build SHA-256:
+`cd656818dff04bf5221d1e0b4d3a72f71974dc394a3548c6402ff0adba1a635b`;
+wheel SHA-256: `0435abfd5bde434462c18cafe242d2f7f128b310265ab5a6917f3ee8c0eced97`.
+This remains a Python 3.11.17 local check.
+
+[PR #19](https://github.com/PhysiCoreEngine12/Drone-Project/pull/19) is a cumulative
+draft against `main`. Its first [CI run](https://github.com/PhysiCoreEngine12/Drone-Project/actions/runs/38636829974)
+passed lint, unit/reference, worker smoke/recovery, PostgreSQL integration and sphere
+smoke, then failed the release-image stage because `rg` was unavailable on the runner.
+The background PR-fix helper independently supplied `a0823db88fc87ac681e3104887df086c36a8e25d`:
+use standard `grep -E` without early stream closure for the exact BuildKit driver guard.
+That fix was preserved; no Docker/provider deployment was performed locally.
+
+The new whole-entry-point regression tests run with a deliberately restricted PATH
+containing `grep` and controlled Git/Python/Docker substitutes, with no `rg` or real
+Docker daemon. The required `docker-container` driver reaches both offline image
+targets; `docker` and `kubernetes` refuse before builds. The lead and peer agent
+each passed **3 tests**, Ruff and shell syntax checks. Full release-image/browser
+CI on the resulting head remains pending; the initial failed run is not a release PASS.
