@@ -88,3 +88,50 @@ def test_namespace_mismatch_fails_before_process_creation(monkeypatch):
     assert report['processes_started'] == 0
     assert report['completed_journeys'] == 0
     assert report['samples'] == []
+
+
+@pytest.mark.parametrize('wait_recovers', [True, False])
+def test_process_wait_timeout_still_retains_ledger_cleanup_and_receipt(monkeypatch, wait_recovers):
+    """A delayed reap must not skip cancellation/fencing or lose observations."""
+    class Process:
+        pid = 987654
+        returncode = None
+
+        def __init__(self):
+            self.waits = 0
+            self.killed = False
+
+        def poll(self):
+            return 0  # Monitor has ended; exercise the cleanup path directly.
+
+        def kill(self):
+            self.killed = True
+
+        def wait(self, timeout):
+            self.waits += 1
+            if self.waits == 1 or not wait_recovers:
+                raise soak.subprocess.TimeoutExpired('synthetic process', timeout)
+            self.returncode = -9
+            return self.returncode
+
+    process, cleanups = Process(), []
+    monkeypatch.setattr(soak, 'compatible_process_namespace', lambda: True)
+    monkeypatch.setattr(soak.subprocess, 'Popen', lambda *a, **k: process)
+    monkeypatch.setattr(soak, 'processes', dict)
+    monkeypatch.setattr(soak, 'cleanup_jobs', lambda root: cleanups.append(root) or {'cleanup_error': None})
+    report = soak.run(soak.Budgets(journeys=1))
+    assert process.killed and process.waits == 2
+    assert len(cleanups) == 1
+    assert report['disposable_directory_removed']
+    assert report['process_cleanup_error'] == (None if wait_recovers else 'process_wait_timeout')
+    assert report['child_exit_code'] == (-9 if wait_recovers else None)
+
+
+def test_cli_retains_process_cleanup_failure_and_exits_nonzero(monkeypatch, tmp_path):
+    report = {'stop_reason': 'journey_budget', 'completed_journeys': 1, 'requests': 13,
+              'failures': 0, 'cleanup_error': None, 'child_exit_code': 0,
+              'owned_process_survivors_after_kill': 0, 'process_cleanup_error': 'process_wait_timeout'}
+    monkeypatch.setattr(soak, 'run', lambda budgets: report)
+    receipt = tmp_path/'receipt.json'
+    assert soak.main(['--journeys', '1', '--receipt', str(receipt)]) == 1
+    assert json.loads(receipt.read_text()) == report

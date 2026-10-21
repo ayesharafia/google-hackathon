@@ -39,7 +39,10 @@ owned processes. Budget exhaustion deliberately exits nonzero and retains partia
   is 2 GiB. Sampled RSS is not peak memory; summed currently live process `VmHWM`
   values are not a simultaneous tree high-water mark. Short-lived children can evade
   a sample; these measurements are not hard OS resource quotas.
-- Process wait allows 3 seconds, descendant-exit observation allows 0.5 seconds,
+- Process wait allows 3 seconds with a bounded 0.5-second kill/reap retry;
+  timeout or OS errors are retained as `process_cleanup_error` and prevent a
+  successful CLI exit, while ledger cancellation/fencing and receipt writing
+  still run. Descendant-exit observation allows 0.5 seconds,
   and ledger cleanup has a separate 5-second signal deadline. Native operations may
   delay Python signal delivery. Directory deletion and OS scheduling are not hard
   real-time bounded. Workload duration and cleanup duration are reported separately.

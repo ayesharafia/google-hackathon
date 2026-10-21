@@ -309,6 +309,7 @@ def run(budgets):
             reason = 'monitor_exception'
         finally:
             cleanup_started = time.monotonic()
+            process_cleanup_error = None
             # Freeze the supervisor first so it cannot create new children while
             # discovering its last descendant tree, including new-session compute.
             table = processes()
@@ -325,7 +326,21 @@ def run(budgets):
                         os.kill(pid, signal.SIGKILL)
                     except ProcessLookupError:
                         pass
-            process.wait(timeout=3)
+            try:
+                process.wait(timeout=3)
+            except subprocess.TimeoutExpired:
+                # Reaping can lag behind the sampled SIGKILL. Keep the trusted
+                # Popen fallback bounded, but always proceed to ledger fencing
+                # and the receipt even if the process remains unresponsive.
+                try:
+                    process.kill()
+                    process.wait(timeout=.5)
+                except subprocess.TimeoutExpired:
+                    process_cleanup_error = 'process_wait_timeout'
+                except OSError:
+                    process_cleanup_error = 'process_wait_error'
+            except OSError:
+                process_cleanup_error = 'process_wait_error'
             descendant_deadline = time.monotonic()+.5
             survivors = 0
             while time.monotonic() < descendant_deadline:
@@ -340,6 +355,7 @@ def run(budgets):
                 pass
             report['stop_reason'] = reason or report['stop_reason']
             report['child_exit_code'] = process.returncode
+            report['process_cleanup_error'] = process_cleanup_error
             report['owned_process_survivors_after_kill'] = survivors
             previous_handler = signal.getsignal(signal.SIGALRM)
 
@@ -364,6 +380,7 @@ def run(budgets):
                   monitoring='50ms sampled owned child-tree RSS and file-byte stop thresholds, not hard quotas; '
                              'summed live process HWM is not simultaneous tree high-water memory',
                   process_wait_timeout_s=3, descendant_exit_observation_s=.5,
+                  process_wait_retry_timeout_s=.5,
                   ledger_cleanup_deadline_s=5,
                   not_verified=['hosted network/provider', '24-hour soak', 'PostgreSQL', 'real aircraft sources',
                                 'viewer access denial, session revocation and logout',
@@ -398,6 +415,7 @@ def main(argv=None):
         stream.write(json.dumps(report, indent=2, allow_nan=False)+'\n')
     print(json.dumps({k: report[k] for k in ('stop_reason', 'completed_journeys', 'requests', 'failures')}))
     return 0 if (report['stop_reason'] == 'journey_budget' and not report['cleanup_error']
+                 and not report.get('process_cleanup_error')
                  and report['completed_journeys'] == budgets.journeys
                  and report['child_exit_code'] == 0 and report['failures'] == 0
                  and report.get('owned_process_survivors_after_kill') == 0) else 1
