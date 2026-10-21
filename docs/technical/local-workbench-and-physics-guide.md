@@ -139,3 +139,55 @@ Verification at this checkpoint: 490 tests passed with three backend tests desel
 See [browser audit](../qa/local-workbench-design-audit.md), [PDF checks](../qa/local-reports.md), [historical review](../reviews/2026-10-05-historical-contract-claude.md), [equation fixtures](../validation/local-hover-and-energy.md) and [work order](../plans/2026-10-04-implementation-plan.md).
 
 Next independent local work: deterministic correlated uncertainty scenarios and reviewed external allowable limits, complete assembly authoring/repair, and recoverable execution. Historical-source numerical reproduction remains pending. Hosted access/operations are deferred by the user. Real geometry, measured rotor/installation data, validation tolerances and named human engineering acceptance remain required before client aircraft performance claims.
+
+## Conditioned hover/climb and failure-state pilot
+
+The opt-in model is `convex_axial_capacity_v2` / local result V4. Create the
+**synthetic noisy hover/climb** or **synthetic octo motor-out** example in the
+workbench, inspect declarations, freeze and evaluate. They are analytic CT/CQ
+fixtures, including synthetic uncertainty bounds and moment allowances. The
+original labelled hover example retains v1/V3 behavior.
+
+In **Condition a retained rotor map**, supply raw SHA-256, policy source, maximum
+relative torque residual, power/torque uncertainty and maximum hull shift/peak
+power fraction. Every number is required; no client tolerance is supplied.
+Conditioning retains a separate derived hash and preserves raw bytes. Binding
+the result to matching rotors is an explicit second action. Save/freeze after
+binding. Per-case matching-inflow source overrides remain separate.
+
+In each case, declare failed rotor IDs or exact axial inflow/world/body velocities,
+source overrides and per-axis torque-band moment allowances with source. For
+steady positive axial climb, body air-relative velocity is the negative of
+world climb velocity at zero attitude. Active sources must match density,
+inflow and pitch. Arbitrary attitudes, acceleration, inflow extrapolation,
+thermal/sag and general fault aerodynamics remain unsupported.
+
+**Deterministic joint scenarios** and **External payload caps** accept sourced
+versioned JSON arrays with explicit Apply-to-draft actions. See the schemas in
+`drone/scenarios.py`. Up to 16 of each are supported. The result displays nominal
+model capacity, deterministic common envelope and checked capped payload
+separately. Proposed caps are not declared approved; caller approval claims are
+not authenticated here. A capped payload below a feasible interval may refuse.
+
+Import STL with explicit source units under **Airframe geometry and rotor links**.
+Numeric transforms and rotor centres use the declared body frame. Choose rotor
+component references, save and reopen to verify placement. Geometry does not
+infer mass or loads. The preview shows retained airframe geometry, rotor disks,
+CG and current governing-case rotor limits. Editing inputs clears stale results.
+Comparisons show frozen input and active-constraint changes; causal attribution
+is not inferred. Integer/float JSON serialization alone is not an input change.
+
+A 409 draft conflict preserves unsaved inputs in a modal: export them, keep
+editing, or explicitly replace with the newest saved draft. Tokens remain in
+page memory. New API endpoints remain bearer-protected:
+`POST /api/drone/projects/performance-sources/{raw_hash}/condition` with
+`{"policy": {...}}`, realistic/motorout example POSTs, and
+`GET /api/drone/projects/geometry-sources/{hash}` for verified original STL bytes.
+
+Run browser acceptance with a Python containing Playwright and system Chromium
+and FFmpeg: `python scripts/qa/next_development_browser.py`. It starts/stops its
+own fresh isolated server and ephemeral credential, retains screenshots/receipt
+in `docs/qa/assets/next-development` and keeps downloads/database/recording in an
+ignored runtime directory. It uses actual Chromium native settings for 200%
+zoom and verifies DPR/layout reflow. Two timings are automated rehearsals,
+not human presenter timings or an API performance benchmark.

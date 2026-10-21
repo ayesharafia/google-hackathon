@@ -1,0 +1,9 @@
+*
+!deployment/
+!deployment/Dockerfile
+!requirements-runtime.lock
+!dist/
+!dist/*.whl
+
+!dist/wheelhouse/
+!dist/wheelhouse/*.whl

@@ -1,0 +1,68 @@
+{
+  "elapsed_s": 0.020629,
+  "observed_disposable_file_bytes_at_end": 336688,
+  "schema_version": 1,
+  "fixture": "synthetic local storage and job bookkeeping",
+  "failure_mode": "injected ENOSPC; no actual filesystem exhaustion",
+  "injection_boundary": "ArtifactStore os.link after bounded temporary write/fsync",
+  "lease_time": "injected clock: 2-second retry backoff and 6-second lease advance",
+  "atomicity_scope": "ArtifactStore object and metadata writes are separate; job completion is separate",
+  "not_verified": [
+    "actual disk/quota exhaustion",
+    "write/flush/fsync ENOSPC",
+    "SQLite ENOSPC",
+    "PostgreSQL",
+    "hosted object storage",
+    "worker/solver integration",
+    "cross-store atomic transaction"
+  ],
+  "limits": {
+    "scenarios": 2,
+    "attempts_per_scenario": 3,
+    "artifact_payload_bytes": 336,
+    "observed_file_bytes_ceiling": 4194304
+  },
+  "scenarios": [
+    {
+      "injection_stage": "object_first_write_link",
+      "errno": "ENOSPC",
+      "temporary_file_cleanup": "passed",
+      "job_result_after_failure": null,
+      "partial_object_after_failure": false,
+      "partial_metadata_after_failure": false,
+      "retry_backoff": "passed",
+      "lease_expiry_recovery": "passed",
+      "stale_publication_rejected": "passed",
+      "accepted_result_immutable": "passed",
+      "sqlite_reopen": "passed",
+      "recovered_artifact_integrity": "passed",
+      "attempt_states": [
+        "failed",
+        "expired",
+        "accepted"
+      ],
+      "payload_bytes": 336
+    },
+    {
+      "injection_stage": "metadata_first_write_link",
+      "errno": "ENOSPC",
+      "temporary_file_cleanup": "passed",
+      "job_result_after_failure": null,
+      "partial_object_after_failure": true,
+      "partial_metadata_after_failure": false,
+      "retry_backoff": "passed",
+      "lease_expiry_recovery": "passed",
+      "stale_publication_rejected": "passed",
+      "accepted_result_immutable": "passed",
+      "sqlite_reopen": "passed",
+      "recovered_artifact_integrity": "passed",
+      "attempt_states": [
+        "failed",
+        "expired",
+        "accepted"
+      ],
+      "payload_bytes": 336
+    }
+  ],
+  "disposable_directory_cleanup": "passed"
+}

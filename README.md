@@ -7,7 +7,9 @@ retained as historical references. Python 3.11; FastAPI orchestration;
 OpenFOAM solves flow equations. The saved-design workbench now calculates
 restricted static-hover payload bounds and fixed-pack constant-segment energy
 from retained rotor maps. The original supplied-point screening example remains
-available. Synthetic examples do not establish a real aircraft capacity.
+available. An opt-in versioned profile adds conditioned maps, axial climb,
+motor-out, deterministic joint scenarios and separately sourced caps. Synthetic
+examples do not establish a real aircraft capacity.
 [M§0, M§4]
 
 ## Setup
@@ -34,7 +36,7 @@ design inputs remain unknown and block dependent work. [M§2, M§26, M§27]
 Continue with the task dependencies and release gates in [plan.md](plan.md). The
 [4 October implementation work order](docs/plans/2026-10-04-implementation-plan.md)
 details saved projects, authoring, rotor maps, trim, capacity, energy and hosted delivery.
-P00.1, P00.2 and [P01.1 contracts](docs/contracts/production-data.md) are complete within their bounded scopes. [Contract acceptance](docs/qa/production-contracts-review.md) records final Claude review and checks. The local [Pilot-1](docs/pilots/pilot-1.md) fixture path has scoped implementation; [checkpoint acceptance](docs/qa/local-workbench-merge.md) records its remaining limits. Next independent model work is deterministic scenarios and sourced allowable limits. Historical equation IDs and old plan section/task references
+P00.1, P00.2 and [P01.1 contracts](docs/contracts/production-data.md) are complete within their bounded scopes. [Contract acceptance](docs/qa/production-contracts-review.md) records final Claude review and checks. The local [Pilot-1](docs/pilots/pilot-1.md) fixture path has scoped implementation; [checkpoint acceptance](docs/qa/local-workbench-merge.md) records its remaining limits. The opt-in conditioned hover/climb, motor-out and deterministic-scenario profile is implemented on the current review branch; independent physics acceptance remains pending. See [execution evidence](docs/qa/next-development-execution-2026-10-05.md). Historical equation IDs and old plan section/task references
 resolve to the archived master plan. The separate 2D PhysiMesh product remains
 untouched; integration is through a versioned export contract.
 
@@ -63,8 +65,8 @@ project data is not distributed with the code. Execution is local and synchronou
 individual identity, recoverable jobs and engineering approval remain pending.
 See [the current backend/formula guide](docs/technical/local-workbench-and-physics-guide.md)
 for model eligibility, outcome semantics, reports and exact limitations. The
-[browser audit](docs/qa/local-workbench-design-audit.md) records the in-app host's
-canceled downloads and remaining browser acceptance.
+[browser audit](docs/qa/local-workbench-design-audit.md) records the historical in-app host limitation and the new standard-Chromium
+download, native 200% zoom, conflict and geometry checks.
 
 ## Verify the frozen production baseline
 

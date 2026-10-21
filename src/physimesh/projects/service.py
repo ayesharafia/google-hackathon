@@ -29,18 +29,18 @@ class ProjectService:
     def save(self, project_id: str, expected_version: int, raw: str) -> dict:
         return self.repository.save(project_id, expected_version, canonical_snapshot(raw))
 
-    def freeze(self, project_id: str, expected_version: int, purpose: str) -> dict:
+    def freeze(self, project_id: str, expected_version: int, purpose: str, *,
+               organization_id='local', author_identity_id='local_operator') -> dict:
         project = self.repository.get(project_id)
         if project['draft_version'] != expected_version:
             raise DraftConflict(project['draft_version'])
         snapshot = parse_snapshot(project['snapshot_json'])
-        from .performance import load_map
-        for rotor in snapshot['rotors']:
-            if rotor.get('map_ref'):
-                try:
-                    load_map(self.artifacts, rotor['map_ref'])
-                except KeyError as exc:
-                    raise ValueError('rotor-map source is not retained') from exc
+        from .performance import load_map, performance_refs
+        for digest in performance_refs(snapshot):
+            try:
+                load_map(self.artifacts, digest)
+            except KeyError as exc:
+                raise ValueError('rotor-map source is not retained') from exc
         # Imported geometry references are byte identities, not inferred source claims.
         for component in snapshot['assembly'].get('components', []):
             digest = component.get('source_sha256')
@@ -54,8 +54,8 @@ class ProjectService:
                     raise ValueError('geometry source byte integrity failed')
         report = models.readiness(models.project_from_mapping(snapshot), purpose)
         revision = DesignRevisionV1(
-            organization_id='local', project_id=project_id, snapshot_json=project['snapshot_json'],
-            snapshot_sha256=snapshot_sha256(snapshot), author_identity_id='local_operator',
+            organization_id=organization_id, project_id=project_id, snapshot_json=project['snapshot_json'],
+            snapshot_sha256=snapshot_sha256(snapshot), author_identity_id=author_identity_id,
             created_utc=utc_now(), readiness_purpose=purpose,
             readiness_reasons=tuple(Reason(code='missing_input', field_path='readiness', message=text)
                                     for text in report.blocking), approval='draft')

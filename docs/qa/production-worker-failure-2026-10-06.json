@@ -1,0 +1,28 @@
+{
+  "fixture": "analytic V4",
+  "supervisor_sigkill": "passed",
+  "compute_child_death": "passed",
+  "lease_expiry": "accelerated database timestamp, not a real 30-second delay",
+  "restart_acceptance": "passed",
+  "stale_publication_denied": "passed",
+  "accepted_receipt_reopened_materialization": "passed",
+  "wall_budget_denied_publication": "passed",
+  "accepted_resources": {
+    "application_build": null,
+    "cpu_s": 1.008119,
+    "limits": {
+      "cpu_s": 60,
+      "disk_bytes": 20000000,
+      "rss_bytes": 2147483648,
+      "thread_environment": {
+        "MKL_NUM_THREADS": "1",
+        "OMP_NUM_THREADS": "1",
+        "OPENBLAS_NUM_THREADS": "1"
+      },
+      "virtual_memory_bytes": 2147483648,
+      "wall_s": 120
+    },
+    "peak_sampled_rss_bytes": 98893824,
+    "wall_s": 1.0069240580014593
+  }
+}

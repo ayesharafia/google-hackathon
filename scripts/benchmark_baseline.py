@@ -112,11 +112,14 @@ def metadata():
         return p.read_text().strip() if p.exists() else None
     return {'utc': datetime.now(UTC).isoformat(),
             'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+            'source_sha256': {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
+                              for p in sorted((ROOT/'src').rglob('*.py'))},
             'python': sys.version, 'platform': platform.platform(), 'visible_cpus': os.cpu_count(),
             'cpu_model': next((s.split(':', 1)[1].strip() for s in Path('/proc/cpuinfo').read_text().splitlines()
                                if s.startswith('model name')), None),
             'cpu_max': read('/sys/fs/cgroup/cpu.max'), 'memory_max': read('/sys/fs/cgroup/memory.max'),
             'numpy': np.__version__, 'httpx': httpx.__version__, 'docker_image': IMAGE,
+            'workload_fixture': 'conditioned CT/CQ V4 hover, energy and axial climb; analytic inputs only',
             'numeric_thread_env': {k: os.environ.get(k) for k in
                                    ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS', 'MKL_NUM_THREADS')},
             'api_config': 'one Uvicorn process, default thread/BLAS settings and access logs; loopback HTTP',
@@ -126,7 +129,7 @@ def metadata():
 
 
 class Server:
-    def __init__(self, data, log_dir):
+    def __init__(self, data, log_dir, *, environment=None):
         self.data = Path(data)
         self.data.mkdir(parents=True, exist_ok=True)
         log_dir = Path(log_dir)
@@ -139,7 +142,8 @@ class Server:
         self.auth = {'Authorization': 'Bearer '+self.token}
         self.env = {**os.environ, 'PHYSIMESH_API_TOKEN': self.token,
                     'PHYSIMESH_DATA_ROOT': str(self.data), 'PHYSIMESH_DB_PATH': str(self.data/'jobs.sqlite'),
-                    'MPLCONFIGDIR': '/workspace/.cache/matplotlib', 'XDG_CACHE_HOME': '/workspace/.cache'}
+                    'MPLCONFIGDIR': '/workspace/.cache/matplotlib', 'XDG_CACHE_HOME': '/workspace/.cache',
+                    **(environment or {})}
         self.log = (log_dir/'server.log').open('ab')
         started = time.perf_counter()
         self.process = subprocess.Popen([str(ROOT/'.venv/bin/python'), '-m', 'uvicorn',
@@ -171,14 +175,15 @@ class Server:
     def seed(self, count):
         users = []
         for _ in range(count):
-            project = self.request('POST', '/api/drone/projects/examples/hover').json()
+            project = self.request('POST', '/api/drone/projects/examples/realistic').json()
             base = '/api/drone/projects/'+project['project_id']
-            rev = self.request('POST', base+'/revisions', json={'expected_version': 1}).json()
+            rev = self.request('POST', base+'/revisions', json={'expected_version': project['draft_version']}).json()
             report = self.request('POST', base+'/studies', json={'revision_sha256': rev['revision_sha256']}).json()
             assert report['outcome'] == 'feasible'
-            assert abs(report['payload_lower_bound_kg']-(153.6/9.80665-12)) < 1e-7
+            assert report['schema_version'] == 'local_mission_capacity_v4'
+            assert abs(report['payload_lower_bound_kg']-4.2531506527296115) < 1e-7
             users.append({'base': base, 'study': report['study_sha256'],
-                          'snapshot': json.loads(project['snapshot_json']), 'version': 1})
+                          'snapshot': json.loads(project['snapshot_json']), 'version': project['draft_version']})
         return users
 
     def stop(self):
@@ -303,7 +308,7 @@ async def load(server, users, workload, concurrency, seconds, directory):
 def api(args):
     output = args.output.resolve()
     dump(output/'metadata.json', metadata())
-    summary = {'startup_runs': [], 'load_runs': []}
+    summary = {'startup_runs': [], 'load_runs': [], 'export_runs': []}
     for repeat in range(1, 6):
         directory = output/f'startup-{repeat}'
         server = Server(directory/'data', directory)
@@ -324,6 +329,16 @@ def api(args):
                 server = Server(directory/'data', directory)
                 try:
                     users = server.seed(50)
+                    # Separately label cold versus repeated exports; do not warm every study.
+                    if concurrency == 1 and workload == 'browse':
+                        path = users[0]['base']+'/studies/'+users[0]['study']+'/pdf'
+                        for phase in ('first_render', 'repeated_export', 'repeated_export'):
+                            monitor = Monitor(server.process.pid).start()
+                            started = time.perf_counter()
+                            exported = server.request('GET', path).content
+                            summary['export_runs'].append({'repeat': repeat, 'phase': phase,
+                                'latency_ms': (time.perf_counter()-started)*1000,
+                                'sha256': hashlib.sha256(exported).hexdigest(), 'resources': monitor.finish()})
                     # Equal seeded inventory and fixed per-user fixtures across all trials.
                     for user in users[:concurrency]:
                         server.request('GET', user['base']+'/inspection')
@@ -430,22 +445,22 @@ def simulations(args):
 def profiles(args):
     from physimesh.api.app import create_app
     from physimesh.api.settings import Settings
-    from physimesh.projects.examples import create_hover_example
+    from physimesh.projects.realistic import create_realistic_example
     output = args.output.resolve()
     directory = output/'function-profile'
     data = directory/'data'
     app = create_app(Settings(data, data/'jobs.sqlite', secrets.token_urlsafe(32), None))
     projects = app.state.projects
     studies = app.state.studies
-    project = create_hover_example(projects)
+    project = create_realistic_example(projects)
     pid = project['project_id']
-    rev = projects.freeze(pid, 1, 'screening')['revision_sha256']
+    rev = projects.freeze(pid, project['draft_version'], 'screening')['revision_sha256']
     result = studies.run(pid, rev)
     study = result['study_sha256']
     changed = json.loads(project['snapshot_json'])
     changed['masses']['items'][0]['mass_kg'] += .2
-    projects.save(pid, 1, json.dumps(changed))
-    second_revision = projects.freeze(pid, 2, 'screening')['revision_sha256']
+    projects.save(pid, project['draft_version'], json.dumps(changed))
+    second_revision = projects.freeze(pid, project['draft_version']+1, 'screening')['revision_sha256']
     second = studies.run(pid, second_revision)
     comparison = studies.compare(pid, study, second['study_sha256'])
     assert comparison['comparable_numeric_results']
@@ -458,7 +473,7 @@ def profiles(args):
     actions = {'study_evaluate': lambda: studies.run(pid, rev),
                'pdf_export': lambda: studies.pdf(pid, study),
                'study_export': lambda: studies.export(pid, study),
-               'project_freeze': lambda: projects.freeze(pid, 2, 'screening'),
+               'project_freeze': lambda: projects.freeze(pid, project['draft_version']+1, 'screening'),
                'study_compare': lambda: studies.compare(pid, study, second['study_sha256'])}
     results = {}
     for name, action in actions.items():

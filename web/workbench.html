@@ -14,31 +14,41 @@
 <p class="intro">Save inputs, retain revisions and inspect what is still missing. Local revision freezing does not approve an aircraft.</p>
 <noscript><p>Enable JavaScript to edit and save a project. Your saved data stays on the local server.</p></noscript>
 <form id="connection" class="connection"><label>Local API token<input id="token" type="password" required autocomplete="off"></label><button type="submit" disabled>Connect</button></form>
+<form id="individual-login" class="connection" hidden><label>Email<input id="login-email" type="email" autocomplete="username" required></label><label>Password<input id="login-password" type="password" autocomplete="current-password" required></label><button type="submit">Sign in</button></form>
+<div id="individual-session" hidden><label>Organization<select id="organization"></select></label><button id="logout" type="button">Sign out</button></div>
+<form id="accept-invitation" hidden><label>Invitation code<input id="invitation-code" type="password" autocomplete="off" required></label><button type="submit">Accept invitation</button></form>
 <p id="message" role="status" aria-live="polite">Loading workspace controls.</p>
 <div class="workbench">
 <aside>
 <h2>Projects</h2>
 <form id="create-project"><label>New project name<input id="project-title" maxlength="160" required disabled></label><button id="create" disabled>Create project</button></form>
 <button id="example" type="button" disabled>Create labelled hover example</button>
+<button id="realistic-example" type="button" disabled>Create synthetic noisy hover/climb</button>
+<button id="motorout-example" type="button" disabled>Create synthetic octo motor-out</button>
 <label>Saved projects<select id="projects" disabled><option value="">Connect to see projects</option></select></label>
 <button id="open" type="button" disabled>Open saved project</button>
+<button id="previous-projects" type="button" disabled>Previous projects</button><button id="next-projects" type="button" disabled>Next projects</button>
 <p id="project-record">No project open.</p>
-<h2>Retained revisions</h2><ul id="revisions"><li>No revision selected.</li></ul>
-<h2>Study history</h2><ul id="studies"><li>No study selected.</li></ul>
+<form id="invite-member" hidden><h3>Invite to this project</h3><label>Email<input id="invite-email" type="email" required></label><label>Project role<select id="invite-role"><option value="viewer">Viewer</option><option value="reviewer">Reviewer</option><option value="engineer">Engineer</option></select></label><button type="submit">Create invitation</button><label id="invitation-result" hidden>Share this one-use code privately<input id="created-invitation" readonly></label></form>
+<h2>Retained revisions</h2><ul id="revisions"><li>No revision selected.</li></ul><button id="more-revisions" type="button" hidden>More revisions</button>
+<section id="job-history" hidden><h2>Jobs</h2><ul id="jobs"></ul></section>
+<h2>Study history</h2><ul id="studies"><li>No study selected.</li></ul><button id="more-studies" type="button" hidden>More studies</button>
 </aside>
 <section class="editor" aria-labelledby="design-title">
 <h2 id="design-title">Open a project to begin.</h2>
 <p id="save-state">Missing physical inputs stay unknown.</p>
-<section aria-labelledby="layout-title"><h3 id="layout-title">Declared rotor layout</h3><div id="layout-view"><p>No rotor positions loaded.</p></div><p id="layout-note">Centres, axes and radii from the input. Drag to orbit when a layout is available.</p><button id="reset-layout" type="button" disabled>Reset layout view</button></section>
+<section aria-labelledby="layout-title"><h3 id="layout-title">Airframe, rotors and governing case</h3><div id="layout-view"><p>No rotor positions loaded.</p></div><p id="layout-note">Centres, axes and radii from the input. Drag to orbit when a layout is available.</p><button id="reset-layout" type="button" disabled>Reset layout view</button></section>
 <div id="input-editors"></div>
 <details><summary>Design input JSON</summary><label for="snapshot">Complete versioned snapshot</label><textarea id="snapshot" spellcheck="false" disabled rows="18"></textarea></details>
 <div class="actions"><button id="save" type="button" disabled>Save draft</button><button id="reload" type="button" disabled>Reload saved draft</button><button id="freeze" type="button" disabled>Freeze saved revision</button><button id="export-draft" type="button" disabled>Export draft JSON</button></div>
-<section aria-labelledby="study-title"><h3 id="study-title">Bounded static-hover study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen hover design</button><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
+<section aria-labelledby="study-title"><h3 id="study-title">Bounded capacity study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen design</button><p id="job-progress" role="status" aria-live="polite"></p><button id="cancel-job" type="button" hidden>Cancel job</button><button id="retry-job" type="button" hidden>Retry failed job</button><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
 <section aria-labelledby="comparison-title"><h3 id="comparison-title">Compare retained studies</h3><p>Compare frozen inputs and recorded outcomes. A changed input does not establish the cause of a capacity change.</p><div class="fields"><label>Before study<select id="compare-before" disabled></select></label><label>After study<select id="compare-after" disabled></select></label></div><button id="compare" type="button" disabled>Compare studies</button><div id="comparison-report" aria-live="polite"></div></section>
+<section id="review-workspace" hidden aria-labelledby="review-title"><h3 id="review-title">Authenticated study review</h3><p>These records document a project review. Aircraft and model qualification remain separate.</p><label>Decision<select id="review-decision"><option value="comment">Comment</option><option value="changes_requested">Changes requested</option><option value="accepted">Accept within declared scope</option></select></label><label>Comment<textarea id="review-comment" maxlength="10000" rows="4"></textarea></label><button id="submit-review" type="button">Record review</button><ul id="reviews"></ul></section>
 <section id="revision-detail" hidden><h3>Frozen revision</h3><p id="revision-summary"></p><pre id="revision-json"></pre></section>
 </section>
 </div>
 </main>
 <footer>Local single-operator workspace. Real aircraft inputs and engineering approval remain pending.</footer>
+<dialog id="draft-conflict" aria-labelledby="conflict-title"><h2 id="conflict-title">Saved draft changed</h2><p id="conflict-message"></p><div class="actions"><button id="conflict-export" type="button">Export my unsaved JSON</button><button id="conflict-keep" type="button">Keep editing</button><button id="conflict-reload" type="button">Replace with latest saved draft</button></div></dialog>
 </body>
 </html>

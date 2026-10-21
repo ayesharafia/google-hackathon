@@ -4,7 +4,63 @@
 **Deployment decision:** private hosted web app for the team and invited clients.
 **Document status:** development specification and work order. Future tasks are uncompleted; this document does not establish production readiness or aircraft validation.
 
-**Current implementation work order:** [4 October implementation plan](docs/plans/2026-10-04-implementation-plan.md). Its original starting point was GitHub `main` at `b524340`; that baseline remains historical. On 5 October, [PR #5](https://github.com/PhysiCoreEngine12/Drone-Project/pull/5) merged the reviewed local workbench checkpoint `f6fc497` into `main` at `8fe3cf7`. Saved projects/revisions, local authoring, retained maps, restricted hover capacity, constant-segment fixed-pack energy, comparisons and reports now exist within their recorded synthetic scope. Next independent model slice: IP12 deterministic correlated scenarios and sourced allowable limits. Remaining browser download/zoom/conflict-dialog checks, assembly/repair, recoverable jobs and evidence investigations stay open. See [the current backend and formula guide](docs/technical/local-workbench-and-physics-guide.md) and [checkpoint receipt](docs/qa/local-workbench-merge.md). No full master task or production gate is completed by these local subsets.
+**Active roadmap:** the table below is the single source of current slice status. Sections 1–16 retain the broader development specifications and release gates. The dated plans are historical specifications, not competing work queues. The user authorized execution of the 5 October direction; real client inputs and a named engineering owner are still unavailable (confirmed 5 October).
+
+## Active slice status
+
+States distinguish implementation from acceptance: **local subset** is historical scoped behavior; **review pending** is implemented/tested but not independently accepted; **blocked** requires an external input; **conditional** requires the stated trigger. No status here promotes aircraft evidence or completes a broader release gate.
+
+| ID | State | Evidence/specification | Blocker or next action |
+|---|---|---|---|
+| Local storage and CI fixes | bounded plumbing review and implementation CI passed | [14 October followup](docs/qa/local-reliability-followup-2026-10-14.md) | CI verified implementation head `5f5ffe4`: 606 unit/118 reference, worker/PostgreSQL, installed wheel/images, browser and sphere smoke; full vendor backend skipped; model/real-data/hosting gates remain open |
+| A07 | monitored local smoke and forced-stop recovery verified; draft integration pending | [Harness scope](docs/qa/bounded-soak.md), [21 October evidence](docs/qa/roadmap-followup-2026-10-21.md), [actual observations](docs/qa/soak-harness-2026-10-21.json) | Issue #15; real study/PDF journey, duration/storage/memory/SIGINT stops and active-job cancellation/stale-completion denial performed; 26 helper tests pass; 24-hour/provider qualification remains pending |
+| A06 | declaration helper verified; draft integration pending | [Intake scope](docs/qa/intake-readiness.md), [14 October execution](docs/qa/a06-execution-2026-10-14.md), [21 October follow-up](docs/qa/roadmap-followup-2026-10-21.md) | Issue #14; malformed electrical metadata no longer falsely invalidates a bound mission; 32 intake tests independently rerun; source verification, human ownership and engineering acceptance remain unverified |
+| A05 | helper verified; draft integration pending | [Drill scope](docs/qa/disk-pressure-drill.md), [14 October execution](docs/qa/a05-execution-2026-10-14.md), [actual observations](docs/qa/a05-observations-2026-10-14.json) | Issue #13; 19 targeted tests and injected storage/retry/fence CLI passed; actual exhaustion/worker/provider/pinned CI remain unverified |
+| A01–A02 | implemented; draft integration pending | [Reconciliation](docs/qa/baseline-reconciliation.md), [model review checklist](docs/qa/model-review-checklist.md), [14 October evidence](docs/qa/roadmap-implementation-2026-10-14.md) | Issue #10; same-family documentation QA/review complete; independent model and human gates remain pending |
+| A03 | helper tested; external profiling pending | [Submission diagnostics](docs/qa/submission-profiling.md), [actual receipt](docs/qa/submission-diagnostics-2026-10-14.json) | Issue #11; 11 targeted tests and six API admissions/cancellations passed in unpinned Python 3.12; pinned CI/PostgreSQL/concurrency unverified |
+| U01 / N0.5 / IP07 / IP10 | software verified; model review pending | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md), [fresh V4 baseline](docs/qa/production-baseline-2026-10-06.md) | [Byte-identical wheel/image receipts](docs/qa/production-release-2026-10-06.json), packaged resources/locked runtime and expanded CI; independent current-model review and human acceptance still gate physics |
+| U02 / N3.2 / IP16 | implemented; local audit retained | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md) | Bounded 1,000-project inventory/history and verified reuse; [repeat audit](docs/qa/production-performance-2026-10-06.md) retains all overloads; submission target, schema caching and 24-hour/provider tests remain open |
+| U03 / IP13 | local integration verified | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md) | Real PostgreSQL 50-writer/version checks, S3-compatible HTTP fixtures and migrations; production provider/bucket/restore decisions pending |
+| U04 / IP14–IP15 / IP17 | fixture journey and recovery verified | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md), [operations](docs/production/operations.md) | Sessions/roles/invitations/review exports; queued bounded studies/reports and fencing; hosted CFD/IdP flow, long soak and provider recovery remain pending |
+| U05 / N2.4 / IP05 / IP11 | review gated | [Production upgrade](docs/production/upgrade.md) | User selected mission/powertrain; current-model review precedes physics extension; analytic fixtures then real-data qualification |
+| N0.1 | blocked | [Scope proposal](docs/plans/2026-10-05-next-development-plan.md) | Client scope agreement and named engineer; no invented ADR-0004 decision |
+| N0.2 | blocked | [Data request](docs/client/aircraft-data-request.md) | Recipient and explicit sending instruction; no message sent |
+| N0.3 | implemented | This table | Review with roadmap changes |
+| N0.4 | browser checked | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Native 200% zoom, real downloads, 409 preservation; broader/client UX pending |
+| N0.5 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Semantic module closure and historical compatibility tests pass; independent review |
+| N1.1 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Versioned retained conservative envelope/torque bands pass fixtures; independent review |
+| N1.2 | authorized; review gated | [MILP option](docs/plans/2026-10-05-next-development-plan.md) | First real map exceeds declared conditioning tolerance; retain LP default |
+| N1.3 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | 60 noise seeds plus API/browser/report/restart fixtures; real maps unavailable |
+| N1.4 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Varying-torque shaft/electrical equivalence; efficiency once; independent review |
+| N2.1 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Quad certificate and feasible octo/zero commands; independent review |
+| N2.2 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Exact matching-inflow climb and unsupported sign/coverage tests; independent review |
+| N2.3 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Joint scenarios, common-candidate energy and separately sourced caps; independent review |
+| N2.4 | authorized; review gated | [Variable-power specification](docs/plans/2026-10-05-next-development-plan.md) | U05 leads next engineering work after current-model review; real data not required for labelled analytic fixtures |
+| N3.1 | local subset | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Declared-mm airframe, numeric rotor/link round trip, governing-limit preview; real geometry pending |
+| N3.2 | implemented | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Retained input/constraint comparison; JSON numeric round-trip fix; standard review pending |
+| N3.3 | local subset | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Two timed automated journeys and retained recording; human presenter rehearsals pending |
+| N4.1 | blocked | [Client intake request](docs/client/aircraft-data-request.md) | D04–D06 and named client engineer |
+| N4.2 | blocked | [Validation specification](docs/plans/2026-10-05-next-development-plan.md) | Real held-out measurements and engineer-owned tolerances |
+| N4.3 | blocked | [Report specification](docs/plans/2026-10-05-next-development-plan.md) | Real inputs, independent review and human scope acceptance |
+| N5 / IP13–IP15 / IP17 | local subsets implemented | [Hosted specifications](docs/plans/2026-10-04-implementation-plan.md#ip13-hosted-metadata-and-private-artifact-adapters) | U03/U04 local adapters/access/study-report workers verified; D01–D03/D07 gate external deployment |
+| IP01 | local subset | [Local checkpoint](docs/qa/local-workbench-merge.md) | Hosted authoring/permissions remain outside this subset |
+| IP02 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Real approved mass ledger unavailable |
+| IP03 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Broader case eligibility tracked in N2 |
+| IP04 | local subset | [Model scope](docs/decisions/ADR-0003-static-hover-profile.md) | Measured-map acceptance tracked in N1 |
+| IP05 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Sag/thermal/real sustained limits unavailable |
+| IP06 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Only declared supported wrench inputs |
+| IP07 | local subset | [Independent bounded review](docs/reviews/2026-10-05-local-hover-claude.md) | Extensions tracked in N1/N2 |
+| IP08 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Restricted LP model; no general aircraft optimum |
+| IP09 | local subset | [Browser audit](docs/qa/local-workbench-design-audit.md) | N0.4 and real-data gates |
+| IP10 | local subset | [Historical compatibility review](docs/reviews/2026-10-05-historical-contract-claude.md) | New semantics require versioned successor |
+| IP11 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Constant segments only; U05/N2.4 authorized after model review |
+| IP12 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | N2.3 implementation shares evidence; independent acceptance pending |
+| IP16 | local subset | [Report evidence](docs/qa/local-reports.md) | Assembly N3.1; hosted client review depends on N5 |
+| IP18 | blocked | N4 above | D04–D06, real validation and hosted release gates |
+| I01 | capability only | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Exact-image regular-point p/U/vorticity probe; independent accuracy/direction/refinement review pending |
+| I02 | preregistered | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Controlled domain/surface protocol retained before probe; full campaign unrun |
+
+Next acceptance sequence: independent cross-family model/contract review → human fixture presentation → real client intake and engineer-owned tolerances when available. Mission/powertrain work is now authorized by the 6 October upgrade; current-model review precedes its physics extension. MILP remains data/coverage driven. Hosting depends on D01–D03. On 14 October the user confirmed that hosting is undecided and remains their later decision; continue local development. No new physics merge or release tag precedes the required review and engineering acceptance.
 
 The product must answer a practical question: **given this approved aircraft design, how much payload can it carry across the required mission?** It must show which condition limits that payload, what evidence supports the answer, and which assumptions could change it. The client should be able to inspect the design, compare revisions, and leave with an understandable, reproducible engineering report.
 
@@ -123,7 +179,7 @@ flowchart LR
     Worker --> Monitor
 ```
 
-The diagram expresses planned responsibilities. These hosted modules do not yet exist.
+The diagram expresses target responsibilities. U03/U04 now implement local hosted metadata, private artifacts, access and study/report workers; external deployment and hosted CFD remain pending in the active status table.
 
 ### Recommended stack, subject to recorded hosting decisions
 

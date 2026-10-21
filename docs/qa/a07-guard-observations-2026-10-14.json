@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "budgets": {
+    "seconds": 20.0,
+    "requests": 30,
+    "journeys": 1,
+    "storage_bytes": 67108864,
+    "memory_bytes": 1073741824
+  },
+  "stop_reason": "incompatible_proc_pid_namespace",
+  "completed_journeys": 0,
+  "requests": 0,
+  "failures": 0,
+  "cleanup_error": null,
+  "child_exit_code": null,
+  "samples": [],
+  "processes_started": 0,
+  "not_verified": [
+    "bounded real worker journey and owned process-tree monitoring"
+  ],
+  "qualification": "Stopped before process creation; proc IDs cannot safely be signalled here"
+}

@@ -7,8 +7,8 @@ from physimesh.drone.trim import MODEL_VERSION
 from .performance import retain_map
 
 
-def create_hover_example(projects):
-    project = projects.create('Illustrative hover design')
+def create_hover_example(projects, title='Illustrative hover design'):
+    project = projects.create(title)
     snapshot = json.loads(project['snapshot_json'])
     snapshot['identity']['data_scope'] = 'analytic_fixture'
     snapshot['masses']['items'] = [{'name': c, 'category': c, 'mass_kg': mass, 'cg_body_m': [0, 0, 0],

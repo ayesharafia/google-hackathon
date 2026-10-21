@@ -175,3 +175,39 @@ The in-app browser received the PDF response and emitted `Page.downloadWillBegin
 A 200% browser-zoom pass, full conflict-dialog recovery journey, broader input/host combinations, client presentation rehearsals and assembly/repair journeys remain pending. Automated independent-connection conflict/restart tests pass, but that does not substitute for an unperformed browser dialogue. Other product pages were not re-certified by this workbench audit. No blanket production UX pass or completed IP16 is claimed.
 
 Code review: both independent standards/spec reviewers found no blocking code regression. Their module-responsibility documentation finding was corrected. Physics review is separately bounded in the Claude receipts; client engineering approval stays pending.
+
+## Standard Chromium follow-up, 5 October 2026
+
+The earlier host observations above remain history. Fresh standard Chromium
+151.0.7922.173 checks now close the specified local download/zoom/conflict journeys.
+[Executable helper](../../scripts/qa/next_development_browser.py),
+[machine receipt](assets/next-development/receipt.json) and
+[milestone scope](next-development-execution-2026-10-05.md) retain the evidence.
+The complete prior design-law table still applies to this local workbench; this
+follow-up changes working controls and the real geometry/result artifact, without
+new marketing sections, decorative fonts, gradients or invented CAD imagery.
+
+| Journey | Observed evidence |
+|---|---|
+| Connect / synthetic noisy hover-climb | [Connected](assets/next-development/01-connected.png), [result](assets/next-development/03-capacity-result.png). Token input clears; fixtures and engineering-pending scope visible. |
+| Explicit conditioning | [Policy form](assets/next-development/09-explicit-conditioning.png). Missing tolerances refuse; sourced values produce a separately retained hash; binding raw-matching rotors is explicit. |
+| JSON / PDF | Real browser downloads complete; saved bytes equal authenticated retained exports. Hashes/sizes in receipt. This closes the standard-browser item, without rewriting the older canceled-host history. |
+| 409 conflict | [Modal](assets/next-development/04-draft-conflict.png). Edited mass survives failed save and Keep editing. Unsaved download contains that edit. Only explicit Replace loads the remote version. |
+| Declared-unit geometry | [Real imported analytic STL](assets/next-development/05-airframe-governing-case.png). Original bytes verified, mm scale explicit, component/rotor centre links survive save/reopen. Geometry supplies no mass/performance. |
+| Native 200% zoom | [Zoom view](assets/next-development/06-native-200-percent.png). Actual browser setting=2, DPR=2 and 1440 px window produces 720 px layout viewport. No document horizontal overflow. This uses native browser settings, not CSS zoom or mobile emulation. |
+| Mobile / keyboard / motion | [390 px result](assets/next-development/07-mobile-capacity.png). Table region takes keyboard ArrowRight; complete columns remain horizontally accessible, focus visible, document width fits. Reduced-motion media setting verified. |
+| Comparison | [Changed placement and active constraints](assets/next-development/08-comparison.png). Cosmetic integer/float serialization no longer invents input changes; boolean/number differences remain meaningful. Raw tiny numerical deltas are retained and qualified, not interpreted as engineering significance. |
+| Governing/failure preview | [Amber governing rotor limits with airframe](assets/next-development/10-active-rotor-airframe.png), [red failed r0](assets/next-development/11-motor-out-layout.png). Failed command thrust, torque and electrical input are verified exactly zero. |
+
+Screenshots were visually inspected. Initial native-zoom screenshot capture was
+blank because the default surface capture did not preserve native viewport
+coordinates; the final image uses the browser viewport capture. One comparison
+finding was fixed: browser serialization of 101325.0 to 101325 falsely appeared
+as an atmosphere edit. The final comparison shows only changed payload placement.
+The geometry is a deliberately minimal analytic component, not a client's airframe.
+
+This is repository application QA. The Product Design plugin's required Browser
+skill and shared critical-overrides resource were unavailable; no completed
+plugin audit is claimed. No blanket production accessibility pass is claimed.
+Human presenter acceptance, confidential real geometry and broader hosting,
+permission, motion, failure and device combinations remain outside this follow-up.
