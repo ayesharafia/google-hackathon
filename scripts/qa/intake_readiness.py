@@ -165,9 +165,9 @@ def inspect_packet(packet):
     if not isinstance(masses, list) or any(not isinstance(item, dict) for item in masses):
         masses = []
     bound_records('mass_cg', masses, 'name', ('mass_source_ref', 'cg_source_ref', 'uncertainty', 'placement_envelope'))
-    record('electrical', ('source_ref', 'pack_mode', 'capacity_energy', 'voltage_current_power_limits',
-                          'discharge_temperature_limits', 'motor_esc_continuous_burst_limits',
-                          'efficiency_source_ref', 'auxiliary_demand'))
+    electrical = record('electrical', ('source_ref', 'pack_mode', 'capacity_energy', 'voltage_current_power_limits',
+                                      'discharge_temperature_limits', 'motor_esc_continuous_burst_limits',
+                                      'efficiency_source_ref', 'auxiliary_demand'))
     mission = record('mission', ('source_ref', 'case_ids', 'segment_ids', 'reserve_convention', 'atmosphere_source_ref'))
     try:
         contract = bound_mission(project)
@@ -175,7 +175,7 @@ def inspect_packet(packet):
         binding('inventory.mission.case_ids', mission.get('case_ids'), [case.case_id for case in contract.cases])
         binding('inventory.mission.segment_ids', mission.get('segment_ids'), [segment.segment_id for segment in contract.sequence])
         binding('inventory.mission.reserve_convention', mission.get('reserve_convention'), contract.reserve_convention)
-        binding('inventory.electrical.pack_mode', inventory.get('electrical', {}).get('pack_mode'), contract.pack_mode)
+        binding('inventory.electrical.pack_mode', electrical.get('pack_mode'), contract.pack_mode)
     except Exception:  # noqa: BLE001 - never emit confidential validation exception text
         mission_state = 'missing_or_invalid_bound_declaration'
         findings.append({'path': 'project.mission.contract_definition', 'state': 'unsupported'})

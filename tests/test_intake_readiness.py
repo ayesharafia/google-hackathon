@@ -75,6 +75,17 @@ def test_malformed_nested_inputs_sanitized():
     assert report['purpose_input_readiness']['cfd_run']['state'] == 'unsupported_input_structure'
 
 
+@pytest.mark.parametrize('value', [None, 'unknown', 'unsupported', ['declared'], 42, False])
+def test_malformed_electrical_metadata_does_not_invalidate_mission(value):
+    packet = complete()
+    packet['inventory']['electrical'] = value
+    report = qa.inspect_packet(packet)
+    assert report['inventory_state'] == 'incomplete_declarations'
+    assert report['mission_contract'] == 'bound_declaration'
+    assert {'path': 'inventory.electrical.pack_mode', 'state': 'missing'} in report['findings']
+    assert not any(item['path'] == 'project.mission.contract_definition' for item in report['findings'])
+
+
 @pytest.mark.parametrize('raw', ['{"a":1,"a":2}', '{"a":NaN}', '{"a":Infinity}', '{"a":1e999}', '['*40+']'*40])
 def test_bad_json_rejected(tmp_path, raw):
     path = tmp_path / 'bad.json'

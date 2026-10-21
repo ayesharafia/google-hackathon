@@ -52,6 +52,10 @@ structural allowables, tolerance suitability or provenance rights. The client da
 request remains the full human review checklist; engineering owners must review
 all detailed requirements before any claim. Named ownership is self-declared only.
 
+Malformed or absent electrical inventory is reported against its electrical
+fields. It does not invalidate an otherwise bound mission declaration: mission
+contract validation and electrical metadata completeness are separate checks.
+
 Existing `project_from_mapping` and `readiness` run separately for screening,
 CFD and feasibility. Their blockers/warnings are reported as counts, not private
 values; malformed nested structures receive a conservative unsupported result.
