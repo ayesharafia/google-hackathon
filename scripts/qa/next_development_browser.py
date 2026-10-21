@@ -135,7 +135,7 @@ with (RUNTIME/'server.log').open('w') as log:
             snap = json.loads(page.locator('#snapshot').input_value())
             source = api('/projects/performance-sources/'+snap['rotors'][0]['map_ref'])
             raw_digest = source['conditioning']['raw_source_sha256']
-            page.get_by_text('Condition a retained rotor map', exact=True).click()
+            page.locator('#input-editors').get_by_text('Condition a retained rotor map', exact=True).click()
             page.get_by_label('Raw map SHA-256', exact=True).fill(raw_digest)
             page.get_by_role('button', name='Condition retained map', exact=True).click()
             policy_box = page.locator('details').filter(has=page.locator('summary').filter(has_text='Condition a retained rotor map'))
@@ -149,7 +149,7 @@ with (RUNTIME/'server.log').open('w') as log:
             shot(page, '09-explicit-conditioning', '#input-editors details:nth-last-of-type(4)')
 
             # The binding action is explicit, and only applies to raw-matching rotors.
-            page.get_by_text('Rotors and retained performance sources', exact=True).click()
+            page.locator('#input-editors').get_by_text('Rotors and retained performance sources', exact=True).click()
             for control in page.get_by_label('Retained map SHA-256', exact=True).all():
                 control.fill(raw_digest)
             page.get_by_role('button', name='Bind conditioned map to matching rotors', exact=True).click()
@@ -172,7 +172,7 @@ with (RUNTIME/'server.log').open('w') as log:
             remote = json.loads(project['snapshot_json'])
             remote['identity']['description'] = 'Remote fixture edit for conflict acceptance'
             api(f'/projects/{pid}/draft', 'PUT', {'expected_version': project['draft_version'], 'snapshot_json': json.dumps(remote)})
-            page.get_by_text('Mass and payload placement', exact=True).click()
+            page.locator('#input-editors').get_by_text('Mass and payload placement', exact=True).click()
             mass = page.get_by_label('Mass, kg', exact=True).first
             old_mass = float(mass.input_value())
             mass.fill(str(old_mass+.25))
@@ -190,7 +190,7 @@ with (RUNTIME/'server.log').open('w') as log:
             RECEIPT['checks'].append('409 dialog preserves draft; unsaved export, keep, explicit replace verified')
 
             # Declared-mm analytic component, linked rotor and numeric round trip.
-            page.get_by_text('Airframe geometry and rotor links', exact=True).click()
+            page.locator('#input-editors').get_by_text('Airframe geometry and rotor links', exact=True).click()
             stl = b'solid fixture\nfacet normal 0 0 1\nouter loop\nvertex -1000 -100 0\nvertex 1000 -100 0\nvertex 1000 100 0\nendloop\nendfacet\nfacet normal 0 0 1\nouter loop\nvertex -1000 -100 0\nvertex 1000 100 0\nvertex -1000 100 0\nendloop\nendfacet\nendsolid fixture\n'
             page.get_by_label('STL components', exact=True).set_input_files({'name':'analytic-airframe-mm.stl','mimeType':'application/octet-stream','buffer':stl})
             page.locator('label').filter(has_text='Source length units').locator('select').select_option('mm')
@@ -199,7 +199,7 @@ with (RUNTIME/'server.log').open('w') as log:
             select = page.locator('label').filter(has_text='Geometry reference for r0').locator('select')
             component = select.locator('option').nth(1).get_attribute('value')
             select.select_option(component)
-            page.get_by_text('Rotors and retained performance sources', exact=True).click()
+            page.locator('#input-editors').get_by_text('Rotors and retained performance sources', exact=True).click()
             page.get_by_label('Centre, m x', exact=True).first.fill('1.05')
             click(page, '#save')
             click(page, '#reload')
@@ -209,7 +209,8 @@ with (RUNTIME/'server.log').open('w') as log:
             assert api('/projects/geometry-sources/'+digest, raw=True) == stl
             page.wait_for_function("document.querySelector('#layout-note').textContent.includes('1 retained airframe')")
             study = run(page)
-            page.wait_for_function("document.querySelector('#layout-note').textContent.includes('Governing case:')")
+            page.wait_for_function("document.querySelector('#layout-note').textContent.includes('Selected case:')")
+            assert study['limiting_case_id'] in page.locator('#layout-note').inner_text(), page.locator('#layout-note').inner_text()
             shot(page, '05-airframe-governing-case', '#layout-title + div')
             RECEIPT['checks'].append('Explicit mm import, original STL equality, rotor link/centre save/reopen, CG and governing case render')
 
@@ -246,7 +247,7 @@ with (RUNTIME/'server.log').open('w') as log:
 
             click(page, '#example')
             before = run(page)
-            page.get_by_text('Mass and payload placement', exact=True).click()
+            page.locator('#input-editors').get_by_text('Mass and payload placement', exact=True).click()
             page.get_by_label('Candidate payload x, m', exact=True).fill('.8')
             click(page, '#save')
             after = run(page)

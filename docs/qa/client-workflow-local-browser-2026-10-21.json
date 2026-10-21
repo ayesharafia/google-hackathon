@@ -1,0 +1,84 @@
+{
+  "browser": "system Chromium",
+  "data_scope": "analytic_fixture",
+  "checks": [
+    "Blank conditioning policy refuses; explicit sourced tolerances condition and bind matching raw-map rotors",
+    "Actual JSON/PDF browser downloads complete and equal retained API bytes",
+    "409 dialog preserves draft; unsaved export, keep, explicit replace verified",
+    "Explicit mm import, original STL equality, rotor link/centre save/reopen, CG and governing case render",
+    "Native Chromium browser zoom=2 verified by getDefaultZoom, DPR=2 and halved layout viewport; no document horizontal overflow",
+    "390px viewport without document overflow, reduced motion and keyboard table access",
+    "Retained before/after inputs and newly active constraints compared with non-causal qualification",
+    "Airframe preview highlights governing rotor map limits amber; octo failure preview highlights exactly zero-command r0 red",
+    "Two timed automated realistic create/freeze/evaluate/export rehearsals, video recorded"
+  ],
+  "rehearsals_s": [
+    1.459,
+    1.529
+  ],
+  "downloads": [
+    {
+      "name": "initial-hover-study-79eb4af9ec894c04af0d5d1be1163569c6585c0d3006a5635b949d11e6819440.json",
+      "bytes": 23010,
+      "sha256": "1a5841be46674e9478683b0e5e1e59223ba7f5ab97070b8f994399c0eb28bf57"
+    },
+    {
+      "name": "initial-hover-study-79eb4af9ec894c04af0d5d1be1163569c6585c0d3006a5635b949d11e6819440.pdf",
+      "bytes": 47846,
+      "sha256": "9b160b6c8b83accfa39d0d5af9cb669cb03fdba3a9d6caa5fc16f8f1ca084a0e"
+    },
+    {
+      "name": "conflict-project_38076916eddd41de93737450d9ca7127-unsaved.json",
+      "bytes": 11883,
+      "sha256": "23df2f5c29e16526ffc12c2bbbe43be61fb5dedcf62d429a32ca6a917a428269"
+    },
+    {
+      "name": "rehearsal-1-hover-study-06d2fb6026d14c013331665488089254728af39a5cacc0a92f77f1083091fdc1.json",
+      "bytes": 23010,
+      "sha256": "138d6319cf3076d1f95299cdc45e6361e905cabc65ea32c5b84b0d5130c150c8"
+    },
+    {
+      "name": "rehearsal-1-hover-study-06d2fb6026d14c013331665488089254728af39a5cacc0a92f77f1083091fdc1.pdf",
+      "bytes": 47885,
+      "sha256": "a193dbec61c44c0839a29d1e8a1b34c00ae13db85f7af30ee79319c936e69a77"
+    },
+    {
+      "name": "rehearsal-2-hover-study-800b416a716c3dc13ab831447cfc0f74dbb9a700de8a0231e8dc109b070ee05e.json",
+      "bytes": 23010,
+      "sha256": "37519a2edf40c3a771f8db15b448c04e472a7b66a9fd4172a656d547c586303c"
+    },
+    {
+      "name": "rehearsal-2-hover-study-800b416a716c3dc13ab831447cfc0f74dbb9a700de8a0231e8dc109b070ee05e.pdf",
+      "bytes": 47877,
+      "sha256": "a56de8d82f5db32d8a73825fc1a7ad00282b7c2c67b53a22f2b132f3c47d5952"
+    }
+  ],
+  "screenshots": [
+    "01-connected.png",
+    "02-synthetic-layout.png",
+    "09-explicit-conditioning.png",
+    "03-capacity-result.png",
+    "04-draft-conflict.png",
+    "05-airframe-governing-case.png",
+    "06-native-200-percent.png",
+    "07-mobile-capacity.png",
+    "08-comparison.png",
+    "10-active-rotor-airframe.png",
+    "11-motor-out-layout.png"
+  ],
+  "native_zoom": {
+    "setting": 2,
+    "innerWidth": 720,
+    "devicePixelRatio": 2,
+    "method": "chrome.settingsPrivate native default browser zoom; no viewport override"
+  },
+  "runtime_evidence": ".backend/next-development-browser/8bc77eb6",
+  "browser_version": "155.0.8059.39",
+  "recording": {
+    "path": ".backend/next-development-browser/8bc77eb6/backup.webm",
+    "frames": 151,
+    "bytes": 2132284,
+    "sha256": "ec475977de03e53de943341914c90188d35d3d3c750818ed561ae7fb83420234",
+    "method": "CDP screencast frame timestamps; system FFmpeg"
+  }
+}

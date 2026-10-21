@@ -57,9 +57,12 @@ def migrate(database):
             db.execute('SELECT pg_advisory_xact_lock(17010602)')
         db.execute(SCHEMA[0])
         versions = [r[0] for r in db.execute('SELECT version FROM platform_migrations').fetchall()]
-        if sorted(versions) not in ([], [1], [1, 2], [1, 2, 3], [1, 2, 3, 4], [1, 2, 3, 4, 5]):
+        if sorted(versions) not in [list(range(1, n+1)) for n in range(7)]:
             raise ValueError('unsupported platform migration; upgrade or restore the matching release')
+        if 6 in versions:
+            return
         if 5 in versions:
+            _artifact_reservations(db)
             return
         for statement in SCHEMA[1:]:
             db.execute(statement)
@@ -78,3 +81,14 @@ def migrate(database):
         db.execute('CREATE TABLE project_reservations (reservation_id TEXT PRIMARY KEY, '
                    'org_id TEXT NOT NULL REFERENCES organizations(org_id),expires_at DOUBLE PRECISION NOT NULL)')
         db.execute('INSERT INTO platform_migrations VALUES(5)')
+        _artifact_reservations(db)
+
+
+def _artifact_reservations(db):
+    # Pending writes never grant access or increment committed artifact_bytes.
+    db.execute('CREATE TABLE artifact_reservations (reservation_id TEXT PRIMARY KEY, '
+               'project_id TEXT NOT NULL REFERENCES platform_projects(project_id),digest TEXT NOT NULL, '
+               'size_bytes BIGINT NOT NULL CHECK(size_bytes>=0),expires_at DOUBLE PRECISION NOT NULL)')
+    db.execute('CREATE INDEX artifact_reservation_project ON artifact_reservations(project_id,digest)')
+    db.execute('CREATE INDEX artifact_reservation_expiry ON artifact_reservations(expires_at)')
+    db.execute('INSERT INTO platform_migrations VALUES(6)')

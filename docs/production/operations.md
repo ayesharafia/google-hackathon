@@ -91,8 +91,10 @@ into an isolated environment, verify all referenced object hashes and role grant
 then exercise studies/reports and worker recovery. Measure recovery point/time;
 RPO 15 minutes and RTO 60 minutes remain proposed, unproved targets.
 
+Project-scoped artifact writes now reserve logical quota before storage and grant access only after successful persistence. Pending reservations expire after five minutes and are reclaimed on later accounting operations. A persisted object from a cancelled/stale attempt can remain project-entitled and charged without an accepted study; orphan collection and physical-storage accounting remain separate work. Trusted pre-project fixture staging still uses post-create binding.
+
 Migrations run transactionally with advisory locking and reject unknown future
-versions (SQLite projects v3; PostgreSQL project migration v1; platform v1-v5).
+versions (SQLite projects v3; PostgreSQL project migration v1; platform v1-v6).
 Back up before upgrade. Drain old-build jobs with old workers before retiring their
 image; new workers do not silently reinterpret old specifications. Rollback means
 restoring a tested compatible snapshot and matching old image, not downgrading a

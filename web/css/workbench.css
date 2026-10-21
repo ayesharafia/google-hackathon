@@ -18,3 +18,5 @@ header :focus-visible{outline-color:var(--light)}
 dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;background:var(--light);color:var(--ink);padding:28px;max-height:calc(100dvh - 32px);overflow:auto}dialog::backdrop{background:#20382ca6}dialog h2{margin-bottom:16px}#input-editors>details>label,#input-editors>details>p{overflow-wrap:anywhere}#input-editors fieldset p{grid-column:1/-1;overflow-wrap:anywhere}#input-editors textarea{min-height:180px}
 
 [hidden]{display:none!important}
+
+#display-context,#layout-inputs,#study-summary{overflow-wrap:anywhere}#display-context{font-weight:600}#layout-inputs p{font-size:14px}#guided-readiness button{margin:6px 0}#studies button[aria-current=true],#revisions button[aria-current=true]{font-weight:800;text-decoration:underline;text-underline-offset:4px}

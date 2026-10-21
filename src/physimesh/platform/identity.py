@@ -273,24 +273,88 @@ class Identity:
             db.execute('UPDATE invitations SET expires_at=? WHERE project_id=? AND email IN '
                        '(SELECT email FROM users WHERE user_id=?)', (self.clock(), project_id, user_id))
 
-    def grant_artifact(self, project_id, digest, size):
+    def _artifact_lock(self, db):
+        suffix = ' FOR UPDATE' if self.database.postgres else ''
+        quota = db.execute('SELECT artifact_bytes FROM platform_quota WHERE quota_id=1'+suffix).fetchone()[0]
+        db.execute('DELETE FROM artifact_reservations WHERE expires_at<=?', (self.clock(),))
+        return quota
+
+    def _artifact_budget(self, db, project_id, digest, size, quota):
+        from physimesh.core.artifacts import ArtifactStore
+        ArtifactStore._validate_digest(digest)
+        if type(size) is not int or size < 0:
+            raise ValueError('artifact size must be a nonnegative integer')
+        if db.execute('SELECT 1 FROM platform_projects WHERE project_id=?', (project_id,)).fetchone() is None:
+            raise Denied('project access denied')
+        retained = db.execute('SELECT size_bytes FROM artifact_access WHERE project_id=? AND digest=?',
+                              (project_id, digest)).fetchone()
+        pending = db.execute('SELECT size_bytes FROM artifact_reservations WHERE project_id=? AND digest=? LIMIT 1',
+                             (project_id, digest)).fetchone()
+        if any(row is not None and row[0] != size for row in (retained, pending)):
+            raise ValueError('artifact size differs from retained identity')
+        if retained is not None or pending is not None:
+            return retained is not None
+        # Concurrent writes of the same project/digest consume one reservation;
+        # another project's identical digest still consumes that project's budget.
+        reserved = db.execute('SELECT COALESCE(SUM(size_bytes),0) AS global_bytes, '
+            'COALESCE(SUM(CASE WHEN project_id=? THEN size_bytes ELSE 0 END),0) AS project_bytes, '
+            'COALESCE(SUM(CASE WHEN project_id=? THEN 1 ELSE 0 END),0) AS project_count FROM '
+            '(SELECT r.project_id,r.digest,MAX(r.size_bytes) AS size_bytes FROM artifact_reservations r '
+            'WHERE NOT EXISTS (SELECT 1 FROM artifact_access a WHERE a.project_id=r.project_id AND a.digest=r.digest) '
+            'GROUP BY r.project_id,r.digest) AS pending', (project_id, project_id)).fetchone()
+        retained_stats = db.execute('SELECT COALESCE(SUM(size_bytes),0) AS bytes,COUNT(*) AS count '
+                                   'FROM artifact_access WHERE project_id=?', (project_id,)).fetchone()
+        if (retained_stats[0]+reserved[1]+size > 5_000_000_000 or quota+reserved[0]+size > 50_000_000_000
+                or retained_stats[1]+reserved[2] >= 10000):
+            raise Denied('project artifact budget exceeded')
+        return False
+
+    def reserve_artifact(self, project_id, digest, size):
+        """Reserve admission for five minutes; pending writes confer no access."""
         with self.database.connection(write=True) as db:
-            suffix = ' FOR UPDATE' if self.database.postgres else ''
-            quota = db.execute('SELECT artifact_bytes FROM platform_quota WHERE quota_id=1'+suffix).fetchone()[0]
-            if db.execute('SELECT project_id FROM platform_projects WHERE project_id=?'+suffix,
-                          (project_id,)).fetchone() is None:
-                raise Denied('project access denied')
-            # Per-project retained bytes are bounded, including deduplicated source bytes.
-            exists = db.execute('SELECT 1 FROM artifact_access WHERE project_id=? AND digest=?',
-                                (project_id, digest)).fetchone()
-            total = db.execute('SELECT COALESCE(SUM(size_bytes),0) FROM artifact_access WHERE project_id=?',
-                               (project_id,)).fetchone()[0]
-            count = db.execute('SELECT COUNT(*) FROM artifact_access WHERE project_id=?', (project_id,)).fetchone()[0]
-            if not exists and (total+size > 5_000_000_000 or quota+size > 50_000_000_000 or count >= 10000):
-                raise Denied('project artifact budget exceeded')
-            db.execute('INSERT OR IGNORE INTO artifact_access VALUES(?,?,?)', (project_id, digest, size))
-            if not exists:
-                db.execute('UPDATE platform_quota SET artifact_bytes=artifact_bytes+? WHERE quota_id=1', (size,))
+            quota = self._artifact_lock(db)
+            if self._artifact_budget(db, project_id, digest, size, quota):
+                return None  # Existing entitlement belongs to a prior successful write.
+            if db.execute('SELECT COUNT(*) FROM artifact_reservations WHERE project_id=?',
+                          (project_id,)).fetchone()[0] >= 10000:
+                raise Denied('project artifact reservation budget exceeded')
+            reservation = ident('artifact')
+            db.execute('INSERT INTO artifact_reservations VALUES(?,?,?,?,?)',
+                       (reservation, project_id, digest, size, self.clock()+300))
+            return reservation
+
+    def finish_artifact(self, reservation):
+        """Commit only a live write reservation, atomically granting and charging once."""
+        if reservation is None:
+            return
+        with self.database.connection(write=True) as db:
+            self._artifact_lock(db)
+            row = db.execute('SELECT project_id,digest,size_bytes FROM artifact_reservations WHERE reservation_id=?',
+                             (reservation,)).fetchone()
+            if row is None:
+                raise Denied('artifact write reservation expired or cancelled; retry publication')
+            self._grant_artifact(db, row[0], row[1], row[2])
+            db.execute('DELETE FROM artifact_reservations WHERE reservation_id=?', (reservation,))
+
+    def cancel_artifact(self, reservation):
+        if reservation is not None:
+            with self.database.connection(write=True) as db:
+                self._artifact_lock(db)
+                db.execute('DELETE FROM artifact_reservations WHERE reservation_id=?', (reservation,))
+
+    @staticmethod
+    def _grant_artifact(db, project_id, digest, size):
+        if db.execute('SELECT 1 FROM artifact_access WHERE project_id=? AND digest=?',
+                      (project_id, digest)).fetchone() is None:
+            db.execute('INSERT INTO artifact_access VALUES(?,?,?)', (project_id, digest, size))
+            db.execute('UPDATE platform_quota SET artifact_bytes=artifact_bytes+? WHERE quota_id=1', (size,))
+
+    def grant_artifact(self, project_id, digest, size):
+        """Associate already-persisted bytes, respecting concurrent pending admissions."""
+        with self.database.connection(write=True) as db:
+            quota = self._artifact_lock(db)
+            self._artifact_budget(db, project_id, digest, size, quota)
+            self._grant_artifact(db, project_id, digest, size)
 
     def require_artifact(self, project_id, digest):
         with self.database.connection() as db:

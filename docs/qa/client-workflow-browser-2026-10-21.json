@@ -1,0 +1,20 @@
+{
+  "schema_version": "client_workflow_browser_v1",
+  "data_scope": "analytic_fixture",
+  "status": "passed",
+  "checks": [
+    "distinct_retained_summary_bounds",
+    "historical_study_uses_frozen_rotor_inputs_preserves_unsaved_draft",
+    "selected_case_context",
+    "draft_view_restores_unsaved_rotor_inputs",
+    "summary_failure_withholds_bounds_preserves_details_and_exports",
+    "draft_conflict_keep_and_explicit_replace",
+    "dirty_organization_switch_cancel_preserves_draft",
+    "confirmed_organization_switch_clears_context",
+    "dirty_logout_cancel_preserves_draft",
+    "confirmed_logout_clears_project_context"
+  ],
+  "media_captured": false,
+  "qualification": "Synthetic browser workflow checks only; no engineering or production acceptance.",
+  "browser_version": "155.0.8059.39"
+}

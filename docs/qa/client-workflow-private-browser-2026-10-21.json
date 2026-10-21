@@ -1,0 +1,34 @@
+{
+  "data_scope": "analytic_fixture",
+  "checks": [
+    "individual sign-in",
+    "private project isolation",
+    "queued study and first PDF",
+    "completed PDF download",
+    "one-use reviewer invitation",
+    "reviewer write denial",
+    "authenticated review bound to exact result",
+    "authenticated review download",
+    "390px layout",
+    "session revocation preserves inputs"
+  ],
+  "downloads": [
+    {
+      "name": "hover-study-cebc8a3262b991680e25aa14a743097e594af915089b60119447ac1e66789893.pdf",
+      "sha256": "ec089adfbd9cdb031e728efb56a7ae5a96a29896c25f81d7bbdaa7e0839a3856",
+      "bytes": 47876
+    },
+    {
+      "name": "workflow-review.json",
+      "sha256": "7ac9e1b73b4f41adf652ccfc272f8bf3e67374a19651a9fb0d627e81962a24de",
+      "bytes": 630
+    }
+  ],
+  "screenshots": [
+    "01-private-design.png",
+    "02-accepted-study-and-jobs.png",
+    "03-mobile-authenticated-review.png",
+    "04-revoked-session-preserves-design.png"
+  ],
+  "browser_version": "155.0.8059.39"
+}

@@ -133,6 +133,11 @@ class LocalStudies:
             raise ValueError('study frozen input association failed')
         return raw, revision.snapshot_json
 
+    def summary(self, project_id: str, study: str) -> dict:
+        from .study_summary import summarize_study
+        raw, _ = self.report_inputs(project_id, study)
+        return summarize_study(raw)
+
     def cached_pdf(self, project_id: str, study: str) -> tuple[bytes, dict] | None:
         from .reports import report_identity
         raw, snapshot = self.report_inputs(project_id, study)

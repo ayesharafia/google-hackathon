@@ -19,7 +19,9 @@ from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, Tabl
 
 from physimesh.drone.provenance import canonical_json
 
-REPORT_VERSION = 'retained_local_study_pdf_v1'
+from .study_summary import SUMMARY_SOURCE_SHA256, SUMMARY_VERSION, summarize_study
+
+REPORT_VERSION = 'retained_local_study_pdf_v2'
 RENDERER_SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 MAX_DIFFS = 500
 
@@ -154,6 +156,15 @@ def render_pdf(raw: bytes, snapshot_raw: str) -> bytes:
     if historical:
         story.append(para('Historical local result with earlier acceptance semantics. Preserved as recorded; '
                           'not reassessed under current V3 rules. Re-evaluate a saved design for current evidence.'))
+    summary = summarize_study(raw)
+    story.append(para('Payload interpretation', heading))
+    for bound in summary['bounds'].values():
+        amount = repr(bound['payload_kg'])+' kg' if bound['payload_kg'] is not None else 'Unavailable'
+        story.append(para(bound['label']+': '+amount+' ('+bound['status']+').'))
+        if bound is not summary['bounds']['nominal']:
+            story.append(para(bound['qualification']))
+    story.append(para('These quantities have distinct scopes. A declared external cap is not '
+                      'authenticated engineering acceptance.'))
     value = data.get('payload_lower_bound_kg')
     if data['outcome'] == 'feasible' and value is not None:
         story += [para(f'{math.floor(value*100)/100:.2f} kg', payload_style),
@@ -267,6 +278,7 @@ def report_identity(raw: bytes, snapshot_raw: str) -> dict:
     return {'reuse_policy': 'verified_pdf_reuse_v2', 'renderer_dependencies': renderer_dependencies(),
             'renderer_version': REPORT_VERSION,
             'renderer_source_sha256': RENDERER_SOURCE_SHA256,
+            'summary_schema_version': SUMMARY_VERSION, 'summary_source_sha256': SUMMARY_SOURCE_SHA256,
             'reportlab_version': reportlab.Version,
             'study_json_sha256': hashlib.sha256(raw).hexdigest(),
             'snapshot_sha256': hashlib.sha256(canonical_json(json.loads(snapshot_raw)).encode()).hexdigest()}
