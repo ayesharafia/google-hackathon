@@ -50,9 +50,9 @@ owned processes. Budget exhaustion deliberately exits nonzero and retains partia
 Linux `/proc` is required. A preflight verifies that `/proc/self/stat` and `os.getpid()`
 refer to the same PID namespace **before any process is created**. If they differ,
 the run stops with `incompatible_proc_pid_namespace`: it does not guess PID mappings,
-signal proc-enumerated IDs or claim resource monitoring succeeded. The current cloud
-execution environment exhibits this mismatch, so a monitored real-worker soak remains
-unverified here. Reproduce on a compatible Linux host or pinned CI before acceptance.
+signal proc-enumerated IDs or claim resource monitoring succeeded. The 14 October
+cloud execution exhibited this mismatch and could not verify a monitored real-worker
+soak. The 21 October follow-up below records actual execution on a compatible host.
 
 ## Stop and cancellation
 
@@ -71,3 +71,19 @@ hosted object stores, actual disk exhaustion or real aircraft data. Existing pla
 privacy tests remain a separate gate. API exceptions are classified with safe labels;
 cleanup failures and incomplete observations stay visible rather than being represented
 as successful qualification.
+
+## Follow-up execution on 21 October 2026
+
+The [retained receipt](soak-harness-2026-10-21.json) records an actual guarded run
+with compatible process namespaces, Python 3.11.16 and hash-locked dependencies.
+One synthetic study/PDF journey completed in 4.709 seconds with 13 requests and
+two accepted jobs. A separate two-second duration stop interrupted a running job;
+cleanup cancelled it and refused its stale completion. Tiny sampled storage and
+memory budgets also stopped their campaigns. A SIGINT campaign stopped during
+its fifth request before any job admission committed. Every run observed zero
+surviving owned processes, no cleanup error, and removal of its temporary root.
+
+Twenty-six helper tests pass, including two regressions that reproduced delayed
+process-reap exceptions skipping ledger cleanup before the fix, and a CLI check
+that a retained process cleanup failure prevents success. These bounded smokes do
+not satisfy the 24-hour target or establish hosted/provider resource quotas.

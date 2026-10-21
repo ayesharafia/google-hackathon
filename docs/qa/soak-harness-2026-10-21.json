@@ -1,0 +1,1628 @@
+{
+  "schema_version": "bounded_soak_followup_v1",
+  "date": "2026-10-21",
+  "python": "3.11.16",
+  "dependencies": {
+    "fastapi": "0.142.2",
+    "httpx": "0.28.1",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "reportlab": "5.0.1"
+  },
+  "source_sha256": {
+    "scripts/qa/bounded_soak.py": "c09b0aad4fbf2b383a81a7ff91498b9e21ba320f7cd32f996315c46e71ea1171",
+    "tests/test_bounded_soak_qa.py": "a08664db7e599cecc357a9bc316378c21bf57c9583e2eebf1eaa543059e317ef"
+  },
+  "performed_checks": {
+    "bounded_soak_tests": "26 passed",
+    "ruff": "passed",
+    "regression_before_fix": "Both delayed-reap cases raised TimeoutExpired before ledger cleanup/receipt; now cleanup and observations retained."
+  },
+  "runs": {
+    "duration": {
+      "requests": 5,
+      "completed_journeys": 0,
+      "failures": 0,
+      "stop_reason": "duration_budget",
+      "request_observations": [
+        {
+          "ordinal": 1,
+          "status": 200,
+          "response_bytes": 126,
+          "error": null,
+          "elapsed_ms": 105.575
+        },
+        {
+          "ordinal": 2,
+          "status": 201,
+          "response_bytes": 8712,
+          "error": null,
+          "elapsed_ms": 28.227
+        },
+        {
+          "ordinal": 3,
+          "status": 200,
+          "response_bytes": 8706,
+          "error": null,
+          "elapsed_ms": 6.907
+        },
+        {
+          "ordinal": 4,
+          "status": 200,
+          "response_bytes": 9062,
+          "error": null,
+          "elapsed_ms": 20.757
+        },
+        {
+          "ordinal": 5,
+          "status": 202,
+          "response_bytes": 2739,
+          "error": null,
+          "elapsed_ms": 5.379
+        }
+      ],
+      "child_exit_code": -9,
+      "process_cleanup_error": null,
+      "owned_process_survivors_after_kill": 0,
+      "accepted_jobs": 1,
+      "states_before_cleanup": {
+        "running": 1
+      },
+      "states_after_cleanup": {
+        "cancelled": 1
+      },
+      "cancelled_unfinished": 1,
+      "stale_completion_checks": 1,
+      "cleanup_error": null,
+      "accepted_jobs_source": "actual durable ledger rows, not HTTP response count",
+      "cleanup_elapsed_s": 0.018,
+      "schema_version": 1,
+      "fixture": "analytic V4 synthetic hosted SQLite TestClient + real worker",
+      "budgets": {
+        "seconds": 2.0,
+        "requests": 200,
+        "journeys": 20,
+        "storage_bytes": 67108864,
+        "memory_bytes": 1073741824
+      },
+      "elapsed_s": 2.02,
+      "samples": [
+        {
+          "elapsed_s": 0.002,
+          "owned_live_processes": 1,
+          "rss_bytes": 4096,
+          "summed_live_process_hwm_bytes": 4096,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.054,
+          "owned_live_processes": 1,
+          "rss_bytes": 21020672,
+          "summed_live_process_hwm_bytes": 21020672,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.105,
+          "owned_live_processes": 1,
+          "rss_bytes": 27852800,
+          "summed_live_process_hwm_bytes": 27852800,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.156,
+          "owned_live_processes": 1,
+          "rss_bytes": 32083968,
+          "summed_live_process_hwm_bytes": 32083968,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.206,
+          "owned_live_processes": 1,
+          "rss_bytes": 36655104,
+          "summed_live_process_hwm_bytes": 36655104,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.257,
+          "owned_live_processes": 1,
+          "rss_bytes": 45395968,
+          "summed_live_process_hwm_bytes": 45395968,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.312,
+          "owned_live_processes": 1,
+          "rss_bytes": 51552256,
+          "summed_live_process_hwm_bytes": 51552256,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.377,
+          "owned_live_processes": 1,
+          "rss_bytes": 57634816,
+          "summed_live_process_hwm_bytes": 57634816,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.432,
+          "owned_live_processes": 1,
+          "rss_bytes": 67469312,
+          "summed_live_process_hwm_bytes": 67469312,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.483,
+          "owned_live_processes": 1,
+          "rss_bytes": 71057408,
+          "summed_live_process_hwm_bytes": 71057408,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.534,
+          "owned_live_processes": 1,
+          "rss_bytes": 74346496,
+          "summed_live_process_hwm_bytes": 74346496,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.585,
+          "owned_live_processes": 1,
+          "rss_bytes": 75927552,
+          "summed_live_process_hwm_bytes": 75927552,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.636,
+          "owned_live_processes": 1,
+          "rss_bytes": 80031744,
+          "summed_live_process_hwm_bytes": 80031744,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.686,
+          "owned_live_processes": 1,
+          "rss_bytes": 87818240,
+          "summed_live_process_hwm_bytes": 87818240,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.737,
+          "owned_live_processes": 1,
+          "rss_bytes": 91086848,
+          "summed_live_process_hwm_bytes": 91086848,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.792,
+          "owned_live_processes": 1,
+          "rss_bytes": 92975104,
+          "summed_live_process_hwm_bytes": 109604864,
+          "file_bytes": 212992
+        },
+        {
+          "elapsed_s": 0.843,
+          "owned_live_processes": 1,
+          "rss_bytes": 110571520,
+          "summed_live_process_hwm_bytes": 110571520,
+          "file_bytes": 212992
+        },
+        {
+          "elapsed_s": 0.894,
+          "owned_live_processes": 1,
+          "rss_bytes": 111468544,
+          "summed_live_process_hwm_bytes": 111468544,
+          "file_bytes": 213206
+        },
+        {
+          "elapsed_s": 0.948,
+          "owned_live_processes": 1,
+          "rss_bytes": 128704512,
+          "summed_live_process_hwm_bytes": 128704512,
+          "file_bytes": 213206
+        },
+        {
+          "elapsed_s": 0.999,
+          "owned_live_processes": 1,
+          "rss_bytes": 131248128,
+          "summed_live_process_hwm_bytes": 131248128,
+          "file_bytes": 229750
+        },
+        {
+          "elapsed_s": 1.051,
+          "owned_live_processes": 2,
+          "rss_bytes": 147185664,
+          "summed_live_process_hwm_bytes": 147185664,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.102,
+          "owned_live_processes": 2,
+          "rss_bytes": 155836416,
+          "summed_live_process_hwm_bytes": 155836416,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.153,
+          "owned_live_processes": 2,
+          "rss_bytes": 161402880,
+          "summed_live_process_hwm_bytes": 161402880,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.204,
+          "owned_live_processes": 2,
+          "rss_bytes": 164769792,
+          "summed_live_process_hwm_bytes": 164769792,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.255,
+          "owned_live_processes": 2,
+          "rss_bytes": 174772224,
+          "summed_live_process_hwm_bytes": 174772224,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.307,
+          "owned_live_processes": 2,
+          "rss_bytes": 180137984,
+          "summed_live_process_hwm_bytes": 180137984,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.358,
+          "owned_live_processes": 2,
+          "rss_bytes": 187453440,
+          "summed_live_process_hwm_bytes": 187453440,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.41,
+          "owned_live_processes": 2,
+          "rss_bytes": 195129344,
+          "summed_live_process_hwm_bytes": 195129344,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.462,
+          "owned_live_processes": 2,
+          "rss_bytes": 200671232,
+          "summed_live_process_hwm_bytes": 200671232,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.513,
+          "owned_live_processes": 2,
+          "rss_bytes": 203292672,
+          "summed_live_process_hwm_bytes": 203292672,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.565,
+          "owned_live_processes": 2,
+          "rss_bytes": 209973248,
+          "summed_live_process_hwm_bytes": 209973248,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.616,
+          "owned_live_processes": 2,
+          "rss_bytes": 215621632,
+          "summed_live_process_hwm_bytes": 215621632,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.667,
+          "owned_live_processes": 2,
+          "rss_bytes": 219176960,
+          "summed_live_process_hwm_bytes": 219176960,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.719,
+          "owned_live_processes": 2,
+          "rss_bytes": 224772096,
+          "summed_live_process_hwm_bytes": 224772096,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.77,
+          "owned_live_processes": 2,
+          "rss_bytes": 225878016,
+          "summed_live_process_hwm_bytes": 242176000,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.821,
+          "owned_live_processes": 2,
+          "rss_bytes": 229216256,
+          "summed_live_process_hwm_bytes": 242176000,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 1.873,
+          "owned_live_processes": 2,
+          "rss_bytes": 229228544,
+          "summed_live_process_hwm_bytes": 242176000,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 1.924,
+          "owned_live_processes": 2,
+          "rss_bytes": 229232640,
+          "summed_live_process_hwm_bytes": 242176000,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 1.976,
+          "owned_live_processes": 1,
+          "rss_bytes": 131448832,
+          "summed_live_process_hwm_bytes": 131448832,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 2.001,
+          "owned_live_processes": 1,
+          "rss_bytes": 131448832,
+          "summed_live_process_hwm_bytes": 131448832,
+          "file_bytes": 261999
+        }
+      ],
+      "processes_started": 1,
+      "disposable_directory_removed": true,
+      "qualification": "Bounded local synthetic smoke; not 24-hour endurance, production SLO, or aircraft acceptance",
+      "monitoring": "50ms sampled owned child-tree RSS and file-byte stop thresholds, not hard quotas; summed live process HWM is not simultaneous tree high-water memory",
+      "process_wait_timeout_s": 3,
+      "descendant_exit_observation_s": 0.5,
+      "process_wait_retry_timeout_s": 0.5,
+      "ledger_cleanup_deadline_s": 5,
+      "not_verified": [
+        "hosted network/provider",
+        "24-hour soak",
+        "PostgreSQL",
+        "real aircraft sources",
+        "viewer access denial, session revocation and logout",
+        "sampling gaps and short-lived descendants",
+        "physical resource quotas"
+      ]
+    },
+    "interrupt": {
+      "requests": 5,
+      "completed_journeys": 0,
+      "failures": 0,
+      "stop_reason": "interrupted",
+      "request_observations": [
+        {
+          "ordinal": 1,
+          "status": 200,
+          "response_bytes": 126,
+          "error": null,
+          "elapsed_ms": 117.2
+        },
+        {
+          "ordinal": 2,
+          "status": 201,
+          "response_bytes": 8712,
+          "error": null,
+          "elapsed_ms": 102.908
+        },
+        {
+          "ordinal": 3,
+          "status": 200,
+          "response_bytes": 8706,
+          "error": null,
+          "elapsed_ms": 45.848
+        },
+        {
+          "ordinal": 4,
+          "status": 200,
+          "response_bytes": 9062,
+          "error": null,
+          "elapsed_ms": 29.806
+        },
+        {
+          "ordinal": 5,
+          "status": null,
+          "response_bytes": null,
+          "error": "unfinished_request",
+          "elapsed_ms": null
+        }
+      ],
+      "child_exit_code": -9,
+      "process_cleanup_error": null,
+      "owned_process_survivors_after_kill": 0,
+      "accepted_jobs": 0,
+      "states_before_cleanup": {},
+      "states_after_cleanup": {},
+      "cancelled_unfinished": 0,
+      "stale_completion_checks": 0,
+      "cleanup_error": null,
+      "accepted_jobs_source": "actual durable ledger rows, not HTTP response count",
+      "cleanup_elapsed_s": 0.027,
+      "schema_version": 1,
+      "fixture": "analytic V4 synthetic hosted SQLite TestClient + real worker",
+      "budgets": {
+        "seconds": 30.0,
+        "requests": 300,
+        "journeys": 20,
+        "storage_bytes": 67108864,
+        "memory_bytes": 1073741824
+      },
+      "elapsed_s": 1.172,
+      "samples": [
+        {
+          "elapsed_s": 0.002,
+          "owned_live_processes": 1,
+          "rss_bytes": 2719744,
+          "summed_live_process_hwm_bytes": 2719744,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.054,
+          "owned_live_processes": 1,
+          "rss_bytes": 20258816,
+          "summed_live_process_hwm_bytes": 20258816,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.105,
+          "owned_live_processes": 1,
+          "rss_bytes": 27131904,
+          "summed_live_process_hwm_bytes": 27131904,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.156,
+          "owned_live_processes": 1,
+          "rss_bytes": 31526912,
+          "summed_live_process_hwm_bytes": 31526912,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.208,
+          "owned_live_processes": 1,
+          "rss_bytes": 35348480,
+          "summed_live_process_hwm_bytes": 35348480,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.259,
+          "owned_live_processes": 1,
+          "rss_bytes": 43290624,
+          "summed_live_process_hwm_bytes": 43290624,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.31,
+          "owned_live_processes": 1,
+          "rss_bytes": 48885760,
+          "summed_live_process_hwm_bytes": 48885760,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.362,
+          "owned_live_processes": 1,
+          "rss_bytes": 57581568,
+          "summed_live_process_hwm_bytes": 57581568,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.413,
+          "owned_live_processes": 1,
+          "rss_bytes": 64290816,
+          "summed_live_process_hwm_bytes": 64290816,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.467,
+          "owned_live_processes": 1,
+          "rss_bytes": 71389184,
+          "summed_live_process_hwm_bytes": 71389184,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.518,
+          "owned_live_processes": 1,
+          "rss_bytes": 73883648,
+          "summed_live_process_hwm_bytes": 73883648,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.569,
+          "owned_live_processes": 1,
+          "rss_bytes": 77279232,
+          "summed_live_process_hwm_bytes": 77279232,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.621,
+          "owned_live_processes": 1,
+          "rss_bytes": 81973248,
+          "summed_live_process_hwm_bytes": 81973248,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.675,
+          "owned_live_processes": 1,
+          "rss_bytes": 89567232,
+          "summed_live_process_hwm_bytes": 89567232,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.727,
+          "owned_live_processes": 1,
+          "rss_bytes": 92590080,
+          "summed_live_process_hwm_bytes": 92590080,
+          "file_bytes": 36896
+        },
+        {
+          "elapsed_s": 0.778,
+          "owned_live_processes": 1,
+          "rss_bytes": 93040640,
+          "summed_live_process_hwm_bytes": 109490176,
+          "file_bytes": 212992
+        },
+        {
+          "elapsed_s": 0.83,
+          "owned_live_processes": 1,
+          "rss_bytes": 109936640,
+          "summed_live_process_hwm_bytes": 109936640,
+          "file_bytes": 245792
+        },
+        {
+          "elapsed_s": 0.881,
+          "owned_live_processes": 1,
+          "rss_bytes": 111472640,
+          "summed_live_process_hwm_bytes": 111472640,
+          "file_bytes": 213206
+        },
+        {
+          "elapsed_s": 0.932,
+          "owned_live_processes": 1,
+          "rss_bytes": 128708608,
+          "summed_live_process_hwm_bytes": 128708608,
+          "file_bytes": 213206
+        },
+        {
+          "elapsed_s": 0.988,
+          "owned_live_processes": 1,
+          "rss_bytes": 129413120,
+          "summed_live_process_hwm_bytes": 129413120,
+          "file_bytes": 220092
+        },
+        {
+          "elapsed_s": 1.044,
+          "owned_live_processes": 1,
+          "rss_bytes": 131227648,
+          "summed_live_process_hwm_bytes": 131227648,
+          "file_bytes": 274725
+        },
+        {
+          "elapsed_s": 1.105,
+          "owned_live_processes": 1,
+          "rss_bytes": 131268608,
+          "summed_live_process_hwm_bytes": 131268608,
+          "file_bytes": 283058
+        }
+      ],
+      "processes_started": 1,
+      "disposable_directory_removed": true,
+      "qualification": "Bounded local synthetic smoke; not 24-hour endurance, production SLO, or aircraft acceptance",
+      "monitoring": "50ms sampled owned child-tree RSS and file-byte stop thresholds, not hard quotas; summed live process HWM is not simultaneous tree high-water memory",
+      "process_wait_timeout_s": 3,
+      "descendant_exit_observation_s": 0.5,
+      "process_wait_retry_timeout_s": 0.5,
+      "ledger_cleanup_deadline_s": 5,
+      "not_verified": [
+        "hosted network/provider",
+        "24-hour soak",
+        "PostgreSQL",
+        "real aircraft sources",
+        "viewer access denial, session revocation and logout",
+        "sampling gaps and short-lived descendants",
+        "physical resource quotas"
+      ]
+    },
+    "memory": {
+      "requests": 0,
+      "completed_journeys": 0,
+      "failures": 0,
+      "request_observations": [],
+      "stop_reason": "memory_observation_budget",
+      "child_exit_code": -9,
+      "process_cleanup_error": null,
+      "owned_process_survivors_after_kill": 0,
+      "accepted_jobs": 0,
+      "states_before_cleanup": {},
+      "states_after_cleanup": {},
+      "cancelled_unfinished": 0,
+      "stale_completion_checks": 0,
+      "cleanup_error": null,
+      "accepted_jobs_source": "actual durable ledger rows, not HTTP response count",
+      "cleanup_elapsed_s": 0.014,
+      "schema_version": 1,
+      "fixture": "analytic V4 synthetic hosted SQLite TestClient + real worker",
+      "budgets": {
+        "seconds": 30.0,
+        "requests": 100,
+        "journeys": 2,
+        "storage_bytes": 67108864,
+        "memory_bytes": 1
+      },
+      "elapsed_s": 0.022,
+      "samples": [
+        {
+          "elapsed_s": 0.008,
+          "owned_live_processes": 1,
+          "rss_bytes": 6041600,
+          "summed_live_process_hwm_bytes": 6041600,
+          "file_bytes": 0
+        }
+      ],
+      "processes_started": 1,
+      "disposable_directory_removed": true,
+      "qualification": "Bounded local synthetic smoke; not 24-hour endurance, production SLO, or aircraft acceptance",
+      "monitoring": "50ms sampled owned child-tree RSS and file-byte stop thresholds, not hard quotas; summed live process HWM is not simultaneous tree high-water memory",
+      "process_wait_timeout_s": 3,
+      "descendant_exit_observation_s": 0.5,
+      "process_wait_retry_timeout_s": 0.5,
+      "ledger_cleanup_deadline_s": 5,
+      "not_verified": [
+        "hosted network/provider",
+        "24-hour soak",
+        "PostgreSQL",
+        "real aircraft sources",
+        "viewer access denial, session revocation and logout",
+        "sampling gaps and short-lived descendants",
+        "physical resource quotas"
+      ]
+    },
+    "normal": {
+      "requests": 13,
+      "completed_journeys": 1,
+      "failures": 0,
+      "stop_reason": "journey_budget",
+      "request_observations": [
+        {
+          "ordinal": 1,
+          "status": 200,
+          "response_bytes": 126,
+          "error": null,
+          "elapsed_ms": 154.298
+        },
+        {
+          "ordinal": 2,
+          "status": 201,
+          "response_bytes": 8712,
+          "error": null,
+          "elapsed_ms": 38.458
+        },
+        {
+          "ordinal": 3,
+          "status": 200,
+          "response_bytes": 8706,
+          "error": null,
+          "elapsed_ms": 8.295
+        },
+        {
+          "ordinal": 4,
+          "status": 200,
+          "response_bytes": 9062,
+          "error": null,
+          "elapsed_ms": 35.832
+        },
+        {
+          "ordinal": 5,
+          "status": 202,
+          "response_bytes": 2739,
+          "error": null,
+          "elapsed_ms": 6.999
+        },
+        {
+          "ordinal": 6,
+          "status": 200,
+          "response_bytes": 4613,
+          "error": null,
+          "elapsed_ms": 11.479
+        },
+        {
+          "ordinal": 7,
+          "status": 200,
+          "response_bytes": 23010,
+          "error": null,
+          "elapsed_ms": 6.991
+        },
+        {
+          "ordinal": 8,
+          "status": 202,
+          "response_bytes": 1217,
+          "error": null,
+          "elapsed_ms": 83.007
+        },
+        {
+          "ordinal": 9,
+          "status": 200,
+          "response_bytes": 4191,
+          "error": null,
+          "elapsed_ms": 18.486
+        },
+        {
+          "ordinal": 10,
+          "status": 200,
+          "response_bytes": 47236,
+          "error": null,
+          "elapsed_ms": 10.562
+        },
+        {
+          "ordinal": 11,
+          "status": 200,
+          "response_bytes": 47236,
+          "error": null,
+          "elapsed_ms": 9.468
+        },
+        {
+          "ordinal": 12,
+          "status": 200,
+          "response_bytes": 227,
+          "error": null,
+          "elapsed_ms": 3.354
+        },
+        {
+          "ordinal": 13,
+          "status": 200,
+          "response_bytes": 321,
+          "error": null,
+          "elapsed_ms": 3.273
+        }
+      ],
+      "child_exit_code": 0,
+      "process_cleanup_error": null,
+      "owned_process_survivors_after_kill": 0,
+      "accepted_jobs": 2,
+      "states_before_cleanup": {
+        "succeeded": 2
+      },
+      "states_after_cleanup": {
+        "succeeded": 2
+      },
+      "cancelled_unfinished": 0,
+      "stale_completion_checks": 0,
+      "cleanup_error": null,
+      "accepted_jobs_source": "actual durable ledger rows, not HTTP response count",
+      "cleanup_elapsed_s": 0.012,
+      "schema_version": 1,
+      "fixture": "analytic V4 synthetic hosted SQLite TestClient + real worker",
+      "budgets": {
+        "seconds": 45.0,
+        "requests": 40,
+        "journeys": 1,
+        "storage_bytes": 67108864,
+        "memory_bytes": 1073741824
+      },
+      "elapsed_s": 4.709,
+      "samples": [
+        {
+          "elapsed_s": 0.002,
+          "owned_live_processes": 1,
+          "rss_bytes": 2068480,
+          "summed_live_process_hwm_bytes": 2068480,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.053,
+          "owned_live_processes": 1,
+          "rss_bytes": 19546112,
+          "summed_live_process_hwm_bytes": 19546112,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.107,
+          "owned_live_processes": 1,
+          "rss_bytes": 25776128,
+          "summed_live_process_hwm_bytes": 25776128,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.158,
+          "owned_live_processes": 1,
+          "rss_bytes": 28200960,
+          "summed_live_process_hwm_bytes": 28200960,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.209,
+          "owned_live_processes": 1,
+          "rss_bytes": 32088064,
+          "summed_live_process_hwm_bytes": 32088064,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.267,
+          "owned_live_processes": 1,
+          "rss_bytes": 35323904,
+          "summed_live_process_hwm_bytes": 35323904,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.335,
+          "owned_live_processes": 1,
+          "rss_bytes": 39018496,
+          "summed_live_process_hwm_bytes": 39018496,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.386,
+          "owned_live_processes": 1,
+          "rss_bytes": 45395968,
+          "summed_live_process_hwm_bytes": 45395968,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.437,
+          "owned_live_processes": 1,
+          "rss_bytes": 45395968,
+          "summed_live_process_hwm_bytes": 45395968,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.488,
+          "owned_live_processes": 1,
+          "rss_bytes": 50769920,
+          "summed_live_process_hwm_bytes": 50769920,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.539,
+          "owned_live_processes": 1,
+          "rss_bytes": 55570432,
+          "summed_live_process_hwm_bytes": 55570432,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.594,
+          "owned_live_processes": 1,
+          "rss_bytes": 67461120,
+          "summed_live_process_hwm_bytes": 67461120,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.645,
+          "owned_live_processes": 1,
+          "rss_bytes": 71090176,
+          "summed_live_process_hwm_bytes": 71090176,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.696,
+          "owned_live_processes": 1,
+          "rss_bytes": 74018816,
+          "summed_live_process_hwm_bytes": 74018816,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.747,
+          "owned_live_processes": 1,
+          "rss_bytes": 74829824,
+          "summed_live_process_hwm_bytes": 74829824,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.798,
+          "owned_live_processes": 1,
+          "rss_bytes": 78426112,
+          "summed_live_process_hwm_bytes": 78426112,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.849,
+          "owned_live_processes": 1,
+          "rss_bytes": 84164608,
+          "summed_live_process_hwm_bytes": 84164608,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.9,
+          "owned_live_processes": 1,
+          "rss_bytes": 89325568,
+          "summed_live_process_hwm_bytes": 89325568,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.951,
+          "owned_live_processes": 1,
+          "rss_bytes": 90898432,
+          "summed_live_process_hwm_bytes": 90898432,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 1.002,
+          "owned_live_processes": 1,
+          "rss_bytes": 106287104,
+          "summed_live_process_hwm_bytes": 106287104,
+          "file_bytes": 212992
+        },
+        {
+          "elapsed_s": 1.053,
+          "owned_live_processes": 1,
+          "rss_bytes": 93544448,
+          "summed_live_process_hwm_bytes": 109625344,
+          "file_bytes": 245760
+        },
+        {
+          "elapsed_s": 1.105,
+          "owned_live_processes": 1,
+          "rss_bytes": 109936640,
+          "summed_live_process_hwm_bytes": 109936640,
+          "file_bytes": 212992
+        },
+        {
+          "elapsed_s": 1.159,
+          "owned_live_processes": 1,
+          "rss_bytes": 111398912,
+          "summed_live_process_hwm_bytes": 111398912,
+          "file_bytes": 213206
+        },
+        {
+          "elapsed_s": 1.21,
+          "owned_live_processes": 1,
+          "rss_bytes": 111542272,
+          "summed_live_process_hwm_bytes": 111542272,
+          "file_bytes": 213206
+        },
+        {
+          "elapsed_s": 1.261,
+          "owned_live_processes": 1,
+          "rss_bytes": 128708608,
+          "summed_live_process_hwm_bytes": 128708608,
+          "file_bytes": 213206
+        },
+        {
+          "elapsed_s": 1.312,
+          "owned_live_processes": 1,
+          "rss_bytes": 131231744,
+          "summed_live_process_hwm_bytes": 131231744,
+          "file_bytes": 274727
+        },
+        {
+          "elapsed_s": 1.363,
+          "owned_live_processes": 1,
+          "rss_bytes": 131473408,
+          "summed_live_process_hwm_bytes": 131473408,
+          "file_bytes": 266706
+        },
+        {
+          "elapsed_s": 1.418,
+          "owned_live_processes": 2,
+          "rss_bytes": 149815296,
+          "summed_live_process_hwm_bytes": 149815296,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.47,
+          "owned_live_processes": 2,
+          "rss_bytes": 156741632,
+          "summed_live_process_hwm_bytes": 156741632,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.522,
+          "owned_live_processes": 2,
+          "rss_bytes": 161337344,
+          "summed_live_process_hwm_bytes": 161337344,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.573,
+          "owned_live_processes": 2,
+          "rss_bytes": 162897920,
+          "summed_live_process_hwm_bytes": 162897920,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.627,
+          "owned_live_processes": 2,
+          "rss_bytes": 166342656,
+          "summed_live_process_hwm_bytes": 166342656,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.679,
+          "owned_live_processes": 2,
+          "rss_bytes": 176066560,
+          "summed_live_process_hwm_bytes": 176066560,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.73,
+          "owned_live_processes": 2,
+          "rss_bytes": 179720192,
+          "summed_live_process_hwm_bytes": 179720192,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.781,
+          "owned_live_processes": 2,
+          "rss_bytes": 187219968,
+          "summed_live_process_hwm_bytes": 187219968,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.833,
+          "owned_live_processes": 2,
+          "rss_bytes": 194433024,
+          "summed_live_process_hwm_bytes": 194433024,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.884,
+          "owned_live_processes": 2,
+          "rss_bytes": 198299648,
+          "summed_live_process_hwm_bytes": 198299648,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.935,
+          "owned_live_processes": 2,
+          "rss_bytes": 201482240,
+          "summed_live_process_hwm_bytes": 201482240,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 1.987,
+          "owned_live_processes": 2,
+          "rss_bytes": 205332480,
+          "summed_live_process_hwm_bytes": 205332480,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 2.038,
+          "owned_live_processes": 2,
+          "rss_bytes": 212144128,
+          "summed_live_process_hwm_bytes": 212144128,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 2.089,
+          "owned_live_processes": 2,
+          "rss_bytes": 215236608,
+          "summed_live_process_hwm_bytes": 215236608,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 2.141,
+          "owned_live_processes": 2,
+          "rss_bytes": 216928256,
+          "summed_live_process_hwm_bytes": 216928256,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 2.193,
+          "owned_live_processes": 2,
+          "rss_bytes": 223821824,
+          "summed_live_process_hwm_bytes": 223821824,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 2.244,
+          "owned_live_processes": 2,
+          "rss_bytes": 234635264,
+          "summed_live_process_hwm_bytes": 234635264,
+          "file_bytes": 238989
+        },
+        {
+          "elapsed_s": 2.296,
+          "owned_live_processes": 2,
+          "rss_bytes": 226643968,
+          "summed_live_process_hwm_bytes": 242126848,
+          "file_bytes": 271757
+        },
+        {
+          "elapsed_s": 2.347,
+          "owned_live_processes": 2,
+          "rss_bytes": 229224448,
+          "summed_live_process_hwm_bytes": 242126848,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 2.401,
+          "owned_live_processes": 2,
+          "rss_bytes": 229224448,
+          "summed_live_process_hwm_bytes": 242126848,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 2.453,
+          "owned_live_processes": 2,
+          "rss_bytes": 229232640,
+          "summed_live_process_hwm_bytes": 242126848,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 2.504,
+          "owned_live_processes": 2,
+          "rss_bytes": 229236736,
+          "summed_live_process_hwm_bytes": 242126848,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 2.557,
+          "owned_live_processes": 2,
+          "rss_bytes": 229265408,
+          "summed_live_process_hwm_bytes": 242126848,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 2.608,
+          "owned_live_processes": 1,
+          "rss_bytes": 131457024,
+          "summed_live_process_hwm_bytes": 131457024,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 2.663,
+          "owned_live_processes": 1,
+          "rss_bytes": 131457024,
+          "summed_live_process_hwm_bytes": 131457024,
+          "file_bytes": 261999
+        },
+        {
+          "elapsed_s": 2.714,
+          "owned_live_processes": 1,
+          "rss_bytes": 131792896,
+          "summed_live_process_hwm_bytes": 131792896,
+          "file_bytes": 257275
+        },
+        {
+          "elapsed_s": 2.765,
+          "owned_live_processes": 1,
+          "rss_bytes": 134873088,
+          "summed_live_process_hwm_bytes": 134873088,
+          "file_bytes": 257275
+        },
+        {
+          "elapsed_s": 2.818,
+          "owned_live_processes": 2,
+          "rss_bytes": 147152896,
+          "summed_live_process_hwm_bytes": 147152896,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 2.869,
+          "owned_live_processes": 2,
+          "rss_bytes": 157458432,
+          "summed_live_process_hwm_bytes": 157458432,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 2.921,
+          "owned_live_processes": 2,
+          "rss_bytes": 163237888,
+          "summed_live_process_hwm_bytes": 163237888,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 2.975,
+          "owned_live_processes": 2,
+          "rss_bytes": 166551552,
+          "summed_live_process_hwm_bytes": 166551552,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.027,
+          "owned_live_processes": 2,
+          "rss_bytes": 170213376,
+          "summed_live_process_hwm_bytes": 170213376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.078,
+          "owned_live_processes": 2,
+          "rss_bytes": 181161984,
+          "summed_live_process_hwm_bytes": 181161984,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.129,
+          "owned_live_processes": 2,
+          "rss_bytes": 187256832,
+          "summed_live_process_hwm_bytes": 187256832,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.184,
+          "owned_live_processes": 2,
+          "rss_bytes": 198922240,
+          "summed_live_process_hwm_bytes": 198922240,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.235,
+          "owned_live_processes": 2,
+          "rss_bytes": 204943360,
+          "summed_live_process_hwm_bytes": 204943360,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.287,
+          "owned_live_processes": 2,
+          "rss_bytes": 208359424,
+          "summed_live_process_hwm_bytes": 208359424,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.338,
+          "owned_live_processes": 2,
+          "rss_bytes": 215482368,
+          "summed_live_process_hwm_bytes": 215482368,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.389,
+          "owned_live_processes": 2,
+          "rss_bytes": 219897856,
+          "summed_live_process_hwm_bytes": 219897856,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.444,
+          "owned_live_processes": 2,
+          "rss_bytes": 222072832,
+          "summed_live_process_hwm_bytes": 222072832,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.511,
+          "owned_live_processes": 2,
+          "rss_bytes": 228192256,
+          "summed_live_process_hwm_bytes": 228192256,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.563,
+          "owned_live_processes": 2,
+          "rss_bytes": 246681600,
+          "summed_live_process_hwm_bytes": 246681600,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.614,
+          "owned_live_processes": 2,
+          "rss_bytes": 231739392,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.665,
+          "owned_live_processes": 2,
+          "rss_bytes": 231739392,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.72,
+          "owned_live_processes": 2,
+          "rss_bytes": 233201664,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.771,
+          "owned_live_processes": 2,
+          "rss_bytes": 235241472,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.822,
+          "owned_live_processes": 2,
+          "rss_bytes": 235683840,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.874,
+          "owned_live_processes": 2,
+          "rss_bytes": 235732992,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.926,
+          "owned_live_processes": 2,
+          "rss_bytes": 235806720,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 3.977,
+          "owned_live_processes": 2,
+          "rss_bytes": 235839488,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 4.029,
+          "owned_live_processes": 2,
+          "rss_bytes": 235905024,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 259310
+        },
+        {
+          "elapsed_s": 4.08,
+          "owned_live_processes": 2,
+          "rss_bytes": 236294144,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 307119
+        },
+        {
+          "elapsed_s": 4.131,
+          "owned_live_processes": 2,
+          "rss_bytes": 236294144,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 307119
+        },
+        {
+          "elapsed_s": 4.183,
+          "owned_live_processes": 2,
+          "rss_bytes": 236302336,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 307119
+        },
+        {
+          "elapsed_s": 4.235,
+          "owned_live_processes": 2,
+          "rss_bytes": 236306432,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 307119
+        },
+        {
+          "elapsed_s": 4.286,
+          "owned_live_processes": 2,
+          "rss_bytes": 236322816,
+          "summed_live_process_hwm_bytes": 246501376,
+          "file_bytes": 307119
+        },
+        {
+          "elapsed_s": 4.337,
+          "owned_live_processes": 1,
+          "rss_bytes": 135725056,
+          "summed_live_process_hwm_bytes": 135725056,
+          "file_bytes": 307119
+        },
+        {
+          "elapsed_s": 4.389,
+          "owned_live_processes": 1,
+          "rss_bytes": 135725056,
+          "summed_live_process_hwm_bytes": 135725056,
+          "file_bytes": 307119
+        },
+        {
+          "elapsed_s": 4.44,
+          "owned_live_processes": 1,
+          "rss_bytes": 135794688,
+          "summed_live_process_hwm_bytes": 135794688,
+          "file_bytes": 314200
+        },
+        {
+          "elapsed_s": 4.491,
+          "owned_live_processes": 1,
+          "rss_bytes": 135798784,
+          "summed_live_process_hwm_bytes": 135798784,
+          "file_bytes": 314468
+        },
+        {
+          "elapsed_s": 4.543,
+          "owned_live_processes": 1,
+          "rss_bytes": 135802880,
+          "summed_live_process_hwm_bytes": 135802880,
+          "file_bytes": 314468
+        },
+        {
+          "elapsed_s": 4.594,
+          "owned_live_processes": 1,
+          "rss_bytes": 135835648,
+          "summed_live_process_hwm_bytes": 135835648,
+          "file_bytes": 314468
+        },
+        {
+          "elapsed_s": 4.646,
+          "owned_live_processes": 1,
+          "rss_bytes": 135847936,
+          "summed_live_process_hwm_bytes": 135847936,
+          "file_bytes": 314468
+        }
+      ],
+      "processes_started": 1,
+      "disposable_directory_removed": true,
+      "qualification": "Bounded local synthetic smoke; not 24-hour endurance, production SLO, or aircraft acceptance",
+      "monitoring": "50ms sampled owned child-tree RSS and file-byte stop thresholds, not hard quotas; summed live process HWM is not simultaneous tree high-water memory",
+      "process_wait_timeout_s": 3,
+      "descendant_exit_observation_s": 0.5,
+      "process_wait_retry_timeout_s": 0.5,
+      "ledger_cleanup_deadline_s": 5,
+      "not_verified": [
+        "hosted network/provider",
+        "24-hour soak",
+        "PostgreSQL",
+        "real aircraft sources",
+        "viewer access denial, session revocation and logout",
+        "sampling gaps and short-lived descendants",
+        "physical resource quotas"
+      ]
+    },
+    "storage": {
+      "requests": 0,
+      "completed_journeys": 0,
+      "failures": 0,
+      "request_observations": [],
+      "stop_reason": "storage_observation_budget",
+      "child_exit_code": -9,
+      "process_cleanup_error": null,
+      "owned_process_survivors_after_kill": 0,
+      "accepted_jobs": 0,
+      "states_before_cleanup": {},
+      "states_after_cleanup": {},
+      "cancelled_unfinished": 0,
+      "stale_completion_checks": 0,
+      "cleanup_error": null,
+      "accepted_jobs_source": "actual durable ledger rows, not HTTP response count",
+      "cleanup_elapsed_s": 0.055,
+      "schema_version": 1,
+      "fixture": "analytic V4 synthetic hosted SQLite TestClient + real worker",
+      "budgets": {
+        "seconds": 30.0,
+        "requests": 100,
+        "journeys": 2,
+        "storage_bytes": 1,
+        "memory_bytes": 1073741824
+      },
+      "elapsed_s": 0.977,
+      "samples": [
+        {
+          "elapsed_s": 0.003,
+          "owned_live_processes": 1,
+          "rss_bytes": 1626112,
+          "summed_live_process_hwm_bytes": 1626112,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.054,
+          "owned_live_processes": 1,
+          "rss_bytes": 19578880,
+          "summed_live_process_hwm_bytes": 19578880,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.106,
+          "owned_live_processes": 1,
+          "rss_bytes": 26324992,
+          "summed_live_process_hwm_bytes": 26324992,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.156,
+          "owned_live_processes": 1,
+          "rss_bytes": 30879744,
+          "summed_live_process_hwm_bytes": 30879744,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.207,
+          "owned_live_processes": 1,
+          "rss_bytes": 32636928,
+          "summed_live_process_hwm_bytes": 32636928,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.258,
+          "owned_live_processes": 1,
+          "rss_bytes": 36077568,
+          "summed_live_process_hwm_bytes": 36077568,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.311,
+          "owned_live_processes": 1,
+          "rss_bytes": 45400064,
+          "summed_live_process_hwm_bytes": 45400064,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.367,
+          "owned_live_processes": 1,
+          "rss_bytes": 52183040,
+          "summed_live_process_hwm_bytes": 52183040,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.418,
+          "owned_live_processes": 1,
+          "rss_bytes": 60710912,
+          "summed_live_process_hwm_bytes": 60710912,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.471,
+          "owned_live_processes": 1,
+          "rss_bytes": 67469312,
+          "summed_live_process_hwm_bytes": 67469312,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.528,
+          "owned_live_processes": 1,
+          "rss_bytes": 73363456,
+          "summed_live_process_hwm_bytes": 73363456,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.579,
+          "owned_live_processes": 1,
+          "rss_bytes": 74420224,
+          "summed_live_process_hwm_bytes": 74420224,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.631,
+          "owned_live_processes": 1,
+          "rss_bytes": 77750272,
+          "summed_live_process_hwm_bytes": 77750272,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.682,
+          "owned_live_processes": 1,
+          "rss_bytes": 79495168,
+          "summed_live_process_hwm_bytes": 79495168,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.765,
+          "owned_live_processes": 1,
+          "rss_bytes": 89055232,
+          "summed_live_process_hwm_bytes": 89055232,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.82,
+          "owned_live_processes": 1,
+          "rss_bytes": 90869760,
+          "summed_live_process_hwm_bytes": 90869760,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.871,
+          "owned_live_processes": 1,
+          "rss_bytes": 91271168,
+          "summed_live_process_hwm_bytes": 91271168,
+          "file_bytes": 0
+        },
+        {
+          "elapsed_s": 0.922,
+          "owned_live_processes": 1,
+          "rss_bytes": 109752320,
+          "summed_live_process_hwm_bytes": 109752320,
+          "file_bytes": 212992
+        }
+      ],
+      "processes_started": 1,
+      "disposable_directory_removed": true,
+      "qualification": "Bounded local synthetic smoke; not 24-hour endurance, production SLO, or aircraft acceptance",
+      "monitoring": "50ms sampled owned child-tree RSS and file-byte stop thresholds, not hard quotas; summed live process HWM is not simultaneous tree high-water memory",
+      "process_wait_timeout_s": 3,
+      "descendant_exit_observation_s": 0.5,
+      "process_wait_retry_timeout_s": 0.5,
+      "ledger_cleanup_deadline_s": 5,
+      "not_verified": [
+        "hosted network/provider",
+        "24-hour soak",
+        "PostgreSQL",
+        "real aircraft sources",
+        "viewer access denial, session revocation and logout",
+        "sampling gaps and short-lived descendants",
+        "physical resource quotas"
+      ]
+    }
+  },
+  "qualification": "Guarded local synthetic SQLite/TestClient study and PDF smoke plus forced duration, storage, memory and SIGINT stops. Sampled stop thresholds, not hard quotas. No24-hour soak, PostgreSQL/provider/network, aircraft qualification or cross-family physics acceptance."
+}

@@ -20,6 +20,17 @@ jobs:
       - run: ../.venv/bin/python -m pytest -q
         working-directory: reference_impl
       - run: .venv/bin/python scripts/qa/platform_smoke.py
+      - name: Bounded roadmap harness journeys
+        run: |
+          .venv/bin/python scripts/qa/disk_pressure_drill.py --receipt .backend/roadmap-qa/disk-pressure.json
+          .venv/bin/python scripts/qa/intake_readiness.py --input tests/fixtures/intake_readiness/complete.json --output .backend/roadmap-qa/intake-complete.json
+          .venv/bin/python scripts/qa/bounded_soak.py --seconds 30 --requests 32 --journeys 1 --storage-bytes 67108864 --memory-bytes 1073741824 --receipt .backend/roadmap-qa/soak.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bounded-roadmap-evidence
+          path: .backend/roadmap-qa
+          retention-days: 14
       - run: .venv/bin/python scripts/qa/worker_failure_drill.py --receipt .backend/worker-failure.json
       - run: |
           .venv/bin/python scripts/qa/platform_services.py start
