@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
 <title>PhysiCore | Design workbench</title>
-<link rel="stylesheet" href="/web/css/workbench.css">
+<link rel="stylesheet" href="/web/css/workbench.css?v=public-3">
 <script type="importmap">{"imports":{"three":"/web/vendor/three.module.min.js"}}</script>
-<script type="module" src="/web/js/workbench.js"></script>
+<script type="module" src="/web/js/workbench.js?v=public-4"></script>
 </head>
 <body>
 <header><a class="brand" href="/web/">PhysiCore</a><span>Local design workbench</span><a href="/web/results.html">Evidence desk</a></header>
@@ -13,7 +14,11 @@
 <h1>Keep the design with the decision.</h1>
 <p class="intro">Save inputs, retain revisions and inspect what is still missing. Local revision freezing does not approve an aircraft.</p>
 <noscript><p>Enable JavaScript to edit and save a project. Your saved data stays on the local server.</p></noscript>
-<form id="connection" class="connection"><label>Local API token<input id="token" type="password" required autocomplete="off"></label><button type="submit" disabled>Connect</button></form>
+<div id="local-session" class="session-panel" hidden>
+<form id="connection" class="connection" hidden><label>Workspace access token<input id="token" type="password" required autocomplete="off"></label><button type="submit" disabled>Connect</button></form>
+<button id="disconnect" type="button" hidden>Forget this browser</button>
+<p id="session-status" role="status">Opening workspace…</p>
+</div>
 <form id="individual-login" class="connection" hidden><label>Email<input id="login-email" type="email" autocomplete="username" required></label><label>Password<input id="login-password" type="password" autocomplete="current-password" required></label><button type="submit">Sign in</button></form>
 <div id="individual-session" hidden><label>Organization<select id="organization"></select></label><button id="logout" type="button">Sign out</button></div>
 <form id="accept-invitation" hidden><label>Invitation code<input id="invitation-code" type="password" autocomplete="off" required></label><button type="submit">Accept invitation</button></form>
@@ -37,6 +42,23 @@
 <section class="editor" aria-labelledby="design-title">
 <h2 id="design-title">Open a project to begin.</h2>
 <p id="save-state">Missing physical inputs stay unknown.</p>
+<section id="project-geometry" aria-labelledby="geometry-title">
+<h3 id="geometry-title">Aircraft geometry</h3>
+<p>Attach original STL files to this project and declare their source units. Replacing or removing geometry changes the draft; frozen revisions keep their files.</p>
+<form id="geometry-form">
+<div class="geometry-fields">
+<label for="geometry-files">STL files<input id="geometry-files" type="file" accept=".stl,model/stl" multiple required disabled aria-describedby="geometry-help"></label>
+<label for="geometry-units">Source units<select id="geometry-units" required disabled><option value="">Choose units</option><option value="m">Metres</option><option value="mm">Millimetres</option><option value="cm">Centimetres</option><option value="in">Inches</option><option value="ft">Feet</option></select></label>
+</div>
+<p id="geometry-help">One unit declaration applies to all selected files. Up to 50 MB and 1,000,000 triangles in total.</p>
+<button id="geometry-upload" type="submit" disabled>Upload and preview</button>
+</form>
+<p id="geometry-status" role="status" aria-live="polite">Create or open a project to attach geometry.</p>
+<div class="geometry-preview"><div id="geometry-view"></div><p id="geometry-empty">No STL attached.</p></div>
+<p class="geometry-caption">Preview uses metres. Drag to orbit; scroll or pinch to zoom. Geometry roles and aircraft readiness remain separate inputs.</p>
+<div class="geometry-tools"><button id="geometry-reset" type="button" disabled>Reset geometry view</button><button id="geometry-remove" type="button" disabled>Remove draft geometry</button><button id="geometry-save" type="button" disabled>Save draft</button></div>
+<div id="geometry-record"></div>
+</section>
 <section aria-labelledby="layout-title"><h3 id="layout-title">Airframe, rotors and governing case</h3><div id="layout-view"><p>No rotor positions loaded.</p></div><p id="layout-note">Centres, axes and radii from the input. Drag to orbit when a layout is available.</p><button id="reset-layout" type="button" disabled>Reset layout view</button></section>
 <div id="input-editors"></div>
 <details><summary>Design input JSON</summary><label for="snapshot">Complete versioned snapshot</label><textarea id="snapshot" spellcheck="false" disabled rows="18"></textarea></details>

@@ -11,7 +11,8 @@ from physimesh.drone import models
 from physimesh.drone.snapshot_hash import snapshot_sha256
 
 from .contracts import DesignRevisionV1, Reason, parse_snapshot, snapshot_json
-from .repository import DraftConflict, ProjectRepository
+from .geometry import geometry_report, source_bytes
+from .repository import DraftConflict, ProjectMissing, ProjectRepository
 from .sqlite import canonical_snapshot, utc_now
 
 
@@ -27,7 +28,22 @@ class ProjectService:
         return self.repository.create(title, snapshot_json(snapshot))
 
     def save(self, project_id: str, expected_version: int, raw: str) -> dict:
-        return self.repository.save(project_id, expected_version, canonical_snapshot(raw))
+        canonical = canonical_snapshot(raw)
+        geometry_report(self.artifacts, parse_snapshot(canonical), verify_sources=True)
+        return self.repository.save(project_id, expected_version, canonical)
+
+    def geometry(self, project_id: str, revision_sha256: str | None = None) -> dict | None:
+        if revision_sha256:
+            raw = self.repository.revision(project_id, revision_sha256).snapshot_json
+        else:
+            raw = self.repository.get(project_id)['snapshot_json']
+        return geometry_report(self.artifacts, parse_snapshot(raw))
+
+    def geometry_source(self, project_id: str, digest: str, revision_sha256: str | None = None) -> bytes:
+        report = self.geometry(project_id, revision_sha256)
+        if report is None or digest not in {component['source_sha256'] for component in report['components']}:
+            raise ProjectMissing('STL is not attached to this project or revision')
+        return source_bytes(self.artifacts, digest)
 
     def freeze(self, project_id: str, expected_version: int, purpose: str, *,
                organization_id='local', author_identity_id='local_operator') -> dict:
@@ -35,6 +51,7 @@ class ProjectService:
         if project['draft_version'] != expected_version:
             raise DraftConflict(project['draft_version'])
         snapshot = parse_snapshot(project['snapshot_json'])
+        geometry_report(self.artifacts, snapshot, verify_sources=True)
         from .performance import load_map, performance_refs
         for digest in performance_refs(snapshot):
             try:

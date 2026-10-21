@@ -33,6 +33,11 @@ Backend tests need Docker and a confirmed, immutable OpenFOAM image pin.
 No CFD capability or aircraft feasibility is established by unit tests. Missing
 design inputs remain unknown and block dependent work. [M§2, M§26, M§27]
 
+The [14 October repo audit and next-milestone plan](docs/plans/2026-10-14-next-development-plan.md)
+proposes measured-map qualification first, then scenarios and allowable limits,
+assembly-linked evidence and a reviewed real-aircraft pilot. It updates the
+sequence in the earlier work orders while retaining their release requirements.
+
 Continue with the task dependencies and release gates in [plan.md](plan.md). The
 [4 October implementation work order](docs/plans/2026-10-04-implementation-plan.md)
 details saved projects, authoring, rotor maps, trim, capacity, energy and hosted delivery.
@@ -58,6 +63,11 @@ Open [the workbench](http://127.0.0.1:8768/web/workbench.html) through the HTTP
 server, connect with that token, and create the labelled hover example. Save,
 inspect, freeze and evaluate it; change a design input and retain a second study
 for comparison. Opening the HTML with `file://` cannot provide the project API.
+
+For a workspace anyone can use, set `PHYSIMESH_PUBLIC_ACCESS=1` before starting
+the server. This mode needs no API token or remembered browser access. Anyone
+with the server or tunnel link can open and edit projects, upload STL geometry
+and save drafts. Both the workbench and evidence desk open without sign-in.
 
 Keep the data directory to retain projects, revisions, maps and results across
 restarts. The tracked `.gitignore` excludes `.backend/` from normal Git staging;
@@ -143,7 +153,9 @@ export PHYSIMESH_API_TOKEN
 
 The token prompt uses zsh. In bash use `read -s -p 'Choose a local session token: ' PHYSIMESH_API_TOKEN`.
 Open [the local evidence desk](http://127.0.0.1:8766/web/results.html) and enter
-that token. No browser storage is used for credentials. The sphere solve took
+that token once. An HttpOnly cookie remembers browser access for 30 days across
+refreshes and both desks; use **Forget this browser** to revoke it. The workspace
+token is never retained in localStorage or sessionStorage. The sphere solve took
 about 16 minutes across three meshes on the audited local machine; timings vary.
 Rerunning the commands reuses completed runs only after checking generated input
 and retained output hashes, regenerates plots, and checks immutable package bytes.

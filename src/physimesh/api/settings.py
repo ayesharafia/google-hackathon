@@ -9,7 +9,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Settings:
-    """Server paths, token, immutable image reference, and bind host; no physical units."""
+    """Server paths, access mode, immutable image reference, and bind host."""
 
     data_root: pathlib.Path
     db_path: pathlib.Path
@@ -18,6 +18,7 @@ class Settings:
     bind_host: str = "127.0.0.1"  # Private development binding [plan Task 1.5].
     max_upload_bytes: int = 50_000_000
     max_triangles: int = 1_000_000
+    public_access: bool = False
     hosted_mode: bool = False
     database_url: str | None = None
     pool_size: int = 8
@@ -31,7 +32,12 @@ class Settings:
     monitoring_token: str | None = None
 
     def __post_init__(self) -> None:
-        if not self.hosted_mode and (not isinstance(self.api_token, str) or not self.api_token.strip()):
+        if not isinstance(self.public_access, bool):
+            raise ValueError("public_access must be a boolean")
+        if self.hosted_mode and self.public_access:
+            raise ValueError("public access is available only in local mode")
+        if not self.hosted_mode and not self.public_access and (
+                not isinstance(self.api_token, str) or not self.api_token.strip()):
             raise ValueError("PHYSIMESH_API_TOKEN is required")
         if (self.openfoam_image_digest is not None
                 and re.fullmatch(r"[^\s@]+@sha256:[0-9a-f]{64}", self.openfoam_image_digest) is None):
@@ -62,8 +68,14 @@ def load_settings(env: Mapping[str, str]) -> Settings:
     mode = env.get('PHYSIMESH_MODE', 'local')
     if mode not in ('local', 'hosted'):
         raise ValueError('PHYSIMESH_MODE must be local or hosted')
-    token = env.get("PHYSIMESH_API_TOKEN", '')
-    if not token and mode == 'local':
+    public_flag = env.get('PHYSIMESH_PUBLIC_ACCESS', '0')
+    if public_flag not in ('0', '1'):
+        raise ValueError('PHYSIMESH_PUBLIC_ACCESS must be 0 or 1')
+    public_access = public_flag == '1'
+    if mode == 'hosted' and public_access:
+        raise ValueError('PHYSIMESH_PUBLIC_ACCESS is available only in local mode')
+    token = '' if public_access else env.get("PHYSIMESH_API_TOKEN", '')
+    if not token and mode == 'local' and not public_access:
         raise ValueError("PHYSIMESH_API_TOKEN is required; refusing unauthenticated startup")
     root = env.get("PHYSIMESH_DATA_ROOT")
     if not root:
@@ -77,6 +89,7 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         env.get("PHYSIMESH_BIND_HOST", "127.0.0.1"),
         int(env.get("PHYSIMESH_MAX_UPLOAD_BYTES", "50000000")),
         int(env.get("PHYSIMESH_MAX_TRIANGLES", "1000000")),
+        public_access=public_access,
         hosted_mode=mode == 'hosted', database_url=env.get('PHYSIMESH_DATABASE_URL'),
         pool_size=int(env.get('PHYSIMESH_POOL_SIZE', '8')), s3_bucket=env.get('PHYSIMESH_S3_BUCKET'),
         s3_endpoint=env.get('PHYSIMESH_S3_ENDPOINT'), s3_region=env.get('PHYSIMESH_S3_REGION'),

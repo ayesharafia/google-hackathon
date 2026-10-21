@@ -169,6 +169,18 @@ def inspection(request: Request, project_id: str):
     return operation(inspect)
 
 
+@router.get('/{project_id}/geometry')
+def geometry(request: Request, project_id: str, revision_sha256: str | None = None):
+    return {'report': operation(lambda: request.app.state.projects.geometry(project_id, revision_sha256))}
+
+
+@router.get('/{project_id}/geometry/{digest}.stl')
+def geometry_source(request: Request, project_id: str, digest: str, revision_sha256: str | None = None):
+    raw = operation(lambda: request.app.state.projects.geometry_source(project_id, digest, revision_sha256))
+    return Response(raw, media_type='model/stl', headers={
+        'Cache-Control': 'private, no-store', 'X-Content-SHA256': digest})
+
+
 @router.put('/{project_id}/draft')
 def save(request: Request, project_id: str, body: SaveDraft):
     record = operation(lambda: request.app.state.projects.save(project_id, body.expected_version, body.snapshot_json))
