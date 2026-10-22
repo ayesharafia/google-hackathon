@@ -1,4 +1,5 @@
 /* Native draft authoring; blank numeric fields preserve unknowns. */
+import {mountSourceLibrary} from './source-library.js?v=tabular-1';
 import {mountAdvanced} from './advanced-editors.js';
 import {renderSourceBinding} from './rotor-source-binding.js?v=source-binding-1';
 const node=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
@@ -63,6 +64,7 @@ export function mountEditors(container,read,write,inspect,importMap,options={}){
     read,enabled:()=>!file.disabled&&file.isConnected,
     apply:(next,count)=>{data=next;rebuild();options.onMapBound?.(count);container.querySelector('[data-readiness-group=rotors]>summary')?.focus();}
   });}catch(error){if(request===importGeneration&&file.isConnected)importResult.textContent=error.message;}finally{if(request===importGeneration)file.value='';}});rotors.append(upload,importResult);
+  mountSourceLibrary(rotors,{...options,read,apply:(next,count)=>{data=next;rebuild();options.onMapBound?.(count);container.querySelector('[data-readiness-group=rotors]>summary')?.focus();}});
   (data.rotors||[]).forEach((r,index)=>{const row=node('fieldset');row.append(node('legend','Rotor '+(index+1)));
     [['Rotor ID','rotor_id'],['Configuration ID','configuration_id'],['Retained map SHA-256','map_ref']].forEach(([label,key])=>row.append(field(label,r[key],v=>{r[key]=v;changed();},'text')));
     triple(row,'Centre, m',r,'center_body_m',changed);triple(row,'Unit axis',r,'axis_body',changed);

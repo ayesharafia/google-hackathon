@@ -341,6 +341,35 @@
         "M .physicore/ops/APPROVALS.md"
       ],
       "finished_at": "2026-10-22T15:57:26+00:00"
+    },
+    {
+      "id": "IMPORT-001",
+      "title": "Import tabular rotor measurements into an authorized reusable library",
+      "done_when": "Bounded CSV/XLSX mapping and explicit units; preview errors; immutable raw/map/manifest; permission-safe catalog reuse; actual unit/API/browser checks pass; model/tolerances unchanged",
+      "kind": "implementation",
+      "priority": 5,
+      "status": "done",
+      "zone": "green",
+      "depends_on": [],
+      "source_refs": [
+        "docs/superpowers/specs/2026-10-22-tabular-component-library-design.md"
+      ],
+      "evidence": [
+        ".physicore/evidence/IMPORT-001-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Approved importer/library implemented and verified locally: 187 Python checks, 35 Node tests, 44 browser checks and package/lint/static checks pass; optional S3/provider/native-zoom and physical qualification remain open. Original shared server/tunnel and all branches preserved.",
+      "started_at": "2026-10-22T18:00:50+00:00",
+      "started_head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+      "started_dirty": [
+        " M .physicore/ops/RESEARCH_LOG.md",
+        " M .physicore/ops/STATE.md",
+        " M .physicore/ops/TASKS.json",
+        " M .physicore/ops/WORKLOG.md",
+        "?? docs/superpowers/specs/2026-10-22-tabular-component-library-design.md",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "finished_at": "2026-10-22T18:29:41+00:00"
     }
   ]
 }

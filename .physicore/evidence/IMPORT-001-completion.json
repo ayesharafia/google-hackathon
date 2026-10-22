@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "kind": "completion",
+  "id": "IMPORT-001",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "captured_at": "2026-10-22T18:29:41+00:00",
+  "baseline_head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "current_head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "changes": [
+    "DECISIONS.md",
+    "README.md",
+    "docs/qa/assets/tabular-library/browser-checks.json",
+    "docs/qa/assets/tabular-library/desktop.png",
+    "docs/qa/assets/tabular-library/mobile-mapping-detail.png",
+    "docs/qa/assets/tabular-library/mobile.png",
+    "docs/qa/assets/tabular-library/zoom-200-css.png",
+    "docs/qa/assets/tabular-library/zoom-mapping-detail.png",
+    "docs/qa/tabular-library-2026-10-22.md",
+    "docs/technical/tabular-rotor-library.md",
+    "plan.md",
+    "pyproject.toml",
+    "requirements-platform.lock",
+    "requirements-runtime.lock",
+    "requirements-test.lock",
+    "requirements.lock",
+    "scripts/qa/source_library_viewer_browser.mjs",
+    "scripts/qa/tabular_library_browser.mjs",
+    "scripts/qa/verify_tabular_package.py",
+    "src/physimesh/api/app.py",
+    "src/physimesh/api/source_library.py",
+    "src/physimesh/projects/source_library.py",
+    "src/physimesh/projects/tabular.py",
+    "tests/projects/test_source_library.py",
+    "tests/projects/test_tabular_import.py",
+    "web/css/workbench.css",
+    "web/js/input-editors.js",
+    "web/js/source-library.js",
+    "web/js/workbench.js",
+    "web/workbench.html"
+  ],
+  "tests": [
+    {
+      "file": ".physicore/evidence/IMPORT-001-test-20261022181719481660.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/projects",
+        "tests/platform",
+        "-m",
+        "not integration",
+        "--ignore=tests/platform/test_storage_identity.py"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/IMPORT-001-test-20261022181121083142.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--test",
+        "tests/web/test_engineering_readiness.mjs",
+        "tests/web/test_rotor_source_binding.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/IMPORT-001-test-20261022182337202648.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/tabular_library_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/IMPORT-001-test-20261022182107905315.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/source_library_viewer_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/IMPORT-001-test-20261022181908112189.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/engineering_readiness_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/IMPORT-001-test-20261022182216417889.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/rotor_source_binding_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/IMPORT-001-test-20261022182854093644.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "scripts/qa/verify_tabular_package.py"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/IMPORT-001-test-20261022182813257956.json",
+      "exit_code": 0,
+      "argv": [
+        "ruff",
+        "check",
+        "."
+      ]
+    }
+  ],
+  "audit_files": [],
+  "summary": "Delivered approved CSV/XLSX literal rotor import, explicit mapping/units/declarations, preview diagnostics and immutable raw/map/manifest; persistent project-owned library, permission-safe same-org reuse, viewer inspection/download and guarded explicit rotor binding. 187 Python checks (optional S3 excluded; 3 integration cases deselected), 35 Node tests and 44 Chrome checks pass, plus wheel/hash-required parser install and lint/static review. Interface law and limitations documented in docs/qa/tabular-library-2026-10-22.md. No model/tolerance, access-mode or original shared-server change; no scientific acceptance."
+}

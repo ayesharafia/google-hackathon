@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/tabular_library_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-22T18:11:31+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nlocator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.tabular-library').getByLabel('RPM column', { exact: true }).locator('option[value=\"1\"]')\u001b[22m\n\n    at /Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/scripts/qa/tabular_library_browser.mjs:29:347 {\n  log: [\n    `  - waiting for locator('.tabular-library').getByLabel('RPM column', { exact: true }).locator('option[value=\"1\"]')`\n  ],\n  name: 'TimeoutError'\n}\n\nNode.js v26.0.0\n"
+}

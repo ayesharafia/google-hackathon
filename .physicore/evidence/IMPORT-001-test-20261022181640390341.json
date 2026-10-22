@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "scripts/qa/verify_tabular_package.py"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T18:16:40+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "{\n  \"wheel_sha256\": \"a14bd1287cb225fc6a049da17d1ebe1df8638689b4b4a1bf96ed17965df8a856\",\n  \"source_assets_verified\": 8,\n  \"hash_verified_fresh_install\": \"{'openpyxl': '3.1.5', 'defusedxml': '0.7.1', 'et-xmlfile': '2.0.0'}\",\n  \"limits\": \"Wheel bytes/metadata and new parser install only; full image/provider integration not run.\"\n}\n\n"
+}

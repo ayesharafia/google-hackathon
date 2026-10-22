@@ -14,8 +14,10 @@ engineering intake-to-review journey. The owner approved Engineering Readiness
 as the first bounded increment. It surfaces actionable saved-input checks while
 keeping source qualification and scientific acceptance separate. Guided retained
 source binding is now implemented with explicit matching selections and stale
-refusal, under separate owner approval. Broader CSV contracts and
-real-design pilot/hosting qualification need their own concrete designs/gates.
+refusal, under separate owner approval. CSV/modern-XLSX rotor import and a
+permission-preserving retained-source library are now implemented and checked
+locally under a separately approved design. Requirement/variant comparisons and
+a real-design pilot/hosting qualification remain the next proposed milestones.
 This direction is a product hypothesis, not validated customer demand.
 **14-day stretch objective:** An honestly scoped, reproducible demonstrator with understandable inputs, outputs, limitations and numerical evidence. This is not a claim of certification, airworthiness, or commercially validated accuracy.
 

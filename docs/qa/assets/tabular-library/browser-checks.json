@@ -1,0 +1,20 @@
+{
+  "kind": "synthetic_tabular_library_acceptance",
+  "passed": 12,
+  "checks": [
+    "Malformed measurement is identified by physical source row and blocks saving",
+    "Explicit CSV mapping and gf/Ncm/kW conversion preview do not modify the draft",
+    "Editing declarations invalidates preview; saving retains source without selecting or binding rotors",
+    "Retained original CSV bytes, including CRLF, match exactly",
+    "Explicit binding changes only selected rotor, stales readiness, saves draft and preserves frozen source",
+    "Reload restores draft and searchable catalog; original/manifest download controls produce actual retained files",
+    "A second project can explicitly reuse accessible catalog source without automatic rotor assignment",
+    "Actual XLSX worksheet selection, mapping, conversion and save succeed",
+    "Reading columns again clears the previous accepted preview",
+    "A delayed preview cannot revive an accepted conversion after settings change",
+    "Desktop, phone and CSS 200% layouts contain controls and use named horizontal data-table scrolling",
+    "No page JavaScript errors"
+  ],
+  "page_errors": [],
+  "limits": "Synthetic UI/data conversion only; no aircraft validation or native browser zoom qualification."
+}

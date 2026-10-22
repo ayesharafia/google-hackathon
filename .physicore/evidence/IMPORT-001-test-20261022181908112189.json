@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/engineering_readiness_browser.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T18:19:08+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "{\n  \"passed\": 18,\n  \"checks\": [\n    \"Incomplete saved project shows separate mass, pack and model gaps\",\n    \"Actual synthetic saved design preserves per-case eligibility and unassessed/pending evidence states\",\n    \"All four default editor actions open the correct group and move keyboard focus\",\n    \"Readiness actions work from keyboard\",\n    \"Structured edit clears previous results; saving permits inspection of the new version\",\n    \"Raw JSON edits also invalidate readiness\",\n    \"Late real inspection reply cannot overwrite edits or revive previous passing checks\",\n    \"Synthetic injected diagnostic is inert text; unknown, rotor, model and sequence actions work\",\n    \"Inspection version mismatch withholds results and asks for reload\",\n    \"Network failure clears prior results; retry succeeds\",\n    \"Late inspection for a previous project cannot populate the new project panel\",\n    \"Frozen viewer context remains separate from saved-draft readiness\",\n    \"Separate supplied-point screening details expand and collapse\",\n    \"390px viewport has no document horizontal overflow and all five checks remain visible\",\n    \"CSS 200% zoom reflows without document horizontal overflow; native browser zoom not asserted\",\n    \"720 CSS-pixel layout, equivalent to a halved desktop layout viewport, keeps controls and text inside the panel\",\n    \"Reload and saved-project reopen never reuse a prior inspection\",\n    \"No page JavaScript errors\"\n  ],\n  \"evidence\": \"/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/.backend/tabular-readiness-regression\"\n}\n\n"
+}

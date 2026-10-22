@@ -1,5 +1,21 @@
 # Evidence log
 
+## 2026-10-22: IMPORT-001 approved implementation and verification
+
+- Added bounded CSV/XLSX literal measurement reading, explicit mapping/units/declarations, conversion preview/refusal and raw/map/manifest persistence. Reused unchanged RotorMapV1 validation and existing scoped storage/quota boundary. Added independent versioned catalog migration with retry-safe project-owned records and authorized listing/reuse.
+- Added native workbench mapping/preview/catalog controls, original/manifest downloads, explicit binding, settings/draft/context guards, and role-correct read-only inspection/pagination. Actual source bytes and frozen project references survive.
+- Final evidence: 187 Python project/platform checks, 35 Node tests and 44 Chrome checks pass, including a separate hosted viewer fixture. Built wheel byte-checks eight assets; fresh hash-required install verifies three new parser packages. Existing unrelated dependency pins, models, tolerances, source JSON path and branches preserved.
+- Fixed stable select naming and actual enlarged-text column squeeze; rechecked the full interface law and actual desktop/phone/enlarged screenshots. A held multipart browser fixture needed actual XLSX bytes reconstructed; successful held reply now proves stale refusal. Earlier failed records retained.
+- Full platform collection initially failed on absent optional boto3; final broad run explicitly excludes that S3 module and deselects three integration cases. Existing dependency deprecation warning retained. No PostgreSQL/S3/provider/full image/native zoom or physical qualification claimed.
+- User guide and detailed evidence: docs/technical/tabular-rotor-library.md and docs/qa/tabular-library-2026-10-22.md. Current delivery remains local; original shared server/tunnel settings unchanged and no external publication/deployment performed in this increment.
+
+## 2026-10-22: tabular import/library design preparation
+
+- Owner selected the first proposed market milestone. Inspected actual map contract, editor, API middleware, project authorization, immutable storage and metadata migrations. Required shaft torque, fixed conditions and a 64-point map cap are explicit constraints, not fields to invent.
+- Prepared the architectural design with CSV/modern XLSX, explicit units/mapping, row preview/refusal, immutable raw/map/manifest lineage, authorized project-owned library reuse and existing guarded binding. Self-reviewed permissions, provenance and scope.
+- Read official openpyxl documentation on supported workbook parsing, read-only behavior, formula/cached values and defusedxml protection; NIST force-conversion table. Exact parser versions remain to be selected and locked after design review.
+- Design review pending under brainstorming; no app code, dependency, model, database migration, test execution or deployment performed. Prior research edits preserved; previous main publication remains 3710619.
+
 ## 2026-10-22: UI-002 guided source binding and authorized main delivery
 
 - Owner approved the concrete import-preview/explicit-selection design and requested publishing all completed pending work to main. Approval and decision 015 preserve branch retention and exclude deployment/scientific acceptance.
@@ -90,4 +106,17 @@
 ## 2026-10-22T15:57:26+00:00 DONE UI-002
 - Evidence: .physicore/evidence/UI-002-completion.json
 - Notes: Approved explicit retained-source assignment complete; 35 UI unit tests, 26 existing regressions, 28 Chrome checks and static/lint checks pass. Original source bytes/frozen revisions preserved; no scientific acceptance or deployment.
+- Next ready: no new task promoted
+
+## 2026-10-22: IMPORT-001 implementation plan
+
+1. Target: engineer importing authorized CSV/XLSX rotor measurements into reusable project-owned library entries.
+2. Data: explicit RPM/force/torque/power columns and units, fixed test declarations; raw/map/manifest immutable identities.
+3. Boundaries: reuse existing strict map model and scoped artifacts; source read plus target write in one organization; no formula/tolerance changes.
+4. Build: bounded parser and diagnostics, transactional library index and authorized APIs, native workbench mapping/preview/catalog integration.
+5. Acceptance: conversion/abuse/access/persistence tests, actual CSV/XLSX browser journeys, readiness/JSON regressions and complete interface-law review.
+
+## 2026-10-22T18:29:41+00:00 DONE IMPORT-001
+- Evidence: .physicore/evidence/IMPORT-001-completion.json
+- Notes: Approved importer/library implemented and verified locally: 187 Python checks, 35 Node tests, 44 browser checks and package/lint/static checks pass; optional S3/provider/native-zoom and physical qualification remain open. Original shared server/tunnel and all branches preserved.
 - Next ready: no new task promoted

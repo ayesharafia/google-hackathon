@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/projects/test_tabular_import.py"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T18:05:16+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "..............................                                           [100%]\n30 passed in 0.55s\n\n"
+}

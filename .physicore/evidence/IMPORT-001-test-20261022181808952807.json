@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/tabular_library_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-22T18:18:08+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\npage.waitForFunction: Timeout 30000ms exceeded.\n    at /Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/scripts/qa/tabular_library_browser.mjs:44:242 {\n  log: [],\n  name: 'TimeoutError'\n}\n\nNode.js v26.0.0\n"
+}

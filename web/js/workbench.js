@@ -1,4 +1,4 @@
-import {mountEditors} from './input-editors.js?v=source-binding-1';
+import {mountEditors} from './input-editors.js?v=tabular-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
 import {mountGeometry} from './geometry-upload.js?v=geometry-3';
 import {renderStudy,renderComparison} from './study-view.js';
@@ -76,6 +76,8 @@ function controls() {
   $('export-pdf').disabled = !study || busy || !connected;
   ['compare-before','compare-after','compare'].forEach(id=>{$(id).disabled=busy||!connected||!current?.studies?.length;});
   document.querySelectorAll('#input-editors input,#input-editors select,#input-editors button,#input-editors textarea').forEach(input => { input.disabled = readOnly || busy || !current || !connected; });
+  document.querySelectorAll('[data-library-read=true]').forEach(input=>{input.disabled=!connected||busy||!current;});
+  document.querySelectorAll('[data-local-disabled=true]').forEach(input=>{input.disabled=true;});
   document.querySelectorAll('[data-source-compatible=false]').forEach(input=>{input.disabled=true;});
   document.querySelectorAll('[data-source-apply]').forEach(button=>{if(!button.closest('.source-binding')?.querySelector('[data-source-compatible=true]'))button.disabled=true;});
   editControls.forEach(id => { $(id).disabled = !current || (!connected&&id!=='export-draft') || busy || (readOnly&&['snapshot','save','freeze'].includes(id)) || (id === 'freeze' && dirty); });
@@ -189,7 +191,7 @@ function showLayoutInputs(data){
   for(const rotor of data.rotors||[]){const line=document.createElement('p');line.dataset.rotorId=rotor.rotor_id;line.textContent='Rotor '+rotor.rotor_id+' · centre ['+(rotor.center_body_m||[]).join(', ')+'] m · axis ['+(rotor.axis_body||[]).join(', ')+'] · map '+(rotor.map_ref||'Unknown');out.append(line);}
   for(const component of data.assembly?.components||[]){const line=document.createElement('p');line.textContent='Component '+component.component_id+' · source '+component.source_sha256+' · source units '+(component.source_units||'Unknown')+' · translation ['+(component.transform?.translation_m||[]).join(', ')+'] m';out.append(line);}
 }
-async function guardedRequest(work){const request=generation,pid=current?.project_id,raw=$('snapshot').value;const result=await work();if(request!==generation||pid!==current?.project_id||raw!==$('snapshot').value)throw new Error('Inputs changed during import. The source was retained; reopen the import step to bind it to the current draft.');return result;}
+async function guardedRequest(work){const request=generation,pid=current?.project_id,raw=$('snapshot').value;const result=await work();if(request!==generation||pid!==current?.project_id||raw!==$('snapshot').value)throw new Error('Inputs changed during import. Reopen the import step and review the current draft before binding.');return result;}
 async function openProject(pid) {
   geometryCache.clear();++layoutGeneration;
   const request = ++generation;
@@ -202,6 +204,8 @@ function editors() {
   inspectSavedInputs, dataset_json => guardedRequest(()=>api('/projects/performance-sources',payload('POST',{dataset_json}))),{
       conditionMap:(digest,policy)=>guardedRequest(()=>api('/projects/performance-sources/'+digest+'/condition',payload('POST',{policy}))),
       importGeometry:(files,units)=>guardedRequest(()=>{const body=new FormData();body.append('source_units',units);[...files].forEach(file=>body.append('files',file));return api('/import',{method:'POST',body});}),
+      sourceRequest:(path,init)=>guardedRequest(()=>api('/projects/'+current.project_id+'/source-library'+path,init)),
+      sourceDownload:async(id,filename)=>{const c=context();const response=await request('/projects/'+current.project_id+'/source-library/'+id+'/original');const blob=await response.blob();if(!isContext(c))throw new Error('Project changed during download.');const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);},
       onMapBound:count=>message('Retained source applied to '+count+' selected rotor'+(count===1?'':'s')+'. Save the draft, then inspect its inputs again.')
     });
   refreshNavigation();

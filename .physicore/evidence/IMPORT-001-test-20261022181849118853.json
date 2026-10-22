@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/tabular_library_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-22T18:18:49+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "\n{\"completed_checks\":[\"Malformed measurement is identified by physical source row and blocks saving\",\"Explicit CSV mapping and gf/Ncm/kW conversion preview do not modify the draft\",\"Editing declarations invalidates preview; saving retains source without selecting or binding rotors\",\"Retained original CSV bytes, including CRLF, match exactly\",\"Explicit binding changes only selected rotor, stales readiness, saves draft and preserves frozen source\",\"Reload restores draft and searchable catalog; original/manifest download controls produce actual retained files\",\"A second project can explicitly reuse accessible catalog source without automatic rotor assignment\",\"Actual XLSX worksheet selection, mapping, conversion and save succeed\",\"Reading columns again clears the previous accepted preview\"],\"status\":\"Choose a nonempty file no larger than 2 MiB.\",\"page_errors\":[]}\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: The input did not match the regular expression /Import settings changed/. Input:\n\n'Choose a nonempty file no larger than 2 MiB.'\n\n    at file:///Users/bhupeshcholake/Desktop/Claude%20Codes/physicore%20drone/scripts/qa/tabular_library_browser.mjs:44:352 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 'Choose a nonempty file no larger than 2 MiB.',\n  expected: /Import settings changed/,\n  operator: 'match',\n  diff: 'simple'\n}\n\nNode.js v26.0.0\n"
+}

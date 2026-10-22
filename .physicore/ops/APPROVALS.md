@@ -1,5 +1,15 @@
 # Current approvals and pending decisions
 
+## 2026-10-22: tabular source/library concrete design approved
+
+Owner answered “alrigth do it” after the market roadmap recommended CSV/Excel
+source import with unit mapping and a reusable component library first. The
+concrete parser, manifest and project-permission design is recorded in
+docs/superpowers/specs/2026-10-22-tabular-component-library-design.md and is
+approved by the owner with “Proceed with this design”. Approval includes parser
+dependencies, targeted tests and browser checks. No specific new scientific acceptance,
+external data license, access-mode change or deployment is approved.
+
 ## 2026-10-22: guided source binding and main publication
 
 The owner explicitly requested further development and pushing all completed

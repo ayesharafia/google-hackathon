@@ -1,0 +1,177 @@
+{
+  "task": "IMPORT-001",
+  "captured_at": "2026-10-22T18:28:54.566601+00:00",
+  "checks": [
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/source-library.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/input-editors.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/workbench.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "scripts/qa/tabular_library_browser.mjs"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "scripts/qa/source_library_viewer_browser.mjs"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "output": ""
+    }
+  ],
+  "protected_model_and_existing_test_diff": [],
+  "decisions_append_only": true,
+  "existing_lock_prefixes_preserved": true,
+  "local_links_checked": 17,
+  "files": [
+    {
+      "path": "src/physimesh/projects/tabular.py",
+      "sha256": "1162490b5f71c749a3aa02b9f8cc51c2c47bbb4e9396f32fb26b3e407545bb90"
+    },
+    {
+      "path": "src/physimesh/projects/source_library.py",
+      "sha256": "47a140663ea714dfa657be9b6f2285e0e6e61d85478504f4ce1b5069d587ef09"
+    },
+    {
+      "path": "src/physimesh/api/source_library.py",
+      "sha256": "2495d6cf3471eee0a1c3f5014da5afb1787cf486a07374c76ff97fc2738a8434"
+    },
+    {
+      "path": "src/physimesh/api/app.py",
+      "sha256": "d28a35811e8b334faaf3383677eff1a5f3ab8d28f1304ed3dbc5075af566a64c"
+    },
+    {
+      "path": "web/js/source-library.js",
+      "sha256": "5f0f43cac098ce1875deaefb67ce5b5b8b43740a704b11719bd1cb7d3a04dd34"
+    },
+    {
+      "path": "web/js/input-editors.js",
+      "sha256": "c2a6d1e6e2d64a04032e6d5acb3b8969383694109b73079c7404a836735aed8e"
+    },
+    {
+      "path": "web/js/workbench.js",
+      "sha256": "927c1f3e03ad7364fef539baa15d39aa013dbec498151ebad9cfc2e377fb47b2"
+    },
+    {
+      "path": "web/workbench.html",
+      "sha256": "1355eb8c3da3a735297c016ed2df4ea3cb8afee75b9ddc67d07791094efe6a8f"
+    },
+    {
+      "path": "web/css/workbench.css",
+      "sha256": "952d575dc87bcce466042fe90d3d82f08ec27dcd582220ffcf9e2df1fe231e4b"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "6e85e1ea65936300544b81393c4abff389ab9cf53716501abbdbb5507f973f8f"
+    },
+    {
+      "path": "requirements.lock",
+      "sha256": "eadf08d86bff6c048bade527e2a7eaa7b88d145d498e4e9e1b57877aea1058d9"
+    },
+    {
+      "path": "requirements-runtime.lock",
+      "sha256": "8bae471e4c569c1ff22645fc07a67ff2193f1e5d41a512ebe68c87b2f3390692"
+    },
+    {
+      "path": "requirements-platform.lock",
+      "sha256": "15bdeaaff34498792ae6d2ba8520f6037d2fea4a69b51144d29b7588be647fbc"
+    },
+    {
+      "path": "requirements-test.lock",
+      "sha256": "0cc1dac25907a30ca426275d7ef540b7b01b974c4eeb9c149f75f9cbbe5c5e34"
+    },
+    {
+      "path": "tests/projects/test_tabular_import.py",
+      "sha256": "d3a00e37eb4faef3230f34dadc1c54b2c41e0c7cd54066e39a7c464b446f35a7"
+    },
+    {
+      "path": "tests/projects/test_source_library.py",
+      "sha256": "9cfbd922de98c143f6c4f8109f3572190f0840e52a333ea12ca09190abc7b73c"
+    },
+    {
+      "path": "scripts/qa/tabular_library_browser.mjs",
+      "sha256": "2ae15081bac65a0ef8db45ac84ca1eb2d431d9176f0f5cc6fc765d4f85a78a42"
+    },
+    {
+      "path": "scripts/qa/source_library_viewer_browser.mjs",
+      "sha256": "b280f2c9ac46a66a343fcb77f871086e5de014befab1921778a13a99376d13e8"
+    },
+    {
+      "path": "scripts/qa/verify_tabular_package.py",
+      "sha256": "d97db04395ec9719526ec9e677061eab960121502b86b3dab79bd98ed7364a69"
+    },
+    {
+      "path": "docs/qa/tabular-library-2026-10-22.md",
+      "sha256": "0ce8188ceee155334ff0fa0dfdd44931ff4d1fac5051f7e1b7f3ef632ec9167e"
+    },
+    {
+      "path": "docs/technical/tabular-rotor-library.md",
+      "sha256": "9f73b9a1401b1402c6cbf031251bf5cbda85a2e37495646edc28a44f9021c761"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/qa/assets/tabular-library/browser-checks.json",
+      "sha256": "88519249218a4c4b5798e8289f87df7ea4a5bac27638c9a773b65c5005558683"
+    },
+    {
+      "path": "docs/qa/assets/tabular-library/desktop.png",
+      "sha256": "8ba46bc0e3424972938cfdcf5288b9abc70b7111db5e4e705bfb95bb86050b99"
+    },
+    {
+      "path": "docs/qa/assets/tabular-library/mobile-mapping-detail.png",
+      "sha256": "be3ba898d82964c5c89fccc4a80bfa8c4fbc844da4583653e43db9943874765c"
+    },
+    {
+      "path": "docs/qa/assets/tabular-library/mobile.png",
+      "sha256": "234dcaa908daab86ab38c1a3ebefc4c5d055ba700f03df22bc0c2d477f05041b"
+    },
+    {
+      "path": "docs/qa/assets/tabular-library/zoom-200-css.png",
+      "sha256": "7b5ce2ec789b75dbff739c6332b519e5c2322c95a570083bc30023bcb9ff9bf5"
+    },
+    {
+      "path": "docs/qa/assets/tabular-library/zoom-mapping-detail.png",
+      "sha256": "ed69e2803035277d4b0719567bb3f7216deedf315e4d202532bb762cc6eefa6d"
+    }
+  ],
+  "limits": "Static/syntax/source/link checks only; test/browser/package receipts separate. No scientific acceptance or provider deployment."
+}

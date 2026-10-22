@@ -73,3 +73,19 @@ dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;backgrou
 #geometry-record ul{padding-left:20px}
 #geometry-record details{margin-top:14px}
 @media(max-width:800px){.geometry-fields{grid-template-columns:1fr}.geometry-preview{height:330px}.geometry-tools button{flex:1}}
+
+/* A working measurement sheet, with original and converted values kept together. */
+.tabular-library{margin:24px 0;min-width:0;container:tabular/inline-size}.tabular-library>section{padding:20px;background:#e2eade;min-width:0}
+.tabular-library h4{font-size:18px;margin:4px 0 16px}.tabular-library p{max-width:76ch}.tabular-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px;margin:20px 0}
+#input-editors .tabular-library fieldset{display:block;min-width:0;margin:24px 0;padding:20px;background:#edf2eb}
+.tabular-map-row{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin:12px 0}
+.tabular-library input,.tabular-library select{min-width:0;max-width:100%}.tabular-library label{overflow-wrap:anywhere}
+.tabular-library .table-scroll{max-width:100%;margin:20px 0;background:#f4f7f1}.tabular-library table{border-collapse:collapse;width:100%;font-size:14px}
+.tabular-library td,.tabular-library th{padding:12px 16px;text-align:left;min-width:112px;vertical-align:top;overflow-wrap:anywhere}
+.tabular-library tbody tr:nth-child(even){background:#e2eade}.tabular-library pre{white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%;font-size:13px}
+.tabular-status{min-height:28px;font-weight:600}.tabular-library button{margin:8px 12px 8px 0;max-width:100%;white-space:normal}
+.source-catalog{margin-top:24px}.source-catalog-entry{padding:18px 0}.source-catalog-entry p{margin:8px 0}
+@media(max-width:600px){.tabular-map-row{grid-template-columns:1fr}.tabular-library>section,#input-editors .tabular-library fieldset{padding:16px}}
+
+@container tabular (min-width:560px){.tabular-map-row{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}}
+.tabular-description{grid-column:1/-1}.tabular-library textarea{min-width:0;width:100%;resize:vertical}

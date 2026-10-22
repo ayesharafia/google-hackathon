@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "ruff",
+    "check",
+    "."
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T18:11:20+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "All checks passed!\n\n"
+}

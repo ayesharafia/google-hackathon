@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "--test",
+    "tests/web/test_engineering_readiness.mjs",
+    "tests/web/test_rotor_source_binding.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T18:11:21+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "✔ uninspected state never presents a passing input check (1.131542ms)\n✔ eligible inputs never promote source evidence or qualified approval (0.099959ms)\n✔ mass missing fields and errors remain separately visible (0.06075ms)\n✔ pack disagreement differs from incomplete and unassessed inputs (0.103333ms)\n✔ an ineligible optional case is not hidden by aggregate required eligibility (0.044375ms)\n✔ separate supplied-point screening state cannot overwrite model eligibility (0.40475ms)\n✔ partial reports preserve unknown input states instead of false conclusions (0.07725ms)\n✔ diagnostic text is retained as data and does not mutate the report (0.057833ms)\n✔ action routes masses.energy: missing to mass (0.098ms)\n✔ action routes payload position required to mass (0.100208ms)\n✔ action routes pack consistency to battery (0.071ms)\n✔ action routes nominal bus voltage to battery (0.056667ms)\n✔ action routes map RPM coverage to rotors (0.0185ms)\n✔ action routes rotor current limit to rotors (0.016083ms)\n✔ action routes sequence segment duration to sequence (0.025125ms)\n✔ action routes local_pilot.model_version to model (0.03825ms)\n✔ action routes payload domain reversed to model (0.020333ms)\n✔ action routes atmosphere source to cases (0.045167ms)\n✔ action routes angular acceleration outside case to cases (0.032792ms)\n✔ action routes unfamiliar backend diagnostic to json (0.02375ms)\n✔ candidate list exposes matching and mismatched configurations without selecting anything (1.221458ms)\n✔ binding changes only explicitly selected base-map references (0.15075ms)\n✔ binding multiple matching rotors retains source kind as metadata, without adding approval (0.058167ms)\n✔ invalid selection [] refuses atomically (0.2485ms)\n✔ invalid selection [\"r0\",\"r0\"] refuses atomically (0.0825ms)\n✔ invalid selection [\"missing\"] refuses atomically (0.046959ms)\n✔ invalid selection [\"other\"] refuses atomically (0.038208ms)\n✔ invalid selection [\"r0\",\"other\"] refuses atomically (0.488709ms)\n✔ any draft edit invalidates the preview before binding (0.076542ms)\n✔ preview identity cannot be omitted (0.075291ms)\n✔ configuration edit, deletion and duplicate IDs never silently remap a selection (0.082625ms)\n✔ incomplete/unknown import identity is not bindable: {\"dataset_id\":\"measured-table\",\"configuration_id\":\"motor-prop-A\",\"source_kind\":\"measured\"} (0.044583ms)\n✔ incomplete/unknown import identity is not bindable: {\"dataset_id\":\"x\"} (0.034083ms)\n✔ incomplete/unknown import identity is not bindable: {\"dataset_id\":\"measured-table\",\"configuration_id\":\"motor-prop-A\",\"source_kind\":\"approved\"} (0.024583ms)\n✔ empty rotor list yields no choices without inventing a configuration (0.032375ms)\nℹ tests 35\nℹ suites 0\nℹ pass 35\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 76.809\n\n"
+}

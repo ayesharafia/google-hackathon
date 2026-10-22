@@ -117,3 +117,64 @@ public primary HTML. It states an hour equals 3600 seconds. Used only to source
 the exact time conversion underlying J/Wh; no battery chemistry, specific
 energy, efficiency, reserve policy or physical error allowance follows from
 it. No dataset/download, measurement, paid service or new licensing dependency.
+
+## 2026-10-22: competitive position and proposed market roadmap
+
+Owner asked what PhysiCore is building and which features should be planned for
+market competition. Read current README, plan, state/strategy and actual
+workbench comparison/export/review controls. This is a planning recommendation;
+no feature implementation, task promotion, model approval or publication follows.
+
+**Proposed first customer:** small commercial multirotor engineering teams whose
+lead engineer reviews payload/endurance design changes. Buyer, willingness to
+pay, current spreadsheet workflow and switching cost remain hypotheses requiring
+interviews. Existing implementation includes retained projects/STL preview,
+restricted map-based payload/constant-hover segment accounting, readiness,
+source assignment, revisions, comparisons and reports; hosted collaboration
+foundations exist but operational/physical acceptance gates remain open.
+
+Official sources checked on 22 October 2026:
+
+- [eCalc xcopterCalc help](https://ecalc.ch/calcinclude/help/xcoptercalchelp.htm):
+  fixed-pitch RC multirotor setup with battery/ESC/motor/propeller selection and
+  environmental inputs. Main calculator search excerpt was available; direct
+  main-page fetch returned 429. Help HTML was read successfully. Supports a
+  component-sizing comparison, not a complete independent feature/pricing audit.
+- [Tyto Flight Stand 50](https://www.tytorobotics.com/pages/flight-stand-50) and
+  [motor/propeller database](https://database.tytorobotics.com/): measurement
+  equipment/software and shared propulsion-test/component records. An initially
+  guessed software URL was inaccessible; no claims derived from that URL.
+  Treat Tyto as an adjacent alternative/data ecosystem and potential integration
+  target, not a presumed partner. Public visibility grants no bulk-reuse license.
+- [SimScale drone simulation](https://www.simscale.com/simulations/drone/):
+  vendor describes cloud CFD, structural and thermal analysis and design sweeps.
+  These are vendor-described capabilities; performance/accuracy/usage marketing
+  metrics were not independently verified or adopted.
+- [OWASP ASVS](https://owasp.org/projects/asvs): official page lists stable
+  5.0.0 and its web-control verification purpose. Proposed future hosted-security
+  assessment framework only; no audit, compliance or airworthiness claim.
+
+**Inference:** a focused measured-component-data -> supported mission assessment
+-> explained design comparison -> reviewable evidence workflow is a practical
+position to test. No claim that competitors lack provenance or review features;
+no defensible moat or customer demand has been established by these pages.
+
+**Three proposed priorities, not implementation-ready backlog tasks:**
+1. Data-to-decision: CSV/Excel mapping with explicit units, original-byte retention,
+   reusable authorized component records, coverage diagnostics and enhanced
+   variant/requirement comparisons. First bounded slice: preview CSV columns,
+   units and rejected rows before conversion to the existing map contract.
+2. Measured evidence: compare frozen predictions with owner-authorized test data,
+   disclose errors and valid ranges; qualified review precedes physical claims.
+   Battery state/temperature/age or new flight regimes require separate data,
+   specs and validation. Existing report/review foundations should be extended.
+3. Paid-pilot delivery: optional private team workspaces, reliable job/recovery,
+   access isolation, backups/restore and support; preserve existing public demo.
+   Validate willingness to pay before choosing exact prices or expanding scope.
+
+Proposed launch gates: three design partners (target, none claimed recruited),
+reviewed measurement comparisons for declared scope, an end-to-end repeatable
+customer workflow, and verified private-data/restore behavior. Target metric:
+time from authorized raw component data to a reviewable design decision, plus
+pilot completion/conversion and error within agreed scope. Values/baselines
+unknown. No customer contact, spending, dataset import, tests or deployment.

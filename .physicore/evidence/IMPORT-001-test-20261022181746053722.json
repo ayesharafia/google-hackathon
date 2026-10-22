@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "ruff",
+    "check",
+    "."
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-22T18:17:46+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "PLW1510 `subprocess.run` without explicit `check` argument\n  --> scripts/qa/verify_tabular_package.py:14:14\n   |\n13 | def run(args):\n14 |     result = subprocess.run(args, cwd=root, text=True, capture_output=True, timeout=90)\n   |              ^^^^^^^^^^^^^^\n15 |     if result.returncode:\n16 |         raise RuntimeError('Command failed: '+repr(args)+'\\n'+(result.stdout+result.stderr)[-3000:])\n   |\nhelp: Add explicit `check=False`\n\nISC004 Unparenthesized implicit string concatenation in collection\n  --> scripts/qa/verify_tabular_package.py:40:31\n   |\n38 |   python = str(work/'venv/bin/python')\n39 |   run(['uv', 'pip', 'install', '--python', python, '--require-hashes', '-r', str(work/'parser.lock')])\n40 |   versions = run([python, '-c', 'from importlib.metadata import version; import openpyxl, defusedxml; '\n   |  _______________________________^\n41 | |                 'print({p:version(p) for p in [\"openpyxl\",\"defusedxml\",\"et-xmlfile\"]})']).strip()\n   | |_______________________________________________________________________________________^\n42 |   print(json.dumps({'wheel_sha256': hashlib.sha256(wheel.read_bytes()).hexdigest(),\n43 |                     'source_assets_verified': len(paths), 'hash_verified_fresh_install': versions,\n   |\nhelp: Did you forget a comma?\nhelp: Wrap implicitly concatenated strings in parentheses\n\nFound 2 errors.\nNo fixes available (1 hidden fix can be enabled with the `--unsafe-fixes` option).\n\n"
+}

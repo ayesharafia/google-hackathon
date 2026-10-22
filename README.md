@@ -103,6 +103,17 @@ for model eligibility, outcome semantics, reports and exact limitations. The
 [browser audit](docs/qa/local-workbench-design-audit.md) records the historical in-app host limitation and the new standard-Chromium
 download, native 200% zoom, conflict and geometry checks.
 
+## Import spreadsheet measurements and reuse rotor sources
+
+The rotor editor now accepts CSV/modern Excel measurement tables through explicit
+column and unit mapping, a conversion/error preview and a persistent source
+library. Original files and conversion manifests remain traceable. Library reuse
+preserves project permissions and requires explicit matching-rotor assignment.
+See [the import/library guide](docs/technical/tabular-rotor-library.md) for required
+measurements, test declarations, limits and provenance exports. Restart a running
+source-checkout API to load the new routes after updating/installing dependencies.
+This does not qualify real aircraft performance or change the shared access mode.
+
 ## Verify the frozen production baseline
 
 [P00.1 evidence and release status](docs/qa/production-baseline.md) and the

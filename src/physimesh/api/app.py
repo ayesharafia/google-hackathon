@@ -75,11 +75,15 @@ def create_app(settings: Settings) -> FastAPI:
         settings.hosted_mode and settings.oidc_issuer) else None
     app.state.projects = ProjectService(repository, ScopedArtifacts(store, app.state.identity)
                                         if settings.hosted_mode else store)
+    from ..projects.source_library import SourceLibrary
+    app.state.source_library = SourceLibrary(app.state.metadata, app.state.projects, app.state.identity)
     app.state.studies = LocalStudies(app.state.projects)
     app.include_router(drone_router)
     app.include_router(results_router)
     app.include_router(contracts_router)
     app.include_router(screening_router)
+    from .source_library import router as source_library_router
+    app.include_router(source_library_router)
     app.include_router(projects_router)
     if not settings.hosted_mode:
         app.include_router(sessions_router)

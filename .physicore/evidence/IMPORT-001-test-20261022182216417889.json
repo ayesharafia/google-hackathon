@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "IMPORT-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/rotor_source_binding_browser.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T18:22:16+00:00",
+  "started_at": "2026-10-22T18:00:50+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "371061918c5882e5c4aff40fc71f4d431bdb377c",
+  "output": "{\n  \"kind\": \"synthetic_source_binding_acceptance\",\n  \"passed\": 10,\n  \"checks\": [\n    \"Import shows actual retained metadata/hash without selecting rotors or changing the draft\",\n    \"Empty selection refuses without changing references\",\n    \"Explicit selection changes only that base-map reference, keeps case overrides, invalidates readiness and restores focus\",\n    \"Original UTF-8 import whitespace/bytes retained exactly in the disposable artifact store\",\n    \"Saving/reopening persists binding while original frozen revision keeps its source\",\n    \"Mismatched configurations cannot be selected or applied\",\n    \"Editing after the import preview refuses stale binding instead of overwriting current edits\",\n    \"A delayed import response cannot create a bindable preview after draft edits\",\n    \"Phone width and CSS 200% enlargement keep metadata, choices and action inside the preview\",\n    \"No page JavaScript errors\"\n  ],\n  \"page_errors\": [],\n  \"raw_source_sha256\": \"324b4d8dc857551a8e2e26228c7efbb17cbd1abda18512971ee874f5f2ca2a68\",\n  \"limits\": \"Synthetic source-reference/UI checks only; no measured data validity, source applicability or physical acceptance inferred. CSS enlargement is not native browser zoom.\"\n}\n\n"
+}
