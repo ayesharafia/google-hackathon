@@ -1,0 +1,204 @@
+{
+  "kind": "existing_synthetic_fixture_diagnostic",
+  "qualification": "Not a scientist-approved validation campaign or aircraft accuracy claim.",
+  "tested_revision": "73793c9e39f840864ebb885bd65b9b38706eaa07",
+  "runtime": {
+    "python": "3.11.16",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "matplotlib": "3.11.2"
+  },
+  "command": "MPLCONFIGDIR=.backend/drone-kickoff-2026-10-22/matplotlib .venv/bin/python reports/assets/drone-kickoff-2026-10-22/probe.py",
+  "comparison": "m_payload=min(400 N,460800 J/(10 W/N * duration_s))/9.80665 m/s^2 - 12 kg",
+  "reference_arithmetic": "Decimal precision 28, then rounded to float for comparison and plotting",
+  "sources": {
+    "tests/drone/test_hover_pilot.py": "8f141a5c298e19d7d905f1b29d7c0febc3937223fe93810088a20876f5d48ca0",
+    "tests/projects/fixtures/incomplete_draft.json": "bb88c7554e09783508954769c48cda24e715a3c6a79ecc628cca1260f7141b61",
+    "src/physimesh/drone/capacity.py": "73d2a955ae4a6a0a60f053a8634de3a1a13011fdcedece7d7af1a53898fd87a7",
+    "src/physimesh/drone/trim.py": "bfe8052ba5c113ed76534de8b783cc51bf8ccf466bf18b36c66a7ece8e28fcab",
+    "src/physimesh/drone/mission_capacity.py": "d070d3b58164bf4602e326dfd426b0456373bd1cfe06b3bd1ee0b5dfea5e154b",
+    "src/physimesh/drone/performance.py": "10dda284ba369d545ad8cf7a1f83fb4c5e603954bc969434fbebe9cfeacf80bf",
+    "src/physimesh/drone/authoring.py": "11d94647d134a020db2cbc8228c9d6a2039024da90d00fe6b9581ed81edddbf9",
+    "src/physimesh/drone/atmosphere.py": "a836a44453a9d63ee0e2818c43cb2c931003892a61b039de46bbf130ff59cdf8",
+    "src/physimesh/projects/performance.py": "83320aa2ac0e9f7021a2b01cf1d8acb3b063e6199b3cb5cdb2652b82f9057c08"
+  },
+  "probe_sha256": "0a860ad745c571d0892acb7d5b5281ad1fe6ad32fd339c4c7a99afc36b748b84",
+  "new_acceptance_tolerance": null,
+  "observation_count": 15,
+  "outcomes": {
+    "feasible": 14,
+    "infeasible": 1
+  },
+  "max_absolute_payload_difference_kg": 3.552713678800501e-15,
+  "max_force_residual_n": 5.684341886080802e-14,
+  "max_moment_residual_nm": 2.842170943040401e-14,
+  "observations": [
+    {
+      "duration_s": 10,
+      "closed_form_payload_kg": 28.788648519117128,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 28.78864851911713,
+      "absolute_payload_difference_kg": 3.552713678800501e-15,
+      "max_force_residual_n": 0.0,
+      "max_moment_residual_nm": 0.0,
+      "reasons": []
+    },
+    {
+      "duration_s": 60,
+      "closed_form_payload_kg": 28.788648519117128,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 28.78864851911713,
+      "absolute_payload_difference_kg": 3.552713678800501e-15,
+      "max_force_residual_n": 0.0,
+      "max_moment_residual_nm": 0.0,
+      "reasons": []
+    },
+    {
+      "duration_s": 90,
+      "closed_form_payload_kg": 28.788648519117128,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 28.78864851911713,
+      "absolute_payload_difference_kg": 3.552713678800501e-15,
+      "max_force_residual_n": 0.0,
+      "max_moment_residual_nm": 0.0,
+      "reasons": []
+    },
+    {
+      "duration_s": 115.2,
+      "closed_form_payload_kg": 28.788648519117128,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 28.78864851911713,
+      "absolute_payload_difference_kg": 3.552713678800501e-15,
+      "max_force_residual_n": 0.0,
+      "max_moment_residual_nm": 0.0,
+      "reasons": []
+    },
+    {
+      "duration_s": 120,
+      "closed_form_payload_kg": 27.157102578352443,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 27.157102578352447,
+      "absolute_payload_difference_kg": 3.552713678800501e-15,
+      "max_force_residual_n": 5.684341886080802e-14,
+      "max_moment_residual_nm": 0.0,
+      "reasons": []
+    },
+    {
+      "duration_s": 150,
+      "closed_form_payload_kg": 19.325682062681956,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 19.325682062681956,
+      "absolute_payload_difference_kg": 0.0,
+      "max_force_residual_n": 0.0,
+      "max_moment_residual_nm": 2.842170943040401e-14,
+      "reasons": []
+    },
+    {
+      "duration_s": 180,
+      "closed_form_payload_kg": 14.104735052234963,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 14.104735052234965,
+      "absolute_payload_difference_kg": 1.7763568394002505e-15,
+      "max_force_residual_n": 0.0,
+      "max_moment_residual_nm": 0.0,
+      "reasons": []
+    },
+    {
+      "duration_s": 210,
+      "closed_form_payload_kg": 10.375487187629968,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 10.375487187629968,
+      "absolute_payload_difference_kg": 0.0,
+      "max_force_residual_n": 7.105427357601002e-15,
+      "max_moment_residual_nm": 7.105427357601002e-15,
+      "reasons": []
+    },
+    {
+      "duration_s": 240,
+      "closed_form_payload_kg": 7.578551289176223,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 7.578551289176223,
+      "absolute_payload_difference_kg": 0.0,
+      "max_force_residual_n": 2.842170943040401e-14,
+      "max_moment_residual_nm": 0.0,
+      "reasons": []
+    },
+    {
+      "duration_s": 270,
+      "closed_form_payload_kg": 5.4031567014899755,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 5.403156701489977,
+      "absolute_payload_difference_kg": 1.7763568394002505e-15,
+      "max_force_residual_n": 4.973799150320701e-14,
+      "max_moment_residual_nm": 2.1316282072803006e-14,
+      "reasons": []
+    },
+    {
+      "duration_s": 300,
+      "closed_form_payload_kg": 3.6628410313409776,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 3.6628410313409776,
+      "absolute_payload_difference_kg": 0.0,
+      "max_force_residual_n": 7.105427357601002e-15,
+      "max_moment_residual_nm": 2.1316282072803006e-14,
+      "reasons": []
+    },
+    {
+      "duration_s": 330,
+      "closed_form_payload_kg": 2.238946392128162,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 2.2389463921281605,
+      "absolute_payload_difference_kg": 1.3322676295501878e-15,
+      "max_force_residual_n": 2.842170943040401e-14,
+      "max_moment_residual_nm": 0.0,
+      "reasons": []
+    },
+    {
+      "duration_s": 360,
+      "closed_form_payload_kg": 1.0523675261174814,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 1.0523675261174816,
+      "absolute_payload_difference_kg": 2.220446049250313e-16,
+      "max_force_residual_n": 0.0,
+      "max_moment_residual_nm": 0.0,
+      "reasons": []
+    },
+    {
+      "duration_s": 390,
+      "closed_form_payload_kg": 0.048339254877675236,
+      "closed_form_state": "feasible under the artificial fixture assumptions",
+      "solver_outcome": "feasible",
+      "solver_payload_kg": 0.04833925487767372,
+      "absolute_payload_difference_kg": 1.519617764955683e-15,
+      "max_force_residual_n": 3.552713678800501e-15,
+      "max_moment_residual_nm": 3.552713678800501e-15,
+      "reasons": []
+    },
+    {
+      "duration_s": 400,
+      "closed_form_payload_kg": null,
+      "closed_form_state": "no nonnegative payload in this fixture",
+      "solver_outcome": "infeasible",
+      "solver_payload_kg": null,
+      "absolute_payload_difference_kg": null,
+      "max_force_residual_n": null,
+      "max_moment_residual_nm": null,
+      "reasons": [
+        "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)"
+      ]
+    }
+  ]
+}
