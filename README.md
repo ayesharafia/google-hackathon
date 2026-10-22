@@ -12,6 +12,20 @@ motor-out, deterministic joint scenarios and separately sourced caps. Synthetic
 examples do not establish a real aircraft capacity.
 [M§0, M§4]
 
+## Project working method
+
+From 22 October 2026, follow the supplied [playbook](PLAYBOOK.md),
+[agent context](CLAUDE.md) and [verification ladder](VALIDATION.md).
+[`AGENTS.md`](AGENTS.md) gives Codex and other agents the required reading order.
+Physics changes follow an approved spec, separate validation and implementation,
+an independent audit, and a plain-language evidence report.
+
+The kit includes [spec/report templates](templates/), [agent roles](.claude/agents/),
+[Claude command definitions](.claude/commands/), a [ladder roadmap](ROADMAP.md) and
+an [append-only decision log](DECISIONS.md). Read the
+[adoption notes](docs/working-method/sim-kit-adoption.md) for wording corrections,
+source integrity and how the kit connects to the existing drone plan.
+
 ## Setup
 
 ```sh
