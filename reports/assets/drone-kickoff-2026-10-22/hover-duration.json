@@ -1,7 +1,7 @@
 {
   "kind": "existing_synthetic_fixture_diagnostic",
   "qualification": "Not a scientist-approved validation campaign or aircraft accuracy claim.",
-  "tested_revision": "73793c9e39f840864ebb885bd65b9b38706eaa07",
+  "tested_revision": "15240a306539e252e43fc85a723888ea7250f2e5",
   "runtime": {
     "python": "3.11.16",
     "numpy": "2.4.6",
@@ -22,7 +22,7 @@
     "src/physimesh/drone/atmosphere.py": "a836a44453a9d63ee0e2818c43cb2c931003892a61b039de46bbf130ff59cdf8",
     "src/physimesh/projects/performance.py": "83320aa2ac0e9f7021a2b01cf1d8acb3b063e6199b3cb5cdb2652b82f9057c08"
   },
-  "probe_sha256": "0a860ad745c571d0892acb7d5b5281ad1fe6ad32fd339c4c7a99afc36b748b84",
+  "probe_sha256": "17a7f51bdcc820698390457177f42acec34db2547ac3f60e76decc633f824ad8",
   "new_acceptance_tolerance": null,
   "observation_count": 15,
   "outcomes": {

@@ -77,7 +77,7 @@ def main():
             'reasons': observed.get('reasons', []),
         })
     with (output/'hover-duration.csv').open('w', newline='') as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator='\n')
         writer.writeheader()
         for row in rows:
             writer.writerow({**row, 'reasons': json.dumps(row['reasons'])})
