@@ -136,16 +136,16 @@ def run_one(app, worker_id, *, wall_s=120, memory_bytes=2*1024**3, disk_bytes=20
                         from physimesh.drone.local_results import LocalCapacityV3, LocalCapacityV4
                         contract = LocalCapacityV4 if result.get('schema_version') == 'local_mission_capacity_v4' else LocalCapacityV3
                         contract.model_validate_json(raw)
-                        with _publication_lease(app.state.jobs, claim):
-                            digest = app.state.artifact_backend.put_bytes(raw, kind=result['schema_version'], meta={})
+                        with _publication_lease(app.state.jobs, claim), artifact_scope(claim['project_id']):
+                            digest = app.state.projects.artifacts.put_bytes(raw, kind=result['schema_version'], meta={})
                         accepted = {'artifact_sha256': digest, 'study_sha256': result['study_sha256']}
                     else:
                         raw = output_file.with_suffix('.pdf').read_bytes()
                         if len(raw) > 5_000_000 or not raw.startswith(b'%PDF-'):
                             raise ValueError('worker PDF missing or exceeds budget')
                         receipt = json.loads(output_file.read_text())
-                        with _publication_lease(app.state.jobs, claim):
-                            digest = app.state.artifact_backend.put_bytes(raw, kind='retained_local_study_pdf_v1', meta=receipt)
+                        with _publication_lease(app.state.jobs, claim), artifact_scope(claim['project_id']):
+                            digest = app.state.projects.artifacts.put_bytes(raw, kind='retained_local_study_pdf_v1', meta=receipt)
                         accepted = {'artifact_sha256': digest, 'report_identity': receipt}
                     usage_end = resource.getrusage(resource.RUSAGE_CHILDREN)
                     accepted['resources'] = {'wall_s': time.monotonic()-started, 'peak_sampled_rss_bytes': peak_rss,
@@ -157,6 +157,9 @@ def run_one(app, worker_id, *, wall_s=120, memory_bytes=2*1024**3, disk_bytes=20
                                                         'thread_environment': {'OPENBLAS_NUM_THREADS': '1',
                                                                                'OMP_NUM_THREADS': '1',
                                                                                'MKL_NUM_THREADS': '1'}}}
+                    # Storage entitlement accounts for retained bytes. Only this
+                    # fenced receipt can accept the study/report association;
+                    # interrupted publication may leave charged, unaccepted bytes.
                     app.state.jobs.complete(claim, accepted)
                 finally:
                     if process.poll() is None:

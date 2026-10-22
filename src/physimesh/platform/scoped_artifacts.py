@@ -1,6 +1,6 @@
 """Request/worker project scopes: a digest is an identity, never an entitlement."""
 import hashlib
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from contextvars import ContextVar
 from dataclasses import dataclass, field
 
@@ -47,10 +47,19 @@ class ScopedArtifacts:
     def put_bytes(self, data, *, kind, meta):
         scope = self._scope()
         digest = hashlib.sha256(data).hexdigest()
-        # Allocate entitlement before writes so over-budget uploads never store bytes.
-        if scope.project_id:
-            self.identity.grant_artifact(scope.project_id, digest, len(data))
-        digest = self.store.put_bytes(data, kind=kind, meta=meta)
+        # Reserve quota before IO; grant access only after complete persistence.
+        reservation = self.identity.reserve_artifact(scope.project_id, digest, len(data)) if scope.project_id else None
+        try:
+            stored = self.store.put_bytes(data, kind=kind, meta=meta)
+            if stored != digest:
+                raise ValueError('artifact backend returned a different content identity')
+            self.identity.finish_artifact(reservation)
+        except BaseException:
+            # If metadata is also unavailable, expiry recovers the reservation.
+            # Never revoke another concurrent writer's successfully granted access.
+            with suppress(Exception):
+                self.identity.cancel_artifact(reservation)
+            raise
         scope.pending[digest] = len(data)
         return digest
 

@@ -123,8 +123,10 @@ class SQLiteProjects:
         """Compatibility list is bounded; inventory clients should follow page cursors."""
         return self.page()['projects']
 
-    def page(self, *, limit=25, after='', user_id=None) -> dict:
+    def page(self, *, limit=25, after='', user_id=None, organization_id=None) -> dict:
         validate_page(limit)
+        if organization_id is not None and user_id is None:
+            raise ValueError('organization inventory requires an authenticated identity')
         args, where = [], []
         tables = 'project_meta p'
         if user_id is not None:
@@ -133,6 +135,9 @@ class SQLiteProjects:
                        'LEFT JOIN project_members pm ON pm.project_id=p.project_id AND pm.user_id=om.user_id')
             where.append("(om.role='admin' OR pm.role IS NOT NULL)")
             args.append(user_id)
+            if organization_id is not None:
+                where.append('pp.org_id=?')
+                args.append(organization_id)
         if after:
             updated, project = decode_cursor(after)
             where.append('(p.updated_utc<? OR (p.updated_utc=? AND p.project_id>?))')

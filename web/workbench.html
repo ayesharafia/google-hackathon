@@ -6,7 +6,7 @@
 <title>PhysiCore | Design workbench</title>
 <link rel="stylesheet" href="/web/css/workbench.css?v=public-3">
 <script type="importmap">{"imports":{"three":"/web/vendor/three.module.min.js"}}</script>
-<script type="module" src="/web/js/workbench.js?v=public-4"></script>
+<script type="module" src="/web/js/workbench.js?v=consolidated-1"></script>
 </head>
 <body>
 <header><a class="brand" href="/web/">PhysiCore</a><span>Local design workbench</span><a href="/web/results.html">Evidence desk</a></header>
@@ -41,6 +41,7 @@
 </aside>
 <section class="editor" aria-labelledby="design-title">
 <h2 id="design-title">Open a project to begin.</h2>
+<p id="display-context" role="status" aria-live="polite">No project selected.</p>
 <p id="save-state">Missing physical inputs stay unknown.</p>
 <section id="project-geometry" aria-labelledby="geometry-title">
 <h3 id="geometry-title">Aircraft geometry</h3>
@@ -59,11 +60,12 @@
 <div class="geometry-tools"><button id="geometry-reset" type="button" disabled>Reset geometry view</button><button id="geometry-remove" type="button" disabled>Remove draft geometry</button><button id="geometry-save" type="button" disabled>Save draft</button></div>
 <div id="geometry-record"></div>
 </section>
-<section aria-labelledby="layout-title"><h3 id="layout-title">Airframe, rotors and governing case</h3><div id="layout-view"><p>No rotor positions loaded.</p></div><p id="layout-note">Centres, axes and radii from the input. Drag to orbit when a layout is available.</p><button id="reset-layout" type="button" disabled>Reset layout view</button></section>
+<section aria-labelledby="layout-title"><h3 id="layout-title">Airframe, rotors and governing case</h3><div id="layout-view"><p>No rotor positions loaded.</p></div><p id="layout-note">Centres, axes and radii from the input. Drag to orbit when a layout is available.</p><button id="show-draft-layout" type="button" disabled>View current draft</button><label>Frozen study case<select id="view-case" disabled></select></label><button id="reset-layout" type="button" disabled>Reset layout view</button><details><summary>Displayed geometry and rotor inputs</summary><div id="layout-inputs"></div></details></section>
+<label>Go to design inputs<select id="editor-navigation"><option value="">Choose an input group</option></select></label><div id="guided-readiness" aria-live="polite"></div>
 <div id="input-editors"></div>
 <details><summary>Design input JSON</summary><label for="snapshot">Complete versioned snapshot</label><textarea id="snapshot" spellcheck="false" disabled rows="18"></textarea></details>
 <div class="actions"><button id="save" type="button" disabled>Save draft</button><button id="reload" type="button" disabled>Reload saved draft</button><button id="freeze" type="button" disabled>Freeze saved revision</button><button id="export-draft" type="button" disabled>Export draft JSON</button></div>
-<section aria-labelledby="study-title"><h3 id="study-title">Bounded capacity study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen design</button><p id="job-progress" role="status" aria-live="polite"></p><button id="cancel-job" type="button" hidden>Cancel job</button><button id="retry-job" type="button" hidden>Retry failed job</button><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
+<section aria-labelledby="study-title"><h3 id="study-title">Bounded capacity study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen design</button><p id="job-progress" role="status" aria-live="polite"></p><button id="cancel-job" type="button" hidden>Cancel job</button><button id="retry-job" type="button" hidden>Retry failed job</button><div id="study-summary" aria-live="polite"></div><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
 <section aria-labelledby="comparison-title"><h3 id="comparison-title">Compare retained studies</h3><p>Compare frozen inputs and recorded outcomes. A changed input does not establish the cause of a capacity change.</p><div class="fields"><label>Before study<select id="compare-before" disabled></select></label><label>After study<select id="compare-after" disabled></select></label></div><button id="compare" type="button" disabled>Compare studies</button><div id="comparison-report" aria-live="polite"></div></section>
 <section id="review-workspace" hidden aria-labelledby="review-title"><h3 id="review-title">Authenticated study review</h3><p>These records document a project review. Aircraft and model qualification remain separate.</p><label>Decision<select id="review-decision"><option value="comment">Comment</option><option value="changes_requested">Changes requested</option><option value="accepted">Accept within declared scope</option></select></label><label>Comment<textarea id="review-comment" maxlength="10000" rows="4"></textarea></label><button id="submit-review" type="button">Record review</button><ul id="reviews"></ul></section>
 <section id="revision-detail" hidden><h3>Frozen revision</h3><p id="revision-summary"></p><pre id="revision-json"></pre></section>

@@ -126,7 +126,15 @@ def operation(action):
 @router.get('')
 def projects(request: Request, limit: int = 25, after: str = ''):
     user = request.state.principal.user_id if request.app.state.settings.hosted_mode else None
-    return operation(lambda: request.app.state.projects.repository.page(limit=limit, after=after, user_id=user))
+    organization = request.headers.get('X-Organization-ID') if user is not None else None
+    if organization is not None:
+        from physimesh.platform.identity import Denied
+        with request.app.state.metadata.connection() as db:
+            if not db.execute('SELECT 1 FROM org_members WHERE org_id=? AND user_id=?',
+                              (organization, user)).fetchone():
+                raise Denied('organization access denied')
+    return operation(lambda: request.app.state.projects.repository.page(
+        limit=limit, after=after, user_id=user, organization_id=organization))
 
 
 @router.post('', status_code=201)
@@ -225,6 +233,11 @@ def study(request: Request, project_id: str, study: str):
 def export_study(request: Request, project_id: str, study: str):
     raw = operation(lambda: request.app.state.studies.export(project_id, study))
     return Response(raw, media_type='application/json', headers={'Content-Disposition': 'attachment; filename=study.json'})
+
+
+@router.get('/{project_id}/studies/{study}/summary')
+def study_summary(request: Request, project_id: str, study: str):
+    return operation(lambda: request.app.state.studies.summary(project_id, study))
 
 
 @router.get('/{project_id}/studies/{study}/pdf')

@@ -2,15 +2,17 @@
 import concurrent.futures
 import json
 import os
+from threading import Barrier
 from uuid import uuid4
 
 import pytest
 
 from physimesh.core.artifacts import ArtifactStore
 from physimesh.platform.database import MetadataDB
-from physimesh.platform.identity import Identity
+from physimesh.platform.identity import Denied, Identity, Principal
 from physimesh.platform.jobs import Jobs, StaleAttempt
 from physimesh.platform.postgres import PostgreSQLProjects
+from physimesh.platform.scoped_artifacts import ScopedArtifacts, artifact_scope
 from physimesh.projects.contracts import snapshot_json
 from physimesh.projects.repository import DraftConflict
 from physimesh.projects.service import ProjectService
@@ -94,3 +96,44 @@ def test_postgres_leases_fences_and_tenant_inventory(database, tmp_path):
 def next_email(identity, uid):
     with identity.database.connection() as db:
         return db.execute('SELECT email FROM users WHERE user_id=?', (uid,)).fetchone()[0]
+
+
+def test_postgres_artifact_reservations_failure_and_competing_publications(database, tmp_path, monkeypatch):
+    """Exercise actual FOR UPDATE serialization and PostgreSQL aggregate/row types."""
+    identity = Identity(database)
+    uid = identity.provision('artifact@example.test', password='synthetic-password-123')
+    org = identity.organization(uid, 'PostgreSQL artifact accounting')
+    principal = Principal(uid, 'artifact@example.test')
+    for pid in ('project_a', 'project_b'):
+        identity.claim_project(principal, org, pid)
+    backend = ArtifactStore(tmp_path/'files')
+    store = ScopedArtifacts(backend, identity)
+    original = backend.put_bytes
+
+    def unavailable(*args, **kwargs):
+        raise OSError('synthetic object store failure')
+
+    monkeypatch.setattr(backend, 'put_bytes', unavailable)
+    with artifact_scope('project_a'), pytest.raises(OSError):
+        store.put_bytes(b'postgres private bytes', kind='fixture', meta={})
+    with database.connection() as db:
+        assert db.execute('SELECT artifact_bytes FROM platform_quota').fetchone()[0] == 0
+        assert db.execute('SELECT COUNT(*) FROM artifact_access').fetchone()[0] == 0
+        assert db.execute('SELECT COUNT(*) FROM artifact_reservations').fetchone()[0] == 0
+    monkeypatch.setattr(backend, 'put_bytes', original)
+    barrier = Barrier(8)
+
+    def publish(_):
+        with artifact_scope('project_a'):
+            barrier.wait()
+            return store.put_bytes(b'postgres private bytes', kind='fixture', meta={})
+
+    with concurrent.futures.ThreadPoolExecutor(8) as pool:
+        digests = list(pool.map(publish, range(8)))
+    assert len(set(digests)) == 1
+    with artifact_scope('project_b'), pytest.raises(Denied):
+        store.open(digests[0])
+    with database.connection() as db:
+        assert db.execute('SELECT artifact_bytes FROM platform_quota').fetchone()[0] == 22
+        assert db.execute('SELECT COUNT(*) FROM artifact_access').fetchone()[0] == 1
+        assert db.execute('SELECT COUNT(*) FROM artifact_reservations').fetchone()[0] == 0

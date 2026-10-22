@@ -59,6 +59,7 @@ jobs:
         run: |
           PHYSIMESH_BROWSER_EVIDENCE_DIR=.backend/browser-local .venv/bin/python scripts/qa/next_development_browser.py
           PHYSIMESH_BROWSER_EVIDENCE_DIR=.backend/browser-private .venv/bin/python scripts/qa/hosted_browser.py
+          .venv/bin/python scripts/qa/client_workflow_browser.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -6,7 +6,42 @@ import {restoreSession,connectSession,forgetSession,isPublicAccess} from './sess
 const $ = id => document.getElementById(id);
 let token = '', connected = false, connectionReady = false, current = null, dirty = false, busy = false, generation = 0, study = null, viewer = null;
 let hosted=false, organization='', inventoryCursor='', inventoryNext=null, inventoryStack=[], activeJob=null;
-let layoutGeneration=0; const geometryCache=new Map();
+let layoutGeneration=0, viewSnapshot=null, viewRevision='', viewMode='draft', selectedCase=''; const geometryCache=new Map();
+const context = () => ({generation, token, organization, project:current?.project_id});
+const isContext = c => c.generation===generation && c.token===token && c.organization===organization && c.project===current?.project_id;
+function updateContext(){
+  $('display-context').textContent=!current?'No project selected.':viewMode==='draft'?'Viewer: '+(dirty?'unsaved':'saved')+' draft version '+current.draft_version+'. Editor changes affect this draft only.':'Viewer: frozen revision '+viewRevision+' · '+(viewMode==='study'?'selected study '+study?.study_sha256:'selected revision')+'. Draft edits do not change this view.';
+  $('show-draft-layout').disabled=!current||busy||viewMode==='draft';
+  $('view-case').disabled=!study||viewMode!=='study'||busy;
+  document.querySelectorAll('#studies button').forEach(button=>button.setAttribute('aria-current',String(button.dataset.study===study?.study_sha256)));
+  document.querySelectorAll('#revisions button').forEach(button=>button.setAttribute('aria-current',String(viewMode!=='draft'&&button.dataset.revision===viewRevision)));
+}
+function clearWorkspace(){
+  ++generation;++layoutGeneration;geometryCache.clear();current=null;study=null;dirty=false;viewSnapshot=null;viewRevision='';viewMode='draft';selectedCase='';activeJob=null;inventoryCursor='';inventoryNext=null;inventoryStack=[];
+  $('snapshot').value='';$('input-editors').replaceChildren();$('study-report').replaceChildren();$('comparison-report').replaceChildren();$('revision-detail').hidden=true;
+  ['revisions','studies','jobs','reviews','compare-before','compare-after','view-case','projects','study-summary','guided-readiness','layout-inputs'].forEach(id=>$(id).replaceChildren());
+  $('design-title').textContent='Open a project to begin.';$('project-record').textContent='No project open.';$('save-state').textContent='Missing physical inputs stay unknown.';
+  ['review-workspace','job-history','invite-member','invitation-result'].forEach(id=>$(id).hidden=true);
+  $('more-revisions').hidden=true;$('more-studies').hidden=true;$('editor-navigation').replaceChildren(new Option('Choose an input group',''));
+  $('created-invitation').value='';$('job-progress').textContent='';$('cancel-job').hidden=true;$('retry-job').hidden=true;
+  if(viewer)viewer.showRotorLayout({rotors:[]},null);$('layout-note').textContent='No design selected.';$('reset-layout').disabled=true;$('project-title').value='';geometryPanel.sync(null,null,false);updateContext();controls();
+}
+async function selectStudy(record){
+  const c=context();const retained=typeof record==='string'?await api(`/projects/${c.project}/studies/${record}`):record;
+  const revision=await api(`/projects/${c.project}/revisions/${retained.specification.revision_sha256}`);
+  if(!isContext(c))return;
+  const frozen=JSON.parse(revision.snapshot_json);study=retained;viewSnapshot=frozen;viewRevision=retained.specification.revision_sha256;viewMode='study';selectedCase=retained.limiting_case_id||retained.headline_candidate_checks?.[0]?.case_id||'';
+  $('view-case').replaceChildren(...(retained.cases||[]).map(row=>{const option=document.createElement('option');option.value=row.case_id;option.textContent=row.case_id+' · '+row.outcome;return option;}));$('view-case').value=selectedCase;showStudy();layout();await loadSummary();
+}
+async function loadSummary(){
+  const c=context(),digest=study?.study_sha256,out=$('study-summary');out.replaceChildren();
+  if(!digest)return;out.textContent='Loading retained study summary…';
+  try{const summary=await api(`/projects/${c.project}/studies/${digest}/summary`);if(!isContext(c)||study?.study_sha256!==digest)return;
+    if(summary.schema_version!=='study_summary_v1'||summary.study_sha256!==digest||summary.revision_sha256!==study.specification.revision_sha256||summary.project_id!==c.project||summary.snapshot_sha256!==study.specification.snapshot_sha256)throw new Error('Summary identity differs from selected study.');
+    out.replaceChildren();const title=document.createElement('h4');title.textContent='Retained study summary';out.append(title);
+    for(const [key,name] of [['nominal','Nominal model bound'],['scenario','Deterministic scenario bound'],['allowable','Checked allowable payload']]){const bound=summary.bounds[key],line=document.createElement('p');line.textContent=(bound.label||name)+': '+(bound.payload_kg==null?'Unavailable':bound.payload_kg+' kg')+' · '+bound.status+'. '+bound.qualification;out.append(line);if(key==='allowable'){const note=document.createElement('p');note.textContent='Declared external cap: '+(bound.declared_cap_kg==null?'Unavailable':bound.declared_cap_kg+' kg')+'. Approval declarations are not authenticated engineering acceptance.';out.append(note);}}
+  }catch(error){if(isContext(c)&&study?.study_sha256===digest)out.textContent='Retained summary unavailable: '+error.message+'. Detailed retained evidence and exports remain available.';}
+}
 const editControls = ['snapshot', 'save', 'reload', 'freeze', 'export-draft'];
 const geometryPanel = mountGeometry({
   read: () => JSON.parse($('snapshot').value),
@@ -18,6 +53,9 @@ const geometryPanel = mountGeometry({
 });
 function message(text, error = false) { $('message').textContent = text; $('message').className = error ? 'error' : ''; }
 function controls() {
+  updateContext();
+  ['organization','logout'].forEach(id=>$(id).disabled=busy);
+  document.querySelectorAll('#individual-login input,#individual-login button,#accept-invitation input,#accept-invitation button').forEach(el=>el.disabled=busy);
   $('local-session').hidden=hosted;
   ['create', 'project-title', 'projects', 'open'].forEach(id => { $(id).disabled = !connected || busy; });
   $('open').disabled = !connected || busy || !$('projects').value;
@@ -40,14 +78,15 @@ function controls() {
   if($('review-decision').selectedOptions[0]?.disabled)$('review-decision').value='comment';
   $('snapshot').disabled=!current||busy;$('snapshot').readOnly=readOnly||!connected;
   document.querySelectorAll('.revision-button,.review-export-button').forEach(button => { button.disabled = busy || !connected; });
-  geometryPanel.setEnabled(Boolean(current && connected && !busy), dirty);
+  geometryPanel.setEnabled(Boolean(current && connected && !busy && !readOnly), dirty);
 }
 async function request(path, options = {}) {
-  const headers = {...options.headers};
-  if(hosted){headers.Authorization='Bearer '+token;headers['X-Organization-ID']=organization;if(current?.project_id)headers['X-Project-ID']=current.project_id;}
+  const requested=context(),headers = {...options.headers};
+  if(hosted){headers.Authorization='Bearer '+token;if(organization)headers['X-Organization-ID']=organization;if(current?.project_id)headers['X-Project-ID']=current.project_id;}
   const response = await fetch('/api/drone' + path, { ...options, credentials:'same-origin', cache:'no-store', headers, signal: AbortSignal.timeout(60000) });
+  if(!isContext(requested))throw new Error('Workspace context changed; the previous response was ignored.');
   if(response.status===401){
-    connected=false;token='';geometryCache.clear();
+    connected=false;token='';++generation;++layoutGeneration;geometryCache.clear();$('invitation-result').hidden=true;$('created-invitation').value='';
     if(hosted){$('individual-session').hidden=true;message('Your session expired or was revoked. Sign in again. Unsaved inputs remain in this editor.',true);}
     else{sessionStatus();message('Browser access expired or was forgotten. Reconnect to continue. Your open draft is still here.',true);}
     controls();
@@ -55,7 +94,7 @@ async function request(path, options = {}) {
   if (!response.ok) { let detail;try{detail=(await response.json()).detail;}catch{detail='HTTP '+response.status;}const error=new Error(typeof detail === 'string' ? detail : detail?.message || JSON.stringify(detail));error.detail=detail;throw error; }
   return response;
 }
-async function api(path, options = {}) { return (await request(path,options)).json(); }
+async function api(path, options = {}) { const c=context(),data=await(await request(path,options)).json();if(!isContext(c))throw new Error('Workspace context changed; the previous response was ignored.');return data; }
 function payload(method, body) { return { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }; }
 async function action(work) {
   if (busy) return;
@@ -73,11 +112,13 @@ async function inventory(selected = '', cursor='') {
   controls();
 }
 function render(project) {
+  if(current?.project_id!==project.project_id){geometryCache.clear();++layoutGeneration;$('reviews').replaceChildren();$('jobs').replaceChildren();$('created-invitation').value='';$('invitation-result').hidden=true;}
+  viewSnapshot=null;viewRevision='';viewMode='draft';selectedCase='';$('view-case').replaceChildren();
   current = project; dirty = false;
   $('more-revisions').hidden=!project.revisions_more;$('more-studies').hidden=!project.studies_more;
   $('invite-member').hidden=!hosted||!project.can_invite;
   $('review-workspace').hidden=!hosted;$('job-history').hidden=!hosted;if(hosted)loadJobs().catch(error=>message(error.message,true));
-  study=null;$('study-report').replaceChildren();
+  study=null;$('study-report').replaceChildren();$('study-summary').replaceChildren();$('guided-readiness').replaceChildren();
   $('snapshot').value = JSON.stringify(JSON.parse(project.snapshot_json), null, 2);
   $('design-title').textContent = project.title;
   $('save-state').textContent = 'Saved draft version ' + project.draft_version + '. Edits create a new version; retained revisions stay unchanged.';
@@ -86,12 +127,13 @@ function render(project) {
   editors();
   const rows = project.revisions.map(record => {
     const li = document.createElement('li'), button = document.createElement('button');
-    button.type = 'button'; button.className = 'revision-button';
+    button.type = 'button'; button.className = 'revision-button';button.dataset.revision=record.revision_sha256;
     button.textContent = 'Draft ' + record.draft_version + ' · ' + record.revision_sha256.slice(0, 12);
     button.addEventListener('click', () => action(async () => {
       const pid = current.project_id, request = generation;
       const revision = await api(`/projects/${pid}/revisions/${record.revision_sha256}`);
       if (request !== generation || pid !== current?.project_id) return;
+      viewSnapshot=JSON.parse(revision.snapshot_json);viewRevision=record.revision_sha256;viewMode='revision';layout();updateContext();
       $('revision-summary').textContent = 'Immutable local revision ' + record.revision_sha256 + '. Engineering approval pending.';
       $('revision-json').textContent = JSON.stringify(revision, null, 2);
       $('revision-detail').hidden = false;
@@ -101,8 +143,8 @@ function render(project) {
   if (!rows.length) { const li = document.createElement('li'); li.textContent = 'No frozen revision yet.'; rows.push(li); }
   $('revisions').replaceChildren(...rows); controls();
   $('studies').replaceChildren(...(project.studies||[]).map(record=>{
-    const li=document.createElement('li'),button=document.createElement('button');button.type='button';button.className='revision-button';button.textContent='Study '+record.study_sha256.slice(0,12);
-    button.addEventListener('click',()=>action(async()=>{study=await api(`/projects/${current.project_id}/studies/${record.study_sha256}`);showStudy();layout();}));li.append(button);return li;
+    const li=document.createElement('li'),button=document.createElement('button');button.type='button';button.className='revision-button';button.dataset.study=record.study_sha256;button.textContent='Study '+record.study_sha256.slice(0,12);
+    button.addEventListener('click',()=>action(()=>selectStudy(record.study_sha256)));li.append(button);return li;
   }));
   ['compare-before','compare-after'].forEach(id=>$(id).replaceChildren(...(project.studies||[]).map(record=>{
     const option=document.createElement('option');option.value=record.study_sha256;option.textContent=record.created_utc+' · '+record.study_sha256.slice(0,12);return option;
@@ -114,23 +156,35 @@ function render(project) {
 function currentStudy(){return !dirty&&current?.revisions.some(r=>r.draft_version===current.draft_version&&r.revision_sha256===study?.specification.revision_sha256);}
 function showStudy(){if(study){renderStudy($('study-report'),study,currentStudy());if(hosted)loadReviews().catch(error=>message(error.message,true));}controls();}
 async function geometryBytes(digest){
-  if(!geometryCache.has(digest))geometryCache.set(digest,(async()=>{try{return await(await request('/projects/geometry-sources/'+digest)).arrayBuffer();}catch(error){geometryCache.delete(digest);throw new Error('Retained geometry unavailable: '+error.message);}})());
+  const requested=context();
+  if(!geometryCache.has(digest))geometryCache.set(digest,(async()=>{
+    const bytes=await(await request('/projects/geometry-sources/'+digest)).arrayBuffer();
+    if(!isContext(requested))throw new Error('Workspace changed while loading geometry.');
+    return bytes;
+  })().catch(error=>{if(isContext(requested))geometryCache.delete(digest);throw error;}));
   return geometryCache.get(digest);
 }
-async function layout(){const request=++layoutGeneration;try{const data=JSON.parse($('snapshot').value),components=data.assembly?.components||[];
+async function layout(){const request=++layoutGeneration;let inputsShown=false;updateContext();try{const data=viewMode==='draft'?JSON.parse($('snapshot').value):viewSnapshot,components=data?.assembly?.components||[];
+  showLayoutInputs(data);inputsShown=true;
   if(!data.rotors?.length&&!components.length){if(viewer)viewer.showRotorLayout({rotors:[]},null);$('layout-note').textContent='No declared rotor layout or airframe. Add inputs or create a labelled example.';$('reset-layout').disabled=true;return;}
   if(components.length>64)throw new Error('Assembly preview supports at most 64 declared components.');
   const geometries=await Promise.all(components.map(async component=>({component,buffer:await geometryBytes(component.source_sha256)})));
   if(request!==layoutGeneration)return;
   if(geometries.reduce((sum,g)=>sum+g.buffer.byteLength,0)>50000000)throw new Error('Assembly preview exceeds 50 MB.');
-  const bound=currentStudy()?study?.headline_candidate_checks?.find(c=>c.case_id===study.limiting_case_id||study.aggregate_limit):null;
-  const record=currentStudy()?study?.cases?.find(c=>c.case_id===study.limiting_case_id):null;
+  const bound=viewMode==='study'?study?.headline_candidate_checks?.find(c=>c.case_id===selectedCase):null;
+  const record=viewMode==='study'?study?.cases?.find(c=>c.case_id===selectedCase):null;
   const highlighted=(data.rotors||[]).filter(r=>record?.active_constraints?.some(c=>c.startsWith(r.rotor_id+'_'))).map(r=>r.rotor_id),failed=bound?.failed_rotor_ids||[];
   viewer??=createViewer($('layout-view'));const count=viewer.showRotorLayout(data,bound?.candidate?.cg_body_m,{geometries,highlightedRotors:highlighted,failedRotors:failed});
-  $('layout-note').textContent=count+' declared rotor disks; '+geometries.length+' retained airframe components. '+(record?'Governing case: '+record.case_id+'. ':'')+(highlighted.length?'Amber active rotor limits: '+highlighted.filter(r=>!failed.includes(r)).join(', ')+'. ':'')+(failed.length?'Red failed rotors: '+failed.join(', ')+'. ':'')+'Positions use the declared body frame. Geometry does not establish aircraft performance.';$('reset-layout').disabled=!(count||geometries.length);
-}catch(error){if(request!==layoutGeneration)return;if(viewer)viewer.showRotorLayout({rotors:[]},null);$('layout-note').textContent='Layout unavailable: '+error.message;$('reset-layout').disabled=true;}}
+  $('layout-note').textContent=count+' declared rotor disks; '+geometries.length+' retained airframe components. '+(record?'Selected case: '+record.case_id+(record.case_id===study?.limiting_case_id?' (governing)':'')+'. ':'')+(highlighted.length?'Amber active rotor limits: '+highlighted.filter(r=>!failed.includes(r)).join(', ')+'. ':'')+(failed.length?'Red failed rotors: '+failed.join(', ')+'. ':'')+'Positions use the declared body frame. Geometry does not establish aircraft performance.';$('reset-layout').disabled=!(count||geometries.length);
+}catch(error){if(request!==layoutGeneration)return;if(!inputsShown)$('layout-inputs').replaceChildren();if(viewer)viewer.showRotorLayout({rotors:[]},null);const selected=viewMode==='study'?study?.cases?.find(c=>c.case_id===selectedCase):null;$('layout-note').textContent=(selected?'Selected case: '+selected.case_id+'. ':'')+'Layout unavailable: '+error.message+(inputsShown?' Declared numeric inputs and source references remain available below.':'');$('reset-layout').disabled=true;}}
+function showLayoutInputs(data){
+  const out=$('layout-inputs');out.replaceChildren();
+  for(const rotor of data.rotors||[]){const line=document.createElement('p');line.dataset.rotorId=rotor.rotor_id;line.textContent='Rotor '+rotor.rotor_id+' · centre ['+(rotor.center_body_m||[]).join(', ')+'] m · axis ['+(rotor.axis_body||[]).join(', ')+'] · map '+(rotor.map_ref||'Unknown');out.append(line);}
+  for(const component of data.assembly?.components||[]){const line=document.createElement('p');line.textContent='Component '+component.component_id+' · source '+component.source_sha256+' · source units '+(component.source_units||'Unknown')+' · translation ['+(component.transform?.translation_m||[]).join(', ')+'] m';out.append(line);}
+}
 async function guardedRequest(work){const request=generation,pid=current?.project_id,raw=$('snapshot').value;const result=await work();if(request!==generation||pid!==current?.project_id||raw!==$('snapshot').value)throw new Error('Inputs changed during import. The source was retained; reopen the import step to bind it to the current draft.');return result;}
 async function openProject(pid) {
+  geometryCache.clear();++layoutGeneration;
   const request = ++generation;
   const project = await api('/projects/' + pid);
   if (request !== generation) return;
@@ -139,13 +193,27 @@ async function openProject(pid) {
 function editors() {
   mountEditors($('input-editors'), () => JSON.parse($('snapshot').value), updateDraft,
   async () => { if (dirty) throw new Error('Save the draft first to inspect these edits.');
-    return api(`/projects/${current.project_id}/inspection`); }, dataset_json => guardedRequest(()=>api('/projects/performance-sources',payload('POST',{dataset_json}))),{
+    const c=context(),report=await api(`/projects/${current.project_id}/inspection`);if(!isContext(c))throw new Error('Project changed during inspection.');showReadiness(report);return report; }, dataset_json => guardedRequest(()=>api('/projects/performance-sources',payload('POST',{dataset_json}))),{
       conditionMap:(digest,policy)=>guardedRequest(()=>api('/projects/performance-sources/'+digest+'/condition',payload('POST',{policy}))),
       importGeometry:(files,units)=>guardedRequest(()=>{const body=new FormData();body.append('source_units',units);[...files].forEach(file=>body.append('files',file));return api('/import',{method:'POST',body});})
     });
+  refreshNavigation();
+}
+function refreshNavigation(){
+  const groups=[...$('input-editors').children].filter(el=>el.tagName==='DETAILS'||el.tagName==='SECTION');
+  $('editor-navigation').replaceChildren(new Option('Choose an input group',''),...groups.map((el,index)=>{el.id='editor-group-'+index;return new Option(el.querySelector('summary,h3')?.textContent||'Inputs',el.id);}));
+}
+new MutationObserver(refreshNavigation).observe($('input-editors'),{childList:true});
+function navigateInputs(id){const target=document.getElementById(id);if(target){target.open=true;target.scrollIntoView({block:'start',behavior:'auto'});target.querySelector('summary,input,select,textarea,button')?.focus();}}
+function showReadiness(report){
+  const out=$('guided-readiness');out.replaceChildren();
+  const heading=document.createElement('p');heading.textContent='Saved draft '+report.draft_version+' inspection. Model eligibility is separate from aircraft approval.';out.append(heading);
+  const reasons=report.hover_readiness?.reasons||report.hover_readiness?.blocking||[];
+  const list=document.createElement('ul');for(const reason of reasons){const li=document.createElement('li');li.textContent=typeof reason==='string'?reason:JSON.stringify(reason);const text=li.textContent.toLowerCase();const group=[...$('editor-navigation').options].find(option=>option.value&&(text.includes('mass')?option.text.includes('Mass'):text.includes('pack')||text.includes('energy')?option.text.includes('battery'):text.includes('map')||text.includes('rotor')?option.text.includes('Rotors'):text.includes('case')||text.includes('mission')||text.includes('atmosphere')?option.text.includes('alternative'):false));if(group){const button=document.createElement('button');button.type='button';button.textContent='Open '+group.text;button.addEventListener('click',()=>navigateInputs(group.value));li.append(' ',button);}list.append(li);}out.append(list);
+  if(!reasons.length){const note=document.createElement('p');note.textContent='No local-hover blockers returned. Source and engineering acceptance remain separate.';out.append(note);}
 }
 function updateDraft(data) {
-  $('snapshot').value=JSON.stringify(data,null,2);dirty=true;
+  $('snapshot').value=JSON.stringify(data,null,2);dirty=true;$('guided-readiness').textContent='Draft inputs changed. Save and inspect again.';
   const inspection=$('inspection-report');if(inspection)inspection.textContent='Inputs edited. Save and inspect again.';
   $('save-state').textContent='Unsaved edits. Save before freezing a revision.';
   controls();showStudy();layout();geometryPanel.sync(current,data,true);
@@ -159,22 +227,14 @@ function sessionStatus() {
     document.querySelector('footer').textContent='Shared workspace. Real aircraft inputs and engineering approval remain pending.';
   }
 }
-function clearWorkspace() {
-  current=null;dirty=false;++generation;geometryCache.clear();++layoutGeneration;
-  $('snapshot').value='';$('design-title').textContent='Open a project to begin.';$('save-state').textContent='';
-  $('projects').replaceChildren();$('project-title').value='';
-  $('input-editors').replaceChildren();$('project-record').textContent='No project open.';$('revision-detail').hidden=true;
-  $('revisions').replaceChildren();$('studies').replaceChildren();study=null;$('study-report').replaceChildren();
-  $('compare-before').replaceChildren();$('compare-after').replaceChildren();$('comparison-report').replaceChildren();
-  if(viewer)viewer.showRotorLayout({rotors:[]},null);$('reset-layout').disabled=true;
-  geometryPanel.sync(null,null,false);controls();
-}
+
 async function loadWorkspace() {
   sessionStatus();controls();await inventory(current?.project_id);
   message(current?'Your open draft is still here.':'Workspace ready. Select or create a project.');
 }
 $('connection').addEventListener('submit', event => {
   event.preventDefault(); if (busy) return;
+  if(!preserveEdits())return;
   const accessToken=$('token').value;$('token').value='';
   action(async()=>{
     connected=await connectSession(accessToken);clearWorkspace();await loadWorkspace();
@@ -191,7 +251,7 @@ $('create-project').addEventListener('submit', event => { event.preventDefault()
 }); });
 $('open').addEventListener('click', () => { if ($('projects').value && preserveEdits()) action(() => openProject($('projects').value)); });
 $('reload').addEventListener('click', () => { if (current && preserveEdits()) action(() => openProject(current.project_id)); });
-$('snapshot').addEventListener('input', () => { dirty = true; $('save-state').textContent = 'Unsaved edits. Save before freezing a revision.'; const binding=$('study-report').querySelector('.study-binding');if(binding)binding.textContent='Inputs edited. This retained study belongs to the previous frozen design.';controls();layout(); });
+$('snapshot').addEventListener('input', () => { dirty = true; $('guided-readiness').textContent='Draft inputs changed. Save and inspect again.';$('save-state').textContent = 'Unsaved edits. Save before freezing a revision.'; const binding=$('study-report').querySelector('.study-binding');if(binding)binding.textContent='Inputs edited. This retained study belongs to the previous frozen design.';controls();layout(); });
  $('snapshot').addEventListener('change', () => {editors();showStudy();layout();try{geometryPanel.sync(current,JSON.parse($('snapshot').value),true);}catch(error){message('Invalid JSON: '+error.message,true);}});
 function saveDraft() { return action(async () => {
   const snapshot = $('snapshot').value;
@@ -216,7 +276,7 @@ $('conflict-reload').addEventListener('click',()=>{$('draft-conflict').close();a
 window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
 $('example').addEventListener('click',()=>{if(!preserveEdits())return;action(async()=>{const project=await api('/projects/examples/hover',payload('POST',{}));++generation;render(project);await inventory(project.project_id);message('Illustrative design created. Save/freeze and evaluate; no real aircraft data is used.');});});
 ['realistic','motorout'].forEach(kind=>$(kind+'-example').addEventListener('click',()=>{if(!preserveEdits())return;action(async()=>{const project=await api('/projects/examples/'+kind,payload('POST',{}));++generation;render(project);await inventory(project.project_id);message('Synthetic noisy CT/CQ fixture created. Its uncertainty bounds and moment allowances are software declarations; no client data is used.');});}));
-$('calculate').addEventListener('click',()=>action(async()=>{const revision=current.revisions.find(r=>r.draft_version===current.draft_version);message('Evaluating covered maps, force/moment balance and every required case…');let result=await api(`/projects/${current.project_id}/studies`,payload('POST',{revision_sha256:revision.revision_sha256}));if(result.job_id){const job=await waitForJob(result);result=await api(`/projects/${current.project_id}/studies/${JSON.parse(job.result_json).study_sha256}`);}render(await api('/projects/'+current.project_id));study=result;showStudy();layout();message('Bounded local study retained. Engineering approval and real-aircraft validation remain pending.');}));
+$('calculate').addEventListener('click',()=>action(async()=>{const revision=current.revisions.find(r=>r.draft_version===current.draft_version);message('Evaluating covered maps, force/moment balance and every required case…');let result=await api(`/projects/${current.project_id}/studies`,payload('POST',{revision_sha256:revision.revision_sha256}));if(result.job_id){const job=await waitForJob(result);result=await api(`/projects/${current.project_id}/studies/${JSON.parse(job.result_json).study_sha256}`);}render(await api('/projects/'+current.project_id));await selectStudy(result);message('Bounded local study retained. Engineering approval and real-aircraft validation remain pending.');}));
 async function downloadStudy(kind){
   const path=`/projects/${current.project_id}/studies/${study.study_sha256}/${kind==='pdf'?'pdf':'export'}`;
   let response=await request(path);
@@ -231,6 +291,9 @@ $('compare').addEventListener('click',()=>action(async()=>{
   const report=await api(`/projects/${current.project_id}/comparisons`,payload('POST',{before:$('compare-before').value,after:$('compare-after').value}));
   renderComparison($('comparison-report'),report);message('Retained studies compared. Current unsaved inputs do not change either record.');
 }));
+$('show-draft-layout').addEventListener('click',()=>{viewMode='draft';viewSnapshot=null;viewRevision='';layout();controls();});
+$('view-case').addEventListener('change',()=>{selectedCase=$('view-case').value;layout();});
+$('editor-navigation').addEventListener('change',()=>{navigateInputs($('editor-navigation').value);});
 $('reset-layout').addEventListener('click',()=>viewer?.reset());
 controls();
 sessionStatus();
@@ -258,12 +321,13 @@ async function sessionOrganizations(){
   organization=$('organization').value;$('individual-session').hidden=false;
 }
 $('individual-login').addEventListener('submit',event=>{event.preventDefault();action(async()=>{
+  if(!preserveEdits())return;clearWorkspace();token='';connected=false;organization='';
   const response=await fetch('/api/drone/platform/login',payload('POST',{email:$('login-email').value,password:$('login-password').value}));$('login-password').value='';
   const result=await response.json();if(!response.ok)throw new Error(result.detail||'Sign-in failed');
   token=result.token;connected=true;geometryCache.clear();++generation;await sessionOrganizations();await inventory();message('Signed in. Select a private project.');
 });});
-$('organization').addEventListener('change',()=>{organization=$('organization').value;});
-$('logout').addEventListener('click',()=>action(async()=>{await api('/platform/logout',payload('POST',{}));token='';connected=false;organization='';geometryCache.clear();$('individual-session').hidden=true;message('Signed out. Inputs remain in this page; save or export them before closing.');}));
+$('organization').addEventListener('change',()=>{const next=$('organization').value;if(!preserveEdits()){$('organization').value=organization;return;}clearWorkspace();organization=next;action(async()=>{await inventory();message('Organization changed. Select a project.');});});
+$('logout').addEventListener('click',()=>{if(!preserveEdits())return;action(async()=>{await api('/platform/logout',payload('POST',{}));clearWorkspace();token='';connected=false;organization='';$('individual-session').hidden=true;message('Signed out. Project data has been cleared from this page.');});});
 $('next-projects').addEventListener('click',()=>{if(inventoryNext)action(async()=>{inventoryStack.push(inventoryCursor);await inventory('',inventoryNext);});});
 $('previous-projects').addEventListener('click',()=>action(()=>inventory('',inventoryStack.pop()||'')));
 ['revisions','studies'].forEach(kind=>$('more-'+kind).addEventListener('click',()=>action(async()=>{
@@ -271,7 +335,7 @@ $('previous-projects').addEventListener('click',()=>action(()=>inventory('',inve
   const retained=new Map(current[kind].map(r=>[kind==='revisions'?r.revision_sha256:r.study_sha256,r]));page[kind].forEach(r=>retained.set(kind==='revisions'?r.revision_sha256:r.study_sha256,r));
   // Load one bounded page at a time and keep its immutable continuation locally.
   if(current[kind+'_cursor']){const more=await api(`/projects/${current.project_id}/history/${kind}?limit=100&after=${encodeURIComponent(current[kind+'_cursor'])}`);more[kind].forEach(r=>retained.set(kind==='revisions'?r.revision_sha256:r.study_sha256,r));cursor=more.next_cursor;}
-  const savedStudy=study;current[kind]=[...retained.values()];current[kind+'_cursor']=cursor;current[kind+'_more']=!!cursor;render(current);if(wasDirty){$('snapshot').value=rawEditor;dirty=true;$('save-state').textContent='Unsaved edits. Save before freezing a revision.';editors();}study=savedStudy;showStudy();
+  const savedStudy=study,savedView={viewSnapshot,viewRevision,viewMode,selectedCase},caseOptions=[...$('view-case').options].map(o=>o.cloneNode(true));current[kind]=[...retained.values()];current[kind+'_cursor']=cursor;current[kind+'_more']=!!cursor;render(current);if(wasDirty){$('snapshot').value=rawEditor;dirty=true;$('save-state').textContent='Unsaved edits. Save before freezing a revision.';editors();}study=savedStudy;({viewSnapshot,viewRevision,viewMode,selectedCase}=savedView);$('view-case').replaceChildren(...caseOptions);$('view-case').value=selectedCase;showStudy();layout();await loadSummary();
 })));
 async function waitForJob(submitted){
   const pid=current.project_id;activeJob={...submitted,project_id:pid};$('cancel-job').hidden=current?.role!=='engineer';$('retry-job').hidden=true;
@@ -307,8 +371,8 @@ $('submit-review').addEventListener('click',()=>action(async()=>{if(!study)retur
 async function loadJobs(){
   const pid=current?.project_id;if(!pid||!hosted)return;const page=await api(`/projects/${pid}/jobs`);if(pid!==current?.project_id)return;
   $('jobs').replaceChildren(...page.jobs.map(record=>{const li=document.createElement('li'),button=document.createElement('button');button.type='button';button.textContent=record.kind+' · '+record.state+' · attempt '+record.attempt_count;
-    button.addEventListener('click',()=>action(async()=>{const job=await waitForJob(record);if(record.kind==='study'){const receipt=JSON.parse(job.result_json);study=await api(`/projects/${pid}/studies/${receipt.study_sha256}`);showStudy();}message('Accepted job evidence reopened.');}));li.append(button);return li;}));
+    button.addEventListener('click',()=>action(async()=>{const job=await waitForJob(record);if(record.kind==='study'){const receipt=JSON.parse(job.result_json);await selectStudy(receipt.study_sha256);}message('Accepted job evidence reopened.');}));li.append(button);return li;}));
 }
 
 $('invite-member').addEventListener('submit',event=>{event.preventDefault();action(async()=>{const result=await api('/platform/projects/'+current.project_id+'/invitations',payload('POST',{email:$('invite-email').value,role:$('invite-role').value}));$('created-invitation').value=result.invitation_token;$('invitation-result').hidden=false;message('One-use invitation created for this email. It expires in 24 hours. Share it privately.');});});
-$('accept-invitation').addEventListener('submit',event=>{event.preventDefault();action(async()=>{const result=await api('/platform/invitations/accept',payload('POST',{invitation_token:$('invitation-code').value}));$('invitation-code').value='';await sessionOrganizations();if(preserveEdits())await openProject(result.project_id);await inventory(result.project_id);message('Invitation accepted for this project.');});});
+$('accept-invitation').addEventListener('submit',event=>{event.preventDefault();if(!preserveEdits())return;action(async()=>{const result=await api('/platform/invitations/accept',payload('POST',{invitation_token:$('invitation-code').value}));$('invitation-code').value='';await sessionOrganizations();await openProject(result.project_id);await inventory(result.project_id);message('Invitation accepted for this project.');});});
