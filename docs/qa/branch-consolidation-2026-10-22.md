@@ -51,6 +51,13 @@ without changing its route, and invalid setting types raise `TypeError`.
 The existing Ruff command reproduced all four findings and passed after fixes.
 JavaScript syntax and diff whitespace checks also passed.
 
+Integration CI also exposed an intermittent Linux procfs race in the existing
+worker failure drill: a child could be reaped between the existence check and
+reading `/proc/<pid>/stat`, raising `ProcessLookupError`. The read now treats
+only missing/reaped-process errors as child exit. The zombie check, timeout,
+restart and stale-publication assertions remain unchanged. This fixes the
+observation harness without changing the worker or relaxing an acceptance check.
+
 No solver equation, model constant, physical tolerance, validation fixture or
 physics acceptance is changed. The draft DR-01 remains awaiting scientist review.
 Existing model/release gates retain their recorded status. The user's merge

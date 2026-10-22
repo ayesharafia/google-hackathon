@@ -66,7 +66,13 @@ def main():
                 supervisor.wait(timeout=10)
                 for _ in range(100):
                     status = Path(f'/proc/{child}/stat')
-                    if not status.exists() or status.read_text().rsplit(')', 1)[1].strip().startswith('Z'):
+                    try:
+                        state = status.read_text().rsplit(')', 1)[1].strip()
+                    except (FileNotFoundError, ProcessLookupError):
+                        # The kernel may reap the child between opening and reading
+                        # procfs. Both errors mean the observed process has exited.
+                        break
+                    if state.startswith('Z'):
                         break
                     time.sleep(.02)
                 else:
