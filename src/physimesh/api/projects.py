@@ -175,7 +175,7 @@ def geometry(request: Request, project_id: str, revision_sha256: str | None = No
 
 
 @router.get('/{project_id}/geometry/{digest}.stl')
-def geometry_source(request: Request, project_id: str, digest: str, revision_sha256: str | None = None):
+def project_geometry_source(request: Request, project_id: str, digest: str, revision_sha256: str | None = None):
     raw = operation(lambda: request.app.state.projects.geometry_source(project_id, digest, revision_sha256))
     return Response(raw, media_type='model/stl', headers={
         'Cache-Control': 'private, no-store', 'X-Content-SHA256': digest})

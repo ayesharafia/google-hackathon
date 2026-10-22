@@ -33,7 +33,7 @@ class Settings:
 
     def __post_init__(self) -> None:
         if not isinstance(self.public_access, bool):
-            raise ValueError("public_access must be a boolean")
+            raise TypeError("public_access must be a boolean")
         if self.hosted_mode and self.public_access:
             raise ValueError("public access is available only in local mode")
         if not self.hosted_mode and not self.public_access and (
