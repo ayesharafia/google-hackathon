@@ -1,0 +1,25 @@
+{
+  "managed_sha256": {
+    ".agents/skills/market-scout/SKILL.md": "c0f09f367225e598d2c9a6d7f1c38c04c2840d10b921374d70fc2f167998e19d",
+    ".agents/skills/physicore-work/SKILL.md": "e72ebf7f5f8aee50892ed0c35ff7e216d78e913b26b65ed986c19fa82251528f",
+    ".agents/skills/scientific-review/SKILL.md": "2013a942672c02d04fc77b9972775edf0fb183a8f25eb5bc760bd69caf12b7ba",
+    ".physicore/AGENT_POLICY.md": "2ab936808dd5011e92d19684421a86a4cd5414122dd69c2672eaa87966bbc202",
+    ".physicore/ops/APPROVALS.md": "922b88318b2d00585a25a9da34e2184f32232c90ac118a12bda0caf7be0dc012",
+    ".physicore/ops/EFFICIENCY.md": "df0a40257d356f9d32f656b2142e66620338bc6df82996e2a353313cd5fbf4a7",
+    ".physicore/ops/INVESTOR_DIGEST.md": "e7c0509dc1c33fdee40154d67d942c2af70fa3b9f8f4523f773071530f23ab86",
+    ".physicore/ops/MARKET_POLICY.md": "0241dc184fa52a5cde46db0558af23f52bc48cb683a32e47e79970cdb1894d94",
+    ".physicore/ops/RESEARCH_LOG.md": "53bcce01e358ba0521e9ff2e49173d157c3c93998f56dbbf47fbb73ab6ff3e8b",
+    ".physicore/ops/SCIENTIFIC_GATES.md": "d7ebccfa6d6e4d48a9aa2eeddcb776051af44e197fcfee9b8a73d90f989fc6b3",
+    ".physicore/ops/STATE.md": "5a7a59fb14b95cab87775c11be4b5b495ca4ddfb4246dd309bd877611d043fe5",
+    ".physicore/ops/STRATEGY.md": "4c0653e14b1ded3b9416684f710d3c6638bcd1d2902af65583e8c3a517ca3a90",
+    ".physicore/ops/TASKS.json": "0108b0b68f67e0d998f73fefe8f3c5a30df97b15fd91e0779341c097633b9435",
+    ".physicore/ops/WORKFLOW.md": "d4dda4746f2ca0ba511956cc06c35bb9fe758baf5453770bd926ccc9edb2e917",
+    ".physicore/ops/WORKLOG.md": "7224edc95b0ba0d7657cc60bbc0dd73ef49caab1bffa4909427329598674a923",
+    ".physicore/specs/SLICE_TEMPLATE.md": "94e2a548d8682b327a4c6ec7241cd36b1b85410b9d57b6e9d22f59459bdec3ef",
+    ".physicore/templates/FEATURE_EVIDENCE.md": "c831db72096292dd644caf2c3e3aa4d13c2a93c2ea1599901121191269cd9452",
+    ".physicore/templates/PHYSICS_SPEC.md": "98129542c8c629edf101e838cb0ed302d9d5225a0f23adc135dab582da6ac145",
+    ".physicore/tools/workflow.py": "43ef035233259bffd81edcd101fa49e79fe4c7ad334b7c203b688f212e4f7d9e"
+  },
+  "package": "PhysiCore Autonomy Portfolio",
+  "version": "3.0"
+}

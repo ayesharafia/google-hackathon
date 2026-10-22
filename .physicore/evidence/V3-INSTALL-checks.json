@@ -1,0 +1,45 @@
+{
+  "kind": "installation_operational_checks",
+  "date": "2026-10-22",
+  "source_baseline": "cdee01b22e86724d3dc5f883295415c4b5f4e188",
+  "application_or_kit_tests_executed": false,
+  "checks": [
+    {
+      "argv": [
+        ".venv/bin/python",
+        ".physicore/tools/workflow.py",
+        "doctor"
+      ],
+      "returncode": 0,
+      "output": "OK: 2 tasks, 1 ready; repo=/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone"
+    },
+    {
+      "argv": [
+        ".venv/bin/python",
+        ".physicore/tools/workflow.py",
+        "next"
+      ],
+      "returncode": 0,
+      "output": "NEXT SLICE-001: Inventory existing drone constants and numerical guard provenance\nAcceptance: Cover five baseline modules, classify every discovered relevant constant or guard, report missing provenance, and change zero model values or tolerances"
+    },
+    {
+      "argv": [
+        ".venv/bin/ruff",
+        "check",
+        "."
+      ],
+      "returncode": 0,
+      "output": "All checks passed!"
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "output": ""
+    }
+  ],
+  "qualifications": "Doctor validates ledger structure, not security or physics; lint checks style/static rules; no application validation is claimed."
+}

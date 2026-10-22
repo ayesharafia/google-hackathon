@@ -1,5 +1,9 @@
 # Simulation kit adoption
 
+**Historical record.** The owner replaced this operating workflow with
+[Portfolio v3](portfolio-v3-adoption-2026-10-22.md). Do not apply the old
+instructions below to new work; retained evidence and source records remain historical.
+
 The subsequent [autonomy update](autonomy-adoption-2026-10-22.md) adds broad-prompt
 orchestration, decision zones and persistent trackers. Its explicit provisional
 experiment exception updates the original approval-before-build rule only for

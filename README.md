@@ -14,17 +14,28 @@ examples do not establish a real aircraft capacity.
 
 ## Project working method
 
-From 22 October 2026, follow the supplied [playbook](PLAYBOOK.md),
-[agent context](CLAUDE.md) and [verification ladder](VALIDATION.md).
-[`AGENTS.md`](AGENTS.md) gives Codex and other agents the required reading order.
-Physics changes follow an approved spec, separate validation and implementation,
-an independent audit, and a plain-language evidence report.
+The owner replaced the old simulation-kit workflow with **PhysiCore Autonomy
+Portfolio v3** on 22 October 2026. Start with [AGENTS.md](AGENTS.md), the
+[current resume state](.physicore/ops/STATE.md) and the
+[v3 Work protocol](.physicore/ops/WORKFLOW.md). A broad “Work” request advances
+one meaningful bounded task by default; specific requests take priority.
 
-The kit includes [spec/report templates](templates/), [agent roles](.claude/agents/),
-[Claude command definitions](.claude/commands/), a [ladder roadmap](ROADMAP.md) and
-an [append-only decision log](DECISIONS.md). Read the
-[adoption notes](docs/working-method/sim-kit-adoption.md) for wording corrections,
-source integrity and how the kit connects to the existing drone plan.
+The [task ledger](.physicore/ops/TASKS.json), [work log](.physicore/ops/WORKLOG.md)
+and [approvals](.physicore/ops/APPROVALS.md) replace the old backlog/journal/inboxes.
+Use [scientific gates](.physicore/ops/SCIENTIFIC_GATES.md) where the task touches
+physics. Existing feature-specific approvals, tolerances and evidence retain
+their scope. See the [migration record](docs/working-method/portfolio-v3-adoption-2026-10-22.md).
+
+From the repository root:
+
+```sh
+.venv/bin/python .physicore/tools/workflow.py doctor
+.venv/bin/python .physicore/tools/workflow.py next
+```
+
+The old role/command files and policies are retained only as
+[historical snapshots](.physicore/legacy/sim-kit-2026-10-22/README.md).
+No background service, external orchestration API or company HQ is installed.
 
 ## Setup
 

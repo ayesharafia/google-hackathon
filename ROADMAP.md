@@ -1,13 +1,14 @@
 # Physics evidence roadmap
 
-## Priority and autonomous work
+## Priority and current work
 
 Priority: **Drone payload/mission first; shared foundation work supports it.**
 This carries forward B's confirmed direction. Other domains remain unselected.
-Use [AUTONOMY.md](AUTONOMY.md) and [BACKLOG.md](BACKLOG.md) for the next bounded
-run. Broad prompts route through the orchestrator and scientific coordinator;
-blocked human decisions are recorded in the inboxes. This changes task selection,
-not any ladder status or scientific approval below.
+Use the [v3 Work protocol](.physicore/ops/WORKFLOW.md),
+[state](.physicore/ops/STATE.md) and [task ledger](.physicore/ops/TASKS.json)
+for current task selection. The tables below preserve the earlier kickoff audit;
+the v3 policy supersedes its generic operating rules, without promoting evidence
+or changing any feature's approved numerical thresholds.
 
 Drone kickoff: 22 October 2026, source `73793c9`. The user confirmed the drone
 payload project: required mission cases, plots and an evidence report. The
@@ -19,8 +20,8 @@ This file tracks physics evidence and the next qualification specifications.
 See the [kickoff report](reports/drone-kickoff-2026-10-22.md) for actual checks,
 sources, limits and the first three tasks.
 
-Status: 🔴 absent or unassessed; 🟡 scoped evidence, acceptance pending;
-🟢 only after applicable L0–L4 evidence and required approval are recorded.
+Historical audit status: 🔴 absent or unassessed; 🟡 scoped evidence, acceptance pending.
+Future claims use the case-appropriate [v3 scientific gates](.physicore/ops/SCIENTIFIC_GATES.md).
 Listed checks are not a contiguous accepted ladder. Missing evidence is not a
 passing L0. Spatial mesh convergence requires a documented applicability decision
 for algebraic models and exact constant-power integration.

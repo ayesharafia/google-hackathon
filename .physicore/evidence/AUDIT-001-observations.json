@@ -1,0 +1,36 @@
+{
+  "kind": "read_only_source_observations",
+  "source_baseline": "cdee01b22e86724d3dc5f883295415c4b5f4e188",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "cfd2251e51b02fdc575831ae747f6e1dccbcfafe726ba4bedfb7ecef0264fd4c"
+    },
+    {
+      "path": "src/physimesh/api/app.py",
+      "sha256": "382ef323a03e2d64723d558ac4dca62d9eae32492921f3399e5fda3f03d1fe98"
+    },
+    {
+      "path": "src/physimesh/projects/service.py",
+      "sha256": "d52686bee52b16a5a738528fc2c89e14ac313473aff022f0ab0bfd6e2c441f84"
+    },
+    {
+      "path": "src/physimesh/drone/capacity.py",
+      "sha256": "73d2a955ae4a6a0a60f053a8634de3a1a13011fdcedece7d7af1a53898fd87a7"
+    },
+    {
+      "path": "src/physimesh/drone/mission_capacity.py",
+      "sha256": "d070d3b58164bf4602e326dfd426b0456373bd1cfe06b3bd1ee0b5dfea5e154b"
+    },
+    {
+      "path": "tests/projects/test_project_geometry.py",
+      "sha256": "1e42569a860cae8cbdea0d5b7357ca902633b95b43a8959e0f14c3266f48b6bf"
+    },
+    {
+      "path": "tests/platform/test_artifact_reservations.py",
+      "sha256": "3a7d1717be806745bc8e618b945c422d64e35f4ba4cdec2ef2a97d55562f024f"
+    }
+  ],
+  "application_tests_executed": false,
+  "limitations": "Source observations and historical CI are not fresh runtime or scientific validation."
+}

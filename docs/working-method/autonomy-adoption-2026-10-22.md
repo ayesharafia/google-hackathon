@@ -1,5 +1,9 @@
 # Autonomous scientific workflow adoption
 
+**Superseded operating instructions.** The owner replaced this workflow with
+[Portfolio v3](portfolio-v3-adoption-2026-10-22.md). This page records the earlier
+adoption only. Use `.physicore/ops/WORKFLOW.md` for new requests.
+
 Date: 22 October 2026. User direction: adopt the revised supplied setup and use
 multiple specialist agents so broad prompts can select useful work without the
 lead researching the science. This updates the earlier kit adoption; existing

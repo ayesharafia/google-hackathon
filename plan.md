@@ -1,21 +1,20 @@
 # PhysiCore Drone: production development plan
 
-**Autonomous work, adopted 22 October 2026:** broad continuation requests use
-[AUTONOMY.md](AUTONOMY.md), the [ready backlog](BACKLOG.md) and the
-[scientific coordination workflow](docs/working-method/autonomy-adoption-2026-10-22.md).
-Keep existing evidence/approval scopes. Provisional physics stays off main;
-retain all branches under B's latest direction.
+**Current operating workflow:** [PhysiCore Autonomy Portfolio v3](.physicore/ops/WORKFLOW.md)
+replaces the old simulation-kit orchestration at the owner's request. Resume from
+[STATE.md](.physicore/ops/STATE.md) and [TASKS.json](.physicore/ops/TASKS.json).
+Default to one bounded task per broad prompt; preserve existing feature-specific
+evidence/approval scopes and retain all branches.
 
 **Planning baseline:** 3 October 2026, commit `66611667aa0d9614f6e5c066db7410b7d7a30a03`, branch `mvp/3day`.
 **Deployment decision:** private hosted web app for the team and invited clients.
 **Document status:** development specification and work order. Future tasks are uncompleted; this document does not establish production readiness or aircraft validation.
 
-**Working method, adopted 22 October 2026:** read [AGENTS.md](AGENTS.md),
-[CLAUDE.md](CLAUDE.md), [PLAYBOOK.md](PLAYBOOK.md), [VALIDATION.md](VALIDATION.md)
-and the [adoption notes](docs/working-method/sim-kit-adoption.md) before work.
-Use the kit's spec, scientist sign-off, separate validation/builder and audit
-workflow for physics changes. The [22 October kickoff](reports/drone-kickoff-2026-10-22.md)
-populates [ROADMAP.md](ROADMAP.md) with scoped evidence and qualification work.
+**Working method:** read [AGENTS.md](AGENTS.md) and relevant v3 policy. Apply
+[scientific gates](.physicore/ops/SCIENTIFIC_GATES.md) to the actual model and
+claimed use, with qualified approvals where needed. The
+[22 October kickoff](reports/drone-kickoff-2026-10-22.md) populates
+[ROADMAP.md](ROADMAP.md) with scoped historical evidence and qualification work.
 The active slice table below retains detailed implementation/release status;
 the roadmap records physics ladder evidence. DR-01 is awaiting scientist review,
 with reviewer unassigned and customer accuracy unknown. The kickoff does not

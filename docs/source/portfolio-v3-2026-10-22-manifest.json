@@ -1,0 +1,450 @@
+{
+  "schema_version": "physicore_portfolio_v3_adoption_v1",
+  "date": "2026-10-22",
+  "timezone": "Asia/Calcutta",
+  "source_baseline": "cdee01b22e86724d3dc5f883295415c4b5f4e188",
+  "archive": {
+    "original_path": "/Users/bhupeshcholake/Downloads/PhysiCore_Autonomy_Portfolio_v3.zip",
+    "retained_path": "docs/source/PhysiCore_Autonomy_Portfolio_v3.zip",
+    "sha256": "0f5e1efb00e816449832efd13633bda4478bdeff8c301e86418e41881cdd1382",
+    "payload_count": 32
+  },
+  "source_payloads": [
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/MASTER_DIRECTIVE.md",
+      "sha256": "e8352b6ab08d4a1a9a4c5e959c1d7d10493c720a2aaacc2c22951b55e7fb8b3f",
+      "bytes": 2332
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/ONE_LINE_SETUP.txt",
+      "sha256": "a93ff4121dacc79351d0feb4352a6e31278541cbfda7f665cecb18560c722b79",
+      "bytes": 412
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/README.md",
+      "sha256": "6c981f3584fdfeb5ea7a895638f8ce20f069c94b552c7f59a88ef4c38898cc8d",
+      "bytes": 3620
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/START_HERE.md",
+      "sha256": "064e9edbef55ce278f0b58067fe26201ccf2e666b53320a6525930753c5d2534",
+      "bytes": 5939
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/TEST_RESULTS.md",
+      "sha256": "51362690de2cee1db031a947baac67697111b9f419c27823551f27af5d3fd876",
+      "bytes": 1503
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/hq/.physicore-hq/README.md",
+      "sha256": "b1dc81ba8f31c3647d5a113ee101167987999deac726f31fa6fe759b26e939c1",
+      "bytes": 1253
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/hq/.physicore-hq/portfolio.py",
+      "sha256": "08aab71b682d75f3cd40868ef4a3e0d3bd904ec00c74372621414767821388f7",
+      "bytes": 2418
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.agents/skills/market-scout/SKILL.md",
+      "sha256": "c0f09f367225e598d2c9a6d7f1c38c04c2840d10b921374d70fc2f167998e19d",
+      "bytes": 534
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.agents/skills/physicore-work/SKILL.md",
+      "sha256": "e72ebf7f5f8aee50892ed0c35ff7e216d78e913b26b65ed986c19fa82251528f",
+      "bytes": 736
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.agents/skills/scientific-review/SKILL.md",
+      "sha256": "2013a942672c02d04fc77b9972775edf0fb183a8f25eb5bc760bd69caf12b7ba",
+      "bytes": 769
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/AGENT_POLICY.md",
+      "sha256": "2ab936808dd5011e92d19684421a86a4cd5414122dd69c2672eaa87966bbc202",
+      "bytes": 3609
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/APPROVALS.md",
+      "sha256": "922b88318b2d00585a25a9da34e2184f32232c90ac118a12bda0caf7be0dc012",
+      "bytes": 654
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/EFFICIENCY.md",
+      "sha256": "df0a40257d356f9d32f656b2142e66620338bc6df82996e2a353313cd5fbf4a7",
+      "bytes": 1972
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/INVESTOR_DIGEST.md",
+      "sha256": "e7c0509dc1c33fdee40154d67d942c2af70fa3b9f8f4523f773071530f23ab86",
+      "bytes": 527
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/MARKET_POLICY.md",
+      "sha256": "0241dc184fa52a5cde46db0558af23f52bc48cb683a32e47e79970cdb1894d94",
+      "bytes": 1652
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/RESEARCH_LOG.md",
+      "sha256": "53bcce01e358ba0521e9ff2e49173d157c3c93998f56dbbf47fbb73ab6ff3e8b",
+      "bytes": 313
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/SCIENTIFIC_GATES.md",
+      "sha256": "d7ebccfa6d6e4d48a9aa2eeddcb776051af44e197fcfee9b8a73d90f989fc6b3",
+      "bytes": 3604
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/STATE.md",
+      "sha256": "5a7a59fb14b95cab87775c11be4b5b495ca4ddfb4246dd309bd877611d043fe5",
+      "bytes": 769
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/STRATEGY.md",
+      "sha256": "4c0653e14b1ded3b9416684f710d3c6638bcd1d2902af65583e8c3a517ca3a90",
+      "bytes": 2474
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/TASKS.json",
+      "sha256": "0108b0b68f67e0d998f73fefe8f3c5a30df97b15fd91e0779341c097633b9435",
+      "bytes": 1179
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/WORKFLOW.md",
+      "sha256": "d4dda4746f2ca0ba511956cc06c35bb9fe758baf5453770bd926ccc9edb2e917",
+      "bytes": 6052
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/ops/WORKLOG.md",
+      "sha256": "7224edc95b0ba0d7657cc60bbc0dd73ef49caab1bffa4909427329598674a923",
+      "bytes": 294
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/specs/SLICE_TEMPLATE.md",
+      "sha256": "94e2a548d8682b327a4c6ec7241cd36b1b85410b9d57b6e9d22f59459bdec3ef",
+      "bytes": 843
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/templates/FEATURE_EVIDENCE.md",
+      "sha256": "c831db72096292dd644caf2c3e3aa4d13c2a93c2ea1599901121191269cd9452",
+      "bytes": 423
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/templates/PHYSICS_SPEC.md",
+      "sha256": "98129542c8c629edf101e838cb0ed302d9d5225a0f23adc135dab582da6ac145",
+      "bytes": 668
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/assets/repo/.physicore/tools/workflow.py",
+      "sha256": "43ef035233259bffd81edcd101fa49e79fe4c7ad334b7c203b688f212e4f7d9e",
+      "bytes": 17495
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/install.py",
+      "sha256": "2cd2fde702d33f9c20edde6e68f6d39ccb644a592906a0bbc3d4655a4363f735",
+      "bytes": 12044
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/references/v2/MIGRATION_AND_AUDIT.md",
+      "sha256": "c76b0a192fb5d1a4216053a213d5c5c7ff695fd14b33d868b4b8df208a6f5b2a",
+      "bytes": 4773
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/references/v2/README.md",
+      "sha256": "a9e1f9d8a146cba9e0d4fbf20de05972d2cd5743dd7d18bd42ac59e26fa9470b",
+      "bytes": 3785
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/references/v2/company/PORTFOLIO_TEMPLATE.md",
+      "sha256": "15be02e4051304363ae4521d1710cdddc4ebd8177ba859602c69129c19abded0",
+      "bytes": 1858
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/references/v2/company/README.md",
+      "sha256": "c67298c74c1553dea6326c57057d7a5a106671c7d7fa1abec888952536c41e65",
+      "bytes": 850
+    },
+    {
+      "archive_path": "PhysiCore_Autonomy_Portfolio_v3/tests/test_v3.py",
+      "sha256": "836056aeef4e3260f7c258bcefe90af017366487caa9590c994730ab324bfa36",
+      "bytes": 9025
+    }
+  ],
+  "installed_assets": [
+    {
+      "path": ".agents/skills/market-scout/SKILL.md",
+      "source_sha256": "c0f09f367225e598d2c9a6d7f1c38c04c2840d10b921374d70fc2f167998e19d",
+      "installed_snapshot_sha256": "c0f09f367225e598d2c9a6d7f1c38c04c2840d10b921374d70fc2f167998e19d",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".agents/skills/physicore-work/SKILL.md",
+      "source_sha256": "e72ebf7f5f8aee50892ed0c35ff7e216d78e913b26b65ed986c19fa82251528f",
+      "installed_snapshot_sha256": "e72ebf7f5f8aee50892ed0c35ff7e216d78e913b26b65ed986c19fa82251528f",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".agents/skills/scientific-review/SKILL.md",
+      "source_sha256": "2013a942672c02d04fc77b9972775edf0fb183a8f25eb5bc760bd69caf12b7ba",
+      "installed_snapshot_sha256": "2013a942672c02d04fc77b9972775edf0fb183a8f25eb5bc760bd69caf12b7ba",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/AGENT_POLICY.md",
+      "source_sha256": "2ab936808dd5011e92d19684421a86a4cd5414122dd69c2672eaa87966bbc202",
+      "installed_snapshot_sha256": "2ab936808dd5011e92d19684421a86a4cd5414122dd69c2672eaa87966bbc202",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/ops/APPROVALS.md",
+      "source_sha256": "922b88318b2d00585a25a9da34e2184f32232c90ac118a12bda0caf7be0dc012",
+      "installed_snapshot_sha256": "0132497795e7be62efe2cce84bdf67cbb6357b19a0df9d9f05ee5f804bebd6e0",
+      "classification": "project_resume_state_or_lint_adaptation"
+    },
+    {
+      "path": ".physicore/ops/EFFICIENCY.md",
+      "source_sha256": "df0a40257d356f9d32f656b2142e66620338bc6df82996e2a353313cd5fbf4a7",
+      "installed_snapshot_sha256": "df0a40257d356f9d32f656b2142e66620338bc6df82996e2a353313cd5fbf4a7",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/ops/INVESTOR_DIGEST.md",
+      "source_sha256": "e7c0509dc1c33fdee40154d67d942c2af70fa3b9f8f4523f773071530f23ab86",
+      "installed_snapshot_sha256": "1d27d7d97893da24cd81bd2e0d25465ef3c6bc00173b619e30949ebf4cd2dc4f",
+      "classification": "project_resume_state_or_lint_adaptation"
+    },
+    {
+      "path": ".physicore/ops/MARKET_POLICY.md",
+      "source_sha256": "0241dc184fa52a5cde46db0558af23f52bc48cb683a32e47e79970cdb1894d94",
+      "installed_snapshot_sha256": "0241dc184fa52a5cde46db0558af23f52bc48cb683a32e47e79970cdb1894d94",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/ops/RESEARCH_LOG.md",
+      "source_sha256": "53bcce01e358ba0521e9ff2e49173d157c3c93998f56dbbf47fbb73ab6ff3e8b",
+      "installed_snapshot_sha256": "53bcce01e358ba0521e9ff2e49173d157c3c93998f56dbbf47fbb73ab6ff3e8b",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/ops/SCIENTIFIC_GATES.md",
+      "source_sha256": "d7ebccfa6d6e4d48a9aa2eeddcb776051af44e197fcfee9b8a73d90f989fc6b3",
+      "installed_snapshot_sha256": "d7ebccfa6d6e4d48a9aa2eeddcb776051af44e197fcfee9b8a73d90f989fc6b3",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/ops/STATE.md",
+      "source_sha256": "5a7a59fb14b95cab87775c11be4b5b495ca4ddfb4246dd309bd877611d043fe5",
+      "installed_snapshot_sha256": "a827347b2e1bbc9691bf41e576d7a5cd1bd4e78750e53468ef8b64b38787aca6",
+      "classification": "project_resume_state_or_lint_adaptation"
+    },
+    {
+      "path": ".physicore/ops/STRATEGY.md",
+      "source_sha256": "4c0653e14b1ded3b9416684f710d3c6638bcd1d2902af65583e8c3a517ca3a90",
+      "installed_snapshot_sha256": "af7fdafc388cd6f56a016c1b45fb70d5f096a9d4ca6694e703c3fc932aadac53",
+      "classification": "project_resume_state_or_lint_adaptation"
+    },
+    {
+      "path": ".physicore/ops/TASKS.json",
+      "source_sha256": "0108b0b68f67e0d998f73fefe8f3c5a30df97b15fd91e0779341c097633b9435",
+      "installed_snapshot_sha256": "1629260330ff73c504ec61f7e112188add98a9d560b348444494370fbefd1da0",
+      "classification": "project_resume_state_or_lint_adaptation"
+    },
+    {
+      "path": ".physicore/ops/WORKFLOW.md",
+      "source_sha256": "d4dda4746f2ca0ba511956cc06c35bb9fe758baf5453770bd926ccc9edb2e917",
+      "installed_snapshot_sha256": "d4dda4746f2ca0ba511956cc06c35bb9fe758baf5453770bd926ccc9edb2e917",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/ops/WORKLOG.md",
+      "source_sha256": "7224edc95b0ba0d7657cc60bbc0dd73ef49caab1bffa4909427329598674a923",
+      "installed_snapshot_sha256": "16396de54366a0d45a6a659264fb721df4fc5dbd639997140b09d0b548f1ec30",
+      "classification": "project_resume_state_or_lint_adaptation"
+    },
+    {
+      "path": ".physicore/specs/SLICE_TEMPLATE.md",
+      "source_sha256": "94e2a548d8682b327a4c6ec7241cd36b1b85410b9d57b6e9d22f59459bdec3ef",
+      "installed_snapshot_sha256": "94e2a548d8682b327a4c6ec7241cd36b1b85410b9d57b6e9d22f59459bdec3ef",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/templates/FEATURE_EVIDENCE.md",
+      "source_sha256": "c831db72096292dd644caf2c3e3aa4d13c2a93c2ea1599901121191269cd9452",
+      "installed_snapshot_sha256": "c831db72096292dd644caf2c3e3aa4d13c2a93c2ea1599901121191269cd9452",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/templates/PHYSICS_SPEC.md",
+      "source_sha256": "98129542c8c629edf101e838cb0ed302d9d5225a0f23adc135dab582da6ac145",
+      "installed_snapshot_sha256": "98129542c8c629edf101e838cb0ed302d9d5225a0f23adc135dab582da6ac145",
+      "classification": "exact_source"
+    },
+    {
+      "path": ".physicore/tools/workflow.py",
+      "source_sha256": "43ef035233259bffd81edcd101fa49e79fe4c7ad334b7c203b688f212e4f7d9e",
+      "installed_snapshot_sha256": "e6645f97ab320217cb2546061ac582f35adc6d99556893bca57356efa1857c38",
+      "classification": "project_resume_state_or_lint_adaptation"
+    }
+  ],
+  "retired_workflow_files": [
+    {
+      "previous_path": "AGENTS.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/AGENTS.snapshot.md",
+      "sha256": "71d4b5d95bb16e22c11373e836ac6ce3f0d196d35dec6f37bf1a581bbed2ede8"
+    },
+    {
+      "previous_path": "CLAUDE.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/CLAUDE.snapshot.md",
+      "sha256": "65c9abcbee9023362471f292443e3bd5c053c1b088249cf61830b68999f97655"
+    },
+    {
+      "previous_path": "AUTONOMY.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/AUTONOMY.md",
+      "sha256": "4458439e24c9d15c70469cdd7d7d5ceb0513ac3461f486a20788eb3711e5af2d"
+    },
+    {
+      "previous_path": "PLAYBOOK.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/PLAYBOOK.md",
+      "sha256": "7b4bf90d214e3acb4d568a677c430c61de2f53663e9d4b9b42c22d28485866e0"
+    },
+    {
+      "previous_path": "VALIDATION.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/VALIDATION.md",
+      "sha256": "fda63c94b51c592027e35727f68fbba28e564b9b3e62fe0f8410c476c5c4e9ea"
+    },
+    {
+      "previous_path": "BACKLOG.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/BACKLOG.md",
+      "sha256": "81a4c243ca8ee73a44442de004cb16e5571f462fe67daaa81766dbf2a0e31c2d"
+    },
+    {
+      "previous_path": "JOURNAL.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/JOURNAL.md",
+      "sha256": "4a8189fee58c3991981a0326d9e38a0bc277c9805770a91f16b037598c0f303d"
+    },
+    {
+      "previous_path": "INBOX_FOR_B.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/INBOX_FOR_B.md",
+      "sha256": "102fe28901c33cfffb8733f9d811938a800525e0cf87fa98fb2248d6328d91bb"
+    },
+    {
+      "previous_path": "INBOX_FOR_SCIENTIST.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/INBOX_FOR_SCIENTIST.md",
+      "sha256": "f3c7e16465978f8bc83ae25b8d52ccb183a52c6986cf9b40a68c0ba0a0f43374"
+    },
+    {
+      "previous_path": ".claude/agents/explainer.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/agents/explainer.md",
+      "sha256": "a557818db8dc940d1659feb64da1d16e1d8dbebc3068d4dbe8526a9e93dd5388"
+    },
+    {
+      "previous_path": ".claude/agents/orchestrator.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/agents/orchestrator.md",
+      "sha256": "22e5db492ce0e96531c874d12e6014a25dd8712fb4f4493ec2eeae5c11a8717f"
+    },
+    {
+      "previous_path": ".claude/agents/physics-architect.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/agents/physics-architect.md",
+      "sha256": "6ea012585350bc1020df5cf06161c40d9297af8d7338ddbcb6f5b58e3a06b38e"
+    },
+    {
+      "previous_path": ".claude/agents/physics-auditor.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/agents/physics-auditor.md",
+      "sha256": "e0fb4ef651d055ddda474c3fa6a436c3f4873b9731dac5cf0024be0a00a19628"
+    },
+    {
+      "previous_path": ".claude/agents/scientific-orchestrator.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/agents/scientific-orchestrator.md",
+      "sha256": "bc7f360e50d818b7bfe9082297e8b86a46b3d2f1eddc922292ea72aee3ecd05d"
+    },
+    {
+      "previous_path": ".claude/agents/solver-builder.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/agents/solver-builder.md",
+      "sha256": "f398c3d91b99358681fd77f691599f2e343a8759a26ca7b0189bde839ea6877e"
+    },
+    {
+      "previous_path": ".claude/agents/spec-writer.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/agents/spec-writer.md",
+      "sha256": "7ba93ce8676f2e64127126b378d1b25fb8fef74b4813f7004b80cbb1f5c90983"
+    },
+    {
+      "previous_path": ".claude/agents/validation-engineer.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/agents/validation-engineer.md",
+      "sha256": "1b2ddb5f7f393f007c149c9ecf68ec824a8a185bd2bc0fdb74bf9a0e0f9b50f7"
+    },
+    {
+      "previous_path": ".claude/commands/build.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/commands/build.md",
+      "sha256": "85588cec7c2ea52812d69834df8dbecca9bd72298535069eeb65f7fd6c3862b1"
+    },
+    {
+      "previous_path": ".claude/commands/digest.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/commands/digest.md",
+      "sha256": "cd2c098bcb97dd949eb17c5c1885c8ea6a7cb2f559360c85d5d7fc0477d33340"
+    },
+    {
+      "previous_path": ".claude/commands/explain.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/commands/explain.md",
+      "sha256": "586433b98656f25546c7a01410f571c2bfb727f8f2d91ed823359828096abb97"
+    },
+    {
+      "previous_path": ".claude/commands/kickoff.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/commands/kickoff.md",
+      "sha256": "08171aad519eca170adb3fc0416dd3e9aacc14089a76df733ce3caa326ebcfa4"
+    },
+    {
+      "previous_path": ".claude/commands/next.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/commands/next.md",
+      "sha256": "3c0191bb8ead90b66857afcfb2363f57c0390eebbaa4cecc89aaae8fb85db42c"
+    },
+    {
+      "previous_path": ".claude/commands/plan-week.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/commands/plan-week.md",
+      "sha256": "1fac35119ed8c9ff665eebb1550fc2a78ecc97f053b6d140663aaa8307ff8ac9"
+    },
+    {
+      "previous_path": ".claude/commands/spec.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/commands/spec.md",
+      "sha256": "1ae66ce56324bc14a8fbf6528835b229e8b9b9883f560f22cb8e202c1ff30006"
+    },
+    {
+      "previous_path": ".claude/commands/status.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/commands/status.md",
+      "sha256": "e2a3201f4acf1a5e109e7fc386b96262cb970e8ea93f9d97f57d860b79b68fdf"
+    },
+    {
+      "previous_path": ".claude/commands/teach.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/.claude/commands/teach.md",
+      "sha256": "d84669b9ee763d94bdd86bc8ba0fed4000fd8f3c853dcd23feaa577ae6226677"
+    },
+    {
+      "previous_path": "templates/EXPLAIN_REPORT.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/templates/EXPLAIN_REPORT.md",
+      "sha256": "55de83abfc0166e8565d99c234a0a73a26eea58529e3ec72fbe08004ba5d22bd"
+    },
+    {
+      "previous_path": "templates/PHYSICS_SPEC.md",
+      "archive_path": ".physicore/legacy/sim-kit-2026-10-22/templates/PHYSICS_SPEC.md",
+      "sha256": "d786c14242e78550569343d7d256a159e91693a07c2d75486f6a7e4723800647"
+    }
+  ],
+  "scope": "This drone checkout only; no HQ, sibling repos, scheduled work or application behavior changes.",
+  "local_helper_adaptations": [
+    "Ruff import ordering",
+    "Python 3.11 UTC alias",
+    "explicit check=False where return codes are handled",
+    "min instead of sorted(...)[0]",
+    "executable bit matching shebang"
+  ],
+  "tests_executed": false,
+  "operational_checks": [
+    "installer dry-run",
+    "installer install",
+    "workflow doctor",
+    "workflow audit/proof/complete",
+    "Ruff",
+    "local links and source/legacy hash verification",
+    "diff whitespace"
+  ]
+}

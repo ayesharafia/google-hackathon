@@ -1,0 +1,22 @@
+# PhysiCore Drone: v3 resume state
+
+- Last verified run: 2026-10-22, v3 install/doctor and source audit; no new application test run.
+- Source baseline: cdee01b22e86724d3dc5f883295415c4b5f4e188, main; policy migration is the current dirty change.
+- Domain (OBSERVED): map-based drone payload/mission software, Python 3.11/FastAPI, NumPy/SciPy; separate OpenFOAM tooling.
+- User goal (CONFIRMED): make saved aircraft designs assess supported required cases/segments, retain geometry/revisions and reproducible evidence.
+- Current request: replace old instructions with Portfolio v3 and publish to this GitHub repository.
+- Scope: this checkout only; no portfolio HQ, sibling-repo install, contacts, paid compute, deployment or branch deletion.
+- Actual source inspected: README.md; src/physimesh/api/app.py; src/physimesh/projects/service.py; src/physimesh/drone/capacity.py; src/physimesh/drone/mission_capacity.py.
+- OBSERVED code paths: local/public/session and hosted modes; SQLite/PostgreSQL selection; scoped artifacts; original STL/project/revision retention; bounded alternative-case and sequence capacity.
+- These code observations are not freshly exercised behavior or installed-aircraft evidence.
+- Test scaffolding inspected: tests/projects/test_project_geometry.py and tests/platform/test_artifact_reservations.py; hover/study-summary tests also located.
+- Historical baseline CI: main cdee01b passed run 39765169727; not relabeled as a fresh migration or physics test.
+- Tests executed by this migration: NONE. Operational checks: installer dry-run/install; workflow doctor; source/hash inventory; Ruff and links/whitespace.
+- Scientific confidence: existing scoped synthetic/software evidence only. Current V4 independent/qualified review and real aircraft data remain pending.
+- Existing DR-01: specs/drone-hover-payload-baseline.md, AWAITING SCIENTIST; reviewer UNASSIGNED, customer accuracy UNKNOWN.
+- Existing model equations, approved tolerances, test assertions and retained results unchanged.
+- Current ledger task: AUDIT-001 done with generated inventory, proof, source observations and narrative.
+- Next safe task: SLICE-001 is ready, scoped as a documentation-only constants/guard provenance inventory; do not move/change constants or thresholds.
+- Earlier preparation proposals and inbox questions remain under .physicore/legacy/sim-kit-2026-10-22/; decisions are carried into APPROVALS.md.
+- Active entry points: AGENTS.md and .physicore/ops/WORKFLOW.md; root old workflow names are redirects only.
+- Runtime hint: use the project .venv interpreter; for helper check commands, put .venv/bin on PATH so allowed python3 resolves project dependencies.
