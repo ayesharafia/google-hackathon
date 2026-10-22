@@ -123,5 +123,21 @@
       "classification": "already in main ancestry",
       "included_in_integration_ancestry": true
     }
-  ]
+  ],
+  "completion": {
+    "main_integration_commit": "90b4a8ebc171038668950f211541631251d41719",
+    "checked_source": "902a0ea2460d67e84da9fe53f8288921da5fcc1a",
+    "ci_runs": [
+      39761676837,
+      39761686000
+    ],
+    "ci_conclusion": "success",
+    "application_tests_passed": 670,
+    "reference_tests_passed": 118,
+    "postgres_tests_passed": 3,
+    "sphere_smoke_tests_passed": 1,
+    "branches_retained_per_user_clarification": true,
+    "restored_branch_count": 9,
+    "remaining_remote_branches_excluding_main": 19
+  }
 }

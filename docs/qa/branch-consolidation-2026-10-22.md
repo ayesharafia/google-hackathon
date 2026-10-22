@@ -4,6 +4,12 @@ The user explicitly requested investigation and consolidation of all branches
 and PRs into `main`, followed by cleanup of the clutter. This authorizes repository
 integration; it does not approve physical assumptions or customer accuracy.
 
+**Final direction:** the user subsequently clarified that all branches should be
+kept and only main needs to be updated. The nine branch names removed before
+that clarification were restored at their exact previous heads. All 19
+non-main remote branches and all local branches are retained. Entry 010 in
+`DECISIONS.md` supersedes the earlier branch-retirement instruction.
+
 ## What the inventory found
 
 Starting `main`: `73793c9e39f840864ebb885bd65b9b38706eaa07`.
@@ -27,8 +33,8 @@ with an ordinary merge and supplies only its previously missing document.
 
 A verified local Git bundle of all pre-consolidation refs is retained under
 `.backend/branch-consolidation-2026-10-22/pre-consolidation.bundle`. It is a local
-recovery artifact, not project data or a new remote branch. Retired remote/local
-branches may be deleted only after their heads are verified as ancestors of main.
+recovery artifact, not project data or a new remote branch. No further branch
+deletion is authorized under the user's clarified direction.
 
 ## Conflict resolution and fixes
 
@@ -65,8 +71,35 @@ instruction is recorded separately in `DECISIONS.md`.
 
 ## Verification and completion record
 
-GitHub Actions runs against the integration heads provide the unit/reference,
-PostgreSQL, worker, installed package/image, browser and sphere checks already
-defined by the repository. Actual results and final cleanup are recorded below
-after those runs finish. Full vendor-backend qualification remains a separate
-workflow; no new aircraft validation is claimed by repository consolidation.
+PR [#22](https://github.com/PhysiCoreEngine12/Drone-Project/pull/22) merged at
+`b54406e`; PR [#21](https://github.com/PhysiCoreEngine12/Drone-Project/pull/21)
+merged at `90b4a8ebc171038668950f211541631251d41719`. Every original remote
+branch head and every historical PR head is included in the resulting main
+history. Redundant PRs #1-#3 were closed because their heads were already on main;
+the original #9 proposal is retained through #21, with its original PR left open.
+
+Both integration runs passed at `902a0ea2460d67e84da9fe53f8288921da5fcc1a`:
+[push CI](https://github.com/PhysiCoreEngine12/Drone-Project/actions/runs/39761676837)
+and [PR CI](https://github.com/PhysiCoreEngine12/Drone-Project/actions/runs/39761686000).
+The main merge tree was verified byte-identical to that checked integration tree
+before this documentation-only completion receipt.
+
+| Performed check | Actual result |
+|---|---|
+| Application suite | 670 passed, 6 deselected; existing deprecation warning |
+| Reference suite | 118 passed; existing deprecation warning |
+| Disposable PostgreSQL integration | 3 passed |
+| Sphere smoke | 1 passed |
+| Ruff; private smoke; bounded harnesses; worker recovery | Passed |
+| Installed wheel and offline release images | Passed |
+| Local/private and focused client-workflow browser journeys | Passed |
+
+Reviewed the retained desktop and mobile screenshots for the affected merge UI.
+The combined geometry and study controls remain visible, text has gutters and
+contrast, and no new decorative styling or hidden entrance content was added.
+Browser receipts confirm 390px layout without document overflow, native 200%
+zoom, real downloads, retained geometry linkage, conflict recovery, private
+denial/revocation and result viewing. This is a scoped integration check, not
+client visual acceptance or a claim that every existing product control was
+exhaustively tested. The optional full vendor-backend campaign was skipped;
+no new aircraft validation is claimed.
