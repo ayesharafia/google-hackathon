@@ -17,8 +17,9 @@ workflow snapshots under `.physicore/legacy/` are records, not active instructio
   migration changes no UI and does not replace those design requirements.
 - `plan.md` records application/release status; `ROADMAP.md` retains the previous
   physics evidence audit. Use `.physicore/ops/STATE.md` and `TASKS.json` to resume.
-- This request authorizes publishing the workflow replacement to this GitHub
-  repository. It does not authorize future merges, deployment, contact or spending.
+- Publish to GitHub only when the owner explicitly requests it, with scope
+  recorded in `.physicore/ops/APPROVALS.md`. Publication does not authorize
+  deployment, contact, spending or branch deletion.
 
 <!-- PHYSICORE AUTONOMY V3 START -->
 ## PhysiCore autonomous project work

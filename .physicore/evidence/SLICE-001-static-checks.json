@@ -1,0 +1,58 @@
+{
+  "task_id": "SLICE-001",
+  "kind": "static_documentation_checks",
+  "captured_at": "2026-10-22T13:29:55.598028+00:00",
+  "commands": [
+    {
+      "argv": [
+        ".venv/bin/python",
+        ".physicore/evidence/SLICE-001-inventory-check.py"
+      ],
+      "returncode": 0,
+      "stdout": "5 unchanged modules; 220 numeric occurrences assigned; 60 local links valid; no model/tests executed\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        ".venv/bin/ruff",
+        "check",
+        ".physicore/evidence/SLICE-001-inventory-check.py"
+      ],
+      "returncode": 0,
+      "stdout": "All checks passed!\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--name-only",
+        "--",
+        "src",
+        "tests",
+        "web",
+        "validation",
+        "specs",
+        "pyproject.toml",
+        ".github",
+        "requirements-runtime.lock",
+        "requirements-test.lock"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "application_or_physics_tests_executed": false,
+  "scope": "Documentation/source-link/hash/whitespace checks only; not a test or solver execution."
+}

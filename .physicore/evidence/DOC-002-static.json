@@ -1,0 +1,226 @@
+{
+  "task": "DOC-002",
+  "kind": "static_documentation_check",
+  "captured_at": "2026-10-22T13:43:03.612498+00:00",
+  "baseline_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "document_sha256": "210a828e0baa5b14ae29fdd3ed8d7f61f6bdcaac276b14565c6357948f1383ef",
+  "sources": [
+    {
+      "path": "src/physimesh/drone/screening_scope.py",
+      "sha256": "d8eb45f41b03c01de3ef7b9185f8891626c97357e7624718b238ea45914bf194",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "src/physimesh/drone/authoring.py",
+      "sha256": "11d94647d134a020db2cbc8228c9d6a2039024da90d00fe6b9581ed81edddbf9",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "src/physimesh/drone/mass.py",
+      "sha256": "d58661c4a8db5e853ac5924567b09864c50fb5c2aac79e9c630441e5c749f70d",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "src/physimesh/drone/models.py",
+      "sha256": "0c3f304bf492a5fde536d3dab667c4f12efb537482b95b63d496a317b6c7a1db",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "src/physimesh/drone/schema/drone_manifest_v1.yaml",
+      "sha256": "6f45d6347115f32da8ebebfdfc591ef5ea3ce729401f2c684ae6c5e0ada61c94",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "src/physimesh/drone/trim.py",
+      "sha256": "bfe8052ba5c113ed76534de8b783cc51bf8ccf466bf18b36c66a7ece8e28fcab",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "src/physimesh/drone/mission_capacity.py",
+      "sha256": "d070d3b58164bf4602e326dfd426b0456373bd1cfe06b3bd1ee0b5dfea5e154b",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "src/physimesh/drone/local_results.py",
+      "sha256": "6250387aadc630bde150e20d9efe2b424fa4ff0205d13be61ddf964ada40d1c4",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "src/physimesh/drone/demo_screening.py",
+      "sha256": "d9b3d31b9549e338bcc1b4a19448e5750aff30ee45b1dbd21753f9d4ff8e42c0",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "src/physimesh/projects/contracts.py",
+      "sha256": "70aab4f43c65185f7b53c3c26155811774a3881a2302571ed3aac09c2e306edf",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "tests/drone/test_screening_scope.py",
+      "sha256": "40ef2c756257fcae18e9f4dc19e40fb51be4f7f0af9fd3db96bc8fe904b6251d",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "tests/drone/test_hover_pilot.py",
+      "sha256": "8f141a5c298e19d7d905f1b29d7c0febc3937223fe93810088a20876f5d48ca0",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "docs/contracts/mission-capacity.md",
+      "sha256": "0e0902a4446f90d0204e8b02cb4d836a9cb266cc5fa0bb6337c23d3fa7fb5f74",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "docs/contracts/production-data.md",
+      "sha256": "85f53101251267533756c1ad66f738f7f53e35d7c173105c7912c5f28efe7206",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "docs/decisions/ADR-0003-static-hover-profile.md",
+      "sha256": "a6a8a0c701e391aae0361bda785ea0caf038ace34ed8be6820baf814688d761e",
+      "unchanged_from_baseline": true
+    },
+    {
+      "path": "docs/validation/local-hover-and-energy.md",
+      "sha256": "7c8714073a40665d949464b6b9ccfdd274d6f8ca24d82bc4a486759292b992af",
+      "unchanged_from_baseline": true
+    }
+  ],
+  "function_numeric_occurrences": [
+    {
+      "line": 35,
+      "source": "0",
+      "rows": "E04/E05/E06/E07"
+    },
+    {
+      "line": 35,
+      "source": "0",
+      "rows": "E04/E05/E06/E07"
+    },
+    {
+      "line": 35,
+      "source": "0",
+      "rows": "E04/E05/E06/E07"
+    },
+    {
+      "line": 35,
+      "source": "1",
+      "rows": "E04/E05/E06/E07"
+    },
+    {
+      "line": 35,
+      "source": "0",
+      "rows": "E04/E05/E06/E07"
+    },
+    {
+      "line": 35,
+      "source": "1",
+      "rows": "E04/E05/E06/E07"
+    },
+    {
+      "line": 35,
+      "source": "0",
+      "rows": "E04/E05/E06/E07"
+    },
+    {
+      "line": 37,
+      "source": "1",
+      "rows": "E08"
+    },
+    {
+      "line": 37,
+      "source": "3600",
+      "rows": "E08"
+    },
+    {
+      "line": 38,
+      "source": "0",
+      "rows": "E08"
+    },
+    {
+      "line": 42,
+      "source": "1e-9",
+      "rows": "E09/E10"
+    },
+    {
+      "line": 42,
+      "source": "0",
+      "rows": "E09/E10"
+    },
+    {
+      "line": 45,
+      "source": "1e-9",
+      "rows": "E09/E10"
+    }
+  ],
+  "function_guards": [
+    {
+      "line": 21,
+      "condition": "not isinstance(names, list) or not names or any(not isinstance(n, str) for n in names)\n                or len(set(names)) != len(names) or len(by_name) != len(items)\n                or any(n not in by_name or by_name[n]['category'] != 'energy' for n in names)"
+    },
+    {
+      "line": 27,
+      "condition": "not isinstance(reserve, Mapping) or reserve.get('kind') != 'fraction'"
+    },
+    {
+      "line": 29,
+      "condition": "reserve.get('convention', 'held_usable_energy_fraction') != 'held_usable_energy_fraction'"
+    },
+    {
+      "line": 32,
+      "condition": "any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)\n               for v in (mass, density, fraction, declared, r))"
+    },
+    {
+      "line": 35,
+      "condition": "mass <= 0 or density <= 0 or not 0 < fraction <= 1 or not 0 <= r < 1 or declared <= 0"
+    },
+    {
+      "line": 38,
+      "condition": "not math.isfinite(derived) or derived <= 0"
+    }
+  ],
+  "local_links": [
+    "../../src/physimesh/drone/screening_scope.py#L37",
+    "../../src/physimesh/drone/screening_scope.py#L16",
+    "../../src/physimesh/drone/screening_scope.py#L18",
+    "../../src/physimesh/drone/authoring.py#L11",
+    "../../src/physimesh/drone/mass.py#L58",
+    "../../src/physimesh/drone/screening_scope.py#L26",
+    "../../src/physimesh/drone/screening_scope.py#L26",
+    "../../src/physimesh/drone/screening_scope.py#L27",
+    "../../src/physimesh/drone/screening_scope.py#L25",
+    "../../src/physimesh/drone/screening_scope.py#L37",
+    "../../src/physimesh/drone/screening_scope.py#L42",
+    "../../src/physimesh/drone/screening_scope.py#L40",
+    "../../src/physimesh/drone/trim.py#L122",
+    "../../src/physimesh/drone/authoring.py#L46",
+    "../../src/physimesh/drone/schema/drone_manifest_v1.yaml#L15",
+    "../../src/physimesh/drone/models.py#L346",
+    "../../src/physimesh/projects/contracts.py#L163",
+    "../../src/physimesh/projects/contracts.py#L213",
+    "../../src/physimesh/drone/trim.py#L128",
+    "../contracts/production-data.md",
+    "../../src/physimesh/drone/trim.py#L125",
+    "../../src/physimesh/drone/trim.py#L208",
+    "../../src/physimesh/drone/trim.py#L232",
+    "../../src/physimesh/drone/mission_capacity.py#L79",
+    "../../src/physimesh/drone/mission_capacity.py#L134",
+    "drone-constants-ledger.md",
+    "../../src/physimesh/drone/local_results.py#L115",
+    "../contracts/mission-capacity.md",
+    "../decisions/ADR-0003-static-hover-profile.md",
+    "local-hover-and-energy.md",
+    "../../tests/drone/test_screening_scope.py#L14",
+    "../../src/physimesh/drone/demo_screening.py#L19",
+    "../../tests/drone/test_screening_scope.py#L73",
+    "../../tests/drone/test_hover_pilot.py#L23",
+    "../../tests/drone/test_hover_pilot.py#L154",
+    "../../.physicore/evidence/DOC-002-static.json",
+    "../../.physicore/ops/APPROVALS.md"
+  ],
+  "protected_source_diff": [],
+  "whitespace_check": "passed",
+  "application_tests_or_model_runs_executed": false,
+  "reproduce": ".venv/bin/python .physicore/evidence/DOC-002-static-check.py",
+  "limitations": "Only static source/hash/link checks. Guard meaning and documentation authored by one primary agent, not independently validated."
+}

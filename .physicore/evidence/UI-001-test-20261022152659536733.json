@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "UI-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/engineering_readiness_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-22T15:26:59+00:00",
+  "started_at": "2026-10-22T15:17:44+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "output": "\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\npage.waitForFunction: Timeout 30000ms exceeded.\n    at idle (/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/scripts/qa/engineering_readiness_browser.mjs:26:25)\n    at /Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/scripts/qa/engineering_readiness_browser.mjs:149:30 {\n  log: [],\n  name: 'TimeoutError'\n}\n\nNode.js v26.0.0\n"
+}

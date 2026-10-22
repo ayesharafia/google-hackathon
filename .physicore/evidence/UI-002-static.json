@@ -1,0 +1,154 @@
+{
+  "task": "UI-002",
+  "captured_at": "2026-10-22T15:56:11.907060+00:00",
+  "checks": [
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/workbench.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/input-editors.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/engineering-readiness.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/rotor-source-binding.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "tests/web/test_engineering_readiness.mjs"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "tests/web/test_rotor_source_binding.mjs"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "scripts/qa/engineering_readiness_browser.mjs"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "scripts/qa/rotor_source_binding_browser.mjs"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "output": ""
+    }
+  ],
+  "protected_diff": [],
+  "qa_links_checked": 10,
+  "files": [
+    {
+      "path": "web/js/workbench.js",
+      "sha256": "4fc2a53558976623982ac4482a73f16a912111ca45f9371c72d0256e8af99e21"
+    },
+    {
+      "path": "web/js/input-editors.js",
+      "sha256": "b7f7f97d19667483afa93fa93fb38ae8a92d287c4cc462eaba064f4f2e65f3d8"
+    },
+    {
+      "path": "web/js/engineering-readiness.js",
+      "sha256": "67828e75b338e0d31fa3aaa0617df32866f2fb01cb71c53821ffb4548b49ed65"
+    },
+    {
+      "path": "web/js/rotor-source-binding.js",
+      "sha256": "d285694f195c1d0d8f3d8a26e722b19147c43a8780e9294c5feb11fa5134ae22"
+    },
+    {
+      "path": "tests/web/test_engineering_readiness.mjs",
+      "sha256": "432632caee7c697504ae4eb6e188febecf076313d92b08668927a4658044de0d"
+    },
+    {
+      "path": "tests/web/test_rotor_source_binding.mjs",
+      "sha256": "bfc258261520c55b9954de0b525c0e86bc8575a6fc06cef8e696528fdc50f48d"
+    },
+    {
+      "path": "scripts/qa/engineering_readiness_browser.mjs",
+      "sha256": "a153e018f34856afd8fe51a47cdf45a10e8cfd4f9548b42d4ad3e34815216bea"
+    },
+    {
+      "path": "scripts/qa/rotor_source_binding_browser.mjs",
+      "sha256": "3350d251543523002d9a2c06cc07289c28cd43c518aafbd4dcb8d48d31d6964e"
+    },
+    {
+      "path": "web/workbench.html",
+      "sha256": "6cf6c2063427c72571eb746d1bb91258723d251af90aba9cbc5b3578d2679f74"
+    },
+    {
+      "path": "web/css/workbench.css",
+      "sha256": "e5bd28bd7c870a762e3c318425a2ae221b6f3d7e1b7d093bdd5dbcd7200b9fb6"
+    },
+    {
+      "path": "docs/qa/rotor-source-binding-2026-10-22.md",
+      "sha256": "4f4be3b4a20392f85d4ce89cd4d1a0ecd9c6f037aaad4d1af5581a2ec8aef37f"
+    }
+  ],
+  "screenshots_and_browser_checklist": [
+    {
+      "path": "docs/qa/assets/rotor-source-binding/browser-checks.json",
+      "sha256": "41856332fc6161bedb1080ee7330bbdbfd5ca51bee12a06339106039cdb7445c"
+    },
+    {
+      "path": "docs/qa/assets/rotor-source-binding/desktop.png",
+      "sha256": "d9d105e6312b16bf9c18b69deb8264e7cd901f9ff888b0ebcaffafd03416a9d0"
+    },
+    {
+      "path": "docs/qa/assets/rotor-source-binding/mobile.png",
+      "sha256": "a031dbb27318f3667868b141a09c8433e601c7dd73be268b80132808213fbc57"
+    },
+    {
+      "path": "docs/qa/assets/rotor-source-binding/zoom-200-css.png",
+      "sha256": "32a6941bda992e3cda7222b80b2140e9518e95ea98332d2987db917a4a207a27"
+    }
+  ],
+  "claim": "Syntax/source/link/whitespace checks only. Unit/browser evidence separate; no physical acceptance."
+}

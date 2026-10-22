@@ -4,9 +4,9 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
 <title>PhysiCore | Design workbench</title>
-<link rel="stylesheet" href="/web/css/workbench.css?v=public-3">
+<link rel="stylesheet" href="/web/css/workbench.css?v=source-binding-1">
 <script type="importmap">{"imports":{"three":"/web/vendor/three.module.min.js"}}</script>
-<script type="module" src="/web/js/workbench.js?v=consolidated-1"></script>
+<script type="module" src="/web/js/workbench.js?v=source-binding-1"></script>
 </head>
 <body>
 <header><a class="brand" href="/web/">PhysiCore</a><span>Local design workbench</span><a href="/web/results.html">Evidence desk</a></header>
@@ -43,6 +43,12 @@
 <h2 id="design-title">Open a project to begin.</h2>
 <p id="display-context" role="status" aria-live="polite">No project selected.</p>
 <p id="save-state">Missing physical inputs stay unknown.</p>
+<section id="engineering-readiness" aria-labelledby="readiness-title">
+<div class="readiness-header"><h3 id="readiness-title">Engineering readiness</h3><button id="inspect-saved" type="button" disabled>Inspect saved draft</button></div>
+<p id="readiness-status" role="status" aria-live="polite">Open a project to inspect its saved inputs.</p>
+<p class="readiness-scope">Input checks for the saved draft. Geometry, frozen studies and qualified engineering acceptance have separate evidence.</p>
+<div id="guided-readiness"></div>
+</section>
 <section id="project-geometry" aria-labelledby="geometry-title">
 <h3 id="geometry-title">Aircraft geometry</h3>
 <p>Attach original STL files to this project and declare their source units. Replacing or removing geometry changes the draft; frozen revisions keep their files.</p>
@@ -61,9 +67,9 @@
 <div id="geometry-record"></div>
 </section>
 <section aria-labelledby="layout-title"><h3 id="layout-title">Airframe, rotors and governing case</h3><div id="layout-view"><p>No rotor positions loaded.</p></div><p id="layout-note">Centres, axes and radii from the input. Drag to orbit when a layout is available.</p><button id="show-draft-layout" type="button" disabled>View current draft</button><label>Frozen study case<select id="view-case" disabled></select></label><button id="reset-layout" type="button" disabled>Reset layout view</button><details><summary>Displayed geometry and rotor inputs</summary><div id="layout-inputs"></div></details></section>
-<label>Go to design inputs<select id="editor-navigation"><option value="">Choose an input group</option></select></label><div id="guided-readiness" aria-live="polite"></div>
+<label>Go to design inputs<select id="editor-navigation"><option value="">Choose an input group</option></select></label>
 <div id="input-editors"></div>
-<details><summary>Design input JSON</summary><label for="snapshot">Complete versioned snapshot</label><textarea id="snapshot" spellcheck="false" disabled rows="18"></textarea></details>
+<details id="design-json"><summary>Design input JSON</summary><label for="snapshot">Complete versioned snapshot</label><textarea id="snapshot" spellcheck="false" disabled rows="18"></textarea></details>
 <div class="actions"><button id="save" type="button" disabled>Save draft</button><button id="reload" type="button" disabled>Reload saved draft</button><button id="freeze" type="button" disabled>Freeze saved revision</button><button id="export-draft" type="button" disabled>Export draft JSON</button></div>
 <section aria-labelledby="study-title"><h3 id="study-title">Bounded capacity study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen design</button><p id="job-progress" role="status" aria-live="polite"></p><button id="cancel-job" type="button" hidden>Cancel job</button><button id="retry-job" type="button" hidden>Retry failed job</button><div id="study-summary" aria-live="polite"></div><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
 <section aria-labelledby="comparison-title"><h3 id="comparison-title">Compare retained studies</h3><p>Compare frozen inputs and recorded outcomes. A changed input does not establish the cause of a capacity change.</p><div class="fields"><label>Before study<select id="compare-before" disabled></select></label><label>After study<select id="compare-after" disabled></select></label></div><button id="compare" type="button" disabled>Compare studies</button><div id="comparison-report" aria-live="polite"></div></section>

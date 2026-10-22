@@ -1,5 +1,6 @@
 /* Native draft authoring; blank numeric fields preserve unknowns. */
 import {mountAdvanced} from './advanced-editors.js';
+import {renderSourceBinding} from './rotor-source-binding.js?v=source-binding-1';
 const node=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
 function field(label,value,update,type='number'){
   const wrap=node('label',label),input=node('input');input.type=type;if(type==='number')input.step='any';input.value=value??'';
@@ -55,9 +56,13 @@ export function mountEditors(container,read,write,inspect,importMap,options={}){
   const setModel=(key,v)=>{data.fidelity.local_pilot||={};data.fidelity.local_pilot[key]=v;changed();};
   mf.append(choice('Data scope',data.identity?.data_scope,['analytic_fixture','client_unvalidated'],v=>{data.identity.data_scope=v;changed();}),choice('Local trim model',pilot.model_version,['convex_static_hover_v1','convex_axial_capacity_v2'],v=>setModel('model_version',v)),field('Auxiliary electrical power, W',pilot.auxiliary_power_w,v=>setModel('auxiliary_power_w',v)));
   ['lower','upper'].forEach((label,i)=>mf.append(field('Declared payload '+label+' domain, kg',pilot.payload_domain_kg?.[i],v=>{data.fidelity.local_pilot||={};if(!Array.isArray(data.fidelity.local_pilot.payload_domain_kg))data.fidelity.local_pilot.payload_domain_kg=[null,null];data.fidelity.local_pilot.payload_domain_kg[i]=v;changed();})));model.append(mf);
-  const rotors=node('section');rotors.append(node('h3','Rotors and retained performance sources'),node('p','Upload rotor_map_v1 JSON. Original bytes are retained by hash; import does not validate installed-aircraft performance.'));
-  const upload=node('label','Import performance JSON'),file=node('input');file.type='file';file.accept='.json,application/json';upload.append(file);const importResult=node('p');
-  file.addEventListener('change',async()=>{try{if(!file.files[0])return;if(file.files[0].size>500000)throw new Error('Map source exceeds 500 kB limit.');const result=await importMap(await file.files[0].text());importResult.textContent='Retained source: '+result.source_sha256+' · configuration '+result.dataset.configuration_id+'. Copy the source hash into the matching rotor.';}catch(error){importResult.textContent=error.message;}finally{file.value='';}});rotors.append(upload,importResult);
+  const rotors=node('section');rotors.append(node('h3','Rotors and retained performance sources'),node('p','Import rotor_map_v1 JSON, then explicitly choose matching rotors. Original bytes are retained; importing a file does not approve its performance.'));
+  const upload=node('label','Import performance JSON'),file=node('input');file.type='file';file.accept='.json,application/json';upload.append(file);const importResult=node('div');
+  let importGeneration=0;
+  file.addEventListener('change',async()=>{const request=++importGeneration;try{if(!file.files[0])return;importResult.replaceChildren();if(file.files[0].size>500000)throw new Error('Map source exceeds 500 kB limit.');const raw=await file.files[0].text();if(request!==importGeneration)return;const result=await importMap(raw);if(request!==importGeneration||!file.isConnected)return;renderSourceBinding(importResult,result,read(),{
+    read,enabled:()=>!file.disabled&&file.isConnected,
+    apply:(next,count)=>{data=next;rebuild();options.onMapBound?.(count);container.querySelector('[data-readiness-group=rotors]>summary')?.focus();}
+  });}catch(error){if(request===importGeneration&&file.isConnected)importResult.textContent=error.message;}finally{if(request===importGeneration)file.value='';}});rotors.append(upload,importResult);
   (data.rotors||[]).forEach((r,index)=>{const row=node('fieldset');row.append(node('legend','Rotor '+(index+1)));
     [['Rotor ID','rotor_id'],['Configuration ID','configuration_id'],['Retained map SHA-256','map_ref']].forEach(([label,key])=>row.append(field(label,r[key],v=>{r[key]=v;changed();},'text')));
     triple(row,'Centre, m',r,'center_body_m',changed);triple(row,'Unit axis',r,'axis_body',changed);
@@ -68,6 +73,6 @@ export function mountEditors(container,read,write,inspect,importMap,options={}){
   const ordered=node('section');ordered.append(node('h3','Chronological mission'),node('p','Optional ordered constant-hover segments share one fixed pack. Leave empty for alternative-case analysis. Variable or transient profiles require another model.'));
   (Array.isArray(data.mission.sequence)?data.mission.sequence:[]).forEach((s,index)=>{const row=node('fieldset');row.append(node('legend','Segment '+(index+1)),field('Segment ID',s.segment_id,v=>{s.segment_id=v;changed();},'text'),field('Referenced case ID',s.case_id,v=>{s.case_id=v;changed();},'text'),field('Segment duration, s',s.duration_s,v=>{s.duration_s=v;changed();}),field('Segment source / scope',s.source_note,v=>{s.source_note=v;changed();},'text'),choice('Power profile',s.power_profile,['constant'],v=>{s.power_profile=v;changed();}),button('Remove segment '+(index+1),()=>{data.mission.sequence.splice(index,1);rebuild();}));ordered.append(row);});
   ordered.append(button('Add constant-hover segment',()=>{if(!Array.isArray(data.mission.sequence))data.mission.sequence=[];data.mission.sequence.push({segment_id:'segment_'+(data.mission.sequence.length+1),case_id:null,duration_s:null,source_note:null,power_profile:'constant'});rebuild();}));
-  [mass,pack,cases,model,rotors,ordered].forEach(section=>{const group=node('details');const heading=section.querySelector('h3');group.append(node('summary',heading.textContent));heading.remove();group.append(section);container.append(group);});container.append(checks);
+  [[mass,'mass'],[pack,'battery'],[cases,'cases'],[model,'model'],[rotors,'rotors'],[ordered,'sequence']].forEach(([section,key])=>{const group=node('details');group.dataset.readinessGroup=key;const heading=section.querySelector('h3');group.append(node('summary',heading.textContent));heading.remove();group.append(section);container.append(group);});container.append(checks);
   mountAdvanced(container,data,changed,rebuild,options);
 }

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "kind": "completion",
+  "id": "UI-002",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "started_at": "2026-10-22T15:48:58+00:00",
+  "captured_at": "2026-10-22T15:57:04+00:00",
+  "baseline_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "current_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "changes": [
+    "docs/qa/assets/rotor-source-binding/browser-checks.json",
+    "docs/qa/assets/rotor-source-binding/desktop.png",
+    "docs/qa/assets/rotor-source-binding/mobile.png",
+    "docs/qa/assets/rotor-source-binding/zoom-200-css.png",
+    "docs/qa/rotor-source-binding-2026-10-22.md",
+    "scripts/qa/rotor_source_binding_browser.mjs",
+    "tests/web/test_rotor_source_binding.mjs",
+    "web/js/rotor-source-binding.js"
+  ],
+  "tests": [
+    {
+      "file": ".physicore/evidence/UI-002-test-20261022154956983658.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--test",
+        "tests/web/test_rotor_source_binding.mjs",
+        "tests/web/test_engineering_readiness.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/UI-002-test-20261022155217606684.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/rotor_source_binding_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/UI-002-test-20261022155448346113.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/projects/test_local_studies.py",
+        "tests/projects/test_project_geometry.py"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/UI-002-test-20261022155444048328.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/engineering_readiness_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/UI-002-test-20261022155456764772.json",
+      "exit_code": 0,
+      "argv": [
+        "ruff",
+        "check",
+        "."
+      ]
+    }
+  ],
+  "audit_files": [],
+  "summary": "Approved guided source binding: explicit matching selections, atomic stale/mismatch refusal, preserved original bytes and frozen revisions, unsaved/readiness invalidation. 35 UI unit tests, 26 regressions, 28 Chrome checks and lint/static checks pass; source/visual evidence and limits in docs/qa/rotor-source-binding-2026-10-22.md. No model, tolerance, access or dependency changes."
+}

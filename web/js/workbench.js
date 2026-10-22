@@ -1,12 +1,14 @@
-import {mountEditors} from './input-editors.js';
+import {mountEditors} from './input-editors.js?v=source-binding-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
 import {mountGeometry} from './geometry-upload.js?v=geometry-3';
 import {renderStudy,renderComparison} from './study-view.js';
 import {restoreSession,connectSession,forgetSession,isPublicAccess} from './session.js?v=public-3';
+import {renderReadiness} from './engineering-readiness.js?v=readiness-1';
 const $ = id => document.getElementById(id);
 let token = '', connected = false, connectionReady = false, current = null, dirty = false, busy = false, generation = 0, study = null, viewer = null;
 let hosted=false, organization='', inventoryCursor='', inventoryNext=null, inventoryStack=[], activeJob=null;
 let layoutGeneration=0, viewSnapshot=null, viewRevision='', viewMode='draft', selectedCase=''; const geometryCache=new Map();
+let inspectionSerial=0;
 const context = () => ({generation, token, organization, project:current?.project_id});
 const isContext = c => c.generation===generation && c.token===token && c.organization===organization && c.project===current?.project_id;
 function updateContext(){
@@ -24,6 +26,7 @@ function clearWorkspace(){
   ['review-workspace','job-history','invite-member','invitation-result'].forEach(id=>$(id).hidden=true);
   $('more-revisions').hidden=true;$('more-studies').hidden=true;$('editor-navigation').replaceChildren(new Option('Choose an input group',''));
   $('created-invitation').value='';$('job-progress').textContent='';$('cancel-job').hidden=true;$('retry-job').hidden=true;
+  resetReadiness();
   if(viewer)viewer.showRotorLayout({rotors:[]},null);$('layout-note').textContent='No design selected.';$('reset-layout').disabled=true;$('project-title').value='';geometryPanel.sync(null,null,false);updateContext();controls();
 }
 async function selectStudy(record){
@@ -59,6 +62,8 @@ function controls() {
   $('local-session').hidden=hosted;
   ['create', 'project-title', 'projects', 'open'].forEach(id => { $(id).disabled = !connected || busy; });
   $('open').disabled = !connected || busy || !$('projects').value;
+  $('inspect-saved').disabled = !connected || busy || !current || dirty;
+  document.querySelectorAll('#guided-readiness button').forEach(button=>{button.disabled=!connected||busy||!current;});
   $('connection').hidden = hosted || !connectionReady || connected;
   $('disconnect').hidden = hosted || !connected || isPublicAccess();
   $('disconnect').disabled = busy;
@@ -71,6 +76,8 @@ function controls() {
   $('export-pdf').disabled = !study || busy || !connected;
   ['compare-before','compare-after','compare'].forEach(id=>{$(id).disabled=busy||!connected||!current?.studies?.length;});
   document.querySelectorAll('#input-editors input,#input-editors select,#input-editors button,#input-editors textarea').forEach(input => { input.disabled = readOnly || busy || !current || !connected; });
+  document.querySelectorAll('[data-source-compatible=false]').forEach(input=>{input.disabled=true;});
+  document.querySelectorAll('[data-source-apply]').forEach(button=>{if(!button.closest('.source-binding')?.querySelector('[data-source-compatible=true]'))button.disabled=true;});
   editControls.forEach(id => { $(id).disabled = !current || (!connected&&id!=='export-draft') || busy || (readOnly&&['snapshot','save','freeze'].includes(id)) || (id === 'freeze' && dirty); });
   $('next-projects').disabled=busy||!inventoryNext; $('previous-projects').disabled=busy||!inventoryStack.length;
   $('submit-review').disabled=busy||!study||!hosted||!['engineer','reviewer'].includes(current?.role);
@@ -118,7 +125,7 @@ function render(project) {
   $('more-revisions').hidden=!project.revisions_more;$('more-studies').hidden=!project.studies_more;
   $('invite-member').hidden=!hosted||!project.can_invite;
   $('review-workspace').hidden=!hosted;$('job-history').hidden=!hosted;if(hosted)loadJobs().catch(error=>message(error.message,true));
-  study=null;$('study-report').replaceChildren();$('study-summary').replaceChildren();$('guided-readiness').replaceChildren();
+  study=null;$('study-report').replaceChildren();$('study-summary').replaceChildren();resetReadiness();
   $('snapshot').value = JSON.stringify(JSON.parse(project.snapshot_json), null, 2);
   $('design-title').textContent = project.title;
   $('save-state').textContent = 'Saved draft version ' + project.draft_version + '. Edits create a new version; retained revisions stay unchanged.';
@@ -192,10 +199,10 @@ async function openProject(pid) {
 }
 function editors() {
   mountEditors($('input-editors'), () => JSON.parse($('snapshot').value), updateDraft,
-  async () => { if (dirty) throw new Error('Save the draft first to inspect these edits.');
-    const c=context(),report=await api(`/projects/${current.project_id}/inspection`);if(!isContext(c))throw new Error('Project changed during inspection.');showReadiness(report);return report; }, dataset_json => guardedRequest(()=>api('/projects/performance-sources',payload('POST',{dataset_json}))),{
+  inspectSavedInputs, dataset_json => guardedRequest(()=>api('/projects/performance-sources',payload('POST',{dataset_json}))),{
       conditionMap:(digest,policy)=>guardedRequest(()=>api('/projects/performance-sources/'+digest+'/condition',payload('POST',{policy}))),
-      importGeometry:(files,units)=>guardedRequest(()=>{const body=new FormData();body.append('source_units',units);[...files].forEach(file=>body.append('files',file));return api('/import',{method:'POST',body});})
+      importGeometry:(files,units)=>guardedRequest(()=>{const body=new FormData();body.append('source_units',units);[...files].forEach(file=>body.append('files',file));return api('/import',{method:'POST',body});}),
+      onMapBound:count=>message('Retained source applied to '+count+' selected rotor'+(count===1?'':'s')+'. Save the draft, then inspect its inputs again.')
     });
   refreshNavigation();
 }
@@ -205,15 +212,41 @@ function refreshNavigation(){
 }
 new MutationObserver(refreshNavigation).observe($('input-editors'),{childList:true});
 function navigateInputs(id){const target=document.getElementById(id);if(target){target.open=true;target.scrollIntoView({block:'start',behavior:'auto'});target.querySelector('summary,input,select,textarea,button')?.focus();}}
-function showReadiness(report){
-  const out=$('guided-readiness');out.replaceChildren();
-  const heading=document.createElement('p');heading.textContent='Saved draft '+report.draft_version+' inspection. Model eligibility is separate from aircraft approval.';out.append(heading);
-  const reasons=report.hover_readiness?.reasons||report.hover_readiness?.blocking||[];
-  const list=document.createElement('ul');for(const reason of reasons){const li=document.createElement('li');li.textContent=typeof reason==='string'?reason:JSON.stringify(reason);const text=li.textContent.toLowerCase();const group=[...$('editor-navigation').options].find(option=>option.value&&(text.includes('mass')?option.text.includes('Mass'):text.includes('pack')||text.includes('energy')?option.text.includes('battery'):text.includes('map')||text.includes('rotor')?option.text.includes('Rotors'):text.includes('case')||text.includes('mission')||text.includes('atmosphere')?option.text.includes('alternative'):false));if(group){const button=document.createElement('button');button.type='button';button.textContent='Open '+group.text;button.addEventListener('click',()=>navigateInputs(group.value));li.append(' ',button);}list.append(li);}out.append(list);
-  if(!reasons.length){const note=document.createElement('p');note.textContent='No local-hover blockers returned. Source and engineering acceptance remain separate.';out.append(note);}
+function navigateReadiness(group){
+  const target=document.querySelector('#input-editors [data-readiness-group="'+group+'"]');
+  navigateInputs(target?.id||'design-json');
+}
+function resetReadiness(stale=false){
+  ++inspectionSerial;$('guided-readiness').setAttribute('aria-busy','false');
+  $('readiness-status').textContent=!current?'Open a project to inspect its saved inputs.':stale
+    ?'Checks out of date. Save your edits, then inspect the saved draft again.'
+    :'Saved draft '+current.draft_version+' has not been inspected here.';
+  $('guided-readiness').replaceChildren();
+  if(current)renderReadiness($('guided-readiness'),null,navigateReadiness);
+}
+async function inspectSavedInputs(){
+  if(!current||dirty)throw new Error('Save the draft first to inspect these edits.');
+  const c=context(),version=current.draft_version,raw=$('snapshot').value,serial=++inspectionSerial;
+  $('readiness-status').textContent='Inspecting saved draft '+version+'…';
+  $('guided-readiness').setAttribute('aria-busy','true');
+  try{
+    const report=await api(`/projects/${current.project_id}/inspection`);
+    if(serial!==inspectionSerial||!isContext(c)||dirty||current.draft_version!==version||$('snapshot').value!==raw)
+      throw new Error('Inputs changed during inspection. Save and inspect again.');
+    if(report.draft_version!==version)throw new Error('The saved draft changed on the server. Reload the saved draft before inspecting again.');
+    renderReadiness($('guided-readiness'),report,navigateReadiness);
+    $('readiness-status').textContent='Inspected saved draft '+version+'. These checks do not apply to frozen revisions or retained studies.';
+    controls();return report;
+  }catch(error){
+    if(serial===inspectionSerial&&isContext(c)){
+      renderReadiness($('guided-readiness'),null,navigateReadiness);
+      $('readiness-status').textContent='Inspection unavailable. '+error.message;
+    }
+    throw error;
+  }finally{if(serial===inspectionSerial)$('guided-readiness').setAttribute('aria-busy','false');}
 }
 function updateDraft(data) {
-  $('snapshot').value=JSON.stringify(data,null,2);dirty=true;$('guided-readiness').textContent='Draft inputs changed. Save and inspect again.';
+  $('snapshot').value=JSON.stringify(data,null,2);dirty=true;resetReadiness(true);
   const inspection=$('inspection-report');if(inspection)inspection.textContent='Inputs edited. Save and inspect again.';
   $('save-state').textContent='Unsaved edits. Save before freezing a revision.';
   controls();showStudy();layout();geometryPanel.sync(current,data,true);
@@ -251,7 +284,7 @@ $('create-project').addEventListener('submit', event => { event.preventDefault()
 }); });
 $('open').addEventListener('click', () => { if ($('projects').value && preserveEdits()) action(() => openProject($('projects').value)); });
 $('reload').addEventListener('click', () => { if (current && preserveEdits()) action(() => openProject(current.project_id)); });
-$('snapshot').addEventListener('input', () => { dirty = true; $('guided-readiness').textContent='Draft inputs changed. Save and inspect again.';$('save-state').textContent = 'Unsaved edits. Save before freezing a revision.'; const binding=$('study-report').querySelector('.study-binding');if(binding)binding.textContent='Inputs edited. This retained study belongs to the previous frozen design.';controls();layout(); });
+$('snapshot').addEventListener('input', () => { dirty = true; resetReadiness(true);$('save-state').textContent = 'Unsaved edits. Save before freezing a revision.'; const binding=$('study-report').querySelector('.study-binding');if(binding)binding.textContent='Inputs edited. This retained study belongs to the previous frozen design.';controls();layout(); });
  $('snapshot').addEventListener('change', () => {editors();showStudy();layout();try{geometryPanel.sync(current,JSON.parse($('snapshot').value),true);}catch(error){message('Invalid JSON: '+error.message,true);}});
 function saveDraft() { return action(async () => {
   const snapshot = $('snapshot').value;
@@ -259,6 +292,7 @@ function saveDraft() { return action(async () => {
   render(project); message('Draft saved. Previous frozen revisions remain available.');
 }); }
 $('save').addEventListener('click',saveDraft);
+$('inspect-saved').addEventListener('click',()=>action(inspectSavedInputs));
 $('freeze').addEventListener('click', () => action(async () => {
   const result = await api(`/projects/${current.project_id}/revisions`, payload('POST', { expected_version: current.draft_version, purpose: 'screening' }));
   await openProject(current.project_id); message('Saved revision frozen: ' + result.revision_sha256 + '. Engineering approval pending.');

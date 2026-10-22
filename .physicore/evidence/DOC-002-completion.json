@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "completion",
+  "id": "DOC-002",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "started_at": "2026-10-22T13:38:04+00:00",
+  "captured_at": "2026-10-22T13:43:03+00:00",
+  "baseline_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "current_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "changes": [
+    "docs/validation/fixed-pack-energy-provenance.md"
+  ],
+  "tests": [],
+  "audit_files": [],
+  "summary": "Documented fixed-pack input units, named battery-mass selection, usable fraction/reserve, exact conversion, all six pack guards, local/typed contract differences and chronological budget consumers. DOC-002-static.json records 16 unchanged sources, 13 numeric occurrences and 37 valid local links. No application tests/model runs; caller boundary identified for audit only."
+}

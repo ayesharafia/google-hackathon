@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "UI-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/engineering_readiness_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-22T15:31:08+00:00",
+  "started_at": "2026-10-22T15:17:44+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "output": "\nnode:internal/process/promises:332\n    triggerUncaughtException(err, true /* fromPromise */);\n    ^\n\nroute.fulfill: Route is already handled!\n    at delayedProject (/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/scripts/qa/engineering_readiness_browser.mjs:146:128) {\n  log: [],\n  name: 'Error'\n}\n\nNode.js v26.0.0\n"
+}

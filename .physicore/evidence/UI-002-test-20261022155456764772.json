@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "UI-002",
+  "kind": "test",
+  "argv": [
+    "ruff",
+    "check",
+    "."
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T15:54:56+00:00",
+  "started_at": "2026-10-22T15:48:58+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "output": "All checks passed!\n\n"
+}

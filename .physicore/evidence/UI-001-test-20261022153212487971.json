@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "UI-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/engineering_readiness_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-22T15:32:12+00:00",
+  "started_at": "2026-10-22T15:17:44+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "output": "\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\nfalse !== true\n\n    at file:///Users/bhupeshcholake/Desktop/Claude%20Codes/physicore%20drone/scripts/qa/engineering_readiness_browser.mjs:177:10 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: false,\n  expected: true,\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v26.0.0\n"
+}

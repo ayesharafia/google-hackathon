@@ -1,0 +1,1591 @@
+{
+  "kind": "static_documentation_inventory",
+  "task_id": "SLICE-001",
+  "baseline_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "source_modules": 5,
+  "numeric_occurrences": 220,
+  "index_or_slice_occurrences": 49,
+  "undisposed_occurrences": 0,
+  "local_links_checked": 60,
+  "ledger_sha256": "b6b54d57450f8404651ec71f0b601972afad28e80408e88a109688c5437af864",
+  "reproduce": ".venv/bin/python .physicore/evidence/SLICE-001-inventory-check.py",
+  "application_or_physics_tests_executed": false,
+  "limits": "Static source/link/hash checks only. Row classifications and nonnumeric guard coverage were authored by the primary agent, not independently validated.",
+  "files": [
+    {
+      "path": "src/physimesh/drone/atmosphere.py",
+      "sha256": "a836a44453a9d63ee0e2818c43cb2c931003892a61b039de46bbf130ff59cdf8",
+      "unchanged_from_baseline": true,
+      "numeric_occurrences": [
+        {
+          "line": 9,
+          "column_0_based": 8,
+          "source_expression": "287.05",
+          "ledger_row": "A01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 10,
+          "column_0_based": 5,
+          "source_expression": "9.80665",
+          "ledger_row": "A02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 11,
+          "column_0_based": 9,
+          "source_expression": "288.15",
+          "ledger_row": "A03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 12,
+          "column_0_based": 9,
+          "source_expression": "101325.0",
+          "ledger_row": "A03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 13,
+          "column_0_based": 12,
+          "source_expression": "0.0065",
+          "ledger_row": "A03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 14,
+          "column_0_based": 19,
+          "source_expression": "11000.0",
+          "ledger_row": "A03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 17,
+          "column_0_based": 53,
+          "source_expression": "1.716e-5",
+          "ledger_row": "A04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 18,
+          "column_0_based": 40,
+          "source_expression": "273.15",
+          "ledger_row": "A04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 18,
+          "column_0_based": 59,
+          "source_expression": "110.4",
+          "ledger_row": "A04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 20,
+          "column_0_based": 37,
+          "source_expression": "1.5",
+          "ledger_row": "A05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 50,
+          "column_0_based": 69,
+          "source_expression": "1.4",
+          "ledger_row": "A06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 56,
+          "column_0_based": 40,
+          "source_expression": "0",
+          "ledger_row": "A07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 66,
+          "column_0_based": 38,
+          "source_expression": "0",
+          "ledger_row": "A07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 76,
+          "column_0_based": 12,
+          "source_expression": "0.0",
+          "ledger_row": "A08",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 86,
+          "column_0_based": 56,
+          "source_expression": "0",
+          "ledger_row": "A09",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 86,
+          "column_0_based": 101,
+          "source_expression": "0",
+          "ledger_row": "A09",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 107,
+          "column_0_based": 49,
+          "source_expression": "2",
+          "ledger_row": "A10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 107,
+          "column_0_based": 64,
+          "source_expression": "2",
+          "ledger_row": "A10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        }
+      ]
+    },
+    {
+      "path": "src/physimesh/drone/performance.py",
+      "sha256": "10dda284ba369d545ad8cf7a1f83fb4c5e603954bc969434fbebe9cfeacf80bf",
+      "unchanged_from_baseline": true,
+      "numeric_occurrences": [
+        {
+          "line": 13,
+          "column_0_based": 37,
+          "source_expression": "0",
+          "ledger_row": "P01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 14,
+          "column_0_based": 40,
+          "source_expression": "0",
+          "ledger_row": "P01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 29,
+          "column_0_based": 47,
+          "source_expression": "1",
+          "ledger_row": "P02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 29,
+          "column_0_based": 61,
+          "source_expression": "2000",
+          "ledger_row": "P02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 37,
+          "column_0_based": 42,
+          "source_expression": "0",
+          "ledger_row": "P01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 37,
+          "column_0_based": 48,
+          "source_expression": "1",
+          "ledger_row": "P01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 39,
+          "column_0_based": 90,
+          "source_expression": "1",
+          "ledger_row": "P02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 39,
+          "column_0_based": 104,
+          "source_expression": "32",
+          "ledger_row": "P02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 40,
+          "column_0_based": 52,
+          "source_expression": "2",
+          "ledger_row": "P02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 40,
+          "column_0_based": 66,
+          "source_expression": "64",
+          "ledger_row": "P02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 53,
+          "column_0_based": 59,
+          "source_expression": "2",
+          "ledger_row": "P03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 53,
+          "column_0_based": 73,
+          "source_expression": "60",
+          "ledger_row": "P03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 54,
+          "column_0_based": 31,
+          "source_expression": "1e-9",
+          "ledger_row": "P04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 54,
+          "column_0_based": 42,
+          "source_expression": "1",
+          "ledger_row": "P04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 56,
+          "column_0_based": 97,
+          "source_expression": "1e-9",
+          "ledger_row": "P04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 56,
+          "column_0_based": 111,
+          "source_expression": "1e-9",
+          "ledger_row": "P04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 59,
+          "column_0_based": 24,
+          "source_expression": "0",
+          "ledger_row": "P05",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 59,
+          "column_0_based": 50,
+          "source_expression": "-1",
+          "ledger_row": "P05",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 64,
+          "column_0_based": 17,
+          "source_expression": "0",
+          "ledger_row": "P05",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 64,
+          "column_0_based": 24,
+          "source_expression": "1",
+          "ledger_row": "P05",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 74,
+          "column_0_based": 65,
+          "source_expression": "1e-9",
+          "ledger_row": "P05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 74,
+          "column_0_based": 79,
+          "source_expression": "0",
+          "ledger_row": "P05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 76,
+          "column_0_based": 67,
+          "source_expression": "1e-9",
+          "ledger_row": "P05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 76,
+          "column_0_based": 81,
+          "source_expression": "0",
+          "ledger_row": "P05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 78,
+          "column_0_based": 59,
+          "source_expression": "1e-9",
+          "ledger_row": "P05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 78,
+          "column_0_based": 73,
+          "source_expression": "0",
+          "ledger_row": "P05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 88,
+          "column_0_based": 27,
+          "source_expression": "2",
+          "ledger_row": "P07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 88,
+          "column_0_based": 37,
+          "source_expression": "60",
+          "ledger_row": "P07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 91,
+          "column_0_based": 19,
+          "source_expression": "1e-9",
+          "ledger_row": "P04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 91,
+          "column_0_based": 28,
+          "source_expression": "1.",
+          "ledger_row": "P04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 104,
+          "column_0_based": 46,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 104,
+          "column_0_based": 55,
+          "source_expression": "1e-10",
+          "ledger_row": "P06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 104,
+          "column_0_based": 67,
+          "source_expression": "1e-10",
+          "ledger_row": "P06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 107,
+          "column_0_based": 47,
+          "source_expression": "1",
+          "ledger_row": "P06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 107,
+          "column_0_based": 79,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 108,
+          "column_0_based": 32,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 108,
+          "column_0_based": 53,
+          "source_expression": "-1",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 110,
+          "column_0_based": 32,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 113,
+          "column_0_based": 27,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 113,
+          "column_0_based": 59,
+          "source_expression": "-1e-10",
+          "ledger_row": "P06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 115,
+          "column_0_based": 33,
+          "source_expression": "-1",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 115,
+          "column_0_based": 45,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 115,
+          "column_0_based": 55,
+          "source_expression": "-1",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 115,
+          "column_0_based": 62,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 116,
+          "column_0_based": 32,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 116,
+          "column_0_based": 49,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 117,
+          "column_0_based": 64,
+          "source_expression": "1e-10",
+          "ledger_row": "P06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 117,
+          "column_0_based": 76,
+          "source_expression": "1e-10",
+          "ledger_row": "P06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 119,
+          "column_0_based": 21,
+          "source_expression": "0",
+          "ledger_row": "P06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 122,
+          "column_0_based": 41,
+          "source_expression": "-1",
+          "ledger_row": "P07",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 122,
+          "column_0_based": 59,
+          "source_expression": "-1",
+          "ledger_row": "P07",
+          "disposition": "STRUCTURE: index/slice"
+        }
+      ]
+    },
+    {
+      "path": "src/physimesh/drone/trim.py",
+      "sha256": "bfe8052ba5c113ed76534de8b783cc51bf8ccf466bf18b36c66a7ece8e28fcab",
+      "unchanged_from_baseline": true,
+      "numeric_occurrences": [
+        {
+          "line": 21,
+          "column_0_based": 15,
+          "source_expression": "1e-8",
+          "ledger_row": "T01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 22,
+          "column_0_based": 17,
+          "source_expression": "1e-7",
+          "ledger_row": "T01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 23,
+          "column_0_based": 18,
+          "source_expression": "1e-7",
+          "ledger_row": "T01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 29,
+          "column_0_based": 15,
+          "source_expression": "0",
+          "ledger_row": "T02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 29,
+          "column_0_based": 43,
+          "source_expression": "0",
+          "ledger_row": "T02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 35,
+          "column_0_based": 62,
+          "source_expression": "3",
+          "ledger_row": "T02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 62,
+          "column_0_based": 24,
+          "source_expression": "0.",
+          "ledger_row": "T03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 94,
+          "column_0_based": 48,
+          "source_expression": "0",
+          "ledger_row": "T03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 96,
+          "column_0_based": 13,
+          "source_expression": "0.",
+          "ledger_row": "T03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 99,
+          "column_0_based": 69,
+          "source_expression": "0",
+          "ledger_row": "T03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 99,
+          "column_0_based": 75,
+          "source_expression": "0",
+          "ledger_row": "T03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 101,
+          "column_0_based": 76,
+          "source_expression": "0",
+          "ledger_row": "T03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 101,
+          "column_0_based": 79,
+          "source_expression": "0",
+          "ledger_row": "T03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 103,
+          "column_0_based": 26,
+          "source_expression": "0",
+          "ledger_row": "T03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 103,
+          "column_0_based": 29,
+          "source_expression": "0",
+          "ledger_row": "T03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 119,
+          "column_0_based": 60,
+          "source_expression": "1",
+          "ledger_row": "T04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 121,
+          "column_0_based": 32,
+          "source_expression": "0",
+          "ledger_row": "T04",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 122,
+          "column_0_based": 37,
+          "source_expression": "0",
+          "ledger_row": "T04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 143,
+          "column_0_based": 44,
+          "source_expression": "1",
+          "ledger_row": "T05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 143,
+          "column_0_based": 64,
+          "source_expression": "16",
+          "ledger_row": "T05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 160,
+          "column_0_based": 57,
+          "source_expression": "1",
+          "ledger_row": "T06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 160,
+          "column_0_based": 68,
+          "source_expression": "0",
+          "ledger_row": "T06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 160,
+          "column_0_based": 79,
+          "source_expression": "1e-9",
+          "ledger_row": "T06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 162,
+          "column_0_based": 90,
+          "source_expression": "-1",
+          "ledger_row": "T06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 162,
+          "column_0_based": 93,
+          "source_expression": "1",
+          "ledger_row": "T06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 164,
+          "column_0_based": 38,
+          "source_expression": "0",
+          "ledger_row": "T06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 164,
+          "column_0_based": 41,
+          "source_expression": "0",
+          "ledger_row": "T06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 164,
+          "column_0_based": 44,
+          "source_expression": "1",
+          "ledger_row": "T06",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 170,
+          "column_0_based": 46,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 170,
+          "column_0_based": 66,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 170,
+          "column_0_based": 70,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 171,
+          "column_0_based": 49,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 171,
+          "column_0_based": 53,
+          "source_expression": "1.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 171,
+          "column_0_based": 76,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 171,
+          "column_0_based": 80,
+          "source_expression": "1.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 171,
+          "column_0_based": 105,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 171,
+          "column_0_based": 109,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 172,
+          "column_0_based": 55,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 172,
+          "column_0_based": 88,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 173,
+          "column_0_based": 45,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 173,
+          "column_0_based": 66,
+          "source_expression": "0.",
+          "ledger_row": "T07",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 178,
+          "column_0_based": 36,
+          "source_expression": "0",
+          "ledger_row": "T08",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 185,
+          "column_0_based": 40,
+          "source_expression": "-1",
+          "ledger_row": "T08",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 186,
+          "column_0_based": 38,
+          "source_expression": "0",
+          "ledger_row": "T08",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 190,
+          "column_0_based": 36,
+          "source_expression": "0",
+          "ledger_row": "T08",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 195,
+          "column_0_based": 87,
+          "source_expression": "0.",
+          "ledger_row": "T09",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 196,
+          "column_0_based": 81,
+          "source_expression": "3",
+          "ledger_row": "T09",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 197,
+          "column_0_based": 28,
+          "source_expression": "0",
+          "ledger_row": "T09",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 200,
+          "column_0_based": 30,
+          "source_expression": "0",
+          "ledger_row": "T09",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 202,
+          "column_0_based": 42,
+          "source_expression": "1e-10",
+          "ledger_row": "T09",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 214,
+          "column_0_based": 35,
+          "source_expression": "2",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 214,
+          "column_0_based": 39,
+          "source_expression": "1",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 215,
+          "column_0_based": 19,
+          "source_expression": "6",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 215,
+          "column_0_based": 57,
+          "source_expression": "3",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 219,
+          "column_0_based": 12,
+          "source_expression": "3",
+          "ledger_row": "T10",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 220,
+          "column_0_based": 11,
+          "source_expression": "3",
+          "ledger_row": "T10",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 222,
+          "column_0_based": 24,
+          "source_expression": "0",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 222,
+          "column_0_based": 27,
+          "source_expression": "0",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 223,
+          "column_0_based": 8,
+          "source_expression": "3",
+          "ledger_row": "T10",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 223,
+          "column_0_based": 12,
+          "source_expression": "-1",
+          "ledger_row": "T10",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 223,
+          "column_0_based": 29,
+          "source_expression": "3",
+          "ledger_row": "T10",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 223,
+          "column_0_based": 34,
+          "source_expression": "-1",
+          "ledger_row": "T10",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 230,
+          "column_0_based": 62,
+          "source_expression": "-1",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 232,
+          "column_0_based": 32,
+          "source_expression": "2",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 232,
+          "column_0_based": 39,
+          "source_expression": "1",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 237,
+          "column_0_based": 38,
+          "source_expression": "0",
+          "ledger_row": "T10",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 243,
+          "column_0_based": 45,
+          "source_expression": "0",
+          "ledger_row": "T11",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 244,
+          "column_0_based": 94,
+          "source_expression": "-1",
+          "ledger_row": "T11",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 252,
+          "column_0_based": 52,
+          "source_expression": "0",
+          "ledger_row": "T11",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 252,
+          "column_0_based": 58,
+          "source_expression": "0",
+          "ledger_row": "T11",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 267,
+          "column_0_based": 24,
+          "source_expression": "0",
+          "ledger_row": "T11",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 267,
+          "column_0_based": 33,
+          "source_expression": "0",
+          "ledger_row": "T11",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 269,
+          "column_0_based": 64,
+          "source_expression": "-1",
+          "ledger_row": "T11",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 276,
+          "column_0_based": 49,
+          "source_expression": "2",
+          "ledger_row": "T11",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 283,
+          "column_0_based": 81,
+          "source_expression": "0",
+          "ledger_row": "T11",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 285,
+          "column_0_based": 41,
+          "source_expression": "0",
+          "ledger_row": "T11",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 304,
+          "column_0_based": 23,
+          "source_expression": "1",
+          "ledger_row": "T12",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 304,
+          "column_0_based": 60,
+          "source_expression": "1",
+          "ledger_row": "T12",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 308,
+          "column_0_based": 62,
+          "source_expression": "-1.",
+          "ledger_row": "T12",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 308,
+          "column_0_based": 77,
+          "source_expression": "0",
+          "ledger_row": "T12",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 309,
+          "column_0_based": 46,
+          "source_expression": "1.",
+          "ledger_row": "T12",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 309,
+          "column_0_based": 61,
+          "source_expression": "10000",
+          "ledger_row": "T12",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 314,
+          "column_0_based": 37,
+          "source_expression": "0",
+          "ledger_row": "T12",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 316,
+          "column_0_based": 65,
+          "source_expression": "0",
+          "ledger_row": "T13",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 319,
+          "column_0_based": 21,
+          "source_expression": "1e-7",
+          "ledger_row": "T13",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 319,
+          "column_0_based": 32,
+          "source_expression": "1.",
+          "ledger_row": "T13",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 330,
+          "column_0_based": 49,
+          "source_expression": "0",
+          "ledger_row": "T14",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 330,
+          "column_0_based": 52,
+          "source_expression": "0",
+          "ledger_row": "T14",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 335,
+          "column_0_based": 25,
+          "source_expression": "0.",
+          "ledger_row": "T14",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 335,
+          "column_0_based": 41,
+          "source_expression": "0.",
+          "ledger_row": "T14",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 335,
+          "column_0_based": 64,
+          "source_expression": "0.",
+          "ledger_row": "T14",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 335,
+          "column_0_based": 90,
+          "source_expression": "0.",
+          "ledger_row": "T14",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 350,
+          "column_0_based": 84,
+          "source_expression": "0.",
+          "ledger_row": "T14",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 351,
+          "column_0_based": 92,
+          "source_expression": "3",
+          "ledger_row": "T14",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 360,
+          "column_0_based": 60,
+          "source_expression": "0",
+          "ledger_row": "T15",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 360,
+          "column_0_based": 102,
+          "source_expression": "1",
+          "ledger_row": "T15",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 363,
+          "column_0_based": 49,
+          "source_expression": "2",
+          "ledger_row": "T15",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 363,
+          "column_0_based": 53,
+          "source_expression": "1",
+          "ledger_row": "T15",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 365,
+          "column_0_based": 19,
+          "source_expression": "-1",
+          "ledger_row": "T15",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 365,
+          "column_0_based": 25,
+          "source_expression": "-1",
+          "ledger_row": "T15",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 367,
+          "column_0_based": 20,
+          "source_expression": "2",
+          "ledger_row": "T15",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 367,
+          "column_0_based": 27,
+          "source_expression": "1",
+          "ledger_row": "T15",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 370,
+          "column_0_based": 64,
+          "source_expression": "1.",
+          "ledger_row": "T15",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 370,
+          "column_0_based": 79,
+          "source_expression": "10000",
+          "ledger_row": "T15",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 374,
+          "column_0_based": 91,
+          "source_expression": "2",
+          "ledger_row": "T15",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 389,
+          "column_0_based": 51,
+          "source_expression": "-1",
+          "ledger_row": "T15",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 392,
+          "column_0_based": 22,
+          "source_expression": "1.",
+          "ledger_row": "T16",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 393,
+          "column_0_based": 17,
+          "source_expression": "1.",
+          "ledger_row": "T16",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 407,
+          "column_0_based": 77,
+          "source_expression": "1e-7",
+          "ledger_row": "T17",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 410,
+          "column_0_based": 49,
+          "source_expression": "1e-7",
+          "ledger_row": "T17",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 417,
+          "column_0_based": 40,
+          "source_expression": "1e-6",
+          "ledger_row": "T18",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 419,
+          "column_0_based": 54,
+          "source_expression": "1e-4",
+          "ledger_row": "T18",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 421,
+          "column_0_based": 21,
+          "source_expression": "-1",
+          "ledger_row": "T18",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 421,
+          "column_0_based": 46,
+          "source_expression": "1",
+          "ledger_row": "T18",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 421,
+          "column_0_based": 52,
+          "source_expression": "1e-6",
+          "ledger_row": "T18",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 426,
+          "column_0_based": 30,
+          "source_expression": "1e-6",
+          "ledger_row": "T18",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 429,
+          "column_0_based": 54,
+          "source_expression": "1e-6",
+          "ledger_row": "T18",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        }
+      ]
+    },
+    {
+      "path": "src/physimesh/drone/capacity.py",
+      "sha256": "73d2a955ae4a6a0a60f053a8634de3a1a13011fdcedece7d7af1a53898fd87a7",
+      "unchanged_from_baseline": true,
+      "numeric_occurrences": [
+        {
+          "line": 25,
+          "column_0_based": 42,
+          "source_expression": "1",
+          "ledger_row": "C01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 25,
+          "column_0_based": 61,
+          "source_expression": "8",
+          "ledger_row": "C01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 73,
+          "column_0_based": 45,
+          "source_expression": "1",
+          "ledger_row": "C01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 73,
+          "column_0_based": 67,
+          "source_expression": "8",
+          "ledger_row": "C01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 140,
+          "column_0_based": 73,
+          "source_expression": "1e-7",
+          "ledger_row": "C02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 141,
+          "column_0_based": 109,
+          "source_expression": "1e-7",
+          "ledger_row": "C02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        }
+      ]
+    },
+    {
+      "path": "src/physimesh/drone/mission_capacity.py",
+      "sha256": "d070d3b58164bf4602e326dfd426b0456373bd1cfe06b3bd1ee0b5dfea5e154b",
+      "unchanged_from_baseline": true,
+      "numeric_occurrences": [
+        {
+          "line": 47,
+          "column_0_based": 45,
+          "source_expression": "1",
+          "ledger_row": "S01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 47,
+          "column_0_based": 67,
+          "source_expression": "32",
+          "ledger_row": "S01",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 81,
+          "column_0_based": 14,
+          "source_expression": "2",
+          "ledger_row": "S02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 82,
+          "column_0_based": 23,
+          "source_expression": "1",
+          "ledger_row": "S02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 84,
+          "column_0_based": 47,
+          "source_expression": "0.",
+          "ledger_row": "S02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 84,
+          "column_0_based": 60,
+          "source_expression": "0",
+          "ledger_row": "S02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 89,
+          "column_0_based": 54,
+          "source_expression": "1",
+          "ledger_row": "S02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 93,
+          "column_0_based": 37,
+          "source_expression": "-1",
+          "ledger_row": "S02",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 95,
+          "column_0_based": 35,
+          "source_expression": "2",
+          "ledger_row": "S02",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 98,
+          "column_0_based": 43,
+          "source_expression": "0",
+          "ledger_row": "S02",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 99,
+          "column_0_based": 43,
+          "source_expression": "1",
+          "ledger_row": "S02",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 100,
+          "column_0_based": 15,
+          "source_expression": "-1",
+          "ledger_row": "S02",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 100,
+          "column_0_based": 18,
+          "source_expression": "0",
+          "ledger_row": "S02",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 100,
+          "column_0_based": 31,
+          "source_expression": "-1",
+          "ledger_row": "S02",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 100,
+          "column_0_based": 34,
+          "source_expression": "1",
+          "ledger_row": "S02",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 109,
+          "column_0_based": 50,
+          "source_expression": "-1",
+          "ledger_row": "S03",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 109,
+          "column_0_based": 56,
+          "source_expression": "-1",
+          "ledger_row": "S03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 112,
+          "column_0_based": 64,
+          "source_expression": "2.",
+          "ledger_row": "S03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 112,
+          "column_0_based": 79,
+          "source_expression": "10000",
+          "ledger_row": "S03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 116,
+          "column_0_based": 91,
+          "source_expression": "2",
+          "ledger_row": "S03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 117,
+          "column_0_based": 80,
+          "source_expression": "-1",
+          "ledger_row": "S03",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 118,
+          "column_0_based": 55,
+          "source_expression": "-1",
+          "ledger_row": "S03",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 118,
+          "column_0_based": 58,
+          "source_expression": "0",
+          "ledger_row": "S03",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 118,
+          "column_0_based": 64,
+          "source_expression": "0",
+          "ledger_row": "S03",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 128,
+          "column_0_based": 30,
+          "source_expression": "-1",
+          "ledger_row": "S04",
+          "disposition": "STRUCTURE: index/slice"
+        },
+        {
+          "line": 134,
+          "column_0_based": 72,
+          "source_expression": "0.",
+          "ledger_row": "S04",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 140,
+          "column_0_based": 23,
+          "source_expression": "1e-7",
+          "ledger_row": "S05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        },
+        {
+          "line": 140,
+          "column_0_based": 34,
+          "source_expression": "1.",
+          "ledger_row": "S05",
+          "disposition": "See ledger row: parameter, guard or algebraic/structural coefficient"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "kind": "synthetic_source_binding_acceptance",
+  "passed": 10,
+  "checks": [
+    "Import shows actual retained metadata/hash without selecting rotors or changing the draft",
+    "Empty selection refuses without changing references",
+    "Explicit selection changes only that base-map reference, keeps case overrides, invalidates readiness and restores focus",
+    "Original UTF-8 import whitespace/bytes retained exactly in the disposable artifact store",
+    "Saving/reopening persists binding while original frozen revision keeps its source",
+    "Mismatched configurations cannot be selected or applied",
+    "Editing after the import preview refuses stale binding instead of overwriting current edits",
+    "A delayed import response cannot create a bindable preview after draft edits",
+    "Phone width and CSS 200% enlargement keep metadata, choices and action inside the preview",
+    "No page JavaScript errors"
+  ],
+  "page_errors": [],
+  "raw_source_sha256": "324b4d8dc857551a8e2e26228c7efbb17cbd1abda18512971ee874f5f2ca2a68",
+  "limits": "Synthetic source-reference/UI checks only; no measured data validity, source applicability or physical acceptance inferred. CSS enlargement is not native browser zoom."
+}

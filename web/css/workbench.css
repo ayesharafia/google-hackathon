@@ -8,6 +8,13 @@
 aside{align-self:start;position:sticky;top:24px;max-height:calc(100dvh - 48px);overflow:auto;scrollbar-gutter:stable}@media(max-width:800px){aside{position:static;max-height:none;overflow:visible}}
 
 #input-editors p{overflow-wrap:anywhere}
+.source-binding{margin:20px 0;padding:20px;background:#e2eade;overflow-wrap:anywhere}
+.source-binding h4{margin:0 0 12px;font-size:17px}.source-binding code{font-size:13px;overflow-wrap:anywhere}
+#input-editors .source-binding fieldset{display:block;padding:0;background:transparent;margin:20px 0}
+#input-editors .source-binding legend{padding:0;margin-bottom:12px}
+#input-editors .source-binding-choice{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;align-items:center;margin:10px 0;min-height:40px;font-weight:500}
+.source-binding-choice input[type=checkbox]{margin:0}.source-binding-choice span{overflow-wrap:anywhere}
+.source-binding-status{min-height:24px;margin-bottom:0}
 #comparison-report{overflow-wrap:anywhere}#comparison-report td{min-width:110px}#compare{margin:16px 0}
 
 #comparison-title~.fields{grid-template-columns:repeat(2,minmax(0,1fr))}@media(max-width:450px){#comparison-title~.fields{grid-template-columns:1fr}}
@@ -20,7 +27,36 @@ dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;backgrou
 [hidden]{display:none!important}
 
 #display-context,#layout-inputs,#study-summary{overflow-wrap:anywhere}#display-context{font-weight:600}#layout-inputs p{font-size:14px}#guided-readiness button{margin:6px 0}#studies button[aria-current=true],#revisions button[aria-current=true]{font-weight:800;text-decoration:underline;text-underline-offset:4px}
+#message,#revision-summary{overflow-wrap:anywhere}
 .session-panel{max-width:760px;margin:20px 0;color:var(--muted)}
+
+/* A saved-input inspection sheet, distinct from the frozen-study result. */
+#engineering-readiness{margin:28px 0 36px;padding:24px;background:#d9e3d8;scroll-margin-top:24px;container:readiness/inline-size}
+.readiness-header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.readiness-header h3{font:400 27px/1.25 var(--display);margin:0}
+#readiness-status{font-weight:600;margin:18px 0 8px;overflow-wrap:anywhere}
+.readiness-scope{font-size:14px;color:#405b49;margin:0 0 22px;max-width:68ch}
+.readiness-checks{display:grid;gap:6px}
+.readiness-check{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding:20px;background:#edf2eb}
+.readiness-check-heading h4{font-size:16px;line-height:1.4;margin:0 0 8px}
+.readiness-result{font-size:14px;font-weight:650;margin:0;line-height:1.5;color:#405b49}
+.readiness-check-body>p{margin:0;font-size:14px;max-width:64ch}
+#guided-readiness .readiness-action{display:inline-block;text-align:left;background:transparent;color:var(--ink);padding:8px 0;margin:8px 0 0;font-weight:700;min-height:40px}
+#guided-readiness .readiness-action:hover:not(:disabled){background:transparent;color:#49604f;text-decoration:underline}
+#guided-readiness .readiness-action:disabled{color:#506457;cursor:default}
+.readiness-issues{padding-left:20px;margin:12px 0 0}
+.readiness-issues li>span{display:block;font-size:14px;overflow-wrap:anywhere}
+.readiness-cases{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:14px}
+.readiness-cases>li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 14px;margin:0;font-size:14px}
+.readiness-cases strong{overflow-wrap:anywhere}
+.readiness-cases>li>span{font-size:13px;color:#405b49}
+.readiness-cases>li>ul{grid-column:1/-1;padding-left:20px}
+.readiness-cases>li>ul span{display:block;overflow-wrap:anywhere}
+.readiness-screening{margin-top:18px;font-size:14px;overflow-wrap:anywhere}
+.readiness-screening p{margin:8px 0 12px}
+@container readiness (min-width:680px){.readiness-check{grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:20px}}
+@container readiness (max-width:450px){.readiness-check-heading{display:block}.readiness-result{margin-top:6px}.readiness-cases>li{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){#engineering-readiness{padding:18px}.readiness-header{align-items:flex-start}.readiness-check{padding:18px}.readiness-check-heading{display:block}.readiness-result{margin-top:6px}.readiness-cases>li{grid-template-columns:1fr}}
 #disconnect{margin-top:8px;background:#c1d1c3;color:var(--ink)}
 #project-geometry{margin:28px 0}
 .geometry-fields{display:grid;grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:12px 20px;max-width:860px}

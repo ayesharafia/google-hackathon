@@ -1,0 +1,111 @@
+{
+  "task": "UI-001",
+  "captured_at": "2026-10-22T15:38:01.333049+00:00",
+  "checks": [
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/workbench.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/input-editors.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "web/js/engineering-readiness.js"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "tests/web/test_engineering_readiness.mjs"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "node",
+        "--check",
+        "scripts/qa/engineering_readiness_browser.mjs"
+      ],
+      "returncode": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "output": ""
+    }
+  ],
+  "protected_diff": [],
+  "qa_links_checked": 13,
+  "files": [
+    {
+      "path": "web/workbench.html",
+      "sha256": "373138b63e6aad349f927d65ae9bb9554fa952eb94384a614e4d604dadb73ac3"
+    },
+    {
+      "path": "web/css/workbench.css",
+      "sha256": "cf717110bcbf6458352c2cec6bbbca2f786a9bea81dd2c38ee1430bb375038b4"
+    },
+    {
+      "path": "web/js/workbench.js",
+      "sha256": "83ec036904604063f499b4bdfb840fe902370f6b6e00254c62d692cd9f9fb2cf"
+    },
+    {
+      "path": "web/js/input-editors.js",
+      "sha256": "82ab44c0a00a7d9a343d452c57ebbe53d6348494d68a559d21b5976a5e41fc2b"
+    },
+    {
+      "path": "web/js/engineering-readiness.js",
+      "sha256": "67828e75b338e0d31fa3aaa0617df32866f2fb01cb71c53821ffb4548b49ed65"
+    },
+    {
+      "path": "tests/web/test_engineering_readiness.mjs",
+      "sha256": "432632caee7c697504ae4eb6e188febecf076313d92b08668927a4658044de0d"
+    },
+    {
+      "path": "scripts/qa/engineering_readiness_browser.mjs",
+      "sha256": "a153e018f34856afd8fe51a47cdf45a10e8cfd4f9548b42d4ad3e34815216bea"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/qa/assets/engineering-readiness/desktop.png",
+      "sha256": "4dd8b7e91bf27a5a1c8bb950f0b56eb4abf2a90f878e2da79534b59e7e38e161"
+    },
+    {
+      "path": "docs/qa/assets/engineering-readiness/mobile.png",
+      "sha256": "c3ccb968143a95f6965c87e8cd141ccb689970cf64ce7ffb0b3d36d6d02afd67"
+    },
+    {
+      "path": "docs/qa/assets/engineering-readiness/narrow-720.png",
+      "sha256": "45add7ba9a6888bc05e6ed768a75879696d2c594cee56ddbd4e23063c03a4371"
+    },
+    {
+      "path": "docs/qa/assets/engineering-readiness/zoom-200-css.png",
+      "sha256": "9ea015cbefc2d40edca7a4cbc30052090f27fc3ed5445e72dbea2d84fda939d8"
+    }
+  ],
+  "claim": "Source/syntax/links only. Browser/test evidence is separate; no physical qualification."
+}

@@ -1,0 +1,32 @@
+{
+  "kind": "synthetic_browser_acceptance",
+  "checks": [
+    "Incomplete saved project shows separate mass, pack and model gaps",
+    "Actual synthetic saved design preserves per-case eligibility and unassessed/pending evidence states",
+    "All four default editor actions open the correct group and move keyboard focus",
+    "Readiness actions work from keyboard",
+    "Structured edit clears previous results; saving permits inspection of the new version",
+    "Raw JSON edits also invalidate readiness",
+    "Late real inspection reply cannot overwrite edits or revive previous passing checks",
+    "Synthetic injected diagnostic is inert text; unknown, rotor, model and sequence actions work",
+    "Inspection version mismatch withholds results and asks for reload",
+    "Network failure clears prior results; retry succeeds",
+    "Late inspection for a previous project cannot populate the new project panel",
+    "Frozen viewer context remains separate from saved-draft readiness",
+    "Separate supplied-point screening details expand and collapse",
+    "390px viewport has no document horizontal overflow and all five checks remain visible",
+    "CSS 200% zoom reflows without document horizontal overflow; native browser zoom not asserted",
+    "720 CSS-pixel layout, equivalent to a halved desktop layout viewport, keeps controls and text inside the panel",
+    "Reload and saved-project reopen never reuse a prior inspection",
+    "No page JavaScript errors"
+  ],
+  "passed": 18,
+  "page_errors": [],
+  "viewports": [
+    "1440x1100",
+    "390x844",
+    "1440x1100 with CSS zoom 2",
+    "720x800"
+  ],
+  "claim": "UI behavior with disposable synthetic designs; injected diagnostics/version/failure responses are UI-only fixtures, not model results or aircraft validation."
+}

@@ -1,0 +1,48 @@
+{
+  "task": "AUDIT-002",
+  "kind": "source_review",
+  "files": [
+    {
+      "path": "src/physimesh/drone/authoring.py",
+      "sha256": "11d94647d134a020db2cbc8228c9d6a2039024da90d00fe6b9581ed81edddbf9"
+    },
+    {
+      "path": "src/physimesh/drone/screening_scope.py",
+      "sha256": "d8eb45f41b03c01de3ef7b9185f8891626c97357e7624718b238ea45914bf194"
+    },
+    {
+      "path": "src/physimesh/drone/mass.py",
+      "sha256": "d58661c4a8db5e853ac5924567b09864c50fb5c2aac79e9c630441e5c749f70d"
+    },
+    {
+      "path": "src/physimesh/drone/models.py",
+      "sha256": "0c3f304bf492a5fde536d3dab667c4f12efb537482b95b63d496a317b6c7a1db"
+    },
+    {
+      "path": "src/physimesh/drone/trim.py",
+      "sha256": "bfe8052ba5c113ed76534de8b783cc51bf8ccf466bf18b36c66a7ece8e28fcab"
+    },
+    {
+      "path": "src/physimesh/api/projects.py",
+      "sha256": "1b9b956303d6fb272bf2a276805eaadc12d79afaf52ee7754d3ea69d76f3f44c"
+    },
+    {
+      "path": "src/physimesh/api/screening.py",
+      "sha256": "5b773a1c36d40c659b3de6255f4899ac4c25a16102c921c4b5601f02f3270b11"
+    },
+    {
+      "path": "web/js/input-editors.js",
+      "sha256": "82ab44c0a00a7d9a343d452c57ebbe53d6348494d68a559d21b5976a5e41fc2b"
+    },
+    {
+      "path": "web/js/engineering-readiness.js",
+      "sha256": "67828e75b338e0d31fa3aaa0617df32866f2fb01cb71c53821ffb4548b49ed65"
+    },
+    {
+      "path": "tests/drone/test_authoring.py",
+      "sha256": "468b1bdfddeeefa90fca537cb733bbd94bf948c2af84a938aa6080c0b5dac46e"
+    }
+  ],
+  "runtime_tests_executed": false,
+  "claim": "Internal source analysis, not demonstrated runtime bypass"
+}

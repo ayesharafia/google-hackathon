@@ -8,6 +8,15 @@
 
 **Customer persona / decision:** the user confirmed saved-design payload/mission assessment with plots/evidence. External customer identity, measured aircraft inputs and acceptance accuracy remain UNKNOWN.
 **Primary product wedge (user-directed):** a retained aircraft-design workbench that reports restricted map-based payload bounds and their limitations across required cases/segments. Commercial demand and real-aircraft predictive accuracy remain unvalidated.
+
+**22 October product direction:** focus the next visible improvements on a guided
+engineering intake-to-review journey. The owner approved Engineering Readiness
+as the first bounded increment. It surfaces actionable saved-input checks while
+keeping source qualification and scientific acceptance separate. Guided retained
+source binding is now implemented with explicit matching selections and stale
+refusal, under separate owner approval. Broader CSV contracts and
+real-design pilot/hosting qualification need their own concrete designs/gates.
+This direction is a product hypothesis, not validated customer demand.
 **14-day stretch objective:** An honestly scoped, reproducible demonstrator with understandable inputs, outputs, limitations and numerical evidence. This is not a claim of certification, airworthiness, or commercially validated accuracy.
 
 ## CEO selection principles

@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "UI-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "--test",
+    "tests/web/test_engineering_readiness.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T15:37:14+00:00",
+  "started_at": "2026-10-22T15:17:44+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+  "output": "✔ uninspected state never presents a passing input check (1.098834ms)\n✔ eligible inputs never promote source evidence or qualified approval (0.063791ms)\n✔ mass missing fields and errors remain separately visible (0.05925ms)\n✔ pack disagreement differs from incomplete and unassessed inputs (0.104083ms)\n✔ an ineligible optional case is not hidden by aggregate required eligibility (0.04425ms)\n✔ separate supplied-point screening state cannot overwrite model eligibility (0.044583ms)\n✔ partial reports preserve unknown input states instead of false conclusions (0.368084ms)\n✔ diagnostic text is retained as data and does not mutate the report (0.0675ms)\n✔ action routes masses.energy: missing to mass (0.115542ms)\n✔ action routes payload position required to mass (0.097875ms)\n✔ action routes pack consistency to battery (0.07125ms)\n✔ action routes nominal bus voltage to battery (0.062958ms)\n✔ action routes map RPM coverage to rotors (0.018667ms)\n✔ action routes rotor current limit to rotors (0.017708ms)\n✔ action routes sequence segment duration to sequence (0.022917ms)\n✔ action routes local_pilot.model_version to model (0.026708ms)\n✔ action routes payload domain reversed to model (0.0315ms)\n✔ action routes atmosphere source to cases (0.045875ms)\n✔ action routes angular acceleration outside case to cases (0.032541ms)\n✔ action routes unfamiliar backend diagnostic to json (0.017458ms)\nℹ tests 20\nℹ suites 0\nℹ pass 20\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 76.127167\n\n"
+}

@@ -102,7 +102,7 @@
       "id": "SLICE-001",
       "title": "Inventory existing drone constants and numerical guard provenance",
       "kind": "documentation",
-      "status": "ready",
+      "status": "done",
       "zone": "green",
       "depends_on": [
         "AUDIT-001"
@@ -112,9 +112,235 @@
       "source_refs": [
         ".physicore/specs/NEXT_SLICE.md"
       ],
-      "evidence": [],
-      "notes": "Do not promote until explicitly scoped with a source-backed spec in the repository.",
-      "scoped": true
+      "evidence": [
+        ".physicore/evidence/SLICE-001-completion.json"
+      ],
+      "notes": "Documentation complete with source/link/hash checks; qualified scientific acceptance remains pending; no model, tolerance, application test or dataset changes.",
+      "scoped": true,
+      "started_at": "2026-10-22T13:21:51+00:00",
+      "started_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+      "started_dirty": [],
+      "finished_at": "2026-10-22T13:29:55+00:00"
+    },
+    {
+      "id": "DOC-002",
+      "title": "Document fixed-pack energy and held-reserve provenance",
+      "done_when": "Account for each direct formula input and guard with units, source links and missing evidence; preserve all model values and tolerances; record bounded static source checks",
+      "kind": "documentation",
+      "priority": 4,
+      "status": "done",
+      "zone": "green",
+      "depends_on": [
+        "SLICE-001"
+      ],
+      "source_refs": [
+        ".physicore/specs/PACK_ENERGY_PROVENANCE.md"
+      ],
+      "evidence": [
+        ".physicore/evidence/DOC-002-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Source-linked energy provenance complete; static hash/link/whitespace and checker lint passed; no physical validation, behavior or threshold changes.",
+      "started_at": "2026-10-22T13:38:04+00:00",
+      "started_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+      "started_dirty": [
+        " M .physicore/ops/INVESTOR_DIGEST.md",
+        " M .physicore/ops/RESEARCH_LOG.md",
+        " M .physicore/ops/STATE.md",
+        " M .physicore/ops/TASKS.json",
+        " M .physicore/ops/WORKLOG.md",
+        "?? .physicore/evidence/SLICE-001-completion.json",
+        "?? .physicore/evidence/SLICE-001-inventory-check.py",
+        "?? .physicore/evidence/SLICE-001-inventory.json",
+        "?? .physicore/evidence/SLICE-001-static-checks.json",
+        "?? .physicore/specs/PACK_ENERGY_PROVENANCE.md",
+        "?? docs/validation/drone-constants-ledger.md",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "finished_at": "2026-10-22T13:43:03+00:00"
+    },
+    {
+      "id": "AUDIT-002",
+      "title": "Audit pack-input validation boundaries and user-visible outcomes",
+      "done_when": "Trace actual caller paths and validation ownership, record source-backed reachability and unknowns, recommend a bounded correction only if justified, preserve all model values and thresholds",
+      "kind": "audit",
+      "priority": 4,
+      "status": "done",
+      "zone": "green",
+      "depends_on": [
+        "DOC-002"
+      ],
+      "source_refs": [
+        ".physicore/specs/PACK_INPUT_BOUNDARY_AUDIT.md"
+      ],
+      "evidence": [
+        ".physicore/evidence/AUDIT-002-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Read-only source audit complete; no local-capacity bypass established; broader type-handling reproduction remains a future proposal; no model/tolerance changes.",
+      "started_at": "2026-10-22T15:45:31+00:00",
+      "started_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+      "started_dirty": [
+        " M .physicore/ops/INVESTOR_DIGEST.md",
+        " M .physicore/ops/RESEARCH_LOG.md",
+        " M .physicore/ops/STATE.md",
+        " M .physicore/ops/STRATEGY.md",
+        " M .physicore/ops/TASKS.json",
+        " M .physicore/ops/WORKLOG.md",
+        " M DECISIONS.md",
+        " M plan.md",
+        " M web/css/workbench.css",
+        " M web/js/input-editors.js",
+        " M web/js/workbench.js",
+        " M web/workbench.html",
+        "?? .physicore/evidence/DOC-002-completion.json",
+        "?? .physicore/evidence/DOC-002-static-check.py",
+        "?? .physicore/evidence/DOC-002-static.json",
+        "?? .physicore/evidence/SLICE-001-completion.json",
+        "?? .physicore/evidence/SLICE-001-inventory-check.py",
+        "?? .physicore/evidence/SLICE-001-inventory.json",
+        "?? .physicore/evidence/SLICE-001-static-checks.json",
+        "?? .physicore/evidence/UI-001-completion.json",
+        "?? .physicore/evidence/UI-001-static.json",
+        "?? .physicore/evidence/UI-001-test-20261022152251238982.json",
+        "?? .physicore/evidence/UI-001-test-20261022152253318960.json",
+        "?? .physicore/evidence/UI-001-test-20261022152659536733.json",
+        "?? .physicore/evidence/UI-001-test-20261022152735323703.json",
+        "?? .physicore/evidence/UI-001-test-20261022152932639806.json",
+        "?? .physicore/evidence/UI-001-test-20261022153108205586.json",
+        "?? .physicore/evidence/UI-001-test-20261022153212487971.json",
+        "?? .physicore/evidence/UI-001-test-20261022153436393527.json",
+        "?? .physicore/evidence/UI-001-test-20261022153714478616.json",
+        "?? .physicore/evidence/UI-001-test-20261022153801014230.json",
+        "?? .physicore/specs/PACK_ENERGY_PROVENANCE.md",
+        "?? .physicore/specs/PACK_INPUT_BOUNDARY_AUDIT.md",
+        "?? docs/qa/assets/engineering-readiness/browser-checks.json",
+        "?? docs/qa/assets/engineering-readiness/desktop.png",
+        "?? docs/qa/assets/engineering-readiness/mobile.png",
+        "?? docs/qa/assets/engineering-readiness/narrow-720.png",
+        "?? docs/qa/assets/engineering-readiness/zoom-200-css.png",
+        "?? docs/qa/engineering-readiness-2026-10-22.md",
+        "?? docs/validation/drone-constants-ledger.md",
+        "?? docs/validation/fixed-pack-energy-provenance.md",
+        "?? scripts/qa/engineering_readiness_browser.mjs",
+        "?? tests/web/test_engineering_readiness.mjs",
+        "?? web/js/engineering-readiness.js",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "finished_at": "2026-10-22T15:46:45+00:00"
+    },
+    {
+      "id": "UI-001",
+      "title": "Add actionable Engineering Readiness to the design workbench",
+      "done_when": "Separate saved mass, pack and per-case eligibility from unassessed sources and pending review; resolve actionable editor links; stale and late responses never show current checks; targeted tests and browser interactions pass without model or access changes",
+      "kind": "implementation",
+      "priority": 5,
+      "status": "done",
+      "zone": "green",
+      "depends_on": [],
+      "source_refs": [
+        ".physicore/ops/RESEARCH_LOG.md"
+      ],
+      "evidence": [
+        ".physicore/evidence/UI-001-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Approved bounded readiness UI complete; final targeted/unit/browser/lint checks pass, earlier failures retained and corrected; no independent physics/industry-readiness claim or publication.",
+      "started_at": "2026-10-22T15:17:44+00:00",
+      "started_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+      "started_dirty": [
+        " M .physicore/ops/INVESTOR_DIGEST.md",
+        " M .physicore/ops/RESEARCH_LOG.md",
+        " M .physicore/ops/STATE.md",
+        " M .physicore/ops/TASKS.json",
+        " M .physicore/ops/WORKLOG.md",
+        "?? .physicore/evidence/DOC-002-completion.json",
+        "?? .physicore/evidence/DOC-002-static-check.py",
+        "?? .physicore/evidence/DOC-002-static.json",
+        "?? .physicore/evidence/SLICE-001-completion.json",
+        "?? .physicore/evidence/SLICE-001-inventory-check.py",
+        "?? .physicore/evidence/SLICE-001-inventory.json",
+        "?? .physicore/evidence/SLICE-001-static-checks.json",
+        "?? .physicore/specs/PACK_ENERGY_PROVENANCE.md",
+        "?? .physicore/specs/PACK_INPUT_BOUNDARY_AUDIT.md",
+        "?? docs/validation/drone-constants-ledger.md",
+        "?? docs/validation/fixed-pack-energy-provenance.md",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "finished_at": "2026-10-22T15:39:59+00:00"
+    },
+    {
+      "id": "UI-002",
+      "title": "Bind imported rotor sources through explicit matching selections",
+      "done_when": "Show retained dataset/configuration/source; explicitly select only matching rotors; reject stale/mismatched/ambiguous selection; preserve original bytes and advanced fields; mark draft/readiness stale; targeted unit and browser checks pass",
+      "kind": "implementation",
+      "priority": 5,
+      "status": "done",
+      "zone": "green",
+      "depends_on": [],
+      "source_refs": [
+        ".physicore/ops/APPROVALS.md"
+      ],
+      "evidence": [
+        ".physicore/evidence/UI-002-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Approved explicit retained-source assignment complete; 35 UI unit tests, 26 existing regressions, 28 Chrome checks and static/lint checks pass. Original source bytes/frozen revisions preserved; no scientific acceptance or deployment.",
+      "started_at": "2026-10-22T15:48:58+00:00",
+      "started_head": "5477f94a0c467f1a01e9691a1f9c53613eeffa67",
+      "started_dirty": [
+        " M .physicore/ops/INVESTOR_DIGEST.md",
+        " M .physicore/ops/RESEARCH_LOG.md",
+        " M .physicore/ops/STATE.md",
+        " M .physicore/ops/STRATEGY.md",
+        " M .physicore/ops/TASKS.json",
+        " M .physicore/ops/WORKLOG.md",
+        " M AGENTS.md",
+        " M DECISIONS.md",
+        " M plan.md",
+        " M web/css/workbench.css",
+        " M web/js/input-editors.js",
+        " M web/js/workbench.js",
+        " M web/workbench.html",
+        "?? .physicore/evidence/AUDIT-002-audit.json",
+        "?? .physicore/evidence/AUDIT-002-completion.json",
+        "?? .physicore/evidence/AUDIT-002-source.json",
+        "?? .physicore/evidence/DOC-002-completion.json",
+        "?? .physicore/evidence/DOC-002-static-check.py",
+        "?? .physicore/evidence/DOC-002-static.json",
+        "?? .physicore/evidence/SLICE-001-completion.json",
+        "?? .physicore/evidence/SLICE-001-inventory-check.py",
+        "?? .physicore/evidence/SLICE-001-inventory.json",
+        "?? .physicore/evidence/SLICE-001-static-checks.json",
+        "?? .physicore/evidence/UI-001-completion.json",
+        "?? .physicore/evidence/UI-001-static.json",
+        "?? .physicore/evidence/UI-001-test-20261022152251238982.json",
+        "?? .physicore/evidence/UI-001-test-20261022152253318960.json",
+        "?? .physicore/evidence/UI-001-test-20261022152659536733.json",
+        "?? .physicore/evidence/UI-001-test-20261022152735323703.json",
+        "?? .physicore/evidence/UI-001-test-20261022152932639806.json",
+        "?? .physicore/evidence/UI-001-test-20261022153108205586.json",
+        "?? .physicore/evidence/UI-001-test-20261022153212487971.json",
+        "?? .physicore/evidence/UI-001-test-20261022153436393527.json",
+        "?? .physicore/evidence/UI-001-test-20261022153714478616.json",
+        "?? .physicore/evidence/UI-001-test-20261022153801014230.json",
+        "?? .physicore/specs/PACK_ENERGY_PROVENANCE.md",
+        "?? .physicore/specs/PACK_INPUT_BOUNDARY_AUDIT.md",
+        "?? docs/qa/assets/engineering-readiness/browser-checks.json",
+        "?? docs/qa/assets/engineering-readiness/desktop.png",
+        "?? docs/qa/assets/engineering-readiness/mobile.png",
+        "?? docs/qa/assets/engineering-readiness/narrow-720.png",
+        "?? docs/qa/assets/engineering-readiness/zoom-200-css.png",
+        "?? docs/qa/engineering-readiness-2026-10-22.md",
+        "?? docs/qa/pack-input-boundary-audit-2026-10-22.md",
+        "?? docs/validation/drone-constants-ledger.md",
+        "?? docs/validation/fixed-pack-energy-provenance.md",
+        "?? scripts/qa/engineering_readiness_browser.mjs",
+        "?? tests/web/test_engineering_readiness.mjs",
+        "?? web/js/engineering-readiness.js",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "finished_at": "2026-10-22T15:57:26+00:00"
     }
   ]
 }
