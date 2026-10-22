@@ -9,9 +9,9 @@ recorded changes do not identify causes.
 Chrome checks passed. Full interface-law review and desktop/phone/enlarged-text
 evidence are in docs/qa/design-comparisons-2026-10-23.md.
 
-**Delivery:** owner authorized publication to main. Verify exact GitHub SHA at
-handoff; preserve all branches and the original shared runtime. No deployment
-or physics acceptance is granted by this UI delivery.
+**Delivery:** implementation 988b93f is published to main and its exact GitHub SHA
+verified. All branch names and the original shared runtime are preserved. No
+deployment or physics acceptance is granted by this UI delivery.
 
 **Next candidate:** reviewable mission/requirement checks and a qualified measured
 aircraft pilot, subject to their concrete designs and scientific gates. Customer

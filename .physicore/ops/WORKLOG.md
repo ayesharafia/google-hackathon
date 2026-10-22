@@ -147,3 +147,9 @@
 - Evidence: .physicore/evidence/COMPARE-001-completion.json
 - Notes: Approved comparison UI and targeted software/browser checks complete; full interface-law review and corrected harness failures retained; main publication authorized, physical qualification and hosting remain open.
 - Next ready: no new task promoted
+
+## 2026-10-23: COMPARE-001 publication
+
+Implementation 988b93fc445712b9ee73e28f2dcacddbc8b84282 pushed to main; exact
+GitHub ref matched. Publication receipt retained. All existing branch names
+preserved. Disposable QA server stopped; original shared runtime untouched.

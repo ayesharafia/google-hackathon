@@ -4,7 +4,7 @@
 
 - Owner approved “Proceed with Design Comparisons”, including targeted checks and publication to main. COMPARE-001 implements grouped whole-declaration changes, before/after case outcomes and limits, exact JSON, strict numeric gating and stale/late-response guards.
 - Verified: 48 Node tests (13 new), 35 existing retained-study/report/summary regressions and 15 disposable Chrome browser checks; no page JS errors. Final law review and screenshots: docs/qa/design-comparisons-2026-10-23.md. Failed harness attempts remain retained and explained. CSS zoom=2 is not native zoom; screen-reader/real-user/provider testing remains unexecuted.
-- Main publication is explicitly authorized for the completed increment. Verify exact remote SHA before final handoff. Previous importer/library af637bf publication receipt is retained.
+- Implementation 988b93fc445712b9ee73e28f2dcacddbc8b84282 is published to main and its exact remote SHA verified. Receipt: .physicore/evidence/PUBLISH-2026-10-23-comparisons.json. Previous importer/library af637bf publication receipt is retained.
 - Preserve original shared runtime/access, retained sources/results/formulas/tolerances and all branches. No deployment, runtime restart, qualified physics acceptance or real-aircraft validation is performed. Broader requirement checks remain a future concrete design.
 
 ## Completed importer delivery
