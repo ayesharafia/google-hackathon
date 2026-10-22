@@ -1,0 +1,34 @@
+{
+  "schema_version": "drone_kickoff_software_checks_v1",
+  "recorded_utc": "2026-10-22T09:55:54.395313+00:00",
+  "source_revision": "73793c9e39f840864ebb885bd65b9b38706eaa07",
+  "qualification": "Fresh software checks only; no scientist sign-off, measured-aircraft validation or accepted L0-L4 ladder.",
+  "scope": "Existing tests and diagnostic; no solver or tolerance edits.",
+  "runs": [
+    {
+      "command": ".venv/bin/python -m pytest -q tests/drone/test_wp02_foundations.py tests/drone/test_models_readiness.py tests/drone/test_hover_pilot.py tests/drone/test_conditioning_and_axial.py tests/projects/test_scenario_limits.py tests/projects/test_semantic_identity.py tests/projects/test_extended_retention.py tests/projects/test_contracts.py",
+      "exit_code": 0,
+      "passed": 167,
+      "warnings": 1,
+      "duration_s": 2.22,
+      "retained_log": "model-tests.log",
+      "retained_log_sha256": "81f2724157e7297c521f4e610a38515c5a48697a4dbc72881e5ff763b049ff7a"
+    },
+    {
+      "command": "cd reference_impl && ../.venv/bin/python -m pytest -q",
+      "exit_code": 0,
+      "passed": 118,
+      "warnings": 1,
+      "duration_s": 0.56,
+      "retained_log": "reference-tests.log",
+      "retained_log_sha256": "8e84e9391ef325597912383c0633bf7e7b5a0fc5e54b7683b90a309430514acb"
+    }
+  ],
+  "not_run": [
+    "Native OpenFOAM/CFD",
+    "PostgreSQL/S3 integration",
+    "Browser journeys",
+    "Installed release images",
+    "Held-out experimental comparisons"
+  ]
+}

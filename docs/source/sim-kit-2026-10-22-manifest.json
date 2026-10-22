@@ -1,0 +1,200 @@
+{
+  "schema_version": "simulation_kit_import_v1",
+  "adopted_date": "2026-10-22",
+  "archive": {
+    "filename": "sim-kit.zip",
+    "sha256": "c3a0c0ba708ced18cbbfc7a49b2118df5af29f5d99def40fc782b62aa816d0fd"
+  },
+  "pasted_playbook": {
+    "filename": "Pasted text.txt",
+    "sha256": "e0da0726306193cb52ce48046c5dbd289bdcae14d50f35583159d7d9ac50c9dd",
+    "matches_archive_playbook_ignoring_trailing_whitespace": true
+  },
+  "file_count": 23,
+  "files": [
+    {
+      "archive_path": "sim-kit/specs/.gitkeep",
+      "repository_path": "specs/.gitkeep",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "imported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/ROADMAP.md",
+      "repository_path": "ROADMAP.md",
+      "source_bytes": 885,
+      "source_sha256": "cf61f4112d5f9846337ac921c84bdebb2fb28688194117586de52b67db3d784e",
+      "imported_sha256": "cf61f4112d5f9846337ac921c84bdebb2fb28688194117586de52b67db3d784e",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/VALIDATION.md",
+      "repository_path": "VALIDATION.md",
+      "source_bytes": 3566,
+      "source_sha256": "fda63c94b51c592027e35727f68fbba28e564b9b3e62fe0f8410c476c5c4e9ea",
+      "imported_sha256": "fda63c94b51c592027e35727f68fbba28e564b9b3e62fe0f8410c476c5c4e9ea",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/CLAUDE.md",
+      "repository_path": "CLAUDE.md",
+      "source_bytes": 3469,
+      "source_sha256": "6b1922cf6b6f0b5b62f899abfc68bc141579c297530dd902c6097cbdc10b604c",
+      "imported_sha256": "6b1922cf6b6f0b5b62f899abfc68bc141579c297530dd902c6097cbdc10b604c",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/templates/EXPLAIN_REPORT.md",
+      "repository_path": "templates/EXPLAIN_REPORT.md",
+      "source_bytes": 852,
+      "source_sha256": "55de83abfc0166e8565d99c234a0a73a26eea58529e3ec72fbe08004ba5d22bd",
+      "imported_sha256": "55de83abfc0166e8565d99c234a0a73a26eea58529e3ec72fbe08004ba5d22bd",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/templates/PHYSICS_SPEC.md",
+      "repository_path": "templates/PHYSICS_SPEC.md",
+      "source_bytes": 1242,
+      "source_sha256": "d786c14242e78550569343d7d256a159e91693a07c2d75486f6a7e4723800647",
+      "imported_sha256": "d786c14242e78550569343d7d256a159e91693a07c2d75486f6a7e4723800647",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/DECISIONS.md",
+      "repository_path": "DECISIONS.md",
+      "source_bytes": 307,
+      "source_sha256": "c91fedb0b7248384b7867d8ad24b740d3d93ee56a20ca076a0d47099d1668c59",
+      "imported_sha256": "8d8bb5ffa5a578cf49aae6568c8ed0617f3eccf02eae1c006c397e72317cc34c",
+      "import_action": "adoption entry appended; original bytes preserved"
+    },
+    {
+      "archive_path": "sim-kit/validation/reference/.gitkeep",
+      "repository_path": "validation/reference/.gitkeep",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "imported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/reports/.gitkeep",
+      "repository_path": "reports/.gitkeep",
+      "source_bytes": 0,
+      "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "imported_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/PLAYBOOK.md",
+      "repository_path": "PLAYBOOK.md",
+      "source_bytes": 5419,
+      "source_sha256": "abc24aab6b814ae5bfec7d0d7d48a4116905a10557d77dff30a7ba2bb57a2193",
+      "imported_sha256": "abc24aab6b814ae5bfec7d0d7d48a4116905a10557d77dff30a7ba2bb57a2193",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/agents/spec-writer.md",
+      "repository_path": ".claude/agents/spec-writer.md",
+      "source_bytes": 980,
+      "source_sha256": "7ba93ce8676f2e64127126b378d1b25fb8fef74b4813f7004b80cbb1f5c90983",
+      "imported_sha256": "7ba93ce8676f2e64127126b378d1b25fb8fef74b4813f7004b80cbb1f5c90983",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/agents/explainer.md",
+      "repository_path": ".claude/agents/explainer.md",
+      "source_bytes": 670,
+      "source_sha256": "a557818db8dc940d1659feb64da1d16e1d8dbebc3068d4dbe8526a9e93dd5388",
+      "imported_sha256": "a557818db8dc940d1659feb64da1d16e1d8dbebc3068d4dbe8526a9e93dd5388",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/agents/physics-architect.md",
+      "repository_path": ".claude/agents/physics-architect.md",
+      "source_bytes": 989,
+      "source_sha256": "6ea012585350bc1020df5cf06161c40d9297af8d7338ddbcb6f5b58e3a06b38e",
+      "imported_sha256": "6ea012585350bc1020df5cf06161c40d9297af8d7338ddbcb6f5b58e3a06b38e",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/agents/solver-builder.md",
+      "repository_path": ".claude/agents/solver-builder.md",
+      "source_bytes": 824,
+      "source_sha256": "f398c3d91b99358681fd77f691599f2e343a8759a26ca7b0189bde839ea6877e",
+      "imported_sha256": "f398c3d91b99358681fd77f691599f2e343a8759a26ca7b0189bde839ea6877e",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/agents/validation-engineer.md",
+      "repository_path": ".claude/agents/validation-engineer.md",
+      "source_bytes": 1070,
+      "source_sha256": "1b2ddb5f7f393f007c149c9ecf68ec824a8a185bd2bc0fdb74bf9a0e0f9b50f7",
+      "imported_sha256": "1b2ddb5f7f393f007c149c9ecf68ec824a8a185bd2bc0fdb74bf9a0e0f9b50f7",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/agents/physics-auditor.md",
+      "repository_path": ".claude/agents/physics-auditor.md",
+      "source_bytes": 929,
+      "source_sha256": "e0fb4ef651d055ddda474c3fa6a436c3f4873b9731dac5cf0024be0a00a19628",
+      "imported_sha256": "e0fb4ef651d055ddda474c3fa6a436c3f4873b9731dac5cf0024be0a00a19628",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/commands/teach.md",
+      "repository_path": ".claude/commands/teach.md",
+      "source_bytes": 285,
+      "source_sha256": "d84669b9ee763d94bdd86bc8ba0fed4000fd8f3c853dcd23feaa577ae6226677",
+      "imported_sha256": "d84669b9ee763d94bdd86bc8ba0fed4000fd8f3c853dcd23feaa577ae6226677",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/commands/status.md",
+      "repository_path": ".claude/commands/status.md",
+      "source_bytes": 270,
+      "source_sha256": "e2a3201f4acf1a5e109e7fc386b96262cb970e8ea93f9d97f57d860b79b68fdf",
+      "imported_sha256": "e2a3201f4acf1a5e109e7fc386b96262cb970e8ea93f9d97f57d860b79b68fdf",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/commands/spec.md",
+      "repository_path": ".claude/commands/spec.md",
+      "source_bytes": 272,
+      "source_sha256": "1ae66ce56324bc14a8fbf6528835b229e8b9b9883f560f22cb8e202c1ff30006",
+      "imported_sha256": "1ae66ce56324bc14a8fbf6528835b229e8b9b9883f560f22cb8e202c1ff30006",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/commands/kickoff.md",
+      "repository_path": ".claude/commands/kickoff.md",
+      "source_bytes": 798,
+      "source_sha256": "08171aad519eca170adb3fc0416dd3e9aacc14089a76df733ce3caa326ebcfa4",
+      "imported_sha256": "08171aad519eca170adb3fc0416dd3e9aacc14089a76df733ce3caa326ebcfa4",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/commands/build.md",
+      "repository_path": ".claude/commands/build.md",
+      "source_bytes": 544,
+      "source_sha256": "85588cec7c2ea52812d69834df8dbecca9bd72298535069eeb65f7fd6c3862b1",
+      "imported_sha256": "85588cec7c2ea52812d69834df8dbecca9bd72298535069eeb65f7fd6c3862b1",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/commands/explain.md",
+      "repository_path": ".claude/commands/explain.md",
+      "source_bytes": 283,
+      "source_sha256": "586433b98656f25546c7a01410f571c2bfb727f8f2d91ed823359828096abb97",
+      "imported_sha256": "586433b98656f25546c7a01410f571c2bfb727f8f2d91ed823359828096abb97",
+      "import_action": "unchanged"
+    },
+    {
+      "archive_path": "sim-kit/.claude/commands/plan-week.md",
+      "repository_path": ".claude/commands/plan-week.md",
+      "source_bytes": 344,
+      "source_sha256": "1fac35119ed8c9ff665eebb1550fc2a78ecc97f053b6d140663aaa8307ff8ac9",
+      "imported_sha256": "1fac35119ed8c9ff665eebb1550fc2a78ecc97f053b6d140663aaa8307ff8ac9",
+      "import_action": "unchanged"
+    }
+  ]
+}

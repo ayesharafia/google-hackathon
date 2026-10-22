@@ -4,6 +4,17 @@
 **Deployment decision:** private hosted web app for the team and invited clients.
 **Document status:** development specification and work order. Future tasks are uncompleted; this document does not establish production readiness or aircraft validation.
 
+**Working method, adopted 22 October 2026:** read [AGENTS.md](AGENTS.md),
+[CLAUDE.md](CLAUDE.md), [PLAYBOOK.md](PLAYBOOK.md), [VALIDATION.md](VALIDATION.md)
+and the [adoption notes](docs/working-method/sim-kit-adoption.md) before work.
+Use the kit's spec, scientist sign-off, separate validation/builder and audit
+workflow for physics changes. The [22 October kickoff](reports/drone-kickoff-2026-10-22.md)
+populates [ROADMAP.md](ROADMAP.md) with scoped evidence and qualification work.
+The active slice table below retains detailed implementation/release status;
+the roadmap records physics ladder evidence. DR-01 is awaiting scientist review,
+with reviewer unassigned and customer accuracy unknown. The kickoff does not
+change recorded physics acceptance or complete a release gate.
+
 **Active roadmap:** the table below is the single source of current slice status. Sections 1–16 retain the broader development specifications and release gates. The dated plans are historical specifications, not competing work queues. The user authorized execution of the 5 October direction; real client inputs and a named engineering owner are still unavailable (confirmed 5 October).
 
 **21 October implementation authority:** the user approved and authorized the [client delivery plan](docs/production/client-delivery-plan.md). Its C00–C12 work packages extend this roadmap from consolidated main `d2e7862`; hosting remains deferred and the current-model/real-data/human gates remain open.

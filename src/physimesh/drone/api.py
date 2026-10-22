@@ -119,7 +119,8 @@ async def import_stl(request: Request, source_units: Annotated[str, Form()],
                        "transform": transform, "schema": "geometry_import_v1"}
     revision = store.put_bytes(canonical_json(revision_record).encode(), kind="geometry_revision",
                                meta={"source_sha256": hashes})
-    return {"status": "read_ok", "geometry_revision_sha256": revision,
+    report = {"schema_version": "geometry_import_report_v1",
+            "status": "read_ok", "geometry_revision_sha256": revision,
             "unit_scale_to_m": scale,
             "conversion": {"from": source_units, "to": "m", "factor": scale},
             "transform": {**transform, "sha256": transform_sha},
@@ -135,3 +136,6 @@ async def import_stl(request: Request, source_units: Annotated[str, Form()],
             "unresolved_inputs": [*(f"assembly.components[{c['component_id']}].role" for c in components),
                                   "rotors"],
             "note": NOTE}
+    report_sha = store.put_bytes(canonical_json(report).encode(), kind="geometry_import_report",
+                                 meta={"geometry_revision_sha256": revision})
+    return {**report, "report_sha256": report_sha}

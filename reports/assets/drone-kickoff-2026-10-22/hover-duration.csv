@@ -1,0 +1,16 @@
+duration_s,closed_form_payload_kg,closed_form_state,solver_outcome,solver_payload_kg,absolute_payload_difference_kg,max_force_residual_n,max_moment_residual_nm,reasons
+10,28.788648519117128,feasible under the artificial fixture assumptions,feasible,28.78864851911713,3.552713678800501e-15,0.0,0.0,[]
+60,28.788648519117128,feasible under the artificial fixture assumptions,feasible,28.78864851911713,3.552713678800501e-15,0.0,0.0,[]
+90,28.788648519117128,feasible under the artificial fixture assumptions,feasible,28.78864851911713,3.552713678800501e-15,0.0,0.0,[]
+115.2,28.788648519117128,feasible under the artificial fixture assumptions,feasible,28.78864851911713,3.552713678800501e-15,0.0,0.0,[]
+120,27.157102578352443,feasible under the artificial fixture assumptions,feasible,27.157102578352447,3.552713678800501e-15,5.684341886080802e-14,0.0,[]
+150,19.325682062681956,feasible under the artificial fixture assumptions,feasible,19.325682062681956,0.0,0.0,2.842170943040401e-14,[]
+180,14.104735052234963,feasible under the artificial fixture assumptions,feasible,14.104735052234965,1.7763568394002505e-15,0.0,0.0,[]
+210,10.375487187629968,feasible under the artificial fixture assumptions,feasible,10.375487187629968,0.0,7.105427357601002e-15,7.105427357601002e-15,[]
+240,7.578551289176223,feasible under the artificial fixture assumptions,feasible,7.578551289176223,0.0,2.842170943040401e-14,0.0,[]
+270,5.4031567014899755,feasible under the artificial fixture assumptions,feasible,5.403156701489977,1.7763568394002505e-15,4.973799150320701e-14,2.1316282072803006e-14,[]
+300,3.6628410313409776,feasible under the artificial fixture assumptions,feasible,3.6628410313409776,0.0,7.105427357601002e-15,2.1316282072803006e-14,[]
+330,2.238946392128162,feasible under the artificial fixture assumptions,feasible,2.2389463921281605,1.3322676295501878e-15,2.842170943040401e-14,0.0,[]
+360,1.0523675261174814,feasible under the artificial fixture assumptions,feasible,1.0523675261174816,2.220446049250313e-16,0.0,0.0,[]
+390,0.048339254877675236,feasible under the artificial fixture assumptions,feasible,0.04833925487767372,1.519617764955683e-15,3.552713678800501e-15,3.552713678800501e-15,[]
+400,,no nonnegative payload in this fixture,infeasible,,,,,"[""The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is None)""]"

@@ -27,6 +27,8 @@ from .contracts import router as contracts_router
 from .projects import router as projects_router
 from .results import router as results_router
 from .screening import router as screening_router
+from .sessions import COOKIE, BrowserSessions, same_origin, valid_bearer
+from .sessions import router as sessions_router
 from .settings import Settings, load_settings
 
 
@@ -63,6 +65,8 @@ def create_app(settings: Settings) -> FastAPI:
                             settings.s3_bucket)
         store.verify_private_bucket()
     app.state.artifact_backend = store
+    app.state.browser_sessions = (BrowserSessions(settings.data_root/'browser-sessions.sqlite', settings.api_token)
+                                  if not settings.hosted_mode and not settings.public_access else None)
     app.state.identity = Identity(app.state.metadata) if settings.hosted_mode else None
     app.state.jobs = Jobs(app.state.metadata) if settings.hosted_mode else None
     from ..platform.login_limit import LoginLimit
@@ -77,6 +81,8 @@ def create_app(settings: Settings) -> FastAPI:
     app.include_router(contracts_router)
     app.include_router(screening_router)
     app.include_router(projects_router)
+    if not settings.hosted_mode:
+        app.include_router(sessions_router)
     from ..platform.api import router as platform_router
     app.include_router(platform_router)
 
@@ -95,10 +101,21 @@ def create_app(settings: Settings) -> FastAPI:
         if not (path == '/api/drone' or path.startswith('/api/drone/')):
             return await call_next(request)
         if not settings.hosted_mode:
-            expected = f'Bearer {settings.api_token}'
-            if not hmac.compare_digest(request.headers.get('authorization', '').encode(), expected.encode()):
+            if settings.public_access:
+                if (request.method not in ('GET', 'HEAD', 'OPTIONS') and 'origin' in request.headers
+                        and not same_origin(request)):
+                    return JSONResponse({'detail': "Submit changes from this workspace's own page."}, status_code=403,
+                                        headers={'Cache-Control': 'no-store'})
+                return await call_next(request)
+            bearer = valid_bearer(request)
+            sessions = app.state.browser_sessions
+            remembered = sessions.valid(request.cookies.get(COOKIE, '')) if sessions else False
+            if ('authorization' in request.headers and not bearer) or not (bearer or remembered):
                 return JSONResponse({'detail': 'missing or invalid bearer token'}, status_code=401,
-                                    headers={'WWW-Authenticate': 'Bearer'})
+                                    headers={'WWW-Authenticate': 'Bearer', 'Cache-Control': 'no-store'})
+            if not bearer and request.method not in ('GET', 'HEAD', 'OPTIONS') and not same_origin(request):
+                return JSONResponse({'detail': "Submit changes from this workspace's own page."}, status_code=403,
+                                    headers={'Cache-Control': 'no-store'})
             if path.startswith('/api/drone/platform/'):
                 return JSONResponse({'detail': 'individual identity requires hosted mode'}, status_code=404)
             return await call_next(request)

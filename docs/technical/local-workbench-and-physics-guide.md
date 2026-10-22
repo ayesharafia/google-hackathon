@@ -4,7 +4,13 @@ Checkpoint: 5 October 2026. This extends the historical MVP guide. Execution is 
 
 ## The user journey
 
-Open `/web/workbench.html` on the local API server. Connect with its configured bearer token; the page retains the token in memory only. Create a project with explicit unknowns, or create the labelled hover fixture. Author the mass ledger, payload placement, fixed pack, required cases, rotor locations/limits and chronological segments. Import an eligible `rotor_map_v1` JSON source and bind its returned original-byte hash to matching rotors.
+Open `/web/workbench.html` on the local API server. In private local mode, connect once with its configured workspace access token. An HttpOnly, SameSite cookie remembers this browser for 30 days across the workbench and evidence desk, including refreshes and server restarts. The token is not stored in browser storage. Use “Forget this browser” to revoke that browser’s access; rotating the server token invalidates all remembered browsers. Create a project with explicit unknowns, or create the labelled hover fixture. Author the mass ledger, payload placement, fixed pack, required cases, rotor locations/limits and chronological segments. Import an eligible `rotor_map_v1` JSON source and bind its returned original-byte hash to matching rotors.
+
+For an open shared workspace, start the server with `PHYSIMESH_PUBLIC_ACCESS=1` and no `PHYSIMESH_API_TOKEN`. Anyone with the server or tunnel URL can view and edit projects, upload geometry and save drafts without a token. Both desks open automatically and omit the connection and forget-browser controls. Public access stays enabled across refreshes and server restarts when that environment setting is kept. Hosted mode rejects this setting and continues to use individual project authorization.
+
+In **Aircraft geometry**, select one or more original STL files, explicitly choose their common source units, then select **Upload and preview**. The preview supports orbit, zoom and reset. Select **Save draft** to attach the import record and original files to the project; reopening restores the preview from authenticated, integrity-checked retained bytes. Uploading replacement files or removing geometry changes only the draft until saved. Frozen revisions retain their earlier geometry. A malformed or oversized upload leaves the current draft geometry unchanged. The existing default intake limits are 50 MB and one million triangles in total.
+
+An STL preview does not assign component roles, supply mass/inertia or establish mesh/CFD readiness. Source coordinates are converted to metres without inferring alignment with the declared rotor layout. Draft JSON exports contain immutable geometry references; original STL bytes remain in the server data root and must accompany that data root when transferring a project.
 
 Save the draft, inspect mass/readiness, freeze the saved version, then evaluate. Dirty inputs disable freeze/evaluation. Edits never alter an existing revision or result. A frozen revision is a software snapshot, not aircraft approval. Inspect every case, the common-payload checks, residuals and any chronological energy ledger. Export the exact JSON or its source-bound PDF. Compare retained studies within the same project; changed inputs do not prove causation.
 
@@ -15,10 +21,11 @@ Save the draft, inspect mass/readiness, freeze the saved version, then evaluate.
 | `projects/repository.py` | Repository protocol, records and conflict/not-found exceptions |
 | `projects/sqlite.py` | Transactional SQLite projects, expected-version saves, immutable revision and study associations |
 | `projects/service.py` | Draft parsing, canonical snapshots, project creation/save/freeze |
+| `projects/geometry.py` | Saved import/units/transform binding and retained STL byte integrity |
 | `projects/performance.py` | Original performance-source retention and integrity checks |
 | `projects/studies.py` | Frozen inputs/source/model binding, evaluation, first accepted result, read/export |
 | `projects/reports.py` | Deterministic qualified PDF and input-aware retained comparisons |
-| `api/projects.py` | Token-protected local HTTP routes, saved-input inspection aggregation and error/status translation |
+| `api/projects.py` | Local and hosted project HTTP routes, saved-input inspection aggregation and error/status translation |
 | `drone/authoring.py` | Installed and candidate mass/CG calculations |
 | `drone/performance.py` | Typed rotor map, coverage, interpolation and restricted convex profile |
 | `drone/trim.py` | Eligibility, linear constraints, allocation, certificate and independent recomputation |
@@ -27,10 +34,11 @@ Save the draft, inspect mass/readiness, freeze the saved version, then evaluate.
 | `drone/local_results.py` | Local V3 consistency and exact known-producer historical read policies |
 | `web/js/input-editors.js` | Native authoring, explicit unknowns, map import and saved-input inspection |
 | `web/js/workbench.js` | Serialized actions, version/dirty state, history and downloads |
+| `web/js/geometry-upload.js` | STL upload, draft attachment/removal, retained preview restoration |
 | `web/js/study-view.js` | Qualified outcome/energy/comparison display and keyboard-scrollable tables |
 | `web/js/viewer3d.js` | Real declared rotor disks/axes and candidate CG; orbit/zoom/reset |
 
-Paths in the table are under `src/physimesh/` except browser files. The viewer does not invent an airframe when CAD is unavailable. Geometry intake and sphere native-field display remain separate existing paths.
+Paths in the table are under `src/physimesh/` except browser files. The viewer does not invent an airframe when CAD is unavailable. Workbench geometry and sphere native-field display use separate previews.
 
 ## Persistence and identities
 
