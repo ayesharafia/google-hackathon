@@ -1,6 +1,6 @@
 # Latest product progress: 22 October 2026
 
-**Delivered locally:** engineers can import CSV/modern Excel rotor measurements,
+**Published to main:** engineers can import CSV/modern Excel rotor measurements,
 map columns/units explicitly, review conversions/errors and retain reusable
 sources. The catalog preserves original bytes and reproducible conversion records;
 reuse follows project/organization permissions and explicit rotor selection.
@@ -16,7 +16,12 @@ traceable design assessment. No real pilot customer, conversion metric or aircra
 accuracy has been established. This extends the existing readiness, revision,
 comparison and report foundation.
 
-**Next:** requirement/variant comparisons and a qualified measured-data pilot.
+Importer/library implementation af637bf is published and its exact GitHub SHA
+verified. All prior branches are retained.
+
+**Next:** clearer retained design comparisons, with a concrete bounded UI design
+awaiting owner approval; requirement checks and a qualified measured-data pilot
+remain later milestones.
 Model/aircraft acceptance, real data and production security/endurance/recovery/
-hosting remain open. Current increment has not changed the original shared
-server/tunnel or deployed a production service.
+hosting remain open. Publication has not changed the original shared server/tunnel or deployed a
+production service.

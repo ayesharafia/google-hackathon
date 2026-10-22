@@ -1,0 +1,10 @@
+{
+  "kind": "github_publication",
+  "captured_at": "2026-10-22T18:34:02.371829+00:00",
+  "branch": "main",
+  "commit": "af637bff11ffdc2aa7fb3dd6b327f01cb8dfe220",
+  "verified_remote_commit": "af637bff11ffdc2aa7fb3dd6b327f01cb8dfe220",
+  "repository": "https://github.com/PhysiCoreEngine12/Drone-Project.git",
+  "working_tree_clean_at_verification": true,
+  "scope": "Owner explicitly requested pushing the completed importer/library work and bringing another improvement. No branch deletion or deployment."
+}

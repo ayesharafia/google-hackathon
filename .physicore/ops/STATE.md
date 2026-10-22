@@ -1,5 +1,14 @@
 # PhysiCore Drone: v3 resume state
 
+## Current continuation: 23 October 2026
+
+- Owner requested pushing the completed changes and another improvement. Importer/library commit af637bf is now published to main; exact remote verification is retained in .physicore/evidence/PUBLISH-2026-10-23-importer.json.
+- Inspected existing comparison renderer, request lifecycle, API/service and comparison tests. Next proposed bounded UI increment: grouped readable input changes and per-case before/after outcomes/constraints, preserved comparable/unavailable semantics and exact JSON, stale selection/context guards.
+- COMPARE-001 remains an unscoped candidate awaiting the concrete design approval requested under brainstorming. No comparison code or tests changed/executed in this continuation. Broader requirement checks remain a later design.
+- Preserve the original shared runtime/access, retained results/formulas/tolerances and all branches. Publication does not imply deployment or aircraft validation.
+
+## Completed importer delivery
+
 - Current request: implement the approved CSV/Excel importer and reusable component library. Owner explicitly answered “Proceed with this design” to the concrete architecture, dependencies and targeted tests/browser checks. Design: docs/superpowers/specs/2026-10-22-tabular-component-library-design.md.
 - IMPORT-001 delivered locally: CSV/modern XLSX worksheet/header/range selection, explicit column/units/test declarations, original/SI preview and row refusal, immutable raw/map/manifest provenance, persistent searchable project-owned source catalog, authorized same-org cross-project reuse and existing explicit rotor binding.
 - Preserved: original source bytes, existing JSON path, saved/frozen geometry/revisions, model equations/schema/tolerances, public-demo access and all branches. Existing study/PDF exports do not yet embed the full tabular manifest chain; library provenance/download controls expose it.

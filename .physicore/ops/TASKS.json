@@ -370,6 +370,22 @@
         "M .physicore/ops/APPROVALS.md"
       ],
       "finished_at": "2026-10-22T18:29:41+00:00"
+    },
+    {
+      "id": "COMPARE-001",
+      "title": "Make retained design comparisons readable and selection-aware",
+      "kind": "implementation",
+      "priority": 5,
+      "status": "candidate",
+      "zone": "green",
+      "depends_on": [],
+      "done_when": "Readable frozen-input change groups, per-case before/after outcomes and active limits, preserved numeric comparability/exact evidence, and stale selection/context guards; targeted tests/browser checks pass",
+      "source_refs": [
+        ".physicore/ops/APPROVALS.md"
+      ],
+      "evidence": [],
+      "scoped": false,
+      "notes": "Concrete bounded comparison UI design pending owner approval; no implementation started."
     }
   ]
 }

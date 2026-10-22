@@ -1,5 +1,19 @@
 # Current approvals and pending decisions
 
+## 2026-10-23: importer publication authorized; comparison design pending
+
+Owner requested “psuh the changes and bring another”. Published implementation
+commit af637bf to main and verified its exact remote SHA. Retain all branches;
+no deployment or runtime restart is authorized by publication alone.
+
+Next proposed bounded change: upgrade the existing retained-study comparison UI
+with readable input-change groups, per-case before/after outcomes and constraints,
+explicit comparable/unavailable states, exact JSON disclosure, and selection/context
+staleness handling. Reuse the current comparison API and preserve formulas,
+thresholds, result bytes and access. Include targeted tests/browser/interface-law
+review and publish the completed increment to main under this request. Awaiting
+concrete design approval under brainstorming; no implementation has started.
+
 ## 2026-10-22: tabular source/library concrete design approved
 
 Owner answered “alrigth do it” after the market roadmap recommended CSV/Excel

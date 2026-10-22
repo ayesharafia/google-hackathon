@@ -1,5 +1,11 @@
 # Evidence log
 
+## 2026-10-23: importer publication and next comparison proposal
+
+- Explicit owner request: push completed changes and bring another improvement. Fetched main, verified a clean one-commit advance, pushed af637bf and verified the remote exact SHA. Publication receipt retained; no branches deleted or runtime deployed/restarted.
+- Read web/js/study-view.js, comparison request/selection handling in workbench.js, projects/reports.py compare_records and studies.py compare, plus existing report/summary tests. Current comparison already withholds unsupported deltas; raw input diffs and persistent old selection results are the next UI opportunity.
+- Proposed COMPARE-001 as a bounded presentation/lifecycle upgrade with readable categories, per-case comparisons, exact-record disclosure and selection staleness. Concrete design approval pending; no feature code/tests or physics changes in this continuation.
+
 ## 2026-10-22: IMPORT-001 approved implementation and verification
 
 - Added bounded CSV/XLSX literal measurement reading, explicit mapping/units/declarations, conversion preview/refusal and raw/map/manifest persistence. Reused unchanged RotorMapV1 validation and existing scoped storage/quota boundary. Added independent versioned catalog migration with retry-safe project-owned records and authorized listing/reuse.
