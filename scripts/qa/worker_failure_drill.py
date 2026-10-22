@@ -19,6 +19,16 @@ from physimesh.platform.jobs import StaleAttempt
 from physimesh.platform.worker import accept_publication, run_one
 
 
+def compute_child_stopped(pid):
+    """A missing proc entry or a zombie confirms the child has stopped."""
+    try:
+        status = Path(f'/proc/{pid}/stat').read_text()
+    except (FileNotFoundError, ProcessLookupError):
+        # procfs can disappear during open/read as the child exits.
+        return True
+    return status.rsplit(')', 1)[1].strip().startswith('Z')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--receipt', type=Path, required=True)
@@ -65,14 +75,7 @@ def main():
                 os.kill(supervisor.pid, signal.SIGKILL)
                 supervisor.wait(timeout=10)
                 for _ in range(100):
-                    status = Path(f'/proc/{child}/stat')
-                    try:
-                        state = status.read_text().rsplit(')', 1)[1].strip()
-                    except (FileNotFoundError, ProcessLookupError):
-                        # The kernel may reap the child between opening and reading
-                        # procfs. Both errors mean the observed process has exited.
-                        break
-                    if state.startswith('Z'):
+                    if compute_child_stopped(child):
                         break
                     time.sleep(.02)
                 else:
