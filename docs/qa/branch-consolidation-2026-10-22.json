@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-22",
+  "starting_main": "73793c9e39f840864ebb885bd65b9b38706eaa07",
+  "integration_source": "cc566b6f78bb9e986bfde8b47f673220771d13ec",
+  "original_remote_branch_count_excluding_main": 19,
+  "squash_identity": {
+    "main_commit": "d2e78627d404c4dd945e068d9e7ecf9a0f0d079f",
+    "former_branch_head": "f861e0ae79e4aa0313bd2f1c6953e407fb2bd1f8",
+    "trees_identical": true
+  },
+  "branches": [
+    {
+      "branch": "codex/a05-disk-pressure-drill",
+      "original_sha": "627e85d91522a663a52d404441da863efdbb05a4",
+      "classification": "already in squash PR 20 history",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/a06-intake-readiness",
+      "original_sha": "07984c210eae0c69c740a860c5479eda814596e6",
+      "classification": "already in squash PR 20 history",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/a07-bounded-soak",
+      "original_sha": "419b0d3f9a931072ad6eb21c4c5c85de772735fb",
+      "classification": "already in squash PR 20 history",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/baseline-findings",
+      "original_sha": "3cbafece6bab7e3d4f5775ade4da5d002ff9410b",
+      "classification": "already in main ancestry",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/client-workflow-foundation",
+      "original_sha": "86f8266fdc34d908ff3cd87b3cd6248db8c8b0a8",
+      "classification": "new client workflow",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/development-roadmap-2026-10-14",
+      "original_sha": "b5209946d11d3a73b6f5cc83cb815d1980847275",
+      "classification": "historical roadmap proposal",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/drone-evidence-kickoff",
+      "original_sha": "0e086d150e86838321d987ba1ffc0a0e5bd5abbf",
+      "classification": "new kickoff package",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/implementation-work-order",
+      "original_sha": "6ccf70d397ddc6c9a40c346ce3638497b2889a16",
+      "classification": "already in main ancestry",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/local-checkpoint-sync",
+      "original_sha": "b6973c9606f13b50aa458804816412ff310f00ad",
+      "classification": "already in main ancestry",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/local-project-workbench",
+      "original_sha": "f6fc4974041b41025d31d7980875650338e27ef8",
+      "classification": "already in main ancestry",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/local-reliability-followup",
+      "original_sha": "edf5beb04665c1f0f0d43256864971f6a0f4fccb",
+      "classification": "already in squash PR 20 history",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/next-development-plan",
+      "original_sha": "5e8cf066eea164398dbd94380175ae7d00a4279c",
+      "classification": "already in squash PR 20 history",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/production-baseline",
+      "original_sha": "966d99d3ab6cd5272534c05d22e26476560e5a2f",
+      "classification": "already in main ancestry",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/production-contracts",
+      "original_sha": "b524340048b284e3ce7c1b3447342345e9354a93",
+      "classification": "already in main ancestry",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/production-platform",
+      "original_sha": "60c0ab2efa7b2352d02458a517c4fe2fe5969b5b",
+      "classification": "already in squash PR 20 history",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/roadmap-followup-2026-10-21",
+      "original_sha": "f861e0ae79e4aa0313bd2f1c6953e407fb2bd1f8",
+      "classification": "already in squash PR 20 history",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "codex/roadmap-foundation-2026-10-14",
+      "original_sha": "701ec77cac2c8879ab14e1ee50d0365ffec82889",
+      "classification": "already in squash PR 20 history",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "drone/wp03-geometry",
+      "original_sha": "ecdffeb77751012de2154499fafead73f45722ec",
+      "classification": "already in main ancestry",
+      "included_in_integration_ancestry": true
+    },
+    {
+      "branch": "mvp/3day",
+      "original_sha": "d17f97a6d37d4458e08f005a20ecf5db870b3235",
+      "classification": "already in main ancestry",
+      "included_in_integration_ancestry": true
+    }
+  ]
+}
