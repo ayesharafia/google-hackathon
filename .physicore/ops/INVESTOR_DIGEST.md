@@ -8,8 +8,7 @@ unsaved drafts. Missing evidence stays unavailable; no model or tolerance change
 **Evidence:** 61 Node tests, 65 existing Python regressions and 31 disposable
 Chrome checks pass. Visual review corrected inherited table styles and verified
 phone/enlarged layouts. Detailed evidence: docs/qa/mission-energy-2026-10-23.md.
-Publication to main is owner-authorized; exact remote verification remains part
-of delivery. Physical acceptance, measured inputs, native zoom/screen-reader
+Implementation 367bd1b is published to main and its exact remote SHA verified. Physical acceptance, measured inputs, native zoom/screen-reader
 usability, hosted operations and real customer demand remain open.
 
 ## Earlier Design Comparisons delivery

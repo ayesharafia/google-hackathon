@@ -181,3 +181,9 @@ preserved. Disposable QA server stopped; original shared runtime untouched.
 - Evidence: .physicore/evidence/ENERGY-001-completion.json
 - Notes: Approved mission energy presentation complete; 61 unit, 65 existing regression and 31 Chrome checks pass; full design-law review, corrected harness failures and physical/usability limitations recorded; main publication authorized, no deployment.
 - Next ready: no new task promoted
+
+## 2026-10-23: ENERGY-001 publication
+
+Implementation 367bd1ba86c9ab50950a81d181803b6990899133 pushed to main; exact GitHub ref matched.
+Receipt: .physicore/evidence/PUBLISH-2026-10-23-energy.json. All pre-existing branch
+names preserved. Disposable QA server stopped; original shared runtime untouched.
