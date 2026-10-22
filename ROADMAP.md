@@ -1,5 +1,14 @@
 # Physics evidence roadmap
 
+## Priority and autonomous work
+
+Priority: **Drone payload/mission first; shared foundation work supports it.**
+This carries forward B's confirmed direction. Other domains remain unselected.
+Use [AUTONOMY.md](AUTONOMY.md) and [BACKLOG.md](BACKLOG.md) for the next bounded
+run. Broad prompts route through the orchestrator and scientific coordinator;
+blocked human decisions are recorded in the inboxes. This changes task selection,
+not any ladder status or scientific approval below.
+
 Drone kickoff: 22 October 2026, source `73793c9`. The user confirmed the drone
 payload project: required mission cases, plots and an evidence report. The
 scientist reviewer, customer accuracy requirement and scientist's assessment of

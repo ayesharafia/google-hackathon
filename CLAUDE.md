@@ -37,7 +37,13 @@ A simulation that "runs" and "looks reasonable" proves nothing. Every physics fe
 ## Agent roster (.claude/agents/)
 physics-architect (plans), spec-writer (specs), validation-engineer (writes tests, owns tolerances), solver-builder (writes code, cannot touch validation/), physics-auditor (independent check), explainer (reports for B). The one who writes the exam never takes it. See PLAYBOOK.md for the weekly rhythm and commands.
 
+## Autonomous mode
+If B says anything vague ("develop further", "keep going", "next", "work on something"), do not ask what to do. Use the orchestrator agent and follow AUTONOMY.md: pick the next task yourself with its priority rules, respect the green/yellow/red decision zones, park blocked items in INBOX_FOR_B.md or INBOX_FOR_SCIENTIST.md, and finish with the DIGEST in JOURNAL.md. If B gives direction, it overrides the priority rules.
+
 ## Where things live
+- `AUTONOMY.md` : decision rights, the autonomous cycle, priority rules
+- `BACKLOG.md` : ready tasks; `JOURNAL.md` : what was done and why, digests at top
+- `INBOX_FOR_B.md`, `INBOX_FOR_SCIENTIST.md` : questions waiting on humans
 - `specs/` : approved physics specs (source of truth)
 - `validation/` : benchmark cases, reference data, test scripts
 - `reports/` : plain-language explain reports

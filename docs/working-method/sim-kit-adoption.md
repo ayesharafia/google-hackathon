@@ -1,5 +1,10 @@
 # Simulation kit adoption
 
+The subsequent [autonomy update](autonomy-adoption-2026-10-22.md) adds broad-prompt
+orchestration, decision zones and persistent trackers. Its explicit provisional
+experiment exception updates the original approval-before-build rule only for
+YELLOW work kept off main. The original import record below remains historical.
+
 Date: 22 October 2026.
 
 The user instructed the agent to read the supplied playbook and `sim-kit.zip`,

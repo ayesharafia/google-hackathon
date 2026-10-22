@@ -1,5 +1,11 @@
 # PhysiCore Drone: production development plan
 
+**Autonomous work, adopted 22 October 2026:** broad continuation requests use
+[AUTONOMY.md](AUTONOMY.md), the [ready backlog](BACKLOG.md) and the
+[scientific coordination workflow](docs/working-method/autonomy-adoption-2026-10-22.md).
+Keep existing evidence/approval scopes. Provisional physics stays off main;
+retain all branches under B's latest direction.
+
 **Planning baseline:** 3 October 2026, commit `66611667aa0d9614f6e5c066db7410b7d7a30a03`, branch `mvp/3day`.
 **Deployment decision:** private hosted web app for the team and invited clients.
 **Document status:** development specification and work order. Future tasks are uncompleted; this document does not establish production readiness or aircraft validation.

@@ -42,7 +42,16 @@ Scientist load: about 1 to 2 hours a week. That is the scaling trick.
 
 ---
 
+## Busy Mode (when you have no direction)
+Just say "develop further" or run `/next`. The orchestrator agent picks the task itself, using the priority rules in AUTONOMY.md, and does it.
+- Want a nudge without detail? `/next focus battery` or `/next 5 tasks`.
+- Your only job: read the DIGEST (2 min), answer INBOX_FOR_B.md with yes/no, forward INBOX_FOR_SCIENTIST.md to the scientist.
+- Agents never wait on you. Anything that needs a human gets parked and they move to the next unblocked task.
+- Nothing provisional reaches main without your yes; nothing is called "validated" without the scientist.
+
 ## Commands (lives in `.claude/commands/`)
+- `/next [direction]` : autonomous mode. Agents choose and do the work.
+- `/digest` : 2-minute catch-up and decisions waiting for you.
 - `/kickoff <project>` : first-time intake for a project. Run once per domain.
 - `/plan-week` : propose this week's features.
 - `/spec <feature>` : draft spec + scientist questions.
