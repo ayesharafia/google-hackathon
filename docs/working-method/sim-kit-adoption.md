@@ -26,7 +26,7 @@ entry; its original bytes remain intact. The pasted playbook matches
 - `ROADMAP.md`, `DECISIONS.md`: starter tracking and append-only decision log.
 - `AGENTS.md`: repository entry point for Codex and other agents.
 
-Except for the appended decision entry, the supplied files remain unchanged.
+At import, except for the appended decision entry, the supplied files were unchanged.
 The interpretations below resolve wording ambiguities when applying them to
 this existing project.
 
@@ -71,11 +71,12 @@ are empty starter sections, not evidence that those solvers exist. Existing
 [review records](../reviews/) and [QA receipts](../qa/) remain authoritative for
 their recorded scope.
 
-`ROADMAP.md` is the kit's new ladder tracker. It stays an unpopulated template
-until a kickoff audits actual evidence. Until then, the active slice table in
-[`plan.md`](../../plan.md) remains the implementation status record. A future
-kickoff should link its ladder entries to that table, specs, reports and actual
-evidence rather than create competing status claims.
+`ROADMAP.md` is the kit's ladder tracker. The
+[22 October drone kickoff](../../reports/drone-kickoff-2026-10-22.md) has now
+populated it with scoped evidence, linked specs and remaining qualification work.
+The active slice table in [`plan.md`](../../plan.md) remains the detailed
+implementation/release status record. Neither record promotes physics acceptance
+without the required evidence and approvals.
 
 `DECISIONS.md` entry 001 is a supplied placeholder and remains untouched. The
 appended adoption entry records the user's workflow decision separately from

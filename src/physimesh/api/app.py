@@ -27,7 +27,8 @@ from .contracts import router as contracts_router
 from .projects import router as projects_router
 from .results import router as results_router
 from .screening import router as screening_router
-from .sessions import BrowserSessions, COOKIE, router as sessions_router, same_origin, valid_bearer
+from .sessions import COOKIE, BrowserSessions, same_origin, valid_bearer
+from .sessions import router as sessions_router
 from .settings import Settings, load_settings
 
 
@@ -106,7 +107,6 @@ def create_app(settings: Settings) -> FastAPI:
                     return JSONResponse({'detail': "Submit changes from this workspace's own page."}, status_code=403,
                                         headers={'Cache-Control': 'no-store'})
                 return await call_next(request)
-            expected = f'Bearer {settings.api_token}'
             bearer = valid_bearer(request)
             sessions = app.state.browser_sessions
             remembered = sessions.valid(request.cookies.get(COOKIE, '')) if sessions else False

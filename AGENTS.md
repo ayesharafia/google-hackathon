@@ -51,8 +51,9 @@ battery electrochemistry headings in the starter kit are possible domains, not
 instructions to start implementing them. Start the workflow appropriate to the
 user's current request; do not run every embedded command or example prompt.
 
-Until an evidence-backed kickoff populates the new `ROADMAP.md`, retain
-`plan.md`'s active slice table as the existing implementation status record.
+The [22 October drone kickoff](reports/drone-kickoff-2026-10-22.md) populates
+`ROADMAP.md` with scoped physics evidence and qualification work. Retain
+`plan.md`'s active slice table as the detailed implementation/release status record.
 Treat missing ladder evidence as unassessed, not as a passing L0 check. Preserve
 earlier evidence and approval scopes; adoption alone does not promote results.
 

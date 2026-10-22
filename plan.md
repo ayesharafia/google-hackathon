@@ -8,10 +8,12 @@
 [CLAUDE.md](CLAUDE.md), [PLAYBOOK.md](PLAYBOOK.md), [VALIDATION.md](VALIDATION.md)
 and the [adoption notes](docs/working-method/sim-kit-adoption.md) before work.
 Use the kit's spec, scientist sign-off, separate validation/builder and audit
-workflow for physics changes. The new [ROADMAP.md](ROADMAP.md) starts as an empty
-ladder tracker; populate it only from an evidence-backed kickoff. Until then,
-the active slice table below retains its existing implementation status role.
-Adoption does not change recorded physics acceptance or complete a release gate.
+workflow for physics changes. The [22 October kickoff](reports/drone-kickoff-2026-10-22.md)
+populates [ROADMAP.md](ROADMAP.md) with scoped evidence and qualification work.
+The active slice table below retains detailed implementation/release status;
+the roadmap records physics ladder evidence. DR-01 is awaiting scientist review,
+with reviewer unassigned and customer accuracy unknown. The kickoff does not
+change recorded physics acceptance or complete a release gate.
 
 **Active roadmap:** the table below is the single source of current slice status. Sections 1–16 retain the broader development specifications and release gates. The dated plans are historical specifications, not competing work queues. The user authorized execution of the 5 October direction; real client inputs and a named engineering owner are still unavailable (confirmed 5 October).
 
