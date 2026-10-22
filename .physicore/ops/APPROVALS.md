@@ -1,6 +1,6 @@
 # Current approvals and pending decisions
 
-## 2026-10-23: importer publication authorized; comparison design pending
+## 2026-10-23: Design Comparisons approved; main publication authorized
 
 Owner requested “psuh the changes and bring another”. Published implementation
 commit af637bf to main and verified its exact remote SHA. Retain all branches;
@@ -11,8 +11,11 @@ with readable input-change groups, per-case before/after outcomes and constraint
 explicit comparable/unavailable states, exact JSON disclosure, and selection/context
 staleness handling. Reuse the current comparison API and preserve formulas,
 thresholds, result bytes and access. Include targeted tests/browser/interface-law
-review and publish the completed increment to main under this request. Awaiting
-concrete design approval under brainstorming; no implementation has started.
+review and publish the completed increment to main under this request. The
+concrete design approval was supplied by the owner: “Proceed with Design Comparisons”.
+This authorizes the bounded UI implementation and targeted tests/browser checks,
+followed by publication to main. No deployment, runtime restart or scientific
+acceptance is granted.
 
 ## 2026-10-22: tabular source/library concrete design approved
 

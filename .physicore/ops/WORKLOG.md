@@ -126,3 +126,24 @@
 - Evidence: .physicore/evidence/IMPORT-001-completion.json
 - Notes: Approved importer/library implemented and verified locally: 187 Python checks, 35 Node tests, 44 browser checks and package/lint/static checks pass; optional S3/provider/native-zoom and physical qualification remain open. Original shared server/tunnel and all branches preserved.
 - Next ready: no new task promoted
+
+## 2026-10-23: COMPARE-001 execution plan
+
+1. User/workflow: engineer selects two retained studies and inspects recorded differences.
+2. Data: preserve API identities, units, whole-array diffs and exact JSON; strict API numeric gating.
+3. Boundaries: UI only, no model, thresholds, source/result bytes or access changes.
+4. Build: grouped inputs, per-case outcomes/limits, explicit stale/request identity guards.
+5. Acceptance: targeted Node/backend tests, disposable Chrome journeys, full interface-law review; commit and push main.
+
+## 2026-10-23: COMPARE-001 verification and interface review
+
+- Implemented approved retained-comparison presentation and lifecycle without backend/model/dependency changes. Actual approval recorded in APPROVALS.md and append-only decision 017.
+- Final checks: 48 Node tests, 35 existing report/summary/local-study regressions, 15 disposable Chrome checks; syntax, document links, protected-path review and whitespace pass. Existing Starlette/httpx warning remains.
+- Two earlier browser harness failures (obsolete fixture label, hidden editor disclosure) were corrected; failed receipts retained. Final run uses actual pointer/keyboard controls with explicitly identified refusal/late-response UI fixtures.
+- Full law applicability review: docs/qa/design-comparisons-2026-10-23.md. Opened final screenshots/detail crops. Fixed table column proportions and narrow/enlarged selector layout using container queries.
+- No physical acceptance, provider/native-browser-zoom/screen-reader usability proof, original runtime restart or deployment. Main publication authorized by the concrete owner approval; preserve every branch.
+
+## 2026-10-22T18:58:46+00:00 DONE COMPARE-001
+- Evidence: .physicore/evidence/COMPARE-001-completion.json
+- Notes: Approved comparison UI and targeted software/browser checks complete; full interface-law review and corrected harness failures retained; main publication authorized, physical qualification and hosting remain open.
+- Next ready: no new task promoted

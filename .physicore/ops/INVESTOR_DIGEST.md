@@ -1,4 +1,23 @@
-# Latest product progress: 22 October 2026
+# Latest product progress: 23 October 2026
+
+**New increment:** readable retained Design Comparisons: grouped frozen input
+changes, per-case before/after outcomes and limits, exact evidence and explicit
+stale-selection handling. Numeric changes follow the existing API permission;
+recorded changes do not identify causes.
+
+**Evidence:** 48 Node tests, 35 retained-study/report regressions and 15 disposable
+Chrome checks passed. Full interface-law review and desktop/phone/enlarged-text
+evidence are in docs/qa/design-comparisons-2026-10-23.md.
+
+**Delivery:** owner authorized publication to main. Verify exact GitHub SHA at
+handoff; preserve all branches and the original shared runtime. No deployment
+or physics acceptance is granted by this UI delivery.
+
+**Next candidate:** reviewable mission/requirement checks and a qualified measured
+aircraft pilot, subject to their concrete designs and scientific gates. Customer
+accuracy, authenticated physical data and a qualified reviewer remain unknown.
+
+## Earlier importer/library delivery
 
 **Published to main:** engineers can import CSV/modern Excel rotor measurements,
 map columns/units explicitly, review conversions/errors and retain reusable
@@ -19,9 +38,8 @@ comparison and report foundation.
 Importer/library implementation af637bf is published and its exact GitHub SHA
 verified. All prior branches are retained.
 
-**Next:** clearer retained design comparisons, with a concrete bounded UI design
-awaiting owner approval; requirement checks and a qualified measured-data pilot
-remain later milestones.
+**Follow-up:** retained comparisons are now implemented in the increment above;
+requirement checks and a qualified measured-data pilot remain later milestones.
 Model/aircraft acceptance, real data and production security/endurance/recovery/
 hosting remain open. Publication has not changed the original shared server/tunnel or deployed a
 production service.

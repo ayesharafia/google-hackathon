@@ -2,10 +2,10 @@
 
 ## Current continuation: 23 October 2026
 
-- Owner requested pushing the completed changes and another improvement. Importer/library commit af637bf is now published to main; exact remote verification is retained in .physicore/evidence/PUBLISH-2026-10-23-importer.json.
-- Inspected existing comparison renderer, request lifecycle, API/service and comparison tests. Next proposed bounded UI increment: grouped readable input changes and per-case before/after outcomes/constraints, preserved comparable/unavailable semantics and exact JSON, stale selection/context guards.
-- COMPARE-001 remains an unscoped candidate awaiting the concrete design approval requested under brainstorming. No comparison code or tests changed/executed in this continuation. Broader requirement checks remain a later design.
-- Preserve the original shared runtime/access, retained results/formulas/tolerances and all branches. Publication does not imply deployment or aircraft validation.
+- Owner approved “Proceed with Design Comparisons”, including targeted checks and publication to main. COMPARE-001 implements grouped whole-declaration changes, before/after case outcomes and limits, exact JSON, strict numeric gating and stale/late-response guards.
+- Verified: 48 Node tests (13 new), 35 existing retained-study/report/summary regressions and 15 disposable Chrome browser checks; no page JS errors. Final law review and screenshots: docs/qa/design-comparisons-2026-10-23.md. Failed harness attempts remain retained and explained. CSS zoom=2 is not native zoom; screen-reader/real-user/provider testing remains unexecuted.
+- Main publication is explicitly authorized for the completed increment. Verify exact remote SHA before final handoff. Previous importer/library af637bf publication receipt is retained.
+- Preserve original shared runtime/access, retained sources/results/formulas/tolerances and all branches. No deployment, runtime restart, qualified physics acceptance or real-aircraft validation is performed. Broader requirement checks remain a future concrete design.
 
 ## Completed importer delivery
 

@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "Actual retained API studies show grouped mass/mission changes, recorded payload delta and all per-case outcomes/limits",
+    "Exact JSON disclosure retains the complete API comparison",
+    "Grouped before/after declarations open with an actual pointer and preserve whole mass arrays",
+    "Selection change clears old results; comparing an identical study explicitly records zero and identical inputs",
+    "Unsaved draft edits leave the retained-study comparison valid",
+    "Strict API gating withholds aggregate and case deltas even if a malformed response supplies values",
+    "Mismatched response identities clear results and show unavailable",
+    "API refusal leaves an explicit failed state without a previous result",
+    "Delayed response is ignored after a selection event (injected while normal controls are disabled)",
+    "UI fixtures expose remaining groups, missing cases and literal hostile text without HTML execution",
+    "Native change disclosures respond to keyboard activation",
+    "phone layout keeps controls/text inside the page and supports horizontal evidence-table scrolling",
+    "enlarged layout keeps controls/text inside the page and supports horizontal evidence-table scrolling",
+    "Opening a different project clears comparison and explains missing retained studies",
+    "No browser JavaScript errors"
+  ],
+  "errors": []
+}

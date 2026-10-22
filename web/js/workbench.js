@@ -1,9 +1,10 @@
 import {mountEditors} from './input-editors.js?v=tabular-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
 import {mountGeometry} from './geometry-upload.js?v=geometry-3';
-import {renderStudy,renderComparison} from './study-view.js';
+import {renderStudy,renderComparison} from './study-view.js?v=comparison-1';
 import {restoreSession,connectSession,forgetSession,isPublicAccess} from './session.js?v=public-3';
 import {renderReadiness} from './engineering-readiness.js?v=readiness-1';
+import {createComparisonController} from './design-comparison.js?v=comparison-1';
 const $ = id => document.getElementById(id);
 let token = '', connected = false, connectionReady = false, current = null, dirty = false, busy = false, generation = 0, study = null, viewer = null;
 let hosted=false, organization='', inventoryCursor='', inventoryNext=null, inventoryStack=[], activeJob=null;
@@ -11,6 +12,17 @@ let layoutGeneration=0, viewSnapshot=null, viewRevision='', viewMode='draft', se
 let inspectionSerial=0;
 const context = () => ({generation, token, organization, project:current?.project_id});
 const isContext = c => c.generation===generation && c.token===token && c.organization===organization && c.project===current?.project_id;
+const comparisons = createComparisonController({
+  readContext: context, isContext,
+  readSelection: () => ({before:$('compare-before').value, after:$('compare-after').value}),
+  fetchReport: (c, pair) => api(`/projects/${c.project}/comparisons`, payload('POST', pair)),
+  render: report => renderComparison($('comparison-report'), report),
+  setState: (state, text) => {
+    const out=$('comparison-report'); out.dataset.state=state;out.setAttribute('aria-busy',String(state==='pending'));
+    if(state!=='current')out.replaceChildren();
+    $('comparison-status').textContent=text;
+  },
+});
 function updateContext(){
   $('display-context').textContent=!current?'No project selected.':viewMode==='draft'?'Viewer: '+(dirty?'unsaved':'saved')+' draft version '+current.draft_version+'. Editor changes affect this draft only.':'Viewer: frozen revision '+viewRevision+' · '+(viewMode==='study'?'selected study '+study?.study_sha256:'selected revision')+'. Draft edits do not change this view.';
   $('show-draft-layout').disabled=!current||busy||viewMode==='draft';
@@ -26,7 +38,7 @@ function clearWorkspace(){
   ['review-workspace','job-history','invite-member','invitation-result'].forEach(id=>$(id).hidden=true);
   $('more-revisions').hidden=true;$('more-studies').hidden=true;$('editor-navigation').replaceChildren(new Option('Choose an input group',''));
   $('created-invitation').value='';$('job-progress').textContent='';$('cancel-job').hidden=true;$('retry-job').hidden=true;
-  resetReadiness();
+  resetReadiness();comparisons.invalidate('Open a project with retained studies to compare.');
   if(viewer)viewer.showRotorLayout({rotors:[]},null);$('layout-note').textContent='No design selected.';$('reset-layout').disabled=true;$('project-title').value='';geometryPanel.sync(null,null,false);updateContext();controls();
 }
 async function selectStudy(record){
@@ -95,7 +107,7 @@ async function request(path, options = {}) {
   const response = await fetch('/api/drone' + path, { ...options, credentials:'same-origin', cache:'no-store', headers, signal: AbortSignal.timeout(60000) });
   if(!isContext(requested))throw new Error('Workspace context changed; the previous response was ignored.');
   if(response.status===401){
-    connected=false;token='';++generation;++layoutGeneration;geometryCache.clear();$('invitation-result').hidden=true;$('created-invitation').value='';
+    connected=false;token='';++generation;++layoutGeneration;comparisons.invalidate('Connection changed. Reconnect and compare again.');geometryCache.clear();$('invitation-result').hidden=true;$('created-invitation').value='';
     if(hosted){$('individual-session').hidden=true;message('Your session expired or was revoked. Sign in again. Unsaved inputs remain in this editor.',true);}
     else{sessionStatus();message('Browser access expired or was forgotten. Reconnect to continue. Your open draft is still here.',true);}
     controls();
@@ -159,7 +171,7 @@ function render(project) {
     const option=document.createElement('option');option.value=record.study_sha256;option.textContent=record.created_utc+' · '+record.study_sha256.slice(0,12);return option;
   })));
   if(project.studies?.length>1)$('compare-before').selectedIndex=1;
-  $('comparison-report').replaceChildren();layout();controls();
+  comparisons.invalidate(project.studies?.length?'Choose retained studies, then compare.':'No retained studies yet. Freeze and evaluate a design first.');layout();controls();
   geometryPanel.sync(project,JSON.parse(project.snapshot_json),false);
 }
 function currentStudy(){return !dirty&&current?.revisions.some(r=>r.draft_version===current.draft_version&&r.revision_sha256===study?.specification.revision_sha256);}
@@ -193,6 +205,7 @@ function showLayoutInputs(data){
 }
 async function guardedRequest(work){const request=generation,pid=current?.project_id,raw=$('snapshot').value;const result=await work();if(request!==generation||pid!==current?.project_id||raw!==$('snapshot').value)throw new Error('Inputs changed during import. Reopen the import step and review the current draft before binding.');return result;}
 async function openProject(pid) {
+  comparisons.invalidate('Opening a project. Compare its retained studies again.');
   geometryCache.clear();++layoutGeneration;
   const request = ++generation;
   const project = await api('/projects/' + pid);
@@ -325,10 +338,8 @@ async function downloadStudy(kind){
 }
 $('export-study').addEventListener('click',()=>action(()=>downloadStudy('json')));
 $('export-pdf').addEventListener('click',()=>action(()=>downloadStudy('pdf')));
-$('compare').addEventListener('click',()=>action(async()=>{
-  const report=await api(`/projects/${current.project_id}/comparisons`,payload('POST',{before:$('compare-before').value,after:$('compare-after').value}));
-  renderComparison($('comparison-report'),report);message('Retained studies compared. Current unsaved inputs do not change either record.');
-}));
+['compare-before','compare-after'].forEach(id=>$(id).addEventListener('change',()=>comparisons.invalidate()));
+$('compare').addEventListener('click',()=>action(()=>comparisons.compare()));
 $('show-draft-layout').addEventListener('click',()=>{viewMode='draft';viewSnapshot=null;viewRevision='';layout();controls();});
 $('view-case').addEventListener('change',()=>{selectedCase=$('view-case').value;layout();});
 $('editor-navigation').addEventListener('change',()=>{navigateInputs($('editor-navigation').value);});

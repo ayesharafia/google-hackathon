@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "COMPARE-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "--check",
+    "web/js/design-comparison.js"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T18:58:01+00:00",
+  "started_at": "2026-10-22T18:51:32+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "cb4166f34822f55b269052d7e93e3bd1c899d4da",
+  "output": "\n"
+}

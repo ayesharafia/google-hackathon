@@ -89,3 +89,17 @@ dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;backgrou
 
 @container tabular (min-width:560px){.tabular-map-row{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}}
 .tabular-description{grid-column:1/-1}.tabular-library textarea{min-width:0;width:100%;resize:vertical}
+
+/* Frozen evidence uses shared table rows and responsive value columns. */
+#comparison-report{container-type:inline-size}
+.comparison-case,.comparison-group{margin:24px 0}
+#comparison-report h5{font:600 17px system-ui;margin:18px 0 12px}
+.comparison-values{display:grid;gap:16px;padding:8px 0;grid-template-columns:minmax(0,1fr)}
+.comparison-values h6{font:600 14px system-ui;margin:12px 0}
+.comparison-values pre{margin:0}
+@container(min-width:620px){.comparison-values{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#comparison-report table{table-layout:fixed}
+#comparison-report tr>:first-child{width:26%}
+#design-comparisons{container-type:inline-size}
+#comparison-title~.fields{grid-template-columns:minmax(0,1fr)}
+@container(min-width:620px){#comparison-title~.fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
