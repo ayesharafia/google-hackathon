@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "ENERGY-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/mission_energy_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-22T19:14:32+00:00",
+  "started_at": "2026-10-22T19:11:12+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "0715aec7b65113fe4d75c1f3e8d91a663c30720d",
+  "output": "PASS Alternative-case study shows unavailable mission budget instead of zero or a mission pass\n\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(seq)\n\n    at file:///Users/bhupeshcholake/Desktop/Claude%20Codes/physicore%20drone/scripts/qa/mission_energy_browser.mjs:21:372 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: undefined,\n  expected: true,\n  operator: '==',\n  diff: 'simple'\n}\n\nNode.js v26.0.0\n"
+}

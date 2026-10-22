@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "kind": "completion",
+  "id": "ENERGY-001",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "started_at": "2026-10-22T19:11:12+00:00",
+  "captured_at": "2026-10-22T19:19:33+00:00",
+  "baseline_head": "0715aec7b65113fe4d75c1f3e8d91a663c30720d",
+  "current_head": "0715aec7b65113fe4d75c1f3e8d91a663c30720d",
+  "changes": [
+    "DECISIONS.md",
+    "docs/qa/assets/mission-energy/comparison-regression-checks.json",
+    "docs/qa/assets/mission-energy/desktop-context.png",
+    "docs/qa/assets/mission-energy/desktop.png",
+    "docs/qa/assets/mission-energy/enlarged-context.png",
+    "docs/qa/assets/mission-energy/enlarged.png",
+    "docs/qa/assets/mission-energy/phone-context.png",
+    "docs/qa/assets/mission-energy/phone.png",
+    "docs/qa/assets/mission-energy/results.json",
+    "docs/qa/mission-energy-2026-10-23.md",
+    "plan.md",
+    "scripts/qa/mission_energy_browser.mjs",
+    "tests/web/test_mission_energy.mjs",
+    "web/css/workbench.css",
+    "web/js/mission-energy.js",
+    "web/js/study-view.js",
+    "web/js/workbench.js",
+    "web/workbench.html"
+  ],
+  "tests": [
+    {
+      "file": ".physicore/evidence/ENERGY-001-test-20261022191300039523.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--test",
+        "tests/web/test_mission_energy.mjs",
+        "tests/web/test_design_comparison.mjs",
+        "tests/web/test_engineering_readiness.mjs",
+        "tests/web/test_rotor_source_binding.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/ENERGY-001-test-20261022191248745407.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "tests/projects/test_local_studies.py",
+        "tests/projects/test_reports.py",
+        "tests/projects/test_study_summary.py",
+        "tests/drone/test_hover_pilot.py",
+        "-q"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/ENERGY-001-test-20261022191736357074.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/mission_energy_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/ENERGY-001-test-20261022191527728339.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/design_comparison_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/ENERGY-001-test-20261022191736435503.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--check",
+        "web/js/workbench.js"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/ENERGY-001-test-20261022191736514269.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--check",
+        "web/js/mission-energy.js"
+      ]
+    }
+  ],
+  "audit_files": [],
+  "summary": "Approved retained Mission Energy Budget with exact J/W/s ledger, explicit missing/unknown evidence and guarded frozen-case navigation; 61 Node, 65 existing Python and 31 Chrome checks pass; full interface review recorded; no energy recomputation, model or deployment changes"
+}

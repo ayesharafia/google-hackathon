@@ -1,7 +1,8 @@
+import {energyCaseMatches} from './mission-energy.js?v=energy-1';
 import {mountEditors} from './input-editors.js?v=tabular-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
 import {mountGeometry} from './geometry-upload.js?v=geometry-3';
-import {renderStudy,renderComparison} from './study-view.js?v=comparison-1';
+import {renderStudy,renderComparison} from './study-view.js?v=energy-1';
 import {restoreSession,connectSession,forgetSession,isPublicAccess} from './session.js?v=public-3';
 import {renderReadiness} from './engineering-readiness.js?v=readiness-1';
 import {createComparisonController} from './design-comparison.js?v=comparison-1';
@@ -86,6 +87,7 @@ function controls() {
   $('calculate').disabled = readOnly || !current || busy || dirty || !connected || !current.revisions.some(r=>r.draft_version===current.draft_version);
   $('export-study').disabled = !study || busy || !connected;
   $('export-pdf').disabled = !study || busy || !connected;
+  document.querySelectorAll('[data-energy-case]').forEach(button=>{button.disabled=busy||!connected||!energyCaseMatches(study,{study_sha256:button.dataset.energyStudy,revision_sha256:button.dataset.energyRevision,project_id:current?.project_id},button.dataset.energyCase);});
   ['compare-before','compare-after','compare'].forEach(id=>{$(id).disabled=busy||!connected||!current?.studies?.length;});
   document.querySelectorAll('#input-editors input,#input-editors select,#input-editors button,#input-editors textarea').forEach(input => { input.disabled = readOnly || busy || !current || !connected; });
   document.querySelectorAll('[data-library-read=true]').forEach(input=>{input.disabled=!connected||busy||!current;});
@@ -175,7 +177,22 @@ function render(project) {
   geometryPanel.sync(project,JSON.parse(project.snapshot_json),false);
 }
 function currentStudy(){return !dirty&&current?.revisions.some(r=>r.draft_version===current.draft_version&&r.revision_sha256===study?.specification.revision_sha256);}
-function showStudy(){if(study){renderStudy($('study-report'),study,currentStudy());if(hosted)loadReviews().catch(error=>message(error.message,true));}controls();}
+function showStudy(){
+  if(study){
+    const requested=context();
+    renderStudy($('study-report'),study,currentStudy(),{onViewCase:async(caseId,binding)=>{
+      if(busy||!connected||!isContext(requested)||!energyCaseMatches(study,binding,caseId))return;
+      await action(async()=>{
+        if(viewMode!=='study'||viewRevision!==binding.revision_sha256)await selectStudy(binding.study_sha256);
+        if(!connected||!isContext(requested)||!energyCaseMatches(study,binding,caseId))return;
+        selectedCase=caseId;$('view-case').value=caseId;layout();
+      });
+      if(connected&&isContext(requested)&&energyCaseMatches(study,binding,caseId)&&viewMode==='study'&&selectedCase===caseId)$('view-case').focus();
+    }});
+    if(hosted)loadReviews().catch(error=>message(error.message,true));
+  }
+  controls();
+}
 async function geometryBytes(digest){
   const requested=context();
   if(!geometryCache.has(digest))geometryCache.set(digest,(async()=>{

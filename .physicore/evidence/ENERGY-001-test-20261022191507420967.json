@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "ENERGY-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/mission_energy_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-22T19:15:07+00:00",
+  "started_at": "2026-10-22T19:11:12+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "0715aec7b65113fe4d75c1f3e8d91a663c30720d",
+  "output": "PASS Alternative-case study shows unavailable mission budget instead of zero or a mission pass\nPASS Actual evaluated sequence exposes exact retained usable/used/remaining J and frozen identities\nPASS Segment order, recorded seconds/watts/joules and literal source notes match actual retained evidence\nPASS Exact energy disclosure opens with a pointer and retains every policy/value\nPASS Existing retained JSON download preserves complete mission energy evidence\nPASS Segment case action selects the referenced case, keeps frozen-study identity and moves focus to the viewer control\n\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: The input did not match the regular expression /123/. Input:\n\n''\n\n    at file:///Users/bhupeshcholake/Desktop/Claude%20Codes/physicore%20drone/scripts/qa/mission_energy_browser.mjs:27:357 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: '',\n  expected: /123/,\n  operator: 'match',\n  diff: 'simple'\n}\n\nNode.js v26.0.0\n"
+}

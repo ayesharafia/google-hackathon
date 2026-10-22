@@ -2,6 +2,8 @@
 
 ## Current continuation: 23 October 2026
 
+- Owner approved “Proceed with Mission Energy Budget”, including targeted tests/browser/interface review and publication to main. ENERGY-001 adds exact retained budget/segment evidence and guarded referenced-case navigation; implemented and locally verified: 61 Node tests, 65 existing Python regressions and 31 Chrome checks (16 mission, 15 comparisons), no page JS errors. Final QA/interface ledger: docs/qa/mission-energy-2026-10-23.md. Main publication is authorized and pending exact remote verification. No formula, source/result byte, reserve, API/dependency, access or deployment change.
+
 - Owner approved “Proceed with Design Comparisons”, including targeted checks and publication to main. COMPARE-001 implements grouped whole-declaration changes, before/after case outcomes and limits, exact JSON, strict numeric gating and stale/late-response guards.
 - Verified: 48 Node tests (13 new), 35 existing retained-study/report/summary regressions and 15 disposable Chrome browser checks; no page JS errors. Final law review and screenshots: docs/qa/design-comparisons-2026-10-23.md. Failed harness attempts remain retained and explained. CSS zoom=2 is not native zoom; screen-reader/real-user/provider testing remains unexecuted.
 - Implementation 988b93fc445712b9ee73e28f2dcacddbc8b84282 is published to main and its exact remote SHA verified. Receipt: .physicore/evidence/PUBLISH-2026-10-23-comparisons.json. Previous importer/library af637bf publication receipt is retained.

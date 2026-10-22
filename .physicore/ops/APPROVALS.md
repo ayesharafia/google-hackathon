@@ -1,5 +1,26 @@
 # Current approvals and pending decisions
 
+## 2026-10-23: Mission Energy Budget approved; main publication authorized
+
+Owner requested “next”. Source review found an existing ordered-segment editor,
+validated retained SequenceEvidence fields and PDF ledger, while the workbench
+only prints short segment power/remaining-energy lines and omits segment energy.
+Approved bounded presentation upgrade: budget/used/remaining J, ordered rows for
+segment/case/duration s/power W/recorded energy J/remaining J, source notes and
+recorded integration/reserve conventions; link each segment to its referenced
+case in the selected frozen-study viewer. Keep exact JSON and study identity.
+Absent sequence evidence is explicitly unavailable, never zero or a passing
+mission. Display recorded values without reapplying reserve, recomputing energy,
+clamping small negative values or inferring battery SOC/endurance.
+
+This extends an existing result flow; no new model, dependency, API, tolerance,
+access change or runtime restart is proposed. Targeted unit/browser checks and
+full interface-law review form the approved acceptance scope. Owner answered “Proceed with Mission Energy Budget” to the concrete proposal,
+including targeted tests/browser/interface review and pushing the completed change
+to main. The brainstorming design gate is satisfied. No deployment, runtime
+restart, scientific acceptance, dependency or access change is authorized.
+Retain all branches and earlier evidence.
+
 ## 2026-10-23: Design Comparisons approved; main publication authorized
 
 Owner requested “psuh the changes and bring another”. Published implementation

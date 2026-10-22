@@ -103,3 +103,18 @@ dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;backgrou
 #design-comparisons{container-type:inline-size}
 #comparison-title~.fields{grid-template-columns:minmax(0,1fr)}
 @container(min-width:620px){#comparison-title~.fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* The mission ledger keeps recorded units and segment order visible. */
+.mission-energy{container:energy/inline-size;margin:28px 0;overflow-wrap:anywhere}
+.energy-binding{font-size:13px;white-space:pre-wrap;color:var(--muted)}
+.energy-totals{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;margin:24px 0}
+.energy-totals>div{padding:18px;background:var(--paper);min-width:0}
+.energy-totals dt{font-size:14px;font-weight:600}
+.energy-totals dd{font-size:22px;margin:10px 0 0;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+@container energy (min-width:720px){.energy-totals{grid-template-columns:repeat(3,minmax(0,1fr))}}
+#study-report .mission-energy .table-scroll>table{min-width:960px;table-layout:fixed}
+.mission-energy tr>:first-child{width:24%}
+.mission-energy tr>:nth-child(2){width:20%}
+#study-report .mission-energy th,#study-report .mission-energy td{white-space:normal;overflow-wrap:anywhere}
+.mission-energy th p{font-size:13px;font-weight:400;margin:12px 0 0;white-space:pre-wrap}
+.mission-energy button{display:block;margin-top:14px;max-width:100%;white-space:normal}

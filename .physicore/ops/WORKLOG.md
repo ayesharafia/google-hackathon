@@ -153,3 +153,31 @@
 Implementation 988b93fc445712b9ee73e28f2dcacddbc8b84282 pushed to main; exact
 GitHub ref matched. Publication receipt retained. All existing branch names
 preserved. Disposable QA server stopped; original shared runtime untouched.
+
+## 2026-10-23: next increment selection
+
+- Clean main 0715aec matches last delivery; workflow next reports no eligible task. Read current v3 state/strategy/permissions and latest digest.
+- Observed SequenceEvidence/SegmentEvidence already retain budget, used/remaining J, per-segment duration/power/energy/source notes and reserve/integration policy; PDF includes these while workbench presents abbreviated plain lines. Existing mission sequence authoring and case-view selection supply the flow.
+- Selected bounded ENERGY-001 presentation as a direct C06 evidence-readability improvement. Broader persisted requirements and new physics remain future designs. No fresh market claims/research needed for this existing-flow upgrade.
+- Concrete proposal recorded in APPROVALS.md; candidate synchronized in TASKS/STATE. Brainstorming requires owner approval before implementation; no code edits, tests, dependency, source/result mutation, push or runtime changes performed.
+
+## 2026-10-23: ENERGY-001 execution plan
+
+1. User/workflow: engineer opens a retained study, inspects the recorded mission energy budget and views a referenced case.
+2. Data: exact retained J/W/s values, ordered segments/source notes and reserve/integration declarations; retain original JSON and identity.
+3. Boundaries: presentation only, no energy recomputation, inferred SOC/endurance, reserve adjustment, model/tolerance/API/dependency change.
+4. Build: native energy ledger with explicit absent/partial states, responsive totals and guarded case-view navigation to the same frozen study.
+5. Acceptance: pure presentation/guard checks, existing study/report regressions, disposable Chrome real controls/phone/enlarged review, full interface-law re-check, publish main.
+
+## 2026-10-23: ENERGY-001 verification and interface review
+
+- Exact retained budget/ordered segment J/W/s, source notes, policy and identity disclosures, guarded case navigation and absent/partial evidence states implemented. No solver/backend/API/dependency/access or original result bytes changed.
+- Passed: 61 Node tests (13 new), 65 existing Python regressions and 31 actual Chrome checks (16 energy, 15 comparison). Existing Starlette/httpx warning remains. Syntax passes; historical fixture untouched.
+- Retained initial test failures: incorrect historical JSON fixture key, out-of-scope disposable segment duration correctly refused by API, and a closed-layout disclosure assertion. Fixed the harness, not model thresholds or reference assertions.
+- Complete design-law ledger/screenshots in docs/qa/mission-energy-2026-10-23.md. Reviewed full and enlarged/cropped screenshots; fixed inherited nowrap/min-width heading collisions and disabled-selector focus timing. Per-cell text-range containment and phone/CSS zoom=2 checks pass.
+- Native zoom, screen-reader/real-user usability, providers and physical qualification unexecuted. One primary agent; no independent science acceptance. Main publication authorized; preserve all branches and original shared runtime.
+
+## 2026-10-22T19:19:33+00:00 DONE ENERGY-001
+- Evidence: .physicore/evidence/ENERGY-001-completion.json
+- Notes: Approved mission energy presentation complete; 61 unit, 65 existing regression and 31 Chrome checks pass; full design-law review, corrected harness failures and physical/usability limitations recorded; main publication authorized, no deployment.
+- Next ready: no new task promoted

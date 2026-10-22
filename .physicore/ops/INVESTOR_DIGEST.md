@@ -1,5 +1,19 @@
 # Latest product progress: 23 October 2026
 
+**New increment:** Mission Energy Budget exposes the exact recorded usable, used
+and remaining J, ordered segment power/duration/energy, source notes and reserve
+handling. Referenced-case actions restore the same frozen study and preserve
+unsaved drafts. Missing evidence stays unavailable; no model or tolerance changed.
+
+**Evidence:** 61 Node tests, 65 existing Python regressions and 31 disposable
+Chrome checks pass. Visual review corrected inherited table styles and verified
+phone/enlarged layouts. Detailed evidence: docs/qa/mission-energy-2026-10-23.md.
+Publication to main is owner-authorized; exact remote verification remains part
+of delivery. Physical acceptance, measured inputs, native zoom/screen-reader
+usability, hosted operations and real customer demand remain open.
+
+## Earlier Design Comparisons delivery
+
 **New increment:** readable retained Design Comparisons: grouped frozen input
 changes, per-case before/after outcomes and limits, exact evidence and explicit
 stale-selection handling. Numeric changes follow the existing API permission;
