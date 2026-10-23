@@ -21,7 +21,8 @@ Research and alternatives: RESEARCH_LOG.md. Preserve all branches/runtime.
 Execution evidence: 124 Node, 45 Python and 68 Chrome checks pass; complete
 interface-law review and wheel/static verification are retained in
 `docs/qa/rotor-source-explorer-2026-10-23.md`. Main publication remains within
-the explicit approval; no deployment or scientific acceptance is inferred.
+the explicit approval and is completed at e5d7e7d, exact remote verified.
+No deployment or scientific acceptance is inferred.
 
 ## 2026-10-23: Case Trim Evidence approved; main publication authorized
 

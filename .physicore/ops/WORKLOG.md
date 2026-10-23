@@ -322,3 +322,11 @@ Owned disposable QA processes 74089 and 74765 stopped with SIGTERM (exit143).
 Original shared service/tunnel untouched. Fetched origin without pruning;
 main baseline ff2b278 matches origin/main. Branch-name snapshot retained locally;
 all branches will be checked after publication. Completion evidence generated.
+
+## 2026-10-23: SOURCE-EXPLORE-001 main publication
+
+Implementation e5d7e7d7c9c1c911b2ea26f1c9673646cd30734f pushed to main; exact GitHub main ref matched.
+All 35 pre-existing local/tracking ref names remain; 20 remote heads
+verified, including every prior tracked branch. Receipt:
+.physicore/evidence/PUBLISH-2026-10-23-source-explorer.json. Publication only;
+no runtime restart/deployment. The next commit records publication metadata.

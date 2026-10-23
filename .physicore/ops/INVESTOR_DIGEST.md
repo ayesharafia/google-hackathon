@@ -8,8 +8,7 @@ source and project changes clear old evidence; viewer access stays read-only.
 **Evidence:** 124 Node tests, 45 Python regressions and 68 Chrome checks pass;
 local wheel contains exact web assets and hashes. Full 147-entry interface review
 corrected wide control layout and accessible descriptions. No formulas,
-dependencies, API/access or retained-byte change. Main publication pending final
-checks. No deployment; customer benefit and physical applicability remain unknown.
+dependencies, API/access or retained-byte change. Implementation e5d7e7d published to main; exact remote SHA verified. No deployment; customer benefit and physical applicability remain unknown.
 
 ## Earlier Case Trim Evidence delivery
 
