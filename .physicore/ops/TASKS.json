@@ -464,7 +464,10 @@
         "PACK-001"
       ],
       "source_refs": [
-        ".physicore/ops/APPROVALS.md"
+        ".physicore/ops/APPROVALS.md",
+        ".physicore/ops/RESEARCH_LOG.md",
+        "https://www.ecalc.ch/calcinclude/help/xcoptercalchelp.htm",
+        "https://www.tytorobotics.com/pages/flight-stand-50"
       ],
       "evidence": [
         ".physicore/evidence/TRIM-001-completion.json"

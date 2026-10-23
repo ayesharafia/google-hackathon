@@ -16,7 +16,7 @@ publication. The brainstorming gate is satisfied; scope TRIM-001 and implement.
 All branches and original runtime retained. Deployment, runtime restart and
 physical acceptance are excluded. Research and alternatives: RESEARCH_LOG.md.
 Implementation/QA evidence: docs/qa/case-trim-evidence-2026-10-23.md; main
-publication receipt will record the verified implementation SHA.
+publication receipt: .physicore/evidence/PUBLISH-2026-10-23-trim-evidence.json.
 
 ## 2026-10-23: Study Review Pack approved; main publication authorized
 

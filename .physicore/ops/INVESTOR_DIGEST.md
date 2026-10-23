@@ -8,7 +8,7 @@ checks and individual case candidates remain visibly separate, with guarded
 **Evidence:** 100 JavaScript tests, 41 Python regressions and 65 installed-Chrome
 checks pass. Full interface review caught and corrected accessible names and
 cramped table labels. No model/API/dependency/source/result or access change.
-Main publication authorized; remote verification pending. Native popup keyboard/
+Implementation 974e046 published to main; exact remote SHA verified. Native popup keyboard/
 zoom, human usability, production/physical qualification and customer demand
 remain unverified. No original runtime restart or deployment performed.
 

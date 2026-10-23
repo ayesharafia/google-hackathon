@@ -262,3 +262,10 @@ the preceding selection turn; preserve their content.
 - Evidence: .physicore/evidence/TRIM-001-completion.json
 - Notes: Approved Case Trim Evidence complete; 100 Node, 41 Python and 65 Chrome checks pass, 147-entry interface review and actual layout/accessibility fixes recorded; preserve models/bytes/branches/runtime; main publication authorized, no deployment or physical acceptance.
 - Next ready: no new task promoted
+
+## 2026-10-23: TRIM-001 publication
+
+Implementation 974e04679f46a1d6f3453e200ee20a61b7d9fb28 pushed to main; exact GitHub ref matched.
+Receipt: .physicore/evidence/PUBLISH-2026-10-23-trim-evidence.json. All pre-existing branch
+names preserved. Owned disposable QA server stopped via SIGTERM (exit143);
+original shared service/tunnel untouched. No production deployment or restart.
