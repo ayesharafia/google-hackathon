@@ -1,0 +1,20 @@
+{
+  "checks": [
+    "No selected study keeps the download disabled with an explicit prompt",
+    "Actual contents disclosure explains included artifacts, hard bounds and exclusions",
+    "Actual ZIP download unpacks safely with exact frozen snapshot/result, valid PDF and every member checksum",
+    "Actual source members match retained references; manifest states raw-spreadsheet exclusions",
+    "Unsaved draft edits do not change exact bytes of the selected retained package",
+    "Queued-report UI fixture waits for preparation before downloading and verifying the actual ZIP",
+    "Mismatched response identity refuses the download and replaces previous success status",
+    "Whole-file checksum mismatch prevents a browser download",
+    "API refusal stays unavailable with no stale or partial ZIP download",
+    "phone layout keeps binding, text, disclosure and button inside deliberate gutters",
+    "enlarged layout keeps binding, text, disclosure and button inside deliberate gutters",
+    "Native package disclosure responds to keyboard Enter",
+    "Pending controls disable; injected workspace invalidation suppresses a delayed ZIP",
+    "Actual conditioned-map study download contains its referenced raw JSON dependencies",
+    "No browser JavaScript errors"
+  ],
+  "errors": []
+}

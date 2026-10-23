@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "kind": "completion",
+  "id": "PACK-001",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "started_at": "2026-10-22T19:26:03+00:00",
+  "captured_at": "2026-10-22T19:46:28+00:00",
+  "baseline_head": "f2146603fbd8accbce5fe2f210fac03618d8fccb",
+  "current_head": "f2146603fbd8accbce5fe2f210fac03618d8fccb",
+  "changes": [
+    "DECISIONS.md",
+    "docs/qa/assets/review-pack/comparison-regression-checks.json",
+    "docs/qa/assets/review-pack/desktop-context.png",
+    "docs/qa/assets/review-pack/desktop.png",
+    "docs/qa/assets/review-pack/enlarged-context.png",
+    "docs/qa/assets/review-pack/enlarged.png",
+    "docs/qa/assets/review-pack/mission-regression-checks.json",
+    "docs/qa/assets/review-pack/phone-context.png",
+    "docs/qa/assets/review-pack/phone.png",
+    "docs/qa/assets/review-pack/results.json",
+    "docs/qa/study-review-pack-2026-10-23.md",
+    "docs/technical/study-review-pack.md",
+    "plan.md",
+    "scripts/qa/review_pack_browser.mjs",
+    "src/physimesh/api/projects.py",
+    "src/physimesh/projects/review_pack.py",
+    "tests/projects/test_review_pack.py",
+    "tests/web/test_review_pack.mjs",
+    "web/css/workbench.css",
+    "web/js/review-pack.js",
+    "web/js/workbench.js",
+    "web/workbench.html"
+  ],
+  "tests": [
+    {
+      "file": ".physicore/evidence/PACK-001-test-20261022193627181734.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "tests/projects/test_review_pack.py",
+        "tests/projects/test_reports.py",
+        "tests/projects/test_local_studies.py",
+        "tests/projects/test_study_summary.py",
+        "tests/platform/test_reuse_pagination.py",
+        "tests/platform/test_worker_artifact_accounting.py",
+        "tests/platform/test_release_recovery.py",
+        "tests/platform/test_identity_jobs.py",
+        "-q"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/PACK-001-test-20261022193428897239.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--test",
+        "tests/web/test_review_pack.mjs",
+        "tests/web/test_mission_energy.mjs",
+        "tests/web/test_design_comparison.mjs",
+        "tests/web/test_engineering_readiness.mjs",
+        "tests/web/test_rotor_source_binding.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/PACK-001-test-20261022193511674016.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/review_pack_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/PACK-001-test-20261022193524677293.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/mission_energy_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/PACK-001-test-20261022193530836181.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/design_comparison_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/PACK-001-test-20261022193648660433.json",
+      "exit_code": 0,
+      "argv": [
+        "ruff",
+        "check",
+        "src/physimesh/projects/review_pack.py",
+        "src/physimesh/api/projects.py",
+        "tests/projects/test_review_pack.py"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/PACK-001-test-20261022193541517299.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--check",
+        "web/js/workbench.js"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/PACK-001-test-20261022193541594336.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--check",
+        "web/js/review-pack.js"
+      ]
+    }
+  ],
+  "audit_files": [],
+  "summary": "Approved Study Review Pack with exact frozen result/input, verified PDF/receipt, rotor/conditioned dependency closure, bounded deterministic ZIP and byte hashes; existing scopes/report jobs preserved; 74 Python, 81 Node and 46 Chrome checks pass with full interface review; Linux producer/provider/physical qualification not claimed"
+}

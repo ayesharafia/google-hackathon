@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "PACK-001",
+  "kind": "test",
+  "argv": [
+    "ruff",
+    "check",
+    "src/physimesh/projects/review_pack.py",
+    "src/physimesh/api/projects.py",
+    "tests/projects/test_review_pack.py"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T19:36:48+00:00",
+  "started_at": "2026-10-22T19:26:03+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "f2146603fbd8accbce5fe2f210fac03618d8fccb",
+  "output": "All checks passed!\n\n"
+}

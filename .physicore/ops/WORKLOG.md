@@ -187,3 +187,31 @@ preserved. Disposable QA server stopped; original shared runtime untouched.
 Implementation 367bd1ba86c9ab50950a81d181803b6990899133 pushed to main; exact GitHub ref matched.
 Receipt: .physicore/evidence/PUBLISH-2026-10-23-energy.json. All pre-existing branch
 names preserved. Disposable QA server stopped; original shared runtime untouched.
+
+## 2026-10-23: CEO selection after mission energy delivery
+
+- No eligible task; inspected actual drone-study JSON/PDF/frozen-input, map/conditioned-source and artifact-permission paths plus existing CFD ZIP implementation.
+- Researched SimScale exports, Tyto saved-test CSV exports and W3C provenance overview. Record distinguishes documented features from the unvalidated review-handoff hypothesis.
+- Selected one bounded existing-export extension, PACK-001, with explicit artifact closure/bounds/exclusions and preserved scopes. Full project backup/import lineage is deferred because original tabular manifests are not frozen-study bindings.
+- Concrete design and candidate synchronized in APPROVALS/TASKS/STATE. Brainstorming gate pending owner approval; no code, tests, dependencies, push, deployment or physical acceptance.
+
+## 2026-10-23: PACK-001 execution plan
+
+1. User/workflow: engineer selects a retained study and downloads one review ZIP for local inspection.
+2. Data: exact result/frozen inputs, verified PDF/receipt, rotor JSON plus conditioned raw dependencies, member/ZIP hashes and explicit exclusions.
+3. Boundaries: existing authorization and PDF jobs; no solver rerun, new dependency, raw-spreadsheet inference, source/result/model edits or access change.
+4. Build: deterministic bounded archive service, read-only endpoint and selection/context-guarded native download/status/contents disclosure.
+5. Acceptance: package/integrity/conditioned/access/job tests, actual download/unzip and refusal/staleness/browser/responsive checks, full interface law, publish main.
+
+## 2026-10-23: PACK-001 verification and final interface review
+
+- Approved package/API/download implemented with existing project/artifact scopes and PDF queue/cache; no solver/model/source/result/dependency or access change. ZIP limits 128 members/40 MiB plus two builder slots; exact byte versus SI-normalized snapshot identities are distinct.
+- Final: 74 Python, 81 Node and 46 Chrome checks pass; changed-file Ruff and JS syntax pass. Initial Python run had 22 passes/two fixture failures (realistic draft version and Linux-only producer); corrected setup, keeping real queue/fence/publication checks with a deterministic actual-PDF producer fixture. Earlier failure receipt retained.
+- Real downloads are unzipped/hash/path/size checked and repeated after unsaved edits; conditioned closure, exact snapshot/result/PDF and source permissions verified. Browser job/error/context injections are labelled UI fixtures; no runtime/provider/physical acceptance is claimed.
+- Full law-family review and opened desktop/phone/enlarged screenshots: docs/qa/study-review-pack-2026-10-23.md. All new controls work and fit with gutters; source/formula thresholds and old tests/fixtures untouched.
+- Authorize main publication per actual owner answer. Preserve all branches and original shared runtime; only disposable QA servers were restarted to load new routes. Production route activation requires separate original-service restart; Linux/native-zoom/screen-reader/load/provider/aircraft gates remain open.
+
+## 2026-10-22T19:46:28+00:00 DONE PACK-001
+- Evidence: .physicore/evidence/PACK-001-completion.json
+- Notes: Approved package and UI complete; 74 Python, 81 Node and 46 Chrome checks and full interface review pass; exact sources/results/model preserved, explicit exclusions and Linux/provider limits; main publication authorized, no original runtime restart/deployment.
+- Next ready: no new task promoted

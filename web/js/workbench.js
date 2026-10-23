@@ -1,3 +1,4 @@
+import {createReviewPackDownloader} from './review-pack.js?v=pack-1';
 import {energyCaseMatches} from './mission-energy.js?v=energy-1';
 import {mountEditors} from './input-editors.js?v=tabular-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
@@ -24,6 +25,13 @@ const comparisons = createComparisonController({
     $('comparison-status').textContent=text;
   },
 });
+const reviewPack = createReviewPackDownloader({
+  readContext: context, isContext, readStudy:()=>study,
+  fetchPack:binding=>request(`/projects/${binding.project}/studies/${binding.study}/review-pack`),
+  waitJob:(job,current)=>waitForJob(job,current),
+  save:(blob,name)=>{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);},
+  setState:(state,text)=>{$('review-pack-status').textContent=text;$('review-pack-status').dataset.state=state;$('export-pack').setAttribute('aria-busy',String(state==='pending'));},
+});
 function updateContext(){
   $('display-context').textContent=!current?'No project selected.':viewMode==='draft'?'Viewer: '+(dirty?'unsaved':'saved')+' draft version '+current.draft_version+'. Editor changes affect this draft only.':'Viewer: frozen revision '+viewRevision+' · '+(viewMode==='study'?'selected study '+study?.study_sha256:'selected revision')+'. Draft edits do not change this view.';
   $('show-draft-layout').disabled=!current||busy||viewMode==='draft';
@@ -39,10 +47,11 @@ function clearWorkspace(){
   ['review-workspace','job-history','invite-member','invitation-result'].forEach(id=>$(id).hidden=true);
   $('more-revisions').hidden=true;$('more-studies').hidden=true;$('editor-navigation').replaceChildren(new Option('Choose an input group',''));
   $('created-invitation').value='';$('job-progress').textContent='';$('cancel-job').hidden=true;$('retry-job').hidden=true;
-  resetReadiness();comparisons.invalidate('Open a project with retained studies to compare.');
+  resetReadiness();reviewPack.invalidate();comparisons.invalidate('Open a project with retained studies to compare.');
   if(viewer)viewer.showRotorLayout({rotors:[]},null);$('layout-note').textContent='No design selected.';$('reset-layout').disabled=true;$('project-title').value='';geometryPanel.sync(null,null,false);updateContext();controls();
 }
 async function selectStudy(record){
+  reviewPack.invalidate('Study selection changed. Download a new pack for the selected record.');
   const c=context();const retained=typeof record==='string'?await api(`/projects/${c.project}/studies/${record}`):record;
   const revision=await api(`/projects/${c.project}/revisions/${retained.specification.revision_sha256}`);
   if(!isContext(c))return;
@@ -87,6 +96,8 @@ function controls() {
   $('calculate').disabled = readOnly || !current || busy || dirty || !connected || !current.revisions.some(r=>r.draft_version===current.draft_version);
   $('export-study').disabled = !study || busy || !connected;
   $('export-pdf').disabled = !study || busy || !connected;
+  $('export-pack').disabled = !study || busy || !connected;
+  $('review-pack-binding').textContent=study?'Study '+study.study_sha256+' · frozen revision '+study.specification.revision_sha256+'. Unsaved draft edits are excluded.':'No retained study selected.';
   document.querySelectorAll('[data-energy-case]').forEach(button=>{button.disabled=busy||!connected||!energyCaseMatches(study,{study_sha256:button.dataset.energyStudy,revision_sha256:button.dataset.energyRevision,project_id:current?.project_id},button.dataset.energyCase);});
   ['compare-before','compare-after','compare'].forEach(id=>{$(id).disabled=busy||!connected||!current?.studies?.length;});
   document.querySelectorAll('#input-editors input,#input-editors select,#input-editors button,#input-editors textarea').forEach(input => { input.disabled = readOnly || busy || !current || !connected; });
@@ -109,7 +120,7 @@ async function request(path, options = {}) {
   const response = await fetch('/api/drone' + path, { ...options, credentials:'same-origin', cache:'no-store', headers, signal: AbortSignal.timeout(60000) });
   if(!isContext(requested))throw new Error('Workspace context changed; the previous response was ignored.');
   if(response.status===401){
-    connected=false;token='';++generation;++layoutGeneration;comparisons.invalidate('Connection changed. Reconnect and compare again.');geometryCache.clear();$('invitation-result').hidden=true;$('created-invitation').value='';
+    connected=false;token='';++generation;++layoutGeneration;reviewPack.invalidate('Reconnect and select a retained study.');comparisons.invalidate('Connection changed. Reconnect and compare again.');geometryCache.clear();$('invitation-result').hidden=true;$('created-invitation').value='';
     if(hosted){$('individual-session').hidden=true;message('Your session expired or was revoked. Sign in again. Unsaved inputs remain in this editor.',true);}
     else{sessionStatus();message('Browser access expired or was forgotten. Reconnect to continue. Your open draft is still here.',true);}
     controls();
@@ -141,7 +152,7 @@ function render(project) {
   $('more-revisions').hidden=!project.revisions_more;$('more-studies').hidden=!project.studies_more;
   $('invite-member').hidden=!hosted||!project.can_invite;
   $('review-workspace').hidden=!hosted;$('job-history').hidden=!hosted;if(hosted)loadJobs().catch(error=>message(error.message,true));
-  study=null;$('study-report').replaceChildren();$('study-summary').replaceChildren();resetReadiness();
+  study=null;reviewPack.invalidate();$('study-report').replaceChildren();$('study-summary').replaceChildren();resetReadiness();
   $('snapshot').value = JSON.stringify(JSON.parse(project.snapshot_json), null, 2);
   $('design-title').textContent = project.title;
   $('save-state').textContent = 'Saved draft version ' + project.draft_version + '. Edits create a new version; retained revisions stay unchanged.';
@@ -355,6 +366,7 @@ async function downloadStudy(kind){
 }
 $('export-study').addEventListener('click',()=>action(()=>downloadStudy('json')));
 $('export-pdf').addEventListener('click',()=>action(()=>downloadStudy('pdf')));
+$('export-pack').addEventListener('click',()=>action(()=>reviewPack.download()));
 ['compare-before','compare-after'].forEach(id=>$(id).addEventListener('change',()=>comparisons.invalidate()));
 $('compare').addEventListener('click',()=>action(()=>comparisons.compare()));
 $('show-draft-layout').addEventListener('click',()=>{viewMode='draft';viewSnapshot=null;viewRevision='';layout();controls();});
@@ -403,10 +415,11 @@ $('previous-projects').addEventListener('click',()=>action(()=>inventory('',inve
   if(current[kind+'_cursor']){const more=await api(`/projects/${current.project_id}/history/${kind}?limit=100&after=${encodeURIComponent(current[kind+'_cursor'])}`);more[kind].forEach(r=>retained.set(kind==='revisions'?r.revision_sha256:r.study_sha256,r));cursor=more.next_cursor;}
   const savedStudy=study,savedView={viewSnapshot,viewRevision,viewMode,selectedCase},caseOptions=[...$('view-case').options].map(o=>o.cloneNode(true));current[kind]=[...retained.values()];current[kind+'_cursor']=cursor;current[kind+'_more']=!!cursor;render(current);if(wasDirty){$('snapshot').value=rawEditor;dirty=true;$('save-state').textContent='Unsaved edits. Save before freezing a revision.';editors();}study=savedStudy;({viewSnapshot,viewRevision,viewMode,selectedCase}=savedView);$('view-case').replaceChildren(...caseOptions);$('view-case').value=selectedCase;showStudy();layout();await loadSummary();
 })));
-async function waitForJob(submitted){
+async function waitForJob(submitted,stillCurrent=()=>true){
   const pid=current.project_id;activeJob={...submitted,project_id:pid};$('cancel-job').hidden=current?.role!=='engineer';$('retry-job').hidden=true;
   try{for(let poll=0;poll<600;poll++){
-    const job=await api(`/projects/${pid}/jobs/${submitted.job_id}`);activeJob={...job,project_id:pid};const attempt=job.attempts.at(-1);
+    if(!stillCurrent())throw new Error('Study or workspace changed during report preparation.');
+    const job=await api(`/projects/${pid}/jobs/${submitted.job_id}`);if(!stillCurrent())throw new Error('Study or workspace changed during report preparation.');activeJob={...job,project_id:pid};const attempt=job.attempts.at(-1);
     $('job-progress').textContent='Job '+job.state+(attempt?' · '+Math.round(attempt.progress*100)+'% · '+attempt.detail:'');
     if(job.state==='succeeded'){activeJob=null;return job;}
     if(['failed','cancelled'].includes(job.state)){$('retry-job').hidden=current?.role!=='engineer';throw new Error(job.reason||'Job '+job.state);}

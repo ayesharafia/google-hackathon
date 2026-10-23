@@ -1,0 +1,21 @@
+{
+  "checks": [
+    "Alternative-case study shows unavailable mission budget instead of zero or a mission pass",
+    "Actual evaluated sequence exposes exact retained usable/used/remaining J and frozen identities",
+    "Segment order, recorded seconds/watts/joules and literal source notes match actual retained evidence",
+    "Exact energy disclosure opens with a pointer and retains every policy/value",
+    "Existing retained JSON download preserves complete mission energy evidence",
+    "Segment case action selects the referenced case, keeps frozen-study identity and moves focus to the viewer control",
+    "Case action restores the retained layout from an unsaved draft view without altering the draft or budget",
+    "Navigation and draft edits leave exact retained result bytes unchanged",
+    "Case controls are disabled while frozen-view restoration is pending, then re-enabled",
+    "Exact evidence disclosure works with keyboard Enter",
+    "phone layout contains budget labels/values and scrolls to the final segment evidence column",
+    "enlarged layout contains budget labels/values and scrolls to the final segment evidence column",
+    "UI fixtures preserve negative remaining energy, unknown policies and missing quantities without inventing a case link",
+    "Selecting another study clears the old ledger; an injected detached stale action cannot reopen the previous case",
+    "Project switch removes prior energy evidence and rejects an injected stale case action",
+    "No browser JavaScript errors"
+  ],
+  "errors": []
+}

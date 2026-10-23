@@ -2,6 +2,8 @@
 
 ## Current continuation: 23 October 2026
 
+- Owner approved “Proceed with Study Review Pack”, including tests/browser/interface review and main publication. PACK-001 implements exact retained result/frozen input, PDF/receipt and rotor/conditioned-source ZIP with hashes, bounds/exclusions and existing permissions/jobs. 74 Python, 81 Node and 46 Chrome checks pass; QA/interface ledger: docs/qa/study-review-pack-2026-10-23.md. No physics/dependency/source/result/access changes; main publication pending exact remote verification. Initial test/setup/Linux limits retained; hosted publication uses deterministic producer fixture, not a demonstrated Linux supervisor. Focused research: RESEARCH_LOG.md. Original shared API must restart to load the route; no restart/deployment performed.
+
 - Owner approved “Proceed with Mission Energy Budget”, including targeted tests/browser/interface review and publication to main. ENERGY-001 adds exact retained budget/segment evidence and guarded referenced-case navigation; implemented and locally verified: 61 Node tests, 65 existing Python regressions and 31 Chrome checks (16 mission, 15 comparisons), no page JS errors. Final QA/interface ledger: docs/qa/mission-energy-2026-10-23.md. Implementation 367bd1ba86c9ab50950a81d181803b6990899133 is published to main and exact remote SHA verified; receipt: .physicore/evidence/PUBLISH-2026-10-23-energy.json. No formula, source/result byte, reserve, API/dependency, access or deployment change.
 
 - Owner approved “Proceed with Design Comparisons”, including targeted checks and publication to main. COMPARE-001 implements grouped whole-declaration changes, before/after case outcomes and limits, exact JSON, strict numeric gating and stale/late-response guards.

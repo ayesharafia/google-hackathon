@@ -1,5 +1,25 @@
 # Current approvals and pending decisions
 
+## 2026-10-23: Study Review Pack approved; main publication authorized
+
+Owner asked for further CEO-led development. Proposed bounded existing-export
+upgrade: a project-authorized study ZIP containing PDF/receipt, exact result and
+frozen input JSON, referenced retained rotor JSON and raw conditioned-source
+dependencies, file hashes and a readable contents/limitations record. Reuse
+existing PDF preparation/job handling and scoped artifacts; no simulation rerun,
+new dependencies, source/result/schema changes or access change. Reject missing
+or corrupt required bytes. Fixed safe names, 128 members/40 MiB uncompressed
+bounds. Exact exclusions: original CSV/XLSX/conversion manifests, CAD, review
+signatures and executable software/build dependencies. No false original import
+association, complete-backup, standalone-replay or physical acceptance claim.
+
+Proposed acceptance includes targeted package/API/access regressions, actual
+browser download/unzip and selection/context guards, complete interface-law
+review and publishing the completed increment to main. Owner answered “Proceed with Study Review Pack” to the concrete design, including
+targeted tests/browser/interface review and publishing the completed feature to main.
+The brainstorming design gate is satisfied. No deployment, source/model changes,
+physical acceptance or new public access is authorized.
+
 ## 2026-10-23: Mission Energy Budget approved; main publication authorized
 
 Owner requested “next”. Source review found an existing ordered-segment editor,

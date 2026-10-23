@@ -240,8 +240,7 @@ def study_summary(request: Request, project_id: str, study: str):
     return operation(lambda: request.app.state.studies.summary(project_id, study))
 
 
-@router.get('/{project_id}/studies/{study}/pdf')
-def pdf_study(request: Request, project_id: str, study: str):
+def prepared_study_pdf(request, project_id, study):
     if request.app.state.settings.hosted_mode:
         cached = operation(lambda: request.app.state.studies.cached_pdf(project_id, study))
         if cached is None:
@@ -251,15 +250,43 @@ def pdf_study(request: Request, project_id: str, study: str):
                 {'study_sha256': study, 'report_identity': report_identity(raw, snapshot),
                  'application_build': request.app.state.build.get('build_sha256')},
                 submitted_by=request.state.principal.user_id))
-            return JSONResponse(job, status_code=202)
-        raw, receipt = cached
+            return JSONResponse(job, status_code=202, headers={'Cache-Control': 'private, no-store'})
+        return cached
     else:
-        raw, receipt = operation(lambda: request.app.state.studies.pdf(project_id, study))
+        return operation(lambda: request.app.state.studies.pdf(project_id, study))
+
+
+@router.get('/{project_id}/studies/{study}/pdf')
+def pdf_study(request: Request, project_id: str, study: str):
+    prepared = prepared_study_pdf(request, project_id, study)
+    if isinstance(prepared, JSONResponse):
+        return prepared
+    raw, receipt = prepared
     return Response(raw, media_type='application/pdf', headers={
         'Content-Disposition': 'attachment; filename=physicore-local-study.pdf',
         'X-Study-JSON-SHA256': receipt['study_json_sha256'], 'X-PDF-SHA256': receipt['pdf_sha256'],
         'X-Report-Renderer': receipt['renderer_version'],
         'X-Report-Renderer-SHA256': receipt['renderer_source_sha256']})
+
+
+@router.get('/{project_id}/studies/{study}/review-pack')
+def review_pack(request: Request, project_id: str, study: str):
+    import hashlib
+
+    from physimesh.projects.review_pack import PackBusy, build_review_pack
+    prepared = prepared_study_pdf(request, project_id, study)
+    if isinstance(prepared, JSONResponse):
+        return prepared
+    try:
+        raw, manifest = operation(lambda: build_review_pack(request.app.state.studies, project_id, study, prepared))
+    except PackBusy as exc:
+        raise HTTPException(503, str(exc), headers={'Retry-After': '2'}) from exc
+    return Response(raw, media_type='application/zip', headers={
+        'Cache-Control': 'private, no-store',
+        'Content-Disposition': 'attachment; filename=physicore-study-review.zip',
+        'X-Review-Pack-Schema': manifest['schema_version'], 'X-Study-SHA256': manifest['study_sha256'],
+        'X-Project-ID': manifest['project_id'],
+        'X-Revision-SHA256': manifest['revision_sha256'], 'X-Pack-SHA256': hashlib.sha256(raw).hexdigest()})
 
 
 @router.post('/{project_id}/comparisons')

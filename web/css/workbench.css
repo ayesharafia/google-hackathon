@@ -118,3 +118,10 @@ dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;backgrou
 #study-report .mission-energy th,#study-report .mission-energy td{white-space:normal;overflow-wrap:anywhere}
 .mission-energy th p{font-size:13px;font-weight:400;margin:12px 0 0;white-space:pre-wrap}
 .mission-energy button{display:block;margin-top:14px;max-width:100%;white-space:normal}
+
+#review-pack{margin:32px 0;overflow-wrap:anywhere}
+#review-pack-binding{font-size:13px;color:var(--muted)}
+#export-pack{max-width:100%;white-space:normal;margin:10px 0}
+#review-pack-status{min-height:24px}
+#review-pack details{margin-top:18px}
+#review-pack li{padding-left:4px}

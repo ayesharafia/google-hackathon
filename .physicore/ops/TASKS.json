@@ -423,6 +423,34 @@
         "M .physicore/ops/APPROVALS.md"
       ],
       "finished_at": "2026-10-22T19:19:33+00:00"
+    },
+    {
+      "id": "PACK-001",
+      "title": "Export a verified frozen-study review package",
+      "kind": "implementation",
+      "priority": 5,
+      "status": "done",
+      "zone": "green",
+      "depends_on": [],
+      "done_when": "Bounded project-authorized ZIP with exact result/frozen inputs, PDF/receipt, verified rotor/conditioned dependency closure, hashes and exclusions; no solver rerun; package/access/job/unit/browser checks and full interface review pass",
+      "source_refs": [
+        ".physicore/ops/APPROVALS.md"
+      ],
+      "evidence": [
+        ".physicore/evidence/PACK-001-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Approved package and UI complete; 74 Python, 81 Node and 46 Chrome checks and full interface review pass; exact sources/results/model preserved, explicit exclusions and Linux/provider limits; main publication authorized, no original runtime restart/deployment.",
+      "started_at": "2026-10-22T19:26:03+00:00",
+      "started_head": "f2146603fbd8accbce5fe2f210fac03618d8fccb",
+      "started_dirty": [
+        " M .physicore/ops/RESEARCH_LOG.md",
+        " M .physicore/ops/STATE.md",
+        " M .physicore/ops/TASKS.json",
+        " M .physicore/ops/WORKLOG.md",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "finished_at": "2026-10-22T19:46:28+00:00"
     }
   ]
 }

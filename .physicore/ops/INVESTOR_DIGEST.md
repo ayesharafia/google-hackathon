@@ -1,5 +1,24 @@
 # Latest product progress: 23 October 2026
 
+**New increment:** Study Review Pack gives engineers a single bounded ZIP of
+PDF/receipt, retained result/frozen inputs, rotor JSON and conditioned raw-source
+dependencies, checksums and readable exclusions. Existing project/artifact
+permissions and PDF preparation jobs are reused; no solver run or model change.
+
+**Evidence:** 74 Python checks, 81 Node tests and 46 disposable Chrome checks
+pass. Real browser downloads unpack/hash-verify; wrong identity, corrupt/missing
+artifacts, denied sources, stale context and archive limits are covered. Full
+UI review: docs/qa/study-review-pack-2026-10-23.md.
+
+**Limits/delivery:** main publication is authorized and pending remote verification.
+Original service restart/deployment is not performed. Full Linux producer and
+provider/load/screen-reader/native-zoom qualification remain open. The package
+excludes CAD, original spreadsheets/conversion manifests, signatures and solver
+executables. Physical accuracy, paying customers and review-time savings remain
+unvalidated.
+
+## Earlier mission energy delivery
+
 **New increment:** Mission Energy Budget exposes the exact recorded usable, used
 and remaining J, ordered segment power/duration/energy, source notes and reserve
 handling. Referenced-case actions restore the same frozen study and preserve

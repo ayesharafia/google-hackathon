@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "PACK-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/review_pack_browser.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-22T19:35:11+00:00",
+  "started_at": "2026-10-22T19:26:03+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "f2146603fbd8accbce5fe2f210fac03618d8fccb",
+  "output": "PASS No selected study keeps the download disabled with an explicit prompt\nPASS Actual contents disclosure explains included artifacts, hard bounds and exclusions\nPASS Actual ZIP download unpacks safely with exact frozen snapshot/result, valid PDF and every member checksum\nPASS Actual source members match retained references; manifest states raw-spreadsheet exclusions\nPASS Unsaved draft edits do not change exact bytes of the selected retained package\nPASS Queued-report UI fixture waits for preparation before downloading and verifying the actual ZIP\nPASS Mismatched response identity refuses the download and replaces previous success status\nPASS Whole-file checksum mismatch prevents a browser download\nPASS API refusal stays unavailable with no stale or partial ZIP download\nPASS phone layout keeps binding, text, disclosure and button inside deliberate gutters\nPASS enlarged layout keeps binding, text, disclosure and button inside deliberate gutters\nPASS Native package disclosure responds to keyboard Enter\nPASS Pending controls disable; injected workspace invalidation suppresses a delayed ZIP\nPASS Actual conditioned-map study download contains its referenced raw JSON dependencies\nPASS No browser JavaScript errors\n{\n  \"passed\": 15,\n  \"checks\": [\n    \"No selected study keeps the download disabled with an explicit prompt\",\n    \"Actual contents disclosure explains included artifacts, hard bounds and exclusions\",\n    \"Actual ZIP download unpacks safely with exact frozen snapshot/result, valid PDF and every member checksum\",\n    \"Actual source members match retained references; manifest states raw-spreadsheet exclusions\",\n    \"Unsaved draft edits do not change exact bytes of the selected retained package\",\n    \"Queued-report UI fixture waits for preparation before downloading and verifying the actual ZIP\",\n    \"Mismatched response identity refuses the download and replaces previous success status\",\n    \"Whole-file checksum mismatch prevents a browser download\",\n    \"API refusal stays unavailable with no stale or partial ZIP download\",\n    \"phone layout keeps binding, text, disclosure and button inside deliberate gutters\",\n    \"enlarged layout keeps binding, text, disclosure and button inside deliberate gutters\",\n    \"Native package disclosure responds to keyboard Enter\",\n    \"Pending controls disable; injected workspace invalidation suppresses a delayed ZIP\",\n    \"Actual conditioned-map study download contains its referenced raw JSON dependencies\",\n    \"No browser JavaScript errors\"\n  ],\n  \"evidence\": \"/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/docs/qa/assets/review-pack\"\n}\n\n"
+}

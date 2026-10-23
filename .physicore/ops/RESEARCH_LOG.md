@@ -178,3 +178,59 @@ customer workflow, and verified private-data/restore behavior. Target metric:
 time from authorized raw component data to a reviewable design decision, plus
 pilot completion/conversion and error within agreed scope. Values/baselines
 unknown. No customer contact, spending, dataset import, tests or deployment.
+
+## 2026-10-23: proposed frozen-study engineering handoff
+
+Owner asked “build more CEO”. Clean main f214660; no eligible task. Observed:
+local studies have verified JSON and frozen-input access, existing local/queued
+PDF exports, exact map bytes including conditioned/raw dependencies, and scoped
+artifact permissions. The separate retained sphere/CFD results path already uses
+a deterministic ZIP, but the local drone-study handoff has no single package.
+Source-library manifests are not bound into frozen study records; do not invent
+a unique original CSV/XLSX lineage from a normalized map hash.
+
+Customer job (hypothesis): a small multirotor engineering team's lead needs to
+inspect a colleague's result/input/source set outside the running app. Buyer,
+willingness to pay, review time and switching cost remain unknown.
+
+Primary sources checked on 23 October 2026:
+- SimScale post-processing docs, https://www.simscale.com/docs/post-processing/
+  (page last updated 10 June 2025): result-control data and local result database
+  can be downloaded; formats depend on the simulation. Export is an expected
+  workflow in this alternative, not a claimed competitor gap.
+- Tyto Flight Stand Software manual, https://www.tytorobotics.com/blogs/manuals-and-datasheets/flight-stand-software-user-manual
+  (8 July 2024): saved tests can be exported; data-handling section describes CSV
+  export/resampling. Adjacent measured-component ecosystem, not an integration
+  or reuse-license grant. Read public HTML only; no test data downloaded.
+- W3C PROV overview, https://www.w3.org/TR/prov-overview/, Working Group Note
+  30 April 2013: describes data provenance and points to PROV Recommendations.
+  General traceability context only; this proposal does not implement a PROV
+  serialization or claim standards, security, aviation or scientific compliance.
+
+Recommendation (proposed, not implemented): one bounded extension to the current
+retained export path. An authenticated/current-project study review ZIP contains
+the verified PDF plus receipt, exact result and canonical frozen snapshot,
+referenced retained performance JSON and conditioned-map raw dependencies,
+readable limitations/contents and SHA-256 member checksums. Member paths derive
+from fixed names/digests; bounded to 128 members and 40 MiB uncompressed. Reuse
+PDF job preparation, avoid solver re-execution, new dependencies or new storage
+subsystems. Corrupt/missing required artifacts refuse the package.
+
+Known limits: original tabular files/manifests, CAD, human review/signatures,
+solver source/build/container and runtime dependencies are excluded and listed.
+This is an input/result handoff, not a complete project backup or guaranteed
+standalone solver replay. Checksums prove byte consistency, not authentic
+engineering approval or physical truth. Existing public-demo/private access
+semantics and all branches stay intact.
+
+Alternatives considered: continuing separate downloads is simpler but leaves
+assembly to the reviewer; a full project backup with raw import/CAD/build lineage
+requires additional bindings, larger storage/permission design and is a later
+feature. No public sharing link or new deployment is required. Expected compute:
+bounded reads/hash/ZIP/PDF generation through existing code, no paid service or
+physics run; roughly one focused implementation slice after design approval.
+Acceptance: exact bytes/member hashes, deterministic repeat output in a fixed
+environment, conditioned closure, missing/corrupt/wrong-project/access refusal,
+real browser download/unzip, stale-selection guard and full UI review. Target
+learning metric: whether a reviewer can identify the result, inputs, model and
+sources from this one artifact; no baseline or savings claimed.
