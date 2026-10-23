@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "SOURCE-EXPLORE-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "--check",
+    "web/js/source-explorer.js"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-23T06:45:37+00:00",
+  "started_at": "2026-10-23T06:26:02+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "ff2b2785b02a863e8439b8134ecf072591034323",
+  "output": "\n"
+}

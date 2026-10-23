@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "kind": "completion",
+  "id": "SOURCE-EXPLORE-001",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "started_at": "2026-10-23T06:26:02+00:00",
+  "captured_at": "2026-10-23T06:50:20+00:00",
+  "baseline_head": "ff2b2785b02a863e8439b8134ecf072591034323",
+  "current_head": "ff2b2785b02a863e8439b8134ecf072591034323",
+  "changes": [
+    "DECISIONS.md",
+    "docs/qa/assets/source-explorer/desktop-context.png",
+    "docs/qa/assets/source-explorer/desktop.png",
+    "docs/qa/assets/source-explorer/enlarged-context.png",
+    "docs/qa/assets/source-explorer/enlarged-plot.png",
+    "docs/qa/assets/source-explorer/enlarged.png",
+    "docs/qa/assets/source-explorer/phone-context.png",
+    "docs/qa/assets/source-explorer/phone-plot.png",
+    "docs/qa/assets/source-explorer/phone.png",
+    "docs/qa/assets/source-explorer/results.json",
+    "docs/qa/assets/source-explorer/viewer/results.json",
+    "docs/qa/rotor-source-explorer-2026-10-23.md",
+    "docs/qa/rotor-source-explorer-design-law-2026-10-23.md",
+    "docs/technical/rotor-source-explorer.md",
+    "plan.md",
+    "scripts/qa/source_explorer_browser.mjs",
+    "scripts/qa/source_explorer_viewer_browser.mjs",
+    "scripts/qa/verify_source_explorer_package.py",
+    "scripts/qa/verify_source_explorer_static.py",
+    "tests/web/test_source_explorer.mjs",
+    "web/css/workbench.css",
+    "web/js/input-editors.js",
+    "web/js/source-explorer.js",
+    "web/js/source-library.js",
+    "web/js/workbench.js",
+    "web/workbench.html"
+  ],
+  "tests": [
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023064755126605.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--test",
+        "tests/web/test_source_explorer.mjs",
+        "tests/web/test_trim_evidence.mjs",
+        "tests/web/test_review_pack.mjs",
+        "tests/web/test_mission_energy.mjs",
+        "tests/web/test_design_comparison.mjs",
+        "tests/web/test_engineering_readiness.mjs",
+        "tests/web/test_rotor_source_binding.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023063347389625.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "tests/projects/test_source_library.py",
+        "tests/projects/test_tabular_import.py",
+        "tests/platform/test_reuse_pagination.py",
+        "-q"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023064428155593.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/source_explorer_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023064426366908.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/source_explorer_viewer_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023063740834663.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/tabular_library_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023064143623498.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/rotor_source_binding_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023064142857652.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/source_library_viewer_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023064144969093.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/trim_evidence_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023064537216936.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "scripts/qa/verify_source_explorer_package.py"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/SOURCE-EXPLORE-001-test-20261023064854244650.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "scripts/qa/verify_source_explorer_static.py",
+        "--baseline",
+        "ff2b2785b02a863e8439b8134ecf072591034323"
+      ]
+    }
+  ],
+  "audit_files": [],
+  "summary": "Implemented Rotor Source Explorer with literal retained-point/coverage plots, exact source rows and linked selection, guarded asynchronous lifecycle and existing read permissions; 124 Node, 45 Python and 68 Chrome checks pass; full interface review and wheel/static evidence retained; no model change or deployment."
+}

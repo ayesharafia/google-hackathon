@@ -1,4 +1,5 @@
 /* A literal measurement worksheet and project-authorized retained library. */
+import {createSourceInspection,renderSourceExplorer} from './source-explorer.js?v=source-explorer-1';
 import {renderSourceBinding} from './rotor-source-binding.js?v=source-binding-1';
 const fields=['rpm','thrust_n','shaft_torque_nm','power_w'];
 const names=['RPM','Thrust','Absorbed shaft torque','Input power'];
@@ -86,23 +87,31 @@ export function mountSourceLibrary(parent,options){
 
   const library=node('section');library.className='source-catalog';library.append(node('h4','Saved rotor sources'),node('p','Reuse sources from projects you can read. Test conditions and aircraft applicability still require engineering review.'));root.append(library);
   const query=input(library,'Search dataset or configuration'),list=node('div'),detail=node('div'),catalogStatus=node('p');catalogStatus.setAttribute('role','status');
-  query.dataset.libraryRead='true';
+  query.dataset.libraryRead='true';detail.className='source-catalog-detail';
   const readButton=(label,run)=>{const el=button(label,run);el.dataset.libraryRead='true';return el;};
   let cursor=null,catalogSerial=0,searchValue='';
-  async function browse(more=false){const ticket=++catalogSerial;try{const term=query.value;if(!more){cursor=null;list.replaceChildren();}const result=await options.sourceRequest('?query='+encodeURIComponent(term)+(more&&cursor?'&after='+cursor:''));if(ticket!==catalogSerial||!file.isConnected||query.value!==term)return;searchValue=term;cursor=result.next_cursor;
+  const inspection=createSourceInspection({
+    fetchSource:id=>options.sourceRequest('/'+id),isCurrent:()=>file.isConnected,
+    clear:()=>detail.replaceChildren(),render:renderInspection,
+    setState:(state,message)=>{detail.setAttribute('aria-busy',String(state==='pending'));catalogStatus.textContent=message;},
+  });
+  async function browse(more=false){const ticket=++catalogSerial;try{const term=query.value;if(!more){cursor=null;list.replaceChildren();inspection.invalidate('Loading matching sources…');}const result=await options.sourceRequest('?query='+encodeURIComponent(term)+(more&&cursor?'&after='+cursor:''));if(ticket!==catalogSerial||!file.isConnected||query.value!==term)return;searchValue=term;cursor=result.next_cursor;
     for(const entry of result.entries){const item=node('div');item.className='source-catalog-entry';item.append(node('strong',entry.dataset_id),node('p',entry.configuration_id+' · '+entry.source_kind),node('p','Project '+entry.project_id.slice(-8)+' · record '+entry.manifest_sha256.slice(0,12)),readButton('Inspect source '+entry.dataset_id,()=>inspect(entry.entry_id)));list.append(item);}
     catalogStatus.textContent=result.entries.length?'Sources loaded. Inspect an entry to review its conditions and provenance.':'No accessible sources match this search.';
     next.dataset.localDisabled=String(!cursor);next.disabled=!cursor||query.disabled;
   }catch(error){catalogStatus.textContent=error.message;}}
-  async function inspect(id){const ticket=++catalogSerial;try{const receipt=await options.sourceRequest('/'+id);if(ticket!==catalogSerial||!file.isConnected)return;
+  function inspect(id){++catalogSerial;return inspection.inspect(id);}
+  function renderInspection(receipt,stillSelected){
+    const id=receipt.entry.entry_id;
     detail.replaceChildren(node('h4',receipt.dataset.dataset_id),node('p','Configuration '+receipt.dataset.configuration_id+'. Density '+receipt.dataset.density_kg_m3+' kg/m³; inflow '+receipt.dataset.axial_inflow_m_s+' m/s; pitch '+receipt.dataset.pitch_deg+'°; duration '+receipt.dataset.max_continuous_duration_s+' s.'),node('p','Original file: '+receipt.manifest.filename+' · '+receipt.manifest.file_sha256),node('p',receipt.qualification));
+    renderSourceExplorer(detail,receipt,{canRead:()=>stillSelected()&&!query.disabled});
     const record=node('details');record.append(node('summary','Conversion record'),node('pre',JSON.stringify(receipt.manifest,null,2)));detail.append(record,
-      readButton('Download conversion record',()=>download(JSON.stringify(receipt.manifest,null,2),'rotor-conversion.json','application/json')),
-      readButton('Download original file',async()=>{try{await options.sourceDownload(id,receipt.manifest.filename);catalogStatus.textContent='Original file download requested.';}catch(error){catalogStatus.textContent=error.message;}}),
-      button('Use source in this project',async()=>{try{const copy=await options.sourceRequest('/'+id+'/reuse',{method:'POST'});if(ticket!==catalogSerial||!file.isConnected)return;showReceipt(copy);catalogStatus.textContent='Source available in this project. Explicitly choose matching rotors in the import section.';binding.scrollIntoView({block:'nearest'});}catch(error){catalogStatus.textContent=error.message;}}));
+      readButton('Download conversion record',()=>{if(stillSelected())download(JSON.stringify(receipt.manifest,null,2),'rotor-conversion.json','application/json');}),
+      readButton('Download original file',async()=>{if(!stillSelected())return;try{await options.sourceDownload(id,receipt.manifest.filename);if(stillSelected())catalogStatus.textContent='Original file download requested.';}catch(error){if(stillSelected())catalogStatus.textContent=error.message;}}),
+      button('Use source in this project',async()=>{if(!stillSelected())return;try{const copy=await options.sourceRequest('/'+id+'/reuse',{method:'POST'});if(!stillSelected())return;showReceipt(copy);catalogStatus.textContent='Source available in this project. Explicitly choose matching rotors in the import section.';binding.scrollIntoView({block:'nearest'});}catch(error){if(stillSelected())catalogStatus.textContent=error.message;}}));
     detail.querySelectorAll('button:not([data-library-read])').forEach(el=>{el.disabled=!enabled();});
-  }catch(error){catalogStatus.textContent=error.message;}}
-  query.addEventListener('input',()=>{++catalogSerial;cursor=null;detail.replaceChildren();list.replaceChildren();catalogStatus.textContent='Search changed. Load matching sources.';next.dataset.localDisabled='true';next.disabled=true;});
+  }
+  query.addEventListener('input',()=>{++catalogSerial;cursor=null;inspection.invalidate('Search changed. Load matching sources.');list.replaceChildren();next.dataset.localDisabled='true';next.disabled=true;});
   const next=readButton('Load more sources',()=>{if(query.value===searchValue&&cursor)browse(true);});next.dataset.localDisabled='true';next.disabled=true;
   library.append(readButton('Load matching sources',()=>browse()),list,next,catalogStatus,detail);state();
 }

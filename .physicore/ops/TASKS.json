@@ -485,6 +485,40 @@
         "M .physicore/ops/APPROVALS.md"
       ],
       "finished_at": "2026-10-23T04:22:00+00:00"
+    },
+    {
+      "id": "SOURCE-EXPLORE-001",
+      "title": "Inspect retained rotor-source samples visually within the existing component library",
+      "done_when": "Discrete retained-point plots with exact power basis, coverage, sample/source-row table; immediate stale clearing and late-response refusal; existing permission and rotor binding behavior preserved; unit/regression/browser/interface checks pass",
+      "kind": "implementation",
+      "priority": 5,
+      "status": "done",
+      "zone": "green",
+      "depends_on": [
+        "IMPORT-001"
+      ],
+      "source_refs": [
+        ".physicore/ops/APPROVALS.md",
+        ".physicore/ops/RESEARCH_LOG.md",
+        "docs/technical/rotor-source-explorer.md",
+        "docs/qa/rotor-source-explorer-2026-10-23.md"
+      ],
+      "evidence": [
+        ".physicore/evidence/SOURCE-EXPLORE-001-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Approved source explorer delivered; 124 Node, 45 Python and 68 Chrome checks pass, wheel/static protection and full 147-entry interface review retained. Main publication authorized; no physical acceptance, deployment or branch deletion.",
+      "started_at": "2026-10-23T06:26:02+00:00",
+      "started_head": "ff2b2785b02a863e8439b8134ecf072591034323",
+      "started_dirty": [
+        " M .physicore/ops/INVESTOR_DIGEST.md",
+        " M .physicore/ops/RESEARCH_LOG.md",
+        " M .physicore/ops/STATE.md",
+        " M .physicore/ops/TASKS.json",
+        " M .physicore/ops/WORKLOG.md",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "finished_at": "2026-10-23T06:50:20+00:00"
     }
   ]
 }

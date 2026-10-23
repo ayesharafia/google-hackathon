@@ -301,3 +301,81 @@ read-only operating-point separation and exact evidence display; 100 Node tests,
 software path on labelled examples; reviewer time savings, real-aircraft accuracy
 and demand remain unmeasured. Delivery and limitations:
 docs/qa/case-trim-evidence-2026-10-23.md. No customer contact or dataset reuse.
+
+## 2026-10-23: proposed Rotor Source Explorer
+
+Owner requested “keep working” after TRIM-001 publication. Clean main ff2b278;
+workflow next reported no eligible task. OBSERVED: Saved rotor sources already
+have an Inspect source action in web/js/source-library.js. It shows identity,
+conditions, source/original hashes, conversion JSON and downloads/reuse. It does
+not plot the normalized sample points. SourceLibrary.detail returns the complete
+rotor_map_v1 dataset after bundle verifies original/map/manifest bytes and
+reproduces the literal SI conversion; current project/source permissions already
+apply. The existing receipt therefore supplies the needed data without a new API.
+
+Customer job (INFERRED): an engineer reviewing a tabular rotor import wants to
+inspect the shape and exact points before explicitly applying it to rotors. This
+may make mapping/units anomalies easier to notice; it cannot validate source
+truth or aircraft applicability. Buyer, customer demand, error-detection benefit,
+time savings and willingness to pay remain UNKNOWN.
+
+Primary sources checked on 23 October 2026:
+- Tyto Flight Stand Software User Manual, public HTML dated 8 July 2024,
+  https://www.tytorobotics.com/blogs/manuals-and-datasheets/flight-stand-software-user-manual:
+  describes selectable data plots, viewing saved test data and export workflows.
+  Supports plotting as an established test-data inspection workflow. Tyto's
+  documented filtering/resampling is not adopted here. No software or datasets
+  downloaded; no integration or reuse license inferred.
+- eCalc xcopterCalc, https://www.ecalc.ch/xcoptercalc.php:
+  displays a motor-characteristic graph and electrical/mechanical operating
+  quantities. Adjacent component-selection alternative, not evidence that it
+  lacks traceability or the proposed feature. Its calculated models/data and
+  heuristics are not copied. Public HTML read only.
+
+No technical standard, physical acceptance threshold or compliance claim is
+introduced. Existing map units/coverage and electrical-versus-shaft power
+semantics are authoritative. No efficiency conversion, interpolation, smoothing,
+extrapolation, new solver evaluation or automatic source acceptance is proposed.
+The chart plots retained normalized points only; declared RPM coverage intervals
+are shown without drawing a fitted line across unsupported gaps.
+
+PROPOSED SOURCE-EXPLORE-001: extend the current library detail with one
+read-only source explorer. Select thrust N, absorbed shaft torque Nm or recorded
+power W versus RPM; label power using its declared basis. Clicking/selecting a
+sample highlights its retained values/source row, with an accessible exact table
+and existing conversion/original downloads. Keep dataset/configuration/source
+kind, test conditions and hashes visible. A measured kind is a declaration, not
+qualified verification; analytic fixtures retain illustrative labels. Missing or
+malformed evidence is unavailable; no synthetic measurements or fitted curves.
+
+Source/search/project changes clear the previous explorer immediately and reject
+late responses. Preserve project/read-only permissions and explicit rotor reuse/
+binding. Scope is existing tabular-library entries; conditioned solver profiles
+and standalone JSON-import paths are outside this increment. Browser-only
+projection uses the existing verified detail response; no new dependency, API,
+retained record/schema/model/access change, runtime restart or deployment.
+
+Alternatives: keep the current conversion JSON/tables (simplest, but leaves the
+observed visual inspection gap); compare multiple sources or overlay solved rotor
+commands (larger condition/model/binding design). Recommend one source at a time
+first. Expected cost: at most 64 stored samples, local browser coordinate mapping,
+no paid service or simulation run. Acceptance proposal: exact point/unit/basis/
+coverage projection checks, source identity and late-response refusal, existing
+import/library/read-only regressions, real browser plot/sample/table interactions,
+phone/enlarged review and the full user interface law. Learning target: reviewer
+can identify a particular source point, basis and declared coverage without
+decoding JSON; baseline and actual benefit remain unknown.
+
+Concrete brainstorming approval, tests/browser review and main-publication scope
+pending. No application code, tests, dependency, spec file, commit or push in this
+selection turn.
+
+## 2026-10-23: Rotor Source Explorer delivery evidence
+
+Owner approved the proposed concrete design. Literal source inspection is now
+implemented and software-verified (124 Node, 45 Python, 68 Chrome checks); see
+docs/qa/rotor-source-explorer-2026-10-23.md. This closes the observed plot/exact-row
+inspection gap without adding a prediction model. No customer interview,
+measured source qualification or adoption metric was obtained. Actual reviewer
+time savings and demand remain UNKNOWN. Existing official-source research and
+larger comparison/command-overlay alternatives remain hypotheses for later scope.

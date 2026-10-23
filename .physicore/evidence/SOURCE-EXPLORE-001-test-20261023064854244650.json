@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "SOURCE-EXPLORE-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "scripts/qa/verify_source_explorer_static.py",
+    "--baseline",
+    "ff2b2785b02a863e8439b8134ecf072591034323"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-23T06:48:54+00:00",
+  "started_at": "2026-10-23T06:26:02+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "ff2b2785b02a863e8439b8134ecf072591034323",
+  "output": "{\n  \"protected_paths_changed\": [],\n  \"syntax_files\": [\n    \"web/js/source-explorer.js\",\n    \"web/js/source-library.js\",\n    \"web/js/input-editors.js\",\n    \"web/js/workbench.js\",\n    \"tests/web/test_source_explorer.mjs\",\n    \"scripts/qa/source_explorer_browser.mjs\",\n    \"scripts/qa/source_explorer_viewer_browser.mjs\"\n  ],\n  \"valid_local_links\": 11,\n  \"law_entries\": 147,\n  \"evidence_sha256\": {\n    \"docs/qa/assets/source-explorer/desktop-context.png\": \"768c190ea5c3dd9e4ae1a164185d4445dffe09ad8798000fb9d0355dfaedf50a\",\n    \"docs/qa/assets/source-explorer/desktop.png\": \"7421f2b525c02e7563fe83e6ab836292f0b11080cafdb8d5ab39ee20154b639e\",\n    \"docs/qa/assets/source-explorer/enlarged-context.png\": \"a2a8ee7675bed80e2a3bd6ce51b963b546317b574ded08b14daef8b57bc245f3\",\n    \"docs/qa/assets/source-explorer/enlarged-plot.png\": \"f3dfc58e5d09aeefff6f79ba0a39d66656b72b1d95f2a239df74354f43be5c2b\",\n    \"docs/qa/assets/source-explorer/enlarged.png\": \"1b84a15e9a95100869e05321ad0f83f3dd41ebee9624314d10a841b5aa879dd8\",\n    \"docs/qa/assets/source-explorer/phone-context.png\": \"34742aaf7625c63529277a60b3f6c70233d9d504321d627a6731f91b44d103ff\",\n    \"docs/qa/assets/source-explorer/phone-plot.png\": \"97d1cb4d3e10a216c722775edaf8a412c68ec3f4c07b338cb775f218a00e4476\",\n    \"docs/qa/assets/source-explorer/phone.png\": \"8165095e05e088c85bc64153ef73c3b26dbd9d3166d25966a72e96dff342f076\",\n    \"docs/qa/assets/source-explorer/results.json\": \"6f3bd9b764ec63ac86375c1022405b3410de9ac5ab9cfd8371993be34b8c802d\",\n    \"docs/qa/assets/source-explorer/viewer/results.json\": \"71326fe4477f6f8087702bba2d76655cdae4088c9601016e342f43e27d30057d\"\n  }\n}\n\n"
+}

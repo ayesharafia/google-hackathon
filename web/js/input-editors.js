@@ -1,5 +1,5 @@
 /* Native draft authoring; blank numeric fields preserve unknowns. */
-import {mountSourceLibrary} from './source-library.js?v=tabular-1';
+import {mountSourceLibrary} from './source-library.js?v=source-explorer-1';
 import {mountAdvanced} from './advanced-editors.js';
 import {renderSourceBinding} from './rotor-source-binding.js?v=source-binding-1';
 const node=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};

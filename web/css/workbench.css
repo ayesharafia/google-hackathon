@@ -147,3 +147,25 @@ dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;backgrou
 #study-report .trim-residuals th,#study-report .trim-interval th{white-space:nowrap;overflow-wrap:normal}
 .trim-evidence button{margin:20px 0 8px;max-width:100%;white-space:normal}
 .trim-detail>details{margin:12px 0}.trim-detail>p{max-width:76ch}
+
+/* Retained sample coordinates, with a separate exact-value ledger. */
+.source-catalog-detail{overflow-wrap:anywhere;min-width:0}.source-explorer{container:source-plot/inline-size;margin:28px 0;min-width:0}
+.source-explorer h5{font:400 25px/1.25 var(--display);margin:20px 0 14px}
+.source-explorer-binding{font-size:13px;white-space:pre-wrap;color:var(--muted)}
+.source-explorer-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:14px 20px;margin:22px 0}
+.source-explorer-controls label{margin:0;min-width:0}.source-explorer select{max-width:100%}
+.source-explorer figure{margin:24px 0;min-width:0}.source-explorer figcaption{font-size:15px;font-weight:650;margin-bottom:12px}
+.source-explorer svg{width:100%;height:300px;display:block;color:var(--ink);overflow:visible}
+.source-axes{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-linecap:round}
+.source-tick{fill:var(--ink);font:12px system-ui,sans-serif}.source-coverage{fill:#708a75}
+.source-point-target{fill:transparent;cursor:pointer}.source-point{stroke:var(--ink);stroke-width:1.5;pointer-events:none}
+.source-point.covered{fill:var(--ink)}.source-point.uncovered{fill:var(--light)}
+[data-source-sample]{cursor:pointer;outline:none}[data-source-sample][data-selected=true] .source-point{stroke-width:2.5}
+[data-source-sample]:focus-visible .source-point-target{stroke:var(--ink);stroke-width:2;stroke-dasharray:3 3}
+[data-source-sample][aria-disabled=true]{cursor:default}.source-sample-status{font-weight:650}
+.source-sample-values{display:grid;grid-template-columns:minmax(0,1fr);gap:16px 24px;margin:22px 0}
+.source-sample-values>div{min-width:0}.source-sample-values dt{font-size:14px;font-weight:600}
+.source-sample-values dd{margin:6px 0 0;font-size:20px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.source-explorer tr[aria-current=true]{background:#ceddcd}.source-explorer tr[aria-current=true] th{font-weight:800}
+.source-explorer td{white-space:nowrap;overflow-wrap:normal;font-variant-numeric:tabular-nums}
+@container source-plot (min-width:600px){.source-explorer-controls,.source-sample-values{grid-template-columns:repeat(2,minmax(0,1fr))}}

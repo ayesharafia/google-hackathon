@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "SOURCE-EXPLORE-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/source_explorer_viewer_browser.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-23T06:44:26+00:00",
+  "started_at": "2026-10-23T06:26:02+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "ff2b2785b02a863e8439b8134ecf072591034323",
+  "output": "PASS Actual hosted viewer retains read-only authoring while source search remains available\nPASS Viewer can inspect and select plotted samples without gaining source reuse/write access\nPASS Viewer keyboard point selection works; all-zero torque plots keep literal zero evidence\nPASS Catalog pagination retains a usable selected-source inspector\nPASS Viewer conversion download still works after pagination and leaves the draft unchanged\nPASS Sign-out removes source evidence and rejects an injected detached chart action\nPASS No viewer page JavaScript errors\n{\n  \"passed\": 7,\n  \"checks\": [\n    \"Actual hosted viewer retains read-only authoring while source search remains available\",\n    \"Viewer can inspect and select plotted samples without gaining source reuse/write access\",\n    \"Viewer keyboard point selection works; all-zero torque plots keep literal zero evidence\",\n    \"Catalog pagination retains a usable selected-source inspector\",\n    \"Viewer conversion download still works after pagination and leaves the draft unchanged\",\n    \"Sign-out removes source evidence and rejects an injected detached chart action\",\n    \"No viewer page JavaScript errors\"\n  ],\n  \"evidence\": \"/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/docs/qa/assets/source-explorer/viewer\"\n}\n\n"
+}

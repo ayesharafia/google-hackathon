@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "SOURCE-EXPLORE-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "scripts/qa/verify_source_explorer_package.py"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-23T06:45:37+00:00",
+  "started_at": "2026-10-23T06:26:02+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "ff2b2785b02a863e8439b8134ecf072591034323",
+  "output": "{\n  \"verified_assets\": [\n    \"js/source-explorer.js\",\n    \"js/source-library.js\",\n    \"js/input-editors.js\",\n    \"js/workbench.js\",\n    \"css/workbench.css\",\n    \"workbench.html\"\n  ],\n  \"wheel_sha256\": \"8bdb8d092cc72cbc84213bc91671276e7b852f4ec31a8c7426e0df5adc5487e5\",\n  \"limits\": \"Local wheel bytes and resource hashes only; no deployment.\"\n}\n\n"
+}

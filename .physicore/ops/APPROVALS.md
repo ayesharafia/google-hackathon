@@ -1,5 +1,28 @@
 # Current approvals and pending decisions
 
+## 2026-10-23: Rotor Source Explorer approved; main publication authorized
+
+Owner asked “keep working”. Proposed bounded addition to the existing library
+Inspect source view: discrete retained thrust/torque/power versus RPM plots,
+declared coverage intervals, exact sample selection/table and source conditions/
+identity. Power keeps its electrical/shaft basis; missing or invalid data stays
+unavailable. No fitted/interpolated curve, efficiency conversion, solved-command
+overlay or physical acceptance. Existing original/conversion downloads and
+explicit reuse/binding remain. Clear prior explorer on source/search/project
+changes and reject late responses. Reuse the current permission-checked detail
+API; no new dependency, source/result/schema/model/access change or deployment.
+
+Owner answered “Proceed with Rotor Source Explorer” to the concrete design,
+including targeted tests, existing import/library/read-only regressions, browser
+sample/plot/table interactions, full interface-law review and main publication.
+The brainstorming gate is satisfied. Scope and implement SOURCE-EXPLORE-001.
+Research and alternatives: RESEARCH_LOG.md. Preserve all branches/runtime.
+
+Execution evidence: 124 Node, 45 Python and 68 Chrome checks pass; complete
+interface-law review and wheel/static verification are retained in
+`docs/qa/rotor-source-explorer-2026-10-23.md`. Main publication remains within
+the explicit approval; no deployment or scientific acceptance is inferred.
+
 ## 2026-10-23: Case Trim Evidence approved; main publication authorized
 
 Owner requested further CEO-led development. Source/market inspection supports a

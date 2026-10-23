@@ -1,0 +1,22 @@
+{
+  "checks": [
+    "Actual retained library source renders five discrete samples, two coverage intervals and source identity without fitted lines",
+    "Exact sample table preserves normalized values and physical original row numbers including blank-row gaps",
+    "Clicking an uncovered stored sample highlights its exact values and row without extending declared coverage",
+    "Quantity selector changes plotted metric and units while exact selected values stay unchanged",
+    "Native sample selector and plot marker Arrow/Home/End/Enter handlers select actual retained points",
+    "Existing original and conversion downloads keep exact retained bytes/records",
+    "Actual shaft-basis source displays stored shaft watts without applying declared efficiency",
+    "phone plot labels/markers and controls fit; exact table scrolls to its final quantity",
+    "enlarged plot labels/markers and controls fit; exact table scrolls to its final quantity",
+    "Starting another source clears the old plot immediately; a newer inspection wins over a delayed response",
+    "Search changes clear selected evidence and suppress a delayed previous inspection",
+    "Mismatched-source UI fixture refuses the inspection without retaining old plot content",
+    "Malformed-sample UI fixture stays unavailable instead of dropping rows or plotting zero",
+    "Source-denial UI fixture clears the plot and reports the refusal",
+    "Plotting and selection preserve the draft, retained source and conversion record exactly",
+    "Project switch removes the old inspector and prevents its delayed response from publishing",
+    "No page JavaScript errors"
+  ],
+  "errors": []
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "SOURCE-EXPLORE-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/tabular_library_browser.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-23T06:37:40+00:00",
+  "started_at": "2026-10-23T06:26:02+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "ff2b2785b02a863e8439b8134ecf072591034323",
+  "output": "{\n  \"passed\": 12,\n  \"checks\": [\n    \"Malformed measurement is identified by physical source row and blocks saving\",\n    \"Explicit CSV mapping and gf/Ncm/kW conversion preview do not modify the draft\",\n    \"Editing declarations invalidates preview; saving retains source without selecting or binding rotors\",\n    \"Retained original CSV bytes, including CRLF, match exactly\",\n    \"Explicit binding changes only selected rotor, stales readiness, saves draft and preserves frozen source\",\n    \"Reload restores draft and searchable catalog; original/manifest download controls produce actual retained files\",\n    \"A second project can explicitly reuse accessible catalog source without automatic rotor assignment\",\n    \"Actual XLSX worksheet selection, mapping, conversion and save succeed\",\n    \"Reading columns again clears the previous accepted preview\",\n    \"A delayed preview cannot revive an accepted conversion after settings change\",\n    \"Desktop, phone and CSS 200% layouts contain controls and use named horizontal data-table scrolling\",\n    \"No page JavaScript errors\"\n  ],\n  \"page_errors\": []\n}\n\n"
+}

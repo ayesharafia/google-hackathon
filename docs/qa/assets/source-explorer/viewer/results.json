@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Actual hosted viewer retains read-only authoring while source search remains available",
+    "Viewer can inspect and select plotted samples without gaining source reuse/write access",
+    "Viewer keyboard point selection works; all-zero torque plots keep literal zero evidence",
+    "Catalog pagination retains a usable selected-source inspector",
+    "Viewer conversion download still works after pagination and leaves the draft unchanged",
+    "Sign-out removes source evidence and rejects an injected detached chart action",
+    "No viewer page JavaScript errors"
+  ],
+  "errors": []
+}

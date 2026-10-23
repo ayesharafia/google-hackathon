@@ -269,3 +269,56 @@ Implementation 974e04679f46a1d6f3453e200ee20a61b7d9fb28 pushed to main; exact Gi
 Receipt: .physicore/evidence/PUBLISH-2026-10-23-trim-evidence.json. All pre-existing branch
 names preserved. Owned disposable QA server stopped via SIGTERM (exit143);
 original shared service/tunnel untouched. No production deployment or restart.
+
+## 2026-10-23: CEO selection after Case Trim Evidence
+
+1. User/workflow: engineer opens an existing library source to inspect its retained samples before explicit rotor binding.
+2. Data/units: existing verified RPM/N/Nm/W points, declared electrical/shaft power basis, fixed test conditions and coverage intervals; original source rows/manifest remain traceable.
+3. Boundaries: browser-only read projection, no new prediction/filter/interpolation/efficiency/model/API/dependency/access or runtime change.
+4. Smallest increment: single-source scatter plot with metric/sample selection and exact table, plus immediate stale clearing on library context changes.
+5. Proposed acceptance: concrete design approval, targeted units/coverage/identity/read-only regressions, browser plot/table/failure/responsive and full interface-law review, main publication if approved.
+
+No eligible task; source and official Tyto/eCalc observations in RESEARCH_LOG.
+SOURCE-EXPLORE-001 unscoped candidate. No application code, tests, spec document,
+commit, push or deployment. Customer benefit remains a hypothesis.
+
+## 2026-10-23: SOURCE-EXPLORE-001 approved execution plan
+
+1. Engineer opens an existing library source, chooses a plotted metric and inspects a retained sample before explicit rotor binding.
+2. Exact RPM/N/Nm/W samples, original row and source identity/conditions; preserve electrical/shaft basis and declared coverage.
+3. Existing verified detail response and permissions only; no conversion, fit, smoothing, prediction, new dependency/API/model or runtime change.
+4. Add a focused read-only scatter-plot/exact-table module and immediate inspection invalidation; native controls and keyboard point selection.
+5. Authorized unit/API/browser/read-only/response-race checks, full interface-law re-check, then main publication with exact remote verification.
+
+Owner answer: “Proceed with Rotor Source Explorer”. Existing six dirty proposal
+ledgers are ours from the selection turn. One primary agent; no independent
+scientific acceptance. Frontend-design/GUI automation skills apply to the new
+inspector and disposable installed-Chrome journey.
+
+## 2026-10-23: SOURCE-EXPLORE-001 verification and full interface review
+
+Implemented literal sample/coverage plots, linked exact row/table/readout and
+permission-aware stale response guards in the existing source inspector. No
+fitted curve, conversion, model/API/dependency/access or retained-byte change.
+Final units: 124 pass (24 new); existing source/import/reuse Python: 45 pass.
+Installed Chrome: 68 checks across explorer (17), new viewer (7), importer (12),
+source binding (9), existing viewer (4), trim evidence (19); zero page JS errors.
+Exact six wheel assets/resource hashes and static protection/syntax/docs checks
+pass. Earlier successful reruns/subset remain retained. One primary agent.
+
+Full 147-entry law re-check and desktop/390px/CSS-enlarged screenshot review
+completed. Fixed invalid container query, shortened sample options and separated
+SVG accessible title/description with accurate keyboard instructions. All actual
+checks/fixtures/limits: docs/qa/rotor-source-explorer-2026-10-23.md. Native popup,
+zoom, screen-reader, user/provider/physical acceptance remain unverified. Main
+publication authorized; no deployment or original shared runtime change.
+
+## 2026-10-23T06:50:20+00:00 DONE SOURCE-EXPLORE-001
+- Evidence: .physicore/evidence/SOURCE-EXPLORE-001-completion.json
+- Notes: Approved source explorer delivered; 124 Node, 45 Python and 68 Chrome checks pass, wheel/static protection and full 147-entry interface review retained. Main publication authorized; no physical acceptance, deployment or branch deletion.
+- Next ready: no new task promoted
+
+Owned disposable QA processes 74089 and 74765 stopped with SIGTERM (exit143).
+Original shared service/tunnel untouched. Fetched origin without pruning;
+main baseline ff2b278 matches origin/main. Branch-name snapshot retained locally;
+all branches will be checked after publication. Completion evidence generated.

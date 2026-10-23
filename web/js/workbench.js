@@ -1,6 +1,6 @@
 import {createReviewPackDownloader} from './review-pack.js?v=pack-1';
 import {energyCaseMatches} from './mission-energy.js?v=energy-1';
-import {mountEditors} from './input-editors.js?v=tabular-1';
+import {mountEditors} from './input-editors.js?v=source-explorer-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
 import {mountGeometry} from './geometry-upload.js?v=geometry-3';
 import {renderStudy,renderComparison} from './study-view.js?v=trim-1';
@@ -105,6 +105,7 @@ function controls() {
   ['compare-before','compare-after','compare'].forEach(id=>{$(id).disabled=busy||!connected||!current?.studies?.length;});
   document.querySelectorAll('#input-editors input,#input-editors select,#input-editors button,#input-editors textarea').forEach(input => { input.disabled = readOnly || busy || !current || !connected; });
   document.querySelectorAll('[data-library-read=true]').forEach(input=>{input.disabled=!connected||busy||!current;});
+  document.querySelectorAll('[data-source-sample]').forEach(mark=>{const disabled=!connected||busy||!current;mark.setAttribute('aria-disabled',String(disabled));mark.setAttribute('tabindex',disabled||mark.dataset.selected!=='true'?'-1':'0');});
   document.querySelectorAll('[data-local-disabled=true]').forEach(input=>{input.disabled=true;});
   document.querySelectorAll('[data-source-compatible=false]').forEach(input=>{input.disabled=true;});
   document.querySelectorAll('[data-source-apply]').forEach(button=>{if(!button.closest('.source-binding')?.querySelector('[data-source-compatible=true]'))button.disabled=true;});
