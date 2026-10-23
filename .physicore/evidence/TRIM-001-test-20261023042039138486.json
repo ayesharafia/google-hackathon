@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "TRIM-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "--check",
+    "scripts/qa/trim_evidence_browser.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-23T04:20:39+00:00",
+  "started_at": "2026-10-23T04:05:14+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "729b94e5245f75fa3e56aec40ca28124611d31bc",
+  "output": "\n"
+}

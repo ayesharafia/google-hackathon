@@ -1,5 +1,23 @@
 # Current approvals and pending decisions
 
+## 2026-10-23: Case Trim Evidence approved; main publication authorized
+
+Owner requested further CEO-led development. Source/market inspection supports a
+bounded improvement to the existing retained-study viewer: select case and
+explicitly distinguish shared/reported-payload checks from separate case-bound
+candidates; inspect recorded per-rotor commands, residual vectors/tolerances,
+active constraints and any torque-band interval; navigate to the same frozen
+case. Exact missing/ambiguous states and raw JSON remain visible. No new physics,
+threshold, inference, dependency, API, source/result edit or access change.
+
+Owner answered “Proceed with Case Trim Evidence” to the concrete design,
+including targeted tests/browser interactions, full interface-law review and main
+publication. The brainstorming gate is satisfied; scope TRIM-001 and implement.
+All branches and original runtime retained. Deployment, runtime restart and
+physical acceptance are excluded. Research and alternatives: RESEARCH_LOG.md.
+Implementation/QA evidence: docs/qa/case-trim-evidence-2026-10-23.md; main
+publication receipt will record the verified implementation SHA.
+
 ## 2026-10-23: Study Review Pack approved; main publication authorized
 
 Owner asked for further CEO-led development. Proposed bounded existing-export

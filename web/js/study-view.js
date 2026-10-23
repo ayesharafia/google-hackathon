@@ -1,4 +1,5 @@
 import {renderMissionEnergy} from './mission-energy.js?v=energy-1';
+import {renderTrimEvidence} from './trim-evidence.js?v=trim-1';
 const el=(tag,text)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e;};
 export function renderStudy(container,report,isCurrent,options={}){
   container.replaceChildren();
@@ -10,6 +11,7 @@ export function renderStudy(container,report,isCurrent,options={}){
   const table=el('table'),head=el('thead'),row=el('tr');['Case','Required','Outcome','Feasible bound, kg','Binding limits'].forEach(text=>row.append(el('th',text)));head.append(row);const body=el('tbody');
   report.cases.forEach(c=>{const tr=el('tr');[c.case_id,c.required?'Yes':'No',c.outcome,c.outcome==='feasible'?(c.candidate?.payload_kg??'Unavailable'):'Unavailable',c.active_constraints?.join(', ')||c.reason||'None identified'].forEach(v=>tr.append(el('td',String(v))));body.append(tr);});table.append(head,body);const wrap=el('div');wrap.className='table-scroll';wrap.tabIndex=0;wrap.setAttribute('role','region');wrap.setAttribute('aria-label','Case capacity table. Scroll horizontally when needed.');wrap.append(table);container.append(el('p','Scroll the table horizontally to inspect every column.'),wrap);
   (report.headline_candidate_checks||[]).forEach(c=>{const detail=el('details');detail.append(el('summary','Shared payload trim: '+c.case_id),el('pre',JSON.stringify(c,null,2)));container.append(detail);});
+  renderTrimEvidence(container,report,options);
   renderMissionEnergy(container,report,options);
   if(report.conditioning_sources&&Object.keys(report.conditioning_sources).length){container.append(el('h4','Conditioned source policy'));Object.values(report.conditioning_sources).forEach(source=>{container.append(el('p','Hull shift '+source.power_shift_w+' W; torque interval ±'+source.torque_error_bound_nm+' Nm. '+source.qualification));});}
   if(report.scenario_analysis){const a=report.scenario_analysis;container.append(el('h4','Deterministic scenario envelope'),el('p','Status: '+a.status+' · supported payload: '+(a.supported_payload_kg??'Unavailable')+' kg.'),el('p',a.qualification));a.scenarios.forEach(s=>container.append(el('p',s.scenario_id+': '+s.result.outcome+' · '+(s.result.payload_lower_bound_kg??'Unavailable')+' kg. '+s.correlation_note)));}

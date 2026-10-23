@@ -222,3 +222,43 @@ Implementation 757b5c8b21bd68ac301b94b9bfd4862207303425 pushed to main; exact Gi
 Receipt: .physicore/evidence/PUBLISH-2026-10-23-review-pack.json. All pre-existing branch
 names preserved. Disposable QA servers stopped; original shared runtime untouched.
 The original API still requires a restart to activate the new route; no deployment performed.
+
+## 2026-10-23: CEO selection after review-pack publication
+
+1. User/workflow: reviewer selects a retained case and explicit operating point to inspect rotor commands and balance evidence.
+2. Data/units: exact retained N, Nm, signed RPM, W, A, kg, J, residual vectors and existing policies; case-bound and shared-payload values stay separate.
+3. Boundaries: presentation-only existing flow, no model/tolerance/source/result/API/dependency/access or production changes.
+4. Smallest increment: native case/evidence selection, command table and residual ledger with existing guarded frozen-case navigation and exact JSON.
+5. Proposed acceptance: owner concrete design approval, targeted projection/binding and existing regressions, browser/interface-law review, separately included main publication scope.
+
+Read source and current workflow; official eCalc/Tyto research and alternatives
+recorded in RESEARCH_LOG.md. No eligible existing task; TRIM-001 is an unscoped
+candidate awaiting the brainstorming gate. No implementation/testing/commit/push.
+
+## 2026-10-23: TRIM-001 approved execution plan
+
+1. Reviewer selects a retained case and explicitly chooses reported-payload check or individual case candidate/bound.
+2. Show exact recorded kg/J/W/A/N/Nm/signed RPM and vector/policy values; absent and ambiguous records stay unavailable.
+3. Preserve all frozen bytes, formulas, thresholds, APIs, dependencies, access and branches; no runtime restart/deployment.
+4. Add a focused pure projection/native inspector module to the current result view, with guarded same-frozen-case navigation.
+5. Run authorized unit/regression/browser checks, point-by-point interface review; publish and verify main.
+
+Owner response: “Proceed with Case Trim Evidence”. Frontend-design and GUI
+automation skills applied; native browser controls and installed Chrome will
+exercise the implemented flow on a disposable server. No independent physics
+approval is claimed. Pre-existing dirty files are the six proposal ledgers from
+the preceding selection turn; preserve their content.
+
+## 2026-10-23: TRIM-001 verification and full interface review
+
+- Separate retained mission-payload checks and individual case candidates, exact rotor/total/residual/policy/interval projection, guarded frozen-case navigation and exact JSON implemented. No backend/API/model/threshold/dependency/access or retained-byte changes.
+- 100 Node tests (19 new), 41 Python regressions and 65 real Chrome checks pass: 19 inspector, 16 mission, 15 comparisons, 15 review-pack. Syntax and protected-path/whitespace checks pass; existing Starlette/httpx warning remains.
+- Initial workflow setup used system Python 3.9 (datetime.UTC unavailable), then repo venv3.11; timeout argument order corrected before command execution. Initial patch parse failure wrote nothing. These were setup issues, not physical failures.
+- Retained browser failures: implicit selector name included options (fixed explicit accessible names); headless macOS native ArrowDown/Enter did not select an option. Changed harness approach after isolated probes to test focus order/Enter disclosure plus select-option value changes. Native popup keyboard selection remains unverified.
+- Re-read the whole user law and accounted for all 147 entries. Opened original-size screenshots; fixed exact decimal line-splitting, collapsed residual labels, caption placement and overlong native option text; added label-line assertions. Ledger: docs/qa/case-trim-evidence-design-law-2026-10-23.md. Final evidence: docs/qa/case-trim-evidence-2026-10-23.md.
+- Actual synthetic/conditioned study values match retained records; diagnostic/missing/duplicate/historical fixtures are labelled UI fixtures. Unsaved edits and stale detached actions tested. No qualified physics, native zoom, screen-reader/real-user/provider/production acceptance claimed. Main publication authorized; all branches and original runtime retained.
+
+## 2026-10-23T04:22:00+00:00 DONE TRIM-001
+- Evidence: .physicore/evidence/TRIM-001-completion.json
+- Notes: Approved Case Trim Evidence complete; 100 Node, 41 Python and 65 Chrome checks pass, 147-entry interface review and actual layout/accessibility fixes recorded; preserve models/bytes/branches/runtime; main publication authorized, no deployment or physical acceptance.
+- Next ready: no new task promoted

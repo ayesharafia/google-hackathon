@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "TRIM-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "--test",
+    "tests/web/test_trim_evidence.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-23T04:08:58+00:00",
+  "started_at": "2026-10-23T04:05:14+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "729b94e5245f75fa3e56aec40ca28124611d31bc",
+  "output": "✔ shared and individual candidates remain distinct exact operating points (1.364542ms)\n✔ missing shared check never falls back to an individual candidate (0.079167ms)\n✔ missing individual case never falls back to a shared check (0.052042ms)\n✔ case order and trim-only IDs are retained without synthesizing records (0.060583ms)\n✔ duplicate shared records refuse ambiguity (0.384458ms)\n✔ duplicate base case records refuse both evidence points (0.056125ms)\n✔ invalid point/case and absent report give unavailable evidence (0.079083ms)\n✔ unsupported candidate remains diagnostic, never made feasible (0.064458ms)\n✔ absence of a candidate leaves quantities and commands unavailable (0.055708ms)\n✔ non-numeric and non-finite values never coerce to zero (0.077208ms)\n✔ vectors require three finite numerical components and retain signs (0.052ms)\n✔ rotor commands preserve literal IDs, signs, zeros and order (0.072084ms)\n✔ partial command rows do not invent current or signed RPM from other values (0.039541ms)\n✔ torque-band interval and source stay exact, without recomputed bounds (0.085708ms)\n✔ malformed interval vectors stay unavailable without using residuals as a substitute (0.056375ms)\n✔ explicit failed rotor IDs and constraint names come only from selected record (0.046042ms)\n✔ projection leaves deeply frozen evidence unchanged (0.572041ms)\n✔ historical retained evidence keeps original candidate and residual values (3.402167ms)\nℹ tests 18\nℹ suites 0\nℹ pass 18\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 80.966375\n\n"
+}

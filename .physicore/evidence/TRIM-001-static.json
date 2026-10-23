@@ -1,0 +1,14 @@
+{
+  "captured_at": "2026-10-23T04:21:34.518056+00:00",
+  "head": "729b94e5245f75fa3e56aec40ca28124611d31bc",
+  "protected_paths_unchanged": [
+    "src",
+    "tests/projects",
+    "pyproject.toml",
+    "requirements.lock",
+    "requirements.platform.lock"
+  ],
+  "new_doc_links_checked": 23,
+  "design_law_entries": 147,
+  "scope": "Static source/doc checks only; no physical qualification"
+}

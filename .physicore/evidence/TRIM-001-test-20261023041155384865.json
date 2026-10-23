@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "TRIM-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/trim_evidence_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-23T04:11:55+00:00",
+  "started_at": "2026-10-23T04:05:14+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "729b94e5245f75fa3e56aec40ca28124611d31bc",
+  "output": "PASS No study shows no invented trim evidence\n\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nlocator.inputValue: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Case trim evidence', exact: true }).getByLabel('Evidence point', { exact: true })\u001b[22m\n\n    at /Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/scripts/qa/trim_evidence_browser.mjs:31:29 {\n  log: [\n    \"  - waiting for getByRole('region', { name: 'Case trim evidence', exact: true }).getByLabel('Evidence point', { exact: true })\"\n  ],\n  name: 'TimeoutError'\n}\n\nNode.js v26.0.0\n"
+}

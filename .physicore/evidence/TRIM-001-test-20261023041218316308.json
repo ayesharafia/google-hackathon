@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "TRIM-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/trim_evidence_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-23T04:12:18+00:00",
+  "started_at": "2026-10-23T04:05:14+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "729b94e5245f75fa3e56aec40ca28124611d31bc",
+  "output": "PASS No study shows no invented trim evidence\nPASS Actual shared-payload command, residual and policy values equal exact retained evidence\nPASS Evidence-point selection uses a distinct individual case candidate without blending mission values\nPASS Pointer disclosures expose exact selected record and per-rotor scope\n\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nAssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'hover_short'\n- 'hover_long'\n         ^\n\n    at file:///Users/bhupeshcholake/Desktop/Claude%20Codes/physicore%20drone/scripts/qa/trim_evidence_browser.mjs:35:105 {\n  generatedMessage: true,\n  code: 'ERR_ASSERTION',\n  actual: 'hover_short',\n  expected: 'hover_long',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v26.0.0\n"
+}

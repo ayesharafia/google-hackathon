@@ -234,3 +234,70 @@ environment, conditioned closure, missing/corrupt/wrong-project/access refusal,
 real browser download/unzip, stale-selection guard and full UI review. Target
 learning metric: whether a reviewer can identify the result, inputs, model and
 sources from this one artifact; no baseline or savings claimed.
+
+## 2026-10-23: proposed readable case trim evidence
+
+Owner asked “alright keep working ceo”. Clean main 729b94e; workflow next
+reported no eligible task. OBSERVED: web/js/study-view.js shows case outcomes
+and binding-limit names but renders shared-payload trim records only as JSON.
+The existing retained candidate contains rotor thrust, shaft torque, signed RPM,
+electrical power, DC input current, force/moment residual vectors and a recorded
+numerical residual policy. Separate case-bound candidates may use different
+payloads from headline_candidate_checks. Never combine those operating points.
+The existing frozen-study viewer already has project/revision/study binding and
+guarded case navigation, so a read-only presentation extension is bounded.
+
+Customer job (INFERRED): an engineering reviewer needs to see how the reported
+payload is distributed across rotors and inspect the numerical balance evidence
+without manually decoding JSON. Buyer, demand, willingness to pay and review time
+remain UNKNOWN; this is a proposed usability improvement, not measured traction.
+
+Primary sources read on 23 October 2026:
+- eCalc xcopterCalc help, https://www.ecalc.ch/calcinclude/help/xcoptercalchelp.htm:
+  documents per-motor operating current, RPM and electrical/mechanical power at
+  hover/maximum conditions, plus scoped warnings. It establishes an existing
+  operating-point inspection workflow, not a competitor feature gap. Do not
+  adopt its thresholds, heuristics, model or proprietary data.
+- Tyto Flight Stand 50, https://www.tytorobotics.com/pages/flight-stand-50:
+  documents acquisition of thrust/torque, voltage/current, RPM and power, plus
+  motor/propeller configuration comparisons. Adjacent test ecosystem; this is
+  not a test-stand integration or measured-data reuse permission. Public HTML
+  only, no reference datasets downloaded.
+
+No standard or compliance claim is introduced. The numerical residual policy is
+an existing software check, not measurement error or aircraft acceptance.
+
+PROPOSED TRIM-001: extend the retained-study view with a case selector and
+explicit evidence-point selector: reported/shared-payload check versus separate
+case-bound candidate. Display the selected record's exact outcome/reason, payload,
+total mass, power and energy, per-rotor thrust N/shaft torque Nm/signed RPM/
+electrical W/DC input A, force and moment residual vectors, recorded tolerances,
+active constraints and any retained torque-band interval. Never infer missing
+commands, failed-rotor labels, margins, a new pass/fail or alternative payload.
+Missing/ambiguous records are unavailable; historical records stay qualified.
+Use guarded existing case navigation to show the same frozen case in 3D.
+Keep exact JSON and all source/result/schema/model/tolerance/access settings.
+No new dependency/API/solver execution is needed by the feature.
+
+Alternatives considered: keep JSON only (least work but leaves the observed
+inspection gap), or add force arrows/limit-utilization graphs (requires additional
+conventions/calculations and a larger design). Recommend the native table/vector
+ledger first. Expected cost: browser-only projection of already retained records,
+no paid service or production restart. One focused implementation increment after
+concrete design approval. Acceptance proposal includes targeted pure projection/
+binding tests, existing study regressions and browser pointer/keyboard/stale/
+absent/historical/phone/enlarged checks, full interface-law review. Learning
+metric: reviewer can identify the chosen operating point and its rotor commands
+without opening JSON; baseline and measured benefit remain unknown.
+
+Brainstorming concrete design approval and acceptance checks/publication scope
+are pending. No application code, tests, new spec file, commit or push performed.
+
+### TRIM-001 outcome after concrete approval
+
+Owner approved the proposed inspector, QA and main publication. Implemented
+read-only operating-point separation and exact evidence display; 100 Node tests,
+41 existing Python regressions and 65 Chrome checks pass. This demonstrates the
+software path on labelled examples; reviewer time savings, real-aircraft accuracy
+and demand remain unmeasured. Delivery and limitations:
+docs/qa/case-trim-evidence-2026-10-23.md. No customer contact or dataset reuse.

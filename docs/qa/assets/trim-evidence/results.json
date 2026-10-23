@@ -1,0 +1,24 @@
+{
+  "checks": [
+    "No study shows no invented trim evidence",
+    "Actual shared-payload command, residual and policy values equal exact retained evidence",
+    "Evidence-point selection uses a distinct individual case candidate without blending mission values",
+    "Pointer disclosures expose exact selected record and per-rotor scope",
+    "Selectors participate in keyboard focus order and exact-record disclosure responds to Enter",
+    "Case action selects the same frozen case and focuses its viewer control",
+    "Restoring a frozen view preserves inspector selection and unsaved draft edits",
+    "Selectors and navigation disable while frozen-view restoration is pending",
+    "phone controls and text fit with gutters; command/residual tables reach their final columns",
+    "enlarged controls and text fit with gutters; command/residual tables reach their final columns",
+    "UI fixture with no shared check stays unavailable until the reviewer explicitly selects the individual case",
+    "Diagnostic/partial UI fixture preserves zero and signed residuals, refuses malformed vectors, escapes text and displays exact interval values",
+    "Duplicate selected-record UI fixture refuses an ambiguous operating point",
+    "Absent-case UI fixture disables both selectors without inventing evidence",
+    "Historical-schema UI fixture keeps the historical warning while displaying recorded values",
+    "Inspector controls and unsaved edits leave exact retained study bytes unchanged",
+    "Project/study switch clears prior evidence and rejects an injected detached stale action",
+    "Actual conditioned/axial example exposes exact retained operating-point values",
+    "No browser JavaScript errors"
+  ],
+  "errors": []
+}

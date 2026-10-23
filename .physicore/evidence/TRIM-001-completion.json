@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "kind": "completion",
+  "id": "TRIM-001",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "started_at": "2026-10-23T04:05:14+00:00",
+  "captured_at": "2026-10-23T04:22:00+00:00",
+  "baseline_head": "729b94e5245f75fa3e56aec40ca28124611d31bc",
+  "current_head": "729b94e5245f75fa3e56aec40ca28124611d31bc",
+  "changes": [
+    "DECISIONS.md",
+    "docs/qa/assets/trim-evidence/comparison-regression-checks.json",
+    "docs/qa/assets/trim-evidence/desktop-context.png",
+    "docs/qa/assets/trim-evidence/desktop.png",
+    "docs/qa/assets/trim-evidence/diagnostic-interval.png",
+    "docs/qa/assets/trim-evidence/enlarged-context.png",
+    "docs/qa/assets/trim-evidence/enlarged-individual-selector.png",
+    "docs/qa/assets/trim-evidence/enlarged.png",
+    "docs/qa/assets/trim-evidence/mission-regression-checks.json",
+    "docs/qa/assets/trim-evidence/pack-regression-checks.json",
+    "docs/qa/assets/trim-evidence/phone-context.png",
+    "docs/qa/assets/trim-evidence/phone-individual-selector.png",
+    "docs/qa/assets/trim-evidence/phone.png",
+    "docs/qa/assets/trim-evidence/results.json",
+    "docs/qa/case-trim-evidence-2026-10-23.md",
+    "docs/qa/case-trim-evidence-design-law-2026-10-23.md",
+    "docs/technical/case-trim-evidence.md",
+    "plan.md",
+    "scripts/qa/trim_evidence_browser.mjs",
+    "tests/web/test_trim_evidence.mjs",
+    "web/css/workbench.css",
+    "web/js/study-view.js",
+    "web/js/trim-evidence.js",
+    "web/js/workbench.js",
+    "web/workbench.html"
+  ],
+  "tests": [
+    {
+      "file": ".physicore/evidence/TRIM-001-test-20261023041457667173.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--test",
+        "tests/web/test_trim_evidence.mjs",
+        "tests/web/test_review_pack.mjs",
+        "tests/web/test_mission_energy.mjs",
+        "tests/web/test_design_comparison.mjs",
+        "tests/web/test_engineering_readiness.mjs",
+        "tests/web/test_rotor_source_binding.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/TRIM-001-test-20261023041142422609.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "tests/projects/test_local_studies.py",
+        "tests/projects/test_reports.py",
+        "tests/projects/test_study_summary.py",
+        "tests/projects/test_scenario_limits.py",
+        "-q"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/TRIM-001-test-20261023042016417909.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/trim_evidence_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/TRIM-001-test-20261023041501796259.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/mission_energy_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/TRIM-001-test-20261023041508293896.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/design_comparison_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/TRIM-001-test-20261023041501773054.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/review_pack_browser.mjs"
+      ]
+    }
+  ],
+  "audit_files": [],
+  "summary": "Implemented exact, independent case trim operating-point inspection with guarded frozen navigation; 100 Node tests, 41 existing Python regressions and 65 Chrome checks pass; complete interface ledger and disclosed keyboard/native-zoom/physical limits retained"
+}

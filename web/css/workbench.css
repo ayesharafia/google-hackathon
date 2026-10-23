@@ -125,3 +125,25 @@ dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;backgrou
 #review-pack-status{min-height:24px}
 #review-pack details{margin-top:18px}
 #review-pack li{padding-left:4px}
+
+/* One operating point per evidence sheet; numbers share stable table columns. */
+.trim-evidence{container:trim/inline-size;margin:36px 0;min-width:0;overflow-wrap:anywhere}
+.trim-evidence>h4{font:400 27px/1.25 var(--display);margin:0 0 18px}
+.trim-binding{font-size:13px;white-space:pre-wrap;color:var(--muted)}
+.trim-fields{display:grid;grid-template-columns:minmax(0,1fr);gap:4px 20px;margin:20px 0}
+.trim-fields label{margin:0;min-width:0}.trim-fields select{max-width:100%}
+.trim-status{font-weight:650;margin:20px 0}
+.trim-totals{display:grid;grid-template-columns:minmax(0,1fr);gap:18px 24px;margin:24px 0}
+.trim-totals>div{min-width:0}.trim-totals dt{font-size:14px;font-weight:600}
+.trim-totals dd{font-size:21px;margin:6px 0 0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+@container trim (min-width:640px){.trim-fields,.trim-totals{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#study-report .trim-evidence .table-scroll>table{min-width:760px;table-layout:auto}
+#study-report .trim-evidence .trim-commands>table{min-width:1050px}
+#study-report .trim-evidence th,#study-report .trim-evidence td{white-space:normal;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+#study-report .trim-evidence td{white-space:nowrap;overflow-wrap:normal}
+.trim-evidence caption{text-align:left;font-weight:600;padding:0 0 14px}
+.trim-residuals tr>:first-child,.trim-interval tr>:first-child{width:200px;min-width:200px}
+.trim-commands tr>:first-child{min-width:140px}
+#study-report .trim-residuals th,#study-report .trim-interval th{white-space:nowrap;overflow-wrap:normal}
+.trim-evidence button{margin:20px 0 8px;max-width:100%;white-space:normal}
+.trim-detail>details{margin:12px 0}.trim-detail>p{max-width:76ch}

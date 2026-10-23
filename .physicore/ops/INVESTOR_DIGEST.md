@@ -1,5 +1,19 @@
 # Latest product progress: 23 October 2026
 
+**Delivered increment:** Case Trim Evidence exposes exact rotor operating values
+and force/moment residual evidence for a selected frozen case. Mission-payload
+checks and individual case candidates remain visibly separate, with guarded
+3D case navigation and explicit missing/diagnostic/historical states.
+
+**Evidence:** 100 JavaScript tests, 41 Python regressions and 65 installed-Chrome
+checks pass. Full interface review caught and corrected accessible names and
+cramped table labels. No model/API/dependency/source/result or access change.
+Main publication authorized; remote verification pending. Native popup keyboard/
+zoom, human usability, production/physical qualification and customer demand
+remain unverified. No original runtime restart or deployment performed.
+
+## Earlier Study Review Pack delivery
+
 **New increment:** Study Review Pack gives engineers a single bounded ZIP of
 PDF/receipt, retained result/frozen inputs, rotor JSON and conditioned raw-source
 dependencies, checksums and readable exclusions. Existing project/artifact

@@ -451,6 +451,37 @@
         "M .physicore/ops/APPROVALS.md"
       ],
       "finished_at": "2026-10-22T19:46:28+00:00"
+    },
+    {
+      "id": "TRIM-001",
+      "title": "Expose exact case trim and rotor command evidence in the retained study viewer",
+      "done_when": "Explicit operating-point separation; exact rotor commands, residuals, policy and intervals; missing/ambiguous and stale guards; same frozen-case navigation; authorized unit, regression, browser and full interface review; preserve model and retained bytes",
+      "kind": "implementation",
+      "priority": 5,
+      "status": "done",
+      "zone": "green",
+      "depends_on": [
+        "PACK-001"
+      ],
+      "source_refs": [
+        ".physicore/ops/APPROVALS.md"
+      ],
+      "evidence": [
+        ".physicore/evidence/TRIM-001-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Approved Case Trim Evidence complete; 100 Node, 41 Python and 65 Chrome checks pass, 147-entry interface review and actual layout/accessibility fixes recorded; preserve models/bytes/branches/runtime; main publication authorized, no deployment or physical acceptance.",
+      "started_at": "2026-10-23T04:05:14+00:00",
+      "started_head": "729b94e5245f75fa3e56aec40ca28124611d31bc",
+      "started_dirty": [
+        " M .physicore/ops/INVESTOR_DIGEST.md",
+        " M .physicore/ops/RESEARCH_LOG.md",
+        " M .physicore/ops/STATE.md",
+        " M .physicore/ops/TASKS.json",
+        " M .physicore/ops/WORKLOG.md",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "finished_at": "2026-10-23T04:22:00+00:00"
     }
   ]
 }

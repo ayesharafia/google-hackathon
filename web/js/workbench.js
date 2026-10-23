@@ -3,7 +3,7 @@ import {energyCaseMatches} from './mission-energy.js?v=energy-1';
 import {mountEditors} from './input-editors.js?v=tabular-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
 import {mountGeometry} from './geometry-upload.js?v=geometry-3';
-import {renderStudy,renderComparison} from './study-view.js?v=energy-1';
+import {renderStudy,renderComparison} from './study-view.js?v=trim-1';
 import {restoreSession,connectSession,forgetSession,isPublicAccess} from './session.js?v=public-3';
 import {renderReadiness} from './engineering-readiness.js?v=readiness-1';
 import {createComparisonController} from './design-comparison.js?v=comparison-1';
@@ -12,6 +12,7 @@ let token = '', connected = false, connectionReady = false, current = null, dirt
 let hosted=false, organization='', inventoryCursor='', inventoryNext=null, inventoryStack=[], activeJob=null;
 let layoutGeneration=0, viewSnapshot=null, viewRevision='', viewMode='draft', selectedCase=''; const geometryCache=new Map();
 let inspectionSerial=0;
+let trimSelection=null;
 const context = () => ({generation, token, organization, project:current?.project_id});
 const isContext = c => c.generation===generation && c.token===token && c.organization===organization && c.project===current?.project_id;
 const comparisons = createComparisonController({
@@ -99,6 +100,8 @@ function controls() {
   $('export-pack').disabled = !study || busy || !connected;
   $('review-pack-binding').textContent=study?'Study '+study.study_sha256+' · frozen revision '+study.specification.revision_sha256+'. Unsaved draft edits are excluded.':'No retained study selected.';
   document.querySelectorAll('[data-energy-case]').forEach(button=>{button.disabled=busy||!connected||!energyCaseMatches(study,{study_sha256:button.dataset.energyStudy,revision_sha256:button.dataset.energyRevision,project_id:current?.project_id},button.dataset.energyCase);});
+  document.querySelectorAll('.trim-evidence select').forEach(select=>{select.disabled=busy||!connected||!study||!select.closest('.trim-evidence').querySelector('[data-trim-select=case]').value;});
+  document.querySelectorAll('[data-trim-case]').forEach(button=>{button.disabled=busy||!connected||!energyCaseMatches(study,{study_sha256:button.dataset.trimStudy,revision_sha256:button.dataset.trimRevision,project_id:current?.project_id},button.dataset.trimCase);});
   ['compare-before','compare-after','compare'].forEach(id=>{$(id).disabled=busy||!connected||!current?.studies?.length;});
   document.querySelectorAll('#input-editors input,#input-editors select,#input-editors button,#input-editors textarea').forEach(input => { input.disabled = readOnly || busy || !current || !connected; });
   document.querySelectorAll('[data-library-read=true]').forEach(input=>{input.disabled=!connected||busy||!current;});
@@ -191,7 +194,10 @@ function currentStudy(){return !dirty&&current?.revisions.some(r=>r.draft_versio
 function showStudy(){
   if(study){
     const requested=context();
-    renderStudy($('study-report'),study,currentStudy(),{onViewCase:async(caseId,binding)=>{
+    renderStudy($('study-report'),study,currentStudy(),{trimSelection,
+      isInteractive:()=>connected&&!busy&&isContext(requested),
+      onTrimSelection:selection=>{if(isContext(requested)&&selection.study_sha256===study?.study_sha256)trimSelection=selection;},
+      onViewCase:async(caseId,binding)=>{
       if(busy||!connected||!isContext(requested)||!energyCaseMatches(study,binding,caseId))return;
       await action(async()=>{
         if(viewMode!=='study'||viewRevision!==binding.revision_sha256)await selectStudy(binding.study_sha256);
