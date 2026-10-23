@@ -10,7 +10,7 @@ pass. Real browser downloads unpack/hash-verify; wrong identity, corrupt/missing
 artifacts, denied sources, stale context and archive limits are covered. Full
 UI review: docs/qa/study-review-pack-2026-10-23.md.
 
-**Limits/delivery:** main publication is authorized and pending remote verification.
+**Limits/delivery:** implementation 757b5c8 is published to main and its exact remote SHA is verified.
 Original service restart/deployment is not performed. Full Linux producer and
 provider/load/screen-reader/native-zoom qualification remain open. The package
 excludes CAD, original spreadsheets/conversion manifests, signatures and solver

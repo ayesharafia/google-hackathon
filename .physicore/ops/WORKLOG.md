@@ -215,3 +215,10 @@ names preserved. Disposable QA server stopped; original shared runtime untouched
 - Evidence: .physicore/evidence/PACK-001-completion.json
 - Notes: Approved package and UI complete; 74 Python, 81 Node and 46 Chrome checks and full interface review pass; exact sources/results/model preserved, explicit exclusions and Linux/provider limits; main publication authorized, no original runtime restart/deployment.
 - Next ready: no new task promoted
+
+## 2026-10-23: PACK-001 publication
+
+Implementation 757b5c8b21bd68ac301b94b9bfd4862207303425 pushed to main; exact GitHub ref matched.
+Receipt: .physicore/evidence/PUBLISH-2026-10-23-review-pack.json. All pre-existing branch
+names preserved. Disposable QA servers stopped; original shared runtime untouched.
+The original API still requires a restart to activate the new route; no deployment performed.
