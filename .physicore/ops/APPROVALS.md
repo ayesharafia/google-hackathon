@@ -1,5 +1,19 @@
 # Current approvals and pending decisions
 
+## 2026-10-26: agentic workbench design review pending
+
+Owner requested AI control inside the app and explicitly confirmed that it must
+cover both project designs and application features/code. This authorizes
+investigation and preparation of a concrete design. Proposed v1 architecture,
+permission boundaries, provider setup, project editing, isolated code branch
+workflow and acceptance are in
+`docs/superpowers/specs/2026-10-26-agentic-workbench-design.md`.
+
+Concrete design approval has not yet been received. No AI implementation,
+provider spending/private-data transfer, source promotion, GitHub publication,
+merge or deployment is inferred. In-app development needs separate owner access;
+the existing shared local token must not grant code execution authority.
+
 ## 2026-10-26: Job Activity & Recovery approved; main publication authorized
 
 Owner answered “Proceed with Job Activity & Recovery” to the concrete hosted

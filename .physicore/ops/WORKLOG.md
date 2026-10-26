@@ -380,3 +380,30 @@ Implementation 65c54a8ed82cc1c8c2383c8e93fcd9bdadfaff4c pushed to main; exact Gi
 All 35 pre-existing local/tracking ref names preserved, with 20 remote
 heads verified. Receipt: .physicore/evidence/PUBLISH-2026-10-26-job-activity.json.
 No deployment or original runtime restart. Next commit records publication metadata.
+
+## 2026-10-26: agentic workbench architecture proposed
+
+Owner requested AI control inside PhysiCore and confirmed both project-design
+and application-code changes. Inspected actual save/inspection/revision/access
+and packaging flows. Existing version conflicts, canonical snapshots and source
+integrity provide project foundations; there is no existing AI integration.
+Read-only Docker discovery succeeded (29.5.2), which does not qualify a sandbox.
+No AI configuration names were present in the inspected process environment;
+no credentials were read or transmitted for this design.
+
+Prepared `docs/superpowers/specs/2026-10-26-agentic-workbench-design.md` with
+alternatives, a shared broker, project proposal/apply/undo, separate operator
+access, constrained container checks, confirmed local code branches, context
+privacy, finite run limits and acceptance. Official OpenAI function/tool/data
+documentation was fetched. Corrected an example duration during spec review;
+8 minutes is 480 seconds, explicitly an example rather than an aircraft input.
+
+AI-CONTROL-001 is a candidate awaiting concrete design approval. No application
+code, dependencies, live AI requests, sandbox builds, main publication, runtime
+change or scientific acceptance occurred in this design task. The owner
+interface law remains required for implementation; no finished UI is claimed.
+
+Workflow doctor validated 14 tasks with zero ready tasks. Design consistency and
+whitespace checks passed. An initial literal-text assertion failed on a wrapped
+phrase; normalizing whitespace corrected that documentation check. No application
+tests ran for this documentation-only change.

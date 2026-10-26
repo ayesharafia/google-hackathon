@@ -1,5 +1,12 @@
 # Latest product progress: 26 October 2026
 
+**Next direction, proposed:** owner wants natural-language control of both
+engineering projects and the app's own code. A concrete two-mode design is
+prepared for review: validated project edits with approval/undo, and an
+owner-only isolated code workflow producing a review branch. This is design
+work, not a delivered AI feature. Provider activation/budget and isolation
+qualification remain pending; no model calls or public release occurred.
+
 **New delivered increment:** Job Activity & Recovery makes existing hosted jobs
 inspectable without waiting. Engineers see recorded attempts/failures, refresh
 manually, explicitly cancel/retry under existing rules and open the associated

@@ -550,6 +550,24 @@
         "M .physicore/ops/APPROVALS.md"
       ],
       "finished_at": "2026-10-26T11:57:24+00:00"
+    },
+    {
+      "id": "AI-CONTROL-001",
+      "title": "Project assistant and owner-only app development through controlled AI tools",
+      "kind": "implementation",
+      "status": "candidate",
+      "zone": "green",
+      "depends_on": [
+        "AUDIT-001"
+      ],
+      "priority": 1,
+      "done_when": "After concrete design approval, demonstrate reviewed project edits and safe undo, context/permission/duplicate guards, separate operator access, and isolated allowed frontend code changes producing an explicitly confirmed local review branch, with targeted API/provider-fixture/container/browser checks and full interface-law review; no inferred live AI, release or scientific qualification.",
+      "source_refs": [
+        "docs/superpowers/specs/2026-10-26-agentic-workbench-design.md"
+      ],
+      "evidence": [],
+      "scoped": false,
+      "notes": "Owner confirmed both project designs and application features/code. Proposed architecture awaits concrete design approval. Implementation has not started. Provider/model/budget activation and any GitHub publication/merge/deployment remain separate."
     }
   ]
 }

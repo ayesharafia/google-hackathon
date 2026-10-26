@@ -2,6 +2,18 @@
 
 ## Current continuation: 26 October 2026
 
+- New owner direction: make the workbench agentic. Owner explicitly selected
+  both project-design changes and the app's features/code. Proposed two-mode
+  architecture and acceptance are in
+  `docs/superpowers/specs/2026-10-26-agentic-workbench-design.md`: typed project
+  proposals with explicit apply/undo, plus separate owner authorization and
+  isolated frontend code work producing a confirmed review branch. Concrete
+  design approval is pending; AI-CONTROL-001 remains an unscoped candidate.
+  No AI code, provider calls, dependency changes, sandbox build or publication
+  occurred. Provider/model/budget activation is separate. Docker availability
+  was observed; runner isolation and live AI are unverified. Local design branch:
+  `codex/agentic-workbench`. Preserve the current shared runtime and all branches.
+
 - Owner approved “Proceed with Job Activity & Recovery”, including tests/browser/full interface review and main publication. JOBS-001 implemented: nonblocking hosted job/attempt inspection, manual refresh/pagination, explicit permitted recovery and associated-study navigation with draft preservation/context guards. Verified 148 Node tests (24 new), 27 existing Python regressions and 58 Chrome checks; four wheel assets/resource hashes and static protections pass. Full law review corrected state wrapping/selected-label contrast and distinguishes list IDs. QA: docs/qa/job-activity-2026-10-26.md. Reused-fixture failed rerun retained and explained; final fresh-fixture checks pass. No server/model/access/dependency changes or deployment. Implementation 65c54a8ed82cc1c8c2383c8e93fcd9bdadfaff4c published to main; exact remote SHA/all branch names verified. Receipt: .physicore/evidence/PUBLISH-2026-10-26-job-activity.json. Hosted mode only; provider/worker/endurance/restore/physical gates remain open.
 
 - Owner approved “Proceed with Rotor Source Explorer”, including targeted tests/browser/interface review and main publication. SOURCE-EXPLORE-001 implemented: discrete retained samples, exact original-row/value inspection, declared coverage and electrical/shaft basis, stale/late-response guards and viewer-safe controls. Verified 124 Node tests (24 new), 45 existing Python regressions and 68 installed-Chrome checks; wheel bytes/resource hashes pass. Full 147-entry law ledger and real layout/name fixes: docs/qa/rotor-source-explorer-2026-10-23.md. No model/API/dependency/access/retained-byte change or deployment. Implementation e5d7e7d7c9c1c911b2ea26f1c9673646cd30734f published to main; exact remote SHA and all branch names verified. Receipt: .physicore/evidence/PUBLISH-2026-10-23-source-explorer.json. Native popup/zoom/screen-reader/provider/physical qualification remain unverified.
