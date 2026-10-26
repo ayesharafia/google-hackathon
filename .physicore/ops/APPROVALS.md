@@ -14,6 +14,8 @@ Implemented and locally checked: 148 Node, 27 Python and 58 Chrome checks;
 full interface-law, exact wheel and static evidence in
 `docs/qa/job-activity-2026-10-26.md`. Main publication remains authorized; no
 deployment or production/scientific qualification is inferred.
+Implementation 65c54a8ed82cc1c8c2383c8e93fcd9bdadfaff4c published to main and exact remote ref verified;
+receipt: .physicore/evidence/PUBLISH-2026-10-26-job-activity.json.
 
 ## 2026-10-23: Rotor Source Explorer approved; main publication authorized
 

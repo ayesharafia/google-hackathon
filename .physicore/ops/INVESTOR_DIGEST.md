@@ -8,7 +8,7 @@ retained study while keeping unsaved design edits. Viewers remain read-only.
 **Evidence:** 148 Node tests, 27 Python regressions and 58 Chrome checks pass.
 Full 147-entry interface-law review corrected wrapping/contrast; exact wheel
 assets/hashes and source protection pass. One reused-fixture failed rerun is
-retained and explained. Main publication pending final Git checks. No new API,
+retained and explained. Implementation 65c54a8 published to main; exact remote ref verified. No new API,
 dependency, model/access policy or deployment. Production worker/provider,
 endurance/restore, qualified science and commercial demand remain unqualified.
 

@@ -373,3 +373,10 @@ name snapshot recorded before publication checks; no branch deletion authorized.
 - Evidence: .physicore/evidence/JOBS-001-completion.json
 - Notes: Approved Job Activity & Recovery delivered; 148 Node, 27 Python and 58 Chrome checks pass, full 147-entry interface review and wheel/static evidence retained; failed reused-fixture rerun explained. Main publication authorized, no deployment or production/scientific acceptance.
 - Next ready: no new task promoted
+
+## 2026-10-26: JOBS-001 main publication
+
+Implementation 65c54a8ed82cc1c8c2383c8e93fcd9bdadfaff4c pushed to main; exact GitHub main ref matched.
+All 35 pre-existing local/tracking ref names preserved, with 20 remote
+heads verified. Receipt: .physicore/evidence/PUBLISH-2026-10-26-job-activity.json.
+No deployment or original runtime restart. Next commit records publication metadata.
