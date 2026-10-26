@@ -330,3 +330,46 @@ All 35 pre-existing local/tracking ref names remain; 20 remote heads
 verified, including every prior tracked branch. Receipt:
 .physicore/evidence/PUBLISH-2026-10-23-source-explorer.json. Publication only;
 no runtime restart/deployment. The next commit records publication metadata.
+
+## 2026-10-26: JOBS-001 approved five-line execution plan
+
+1. Hosted project engineer/reviewer inspects an existing job without waiting for completion or discarding draft edits.
+2. Literal recorded job state/reason/Unix timestamps and ordered attempt progress/detail; absent stays unrecorded, no ETA or physics inference.
+3. Existing list/detail/cancel/retry APIs and permissions only; preserve worker/queue/acceptance models, bytes, dependencies, runtime and all branches.
+4. Separate focused job projection/controller/view, manual refresh/older pagination, explicit guarded recovery and associated-study action.
+5. Owner-authorized unit/API/browser/failure/readonly/context/layout checks and full design-law re-check; publish completed increment to main.
+
+Owner approved concrete design. Source inspection/research recorded. One primary
+implementer; no qualified science, deployment or background operation claimed.
+
+## 2026-10-26: JOBS-001 implementation and verification
+
+Focused job-activity projection/controller/native view integrated with the
+existing hosted sidebar/workbench. Literal ordered attempts, reason/UTC times,
+manual bounded refresh/pagination and explicit state/permission-aware recovery;
+associated retained-study navigation preserves unsaved JSON. Existing accepted-
+result GET materialization and original submitted-job polling remain unchanged.
+No source/result/model/API/dependency/access/queue edits. One implementing agent.
+
+Final evidence: 148 Node (24 new), 27 existing Python and 58 Chrome checks
+(22 new hosted owner/viewer, 17 source explorer, 19 trim) pass. Four exact wheel
+assets/resource hashes, syntax/protection/docs/147-entry law/screenshot checks
+pass. Existing Starlette/httpx warning remains. Reused-fixture browser rerun
+failed because its job was already retried; retained JOBS-001-test-20261026114949161285.json,
+no assertion relaxed, fresh-fixture preflight/restarts and final runs pass.
+
+Full design-law re-check and final desktop/390px/CSS-enlarged screenshots reviewed.
+Fixed whole state cells, selected-label contrast (asserted >=4.5:1), distinct
+short IDs, current-limit wording, focus and detached-action guards. Exact report:
+docs/qa/job-activity-2026-10-26.md. Native zoom, screen-reader/provider/user/
+endurance/restore and physical acceptance are not qualified. Main publication
+is explicitly authorized; no original shared runtime restart or deployment.
+
+Owned final QA servers 81357 and 81090 stopped with SIGTERM; prior fresh-fixture
+processes were also stopped. Original shared runtime/tunnel untouched. Branch-
+name snapshot recorded before publication checks; no branch deletion authorized.
+
+## 2026-10-26T11:57:24+00:00 DONE JOBS-001
+- Evidence: .physicore/evidence/JOBS-001-completion.json
+- Notes: Approved Job Activity & Recovery delivered; 148 Node, 27 Python and 58 Chrome checks pass, full 147-entry interface review and wheel/static evidence retained; failed reused-fixture rerun explained. Main publication authorized, no deployment or production/scientific acceptance.
+- Next ready: no new task promoted

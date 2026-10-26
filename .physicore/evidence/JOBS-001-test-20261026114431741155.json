@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "JOBS-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "--test",
+    "tests/web/test_job_activity.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-26T11:44:31+00:00",
+  "started_at": "2026-10-26T11:40:19+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "f8efdd34efe30558cfc9714706d4b51c2be0a81e",
+  "output": "✔ queued job retains zero timestamps and no invented attempt (0.654959ms)\n✔ timestamp formatter preserves epoch and refuses missing/bool/nonfinite values (0.729917ms)\n✔ failed and cancelled state offer explicit retry within existing five-attempt boundary (0.376041ms)\n✔ running state offers cancellation only and preserves literal progress/detail (0.066375ms)\n✔ project and selected job identity must match (0.098625ms)\n✔ unsupported state, kind, count and timestamps refuse inspection (0.089041ms)\n✔ partial, unordered and mismatched attempt history refuses instead of hiding records (0.09625ms)\n✔ succeeded study link uses retained receipt and validated artifact digest (0.065958ms)\n✔ missing/malformed receipt or spec never invents a study link (0.092084ms)\n✔ report study binding requires exact semantic report identity, independent of key order (0.128375ms)\n✔ projection leaves frozen original job evidence unchanged (0.062792ms)\n✔ page rejects invalid kinds, duplicate IDs and unsupported shapes (0.088042ms)\n✔ inspection clears previous detail immediately and makes no submission (0.155125ms)\n✔ new selection wins over older detail response (0.068458ms)\n✔ project/logout context change suppresses late detail success and failure (0.0905ms)\n✔ mismatched response and denied detail clear evidence and explain unavailability (0.120125ms)\n✔ pagination retains selected detail and uses server continuation (0.117292ms)\n✔ refresh history replaces rather than duplicates and stale pages are ignored (0.449834ms)\n✔ readonly inspection never gains recovery rights (0.07625ms)\n✔ retry is explicit, posts once, disables duplicate actions and does not poll (0.069833ms)\n✔ cancellation uses the current job and honours terminal server response (0.038417ms)\n✔ recovery failure clears action authority until explicit refresh (0.038083ms)\n✔ late recovery response cannot repopulate another workspace (0.035292ms)\n✔ terminal/noneligible jobs never issue recovery calls (0.031167ms)\nℹ tests 24\nℹ suites 0\nℹ pass 24\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 73.718\n\n"
+}

@@ -1,4 +1,5 @@
 import {createReviewPackDownloader} from './review-pack.js?v=pack-1';
+import {mountJobActivity} from './job-activity.js?v=jobs-1';
 import {energyCaseMatches} from './mission-energy.js?v=energy-1';
 import {mountEditors} from './input-editors.js?v=source-explorer-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
@@ -33,6 +34,14 @@ const reviewPack = createReviewPackDownloader({
   save:(blob,name)=>{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);},
   setState:(state,text)=>{$('review-pack-status').textContent=text;$('review-pack-status').dataset.state=state;$('export-pack').setAttribute('aria-busy',String(state==='pending'));},
 });
+const jobActivity=mountJobActivity({
+  list:$('jobs'),detail:$('job-detail'),refresh:$('refresh-jobs'),more:$('more-jobs'),
+  request:api,readContext:context,isContext,
+  canRead:()=>Boolean(hosted&&connected&&current),
+  canWrite:()=>Boolean(hosted&&connected&&current?.role==='engineer'&&!busy),
+  canOpen:()=>Boolean(connected&&current&&!busy),
+  openStudy:digest=>action(()=>selectStudy(digest)),
+});
 function updateContext(){
   $('display-context').textContent=!current?'No project selected.':viewMode==='draft'?'Viewer: '+(dirty?'unsaved':'saved')+' draft version '+current.draft_version+'. Editor changes affect this draft only.':'Viewer: frozen revision '+viewRevision+' · '+(viewMode==='study'?'selected study '+study?.study_sha256:'selected revision')+'. Draft edits do not change this view.';
   $('show-draft-layout').disabled=!current||busy||viewMode==='draft';
@@ -41,6 +50,7 @@ function updateContext(){
   document.querySelectorAll('#revisions button').forEach(button=>button.setAttribute('aria-current',String(viewMode!=='draft'&&button.dataset.revision===viewRevision)));
 }
 function clearWorkspace(){
+  jobActivity.reset();$('job-activity').hidden=true;
   ++generation;++layoutGeneration;geometryCache.clear();current=null;study=null;dirty=false;viewSnapshot=null;viewRevision='';viewMode='draft';selectedCase='';activeJob=null;inventoryCursor='';inventoryNext=null;inventoryStack=[];
   $('snapshot').value='';$('input-editors').replaceChildren();$('study-report').replaceChildren();$('comparison-report').replaceChildren();$('revision-detail').hidden=true;
   ['revisions','studies','jobs','reviews','compare-before','compare-after','view-case','projects','study-summary','guided-readiness','layout-inputs'].forEach(id=>$(id).replaceChildren());
@@ -80,6 +90,7 @@ const geometryPanel = mountGeometry({
 function message(text, error = false) { $('message').textContent = text; $('message').className = error ? 'error' : ''; }
 function controls() {
   updateContext();
+  jobActivity.updateAccess();
   ['organization','logout'].forEach(id=>$(id).disabled=busy);
   document.querySelectorAll('#individual-login input,#individual-login button,#accept-invitation input,#accept-invitation button').forEach(el=>el.disabled=busy);
   $('local-session').hidden=hosted;
@@ -150,12 +161,12 @@ async function inventory(selected = '', cursor='') {
   controls();
 }
 function render(project) {
-  if(current?.project_id!==project.project_id){geometryCache.clear();++layoutGeneration;$('reviews').replaceChildren();$('jobs').replaceChildren();$('created-invitation').value='';$('invitation-result').hidden=true;}
+  if(current?.project_id!==project.project_id){jobActivity.reset();geometryCache.clear();++layoutGeneration;$('reviews').replaceChildren();$('jobs').replaceChildren();$('created-invitation').value='';$('invitation-result').hidden=true;}
   viewSnapshot=null;viewRevision='';viewMode='draft';selectedCase='';$('view-case').replaceChildren();
   current = project; dirty = false;
   $('more-revisions').hidden=!project.revisions_more;$('more-studies').hidden=!project.studies_more;
   $('invite-member').hidden=!hosted||!project.can_invite;
-  $('review-workspace').hidden=!hosted;$('job-history').hidden=!hosted;if(hosted)loadJobs().catch(error=>message(error.message,true));
+  $('review-workspace').hidden=!hosted;$('job-history').hidden=!hosted;$('job-activity').hidden=!hosted;if(hosted)loadJobs().catch(error=>message(error.message,true));
   study=null;reviewPack.invalidate();$('study-report').replaceChildren();$('study-summary').replaceChildren();resetReadiness();
   $('snapshot').value = JSON.stringify(JSON.parse(project.snapshot_json), null, 2);
   $('design-title').textContent = project.title;
@@ -455,9 +466,7 @@ async function loadReviews(){
 $('submit-review').addEventListener('click',()=>action(async()=>{if(!study)return;await api('/platform/reviews/'+current.project_id,payload('POST',{study_sha256:study.study_sha256,decision:$('review-decision').value,comment:$('review-comment').value}));$('review-comment').value='';await loadReviews();message('Authenticated review retained against this exact study result.');}));
 
 async function loadJobs(){
-  const pid=current?.project_id;if(!pid||!hosted)return;const page=await api(`/projects/${pid}/jobs`);if(pid!==current?.project_id)return;
-  $('jobs').replaceChildren(...page.jobs.map(record=>{const li=document.createElement('li'),button=document.createElement('button');button.type='button';button.textContent=record.kind+' · '+record.state+' · attempt '+record.attempt_count;
-    button.addEventListener('click',()=>action(async()=>{const job=await waitForJob(record);if(record.kind==='study'){const receipt=JSON.parse(job.result_json);await selectStudy(receipt.study_sha256);}message('Accepted job evidence reopened.');}));li.append(button);return li;}));
+  if(current&&hosted&&connected)await jobActivity.browse();
 }
 
 $('invite-member').addEventListener('submit',event=>{event.preventDefault();action(async()=>{const result=await api('/platform/projects/'+current.project_id+'/invitations',payload('POST',{email:$('invite-email').value,role:$('invite-role').value}));$('created-invitation').value=result.invitation_token;$('invitation-result').hidden=false;message('One-use invitation created for this email. It expires in 24 hours. Share it privately.');});});

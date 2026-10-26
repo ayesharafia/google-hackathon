@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "JOBS-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "scripts/qa/verify_job_activity_release.py",
+    "--baseline",
+    "f8efdd34efe30558cfc9714706d4b51c2be0a81e"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-26T11:55:40+00:00",
+  "started_at": "2026-10-26T11:40:19+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "f8efdd34efe30558cfc9714706d4b51c2be0a81e",
+  "output": "{\n  \"protected_paths_changed\": [],\n  \"syntax_checked\": [\n    \"web/js/job-activity.js\",\n    \"web/js/workbench.js\",\n    \"tests/web/test_job_activity.mjs\",\n    \"scripts/qa/job_activity_browser.mjs\"\n  ],\n  \"python_syntax_files\": 2,\n  \"valid_local_links\": 11,\n  \"law_entries\": 147,\n  \"wheel_assets\": [\n    \"js/job-activity.js\",\n    \"js/workbench.js\",\n    \"css/workbench.css\",\n    \"workbench.html\"\n  ],\n  \"wheel_sha256\": \"12bd6bb33d33e414e9663baf9bdc261187ff827b51bb2c4e030532dff2b13c5b\",\n  \"evidence_sha256\": {\n    \"docs/qa/assets/job-activity/desktop-context.png\": \"e15fc5c8093967737a294b3b2b945ca6b2abb4caf744f77ff142b1fe008bc3a1\",\n    \"docs/qa/assets/job-activity/desktop.png\": \"85c0ce9439ac7636816e6b3b2ab9369a3e968af610c854f8529e6701bd7b5ce0\",\n    \"docs/qa/assets/job-activity/enlarged-context.png\": \"c10833a7cdb350b4114fcd4ec2f3485d8ff99a04650a52fa2175e729a13d767d\",\n    \"docs/qa/assets/job-activity/enlarged.png\": \"e82ea9e5598e17f546bc85257f552605eaaea4209610c5f9c5c2c7f0278cd285\",\n    \"docs/qa/assets/job-activity/phone-context.png\": \"b1c9008216e40aeca51350285b71b2f9782491c40d253182545712fc39908eec\",\n    \"docs/qa/assets/job-activity/phone.png\": \"65838ba3338f42c11611002fda68f062eb24a362d182d19c2d921c3d311b79f7\",\n    \"docs/qa/assets/job-activity/results.json\": \"83dad37c0a0384f13a3c286c2fa81bf0fcabe6ee442623e185cf2c028926962d\"\n  },\n  \"limits\": \"Local software/release evidence, no deployment.\"\n}\n\n"
+}

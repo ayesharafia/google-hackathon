@@ -379,3 +379,52 @@ inspection gap without adding a prediction model. No customer interview,
 measured source qualification or adoption metric was obtained. Actual reviewer
 time savings and demand remain UNKNOWN. Existing official-source research and
 larger comparison/command-overlay alternatives remain hypotheses for later scope.
+
+## 2026-10-26: hosted Job Activity & Recovery
+
+OBSERVED: all current v3 tasks are done; clean main f8efdd3. Existing hosted
+loadJobs renders kind/state/attempt count and routes every selection through
+waitForJob, which waits for a terminal state under the global busy action.
+The server already exposes a paginated list and exact detail with ordered
+attempts, reasons, timing and existing permission-checked cancel/retry routes.
+GET detail also idempotently materializes accepted results; this existing
+recovery behavior must remain unchanged. No runtime defect is inferred merely
+from source inspection. Public/local mode has no durable job history API.
+
+RESEARCHED 26 October 2026 (official public documentation, no data reused):
+- https://www.simscale.com/docs/platform/ describes its job-status panel for
+  operation state and runtime. Read page successfully.
+- https://rescale.com/documentation/main/rescale-basics/job-workstation-pages/
+  search-index excerpt describes state-dependent troubleshooting and result
+  actions. https://rescale.com/documentation/main/rescale-basics/monitoring-status/
+  indexed official documentation describes status/error/log inspection.
+  Direct fetches timed out; only indexed excerpts were available for Rescale.
+These establish adjacent workflow patterns, not competitor deficiencies,
+accuracy, customer demand or measurable time savings. No standard compliance
+or operational qualification claim follows from this UI change.
+
+INFERRED customer job: an engineer diagnoses queued/running/failed work and
+chooses an explicit recovery action without losing unsaved design edits.
+PROPOSED smallest useful slice: inspect existing hosted jobs without waiting;
+literal state/reason/timestamps/attempts, manual refresh and bounded pagination,
+explicit permission/state-aware cancel/retry, guarded associated-study navigation.
+No automatic retry, ETA, queue/model/access/dependency or deployment changes.
+Alternatives: another source comparison view (less direct operational value),
+or full monitoring/notifications/auto-recovery (larger service/hosting design).
+Expected compute: bounded HTTP reads/user-requested existing job retries;
+no paid service or new background monitor. Learning target: reviewers locate
+failure context and choose the correct job action while preserving their draft.
+Customer demand, timing improvement, hosted provider/load/endurance are UNKNOWN.
+
+Owner approved “Proceed with Job Activity & Recovery”, including targeted
+unit/API/browser checks, full interface review and publishing the completed
+increment to main. One bounded task; no expanded production or science claim.
+
+## 2026-10-26: job workflow evidence outcome
+
+JOBS-001 implements the approved hosted operational slice. Software checks
+support exact inspection/recovery and draft preservation within synthetic local
+fixtures (148 Node, 27 Python, 58 Chrome). See docs/qa/job-activity-2026-10-26.md.
+No customer interview, adoption metric, measured diagnosis-time gain, hosted
+provider qualification or independent physical review was obtained. Those
+remain UNKNOWN or gated; no market leadership or production-ready claim follows.

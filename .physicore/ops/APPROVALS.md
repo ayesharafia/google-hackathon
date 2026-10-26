@@ -1,5 +1,20 @@
 # Current approvals and pending decisions
 
+## 2026-10-26: Job Activity & Recovery approved; main publication authorized
+
+Owner answered “Proceed with Job Activity & Recovery” to the concrete hosted
+job inspection/attempt history, manual refresh/older pagination, permission-
+checked explicit cancel/retry and associated retained-study design. Include
+stale/context guards, targeted unit/API/browser checks and full interface-law
+review, then publish completed changes to main. No automatic retry, ETA, queue/
+model/access/dependency changes or deployment. Preserve drafts, results, sources
+and all branches. Brainstorming design gate satisfied; no scientific acceptance.
+
+Implemented and locally checked: 148 Node, 27 Python and 58 Chrome checks;
+full interface-law, exact wheel and static evidence in
+`docs/qa/job-activity-2026-10-26.md`. Main publication remains authorized; no
+deployment or production/scientific qualification is inferred.
+
 ## 2026-10-23: Rotor Source Explorer approved; main publication authorized
 
 Owner asked “keep working”. Proposed bounded addition to the existing library

@@ -1,0 +1,28 @@
+{
+  "checks": [
+    "Actual hosted history loads 25 jobs then all 33 through the real server cursor",
+    "Running job opens immediately with literal two-attempt evidence while unsaved draft editing remains available",
+    "Exact job disclosure retains failed and current attempts without converting progress into an ETA",
+    "Manual refresh works by keyboard, restores focus and preserves the draft",
+    "Refreshing and paging history retains selected exact job evidence",
+    "Failure reason is escaped literal text and exposes explicit eligible recovery",
+    "Explicit retry posts once and returns queued state without polling or an automatic retry",
+    "Explicit cancellation uses the selected real queued job and records server cancellation",
+    "Accepted study and report jobs open their same-project retained study without discarding unsaved edits",
+    "phone controls and facts fit with gutters; attempt table reaches its final detail column",
+    "enlarged controls and facts fit with gutters; attempt table reaches its final detail column",
+    "New job selection clears old details immediately and rejects a delayed prior response",
+    "Labelled identity response fixture refuses invalid evidence and recovery authority",
+    "Labelled attempt response fixture refuses invalid evidence and recovery authority",
+    "Labelled denied-detail response clears old private data",
+    "Ambiguous/failed recovery clears action authority until explicit refresh",
+    "Inspection and real recovery leave saved draft, unsaved editor and retained study bytes unchanged",
+    "Project change invalidates delayed job inspection and clears its selected private evidence",
+    "Actual hosted viewer reads attempts and refreshes while cancellation/retry remain disabled",
+    "Actual server refuses viewer recovery and cross-project job access",
+    "Logout removes job evidence and rejects an injected detached recovery action",
+    "No page JavaScript errors"
+  ],
+  "errors": [],
+  "limits": "Synthetic local SQLite hosted-mode software checks; no provider, native zoom, screen-reader, endurance or aircraft qualification."
+}

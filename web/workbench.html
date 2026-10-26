@@ -4,9 +4,9 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
 <title>PhysiCore | Design workbench</title>
-<link rel="stylesheet" href="/web/css/workbench.css?v=source-explorer-1">
+<link rel="stylesheet" href="/web/css/workbench.css?v=jobs-1">
 <script type="importmap">{"imports":{"three":"/web/vendor/three.module.min.js"}}</script>
-<script type="module" src="/web/js/workbench.js?v=source-explorer-1"></script>
+<script type="module" src="/web/js/workbench.js?v=jobs-1"></script>
 </head>
 <body>
 <header><a class="brand" href="/web/">PhysiCore</a><span>Local design workbench</span><a href="/web/results.html">Evidence desk</a></header>
@@ -36,7 +36,7 @@
 <p id="project-record">No project open.</p>
 <form id="invite-member" hidden><h3>Invite to this project</h3><label>Email<input id="invite-email" type="email" required></label><label>Project role<select id="invite-role"><option value="viewer">Viewer</option><option value="reviewer">Reviewer</option><option value="engineer">Engineer</option></select></label><button type="submit">Create invitation</button><label id="invitation-result" hidden>Share this one-use code privately<input id="created-invitation" readonly></label></form>
 <h2>Retained revisions</h2><ul id="revisions"><li>No revision selected.</li></ul><button id="more-revisions" type="button" hidden>More revisions</button>
-<section id="job-history" hidden><h2>Jobs</h2><ul id="jobs"></ul></section>
+<section id="job-history" hidden><h2>Jobs</h2><button id="refresh-jobs" type="button" disabled>Refresh job history</button><ul id="jobs"></ul><button id="more-jobs" type="button" hidden>Load older jobs</button></section>
 <h2>Study history</h2><ul id="studies"><li>No study selected.</li></ul><button id="more-studies" type="button" hidden>More studies</button>
 </aside>
 <section class="editor" aria-labelledby="design-title">
@@ -72,6 +72,7 @@
 <details id="design-json"><summary>Design input JSON</summary><label for="snapshot">Complete versioned snapshot</label><textarea id="snapshot" spellcheck="false" disabled rows="18"></textarea></details>
 <div class="actions"><button id="save" type="button" disabled>Save draft</button><button id="reload" type="button" disabled>Reload saved draft</button><button id="freeze" type="button" disabled>Freeze saved revision</button><button id="export-draft" type="button" disabled>Export draft JSON</button></div>
 <section aria-labelledby="study-title"><h3 id="study-title">Bounded capacity study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen design</button><p id="job-progress" role="status" aria-live="polite"></p><button id="cancel-job" type="button" hidden>Cancel job</button><button id="retry-job" type="button" hidden>Retry failed job</button><div id="study-summary" aria-live="polite"></div><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
+<section id="job-activity" hidden aria-labelledby="job-activity-title"><h3 id="job-activity-title">Job activity &amp; recovery</h3><p>Inspect recorded execution attempts. A completed job does not establish physical validity.</p><div id="job-detail" tabindex="-1"></div></section>
 <section id="review-pack" aria-labelledby="review-pack-title">
 <h3 id="review-pack-title">Study Review Pack</h3>
 <p>One ZIP for reviewing a retained result, its frozen inputs and rotor sources.</p>

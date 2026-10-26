@@ -1,4 +1,18 @@
-# Latest product progress: 23 October 2026
+# Latest product progress: 26 October 2026
+
+**New delivered increment:** Job Activity & Recovery makes existing hosted jobs
+inspectable without waiting. Engineers see recorded attempts/failures, refresh
+manually, explicitly cancel/retry under existing rules and open the associated
+retained study while keeping unsaved design edits. Viewers remain read-only.
+
+**Evidence:** 148 Node tests, 27 Python regressions and 58 Chrome checks pass.
+Full 147-entry interface-law review corrected wrapping/contrast; exact wheel
+assets/hashes and source protection pass. One reused-fixture failed rerun is
+retained and explained. Main publication pending final Git checks. No new API,
+dependency, model/access policy or deployment. Production worker/provider,
+endurance/restore, qualified science and commercial demand remain unqualified.
+
+## Earlier Rotor Source Explorer delivery
 
 **New delivered increment:** Rotor Source Explorer adds discrete plots and exact
 sample/original-row inspection to retained library sources. Declared coverage

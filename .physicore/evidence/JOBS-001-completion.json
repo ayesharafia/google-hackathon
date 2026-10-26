@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "kind": "completion",
+  "id": "JOBS-001",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "started_at": "2026-10-26T11:40:19+00:00",
+  "captured_at": "2026-10-26T11:57:24+00:00",
+  "baseline_head": "f8efdd34efe30558cfc9714706d4b51c2be0a81e",
+  "current_head": "f8efdd34efe30558cfc9714706d4b51c2be0a81e",
+  "changes": [
+    "DECISIONS.md",
+    "docs/qa/assets/job-activity/desktop-context.png",
+    "docs/qa/assets/job-activity/desktop.png",
+    "docs/qa/assets/job-activity/enlarged-context.png",
+    "docs/qa/assets/job-activity/enlarged.png",
+    "docs/qa/assets/job-activity/phone-context.png",
+    "docs/qa/assets/job-activity/phone.png",
+    "docs/qa/assets/job-activity/results.json",
+    "docs/qa/job-activity-2026-10-26.md",
+    "docs/qa/job-activity-design-law-2026-10-26.md",
+    "docs/technical/job-activity.md",
+    "plan.md",
+    "scripts/qa/job_activity_browser.mjs",
+    "scripts/qa/job_activity_fixture.py",
+    "scripts/qa/verify_job_activity_release.py",
+    "tests/web/test_job_activity.mjs",
+    "web/css/workbench.css",
+    "web/js/job-activity.js",
+    "web/js/workbench.js",
+    "web/workbench.html"
+  ],
+  "tests": [
+    {
+      "file": ".physicore/evidence/JOBS-001-test-20261026115327051675.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "--test",
+        "tests/web/test_job_activity.mjs",
+        "tests/web/test_source_explorer.mjs",
+        "tests/web/test_trim_evidence.mjs",
+        "tests/web/test_review_pack.mjs",
+        "tests/web/test_mission_energy.mjs",
+        "tests/web/test_design_comparison.mjs",
+        "tests/web/test_engineering_readiness.mjs",
+        "tests/web/test_rotor_source_binding.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/JOBS-001-test-20261026114458203240.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/platform/test_identity_jobs.py",
+        "tests/platform/test_release_recovery.py",
+        "tests/platform/test_worker_artifact_accounting.py",
+        "tests/platform/test_reuse_pagination.py"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/JOBS-001-test-20261026115330588292.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/job_activity_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/JOBS-001-test-20261026115137526753.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/source_explorer_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/JOBS-001-test-20261026115137036372.json",
+      "exit_code": 0,
+      "argv": [
+        "node",
+        "scripts/qa/trim_evidence_browser.mjs"
+      ]
+    },
+    {
+      "file": ".physicore/evidence/JOBS-001-test-20261026115710410725.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "scripts/qa/verify_job_activity_release.py",
+        "--baseline",
+        "f8efdd34efe30558cfc9714706d4b51c2be0a81e"
+      ]
+    }
+  ],
+  "audit_files": [],
+  "summary": "Implemented approved hosted Job Activity & Recovery: literal nonblocking job/attempt inspection, manual refresh/pagination, explicit permitted recovery and associated-study navigation with draft/context guards. 148 Node, 27 Python and 58 Chrome checks pass; full interface-law and wheel/static evidence retained. Reused-fixture failed rerun explained; no deployment or physical qualification."
+}

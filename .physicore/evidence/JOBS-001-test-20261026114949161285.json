@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "JOBS-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/job_activity_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-26T11:49:49+00:00",
+  "started_at": "2026-10-26T11:40:19+00:00",
+  "repo": "/Users/bhupeshcholake/Desktop/Claude Codes/physicore drone",
+  "head": "f8efdd34efe30558cfc9714706d4b51c2be0a81e",
+  "output": "PASS Actual hosted history loads 25 jobs then all 33 through the real server cursor\nPASS Running job opens immediately with literal two-attempt evidence while unsaved draft editing remains available\nPASS Exact job disclosure retains failed and current attempts without converting progress into an ETA\nPASS Manual refresh works by keyboard, restores focus and preserves the draft\nPASS Refreshing and paging history retains selected exact job evidence\n\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nlocator.isEnabled: Timeout 12000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Retry selected job', exact: true })\u001b[22m\n\n    at /Users/bhupeshcholake/Desktop/Claude Codes/physicore drone/scripts/qa/job_activity_browser.mjs:29:296 {\n  log: [\n    \"  - waiting for getByRole('button', { name: 'Retry selected job', exact: true })\"\n  ],\n  name: 'TimeoutError'\n}\n\nNode.js v26.0.0\n"
+}
