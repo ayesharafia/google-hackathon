@@ -407,3 +407,31 @@ Workflow doctor validated 14 tasks with zero ready tasks. Design consistency and
 whitespace checks passed. An initial literal-text assertion failed on a wrapped
 phrase; normalizing whitespace corrected that documentation check. No application
 tests ran for this documentation-only change.
+
+## 2026-10-26: owner clarified AI-native/MCP foundation
+
+Owner did not approve the first assistant proposal. They clarified that AI must
+underpin the whole product, future LLMs must control it, and an owned MCP server
+should support future development. Revised the architecture around shared typed
+domain actions, a policy gateway, scoped AI-client grants, context resources and
+an MCP adapter. Embedded chat is a later client; OpenAI is no longer the proposed
+foundation dependency. External MCP hosts supply their own models.
+
+Fetched official MCP architecture, current 2026-07-28 transport/tools/resources/
+authorization specifications and Python SDK/release guidance. Inspected actual
+routes/services and browser authoring. Found important migration boundaries:
+HTTP POST-based permission cannot classify all MCP calls, job detail can
+materialize accepted results, report reads may queue/create artifacts, and some
+source/geometry editing logic currently lives in browser helpers. These are
+recorded in `docs/architecture/ai-capability-map.md`.
+
+Active proposal: `docs/superpowers/specs/2026-10-26-ai-native-foundation-design.md`.
+Earlier design is explicitly superseded and retained as history. AI-CONTROL-001
+remains an unscoped candidate pending revised design approval. No application
+code, credentials, model calls, dependencies, sandbox builds, runtime changes,
+publication or scientific approval occurred in this revision.
+
+Revised-document local links, proposal/superseded status, permission/receipt/
+transport boundaries, pending task references and whitespace checks passed.
+Workflow doctor reports 14 tasks and zero ready tasks. Application/MCP tests were
+not run for this documentation-only revision.

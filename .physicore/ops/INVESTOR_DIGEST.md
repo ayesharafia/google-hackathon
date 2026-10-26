@@ -1,11 +1,12 @@
 # Latest product progress: 26 October 2026
 
-**Next direction, proposed:** owner wants natural-language control of both
-engineering projects and the app's own code. A concrete two-mode design is
-prepared for review: validated project edits with approval/undo, and an
-owner-only isolated code workflow producing a review branch. This is design
-work, not a delivered AI feature. Provider activation/budget and isolation
-qualification remain pending; no model calls or public release occurred.
+**Next direction, revised proposal:** owner wants AI as a product foundation,
+with future LLMs operating it through an owned MCP server. Prepared a shared
+action/policy/resource design and source-backed coverage map. Build the action
+foundation and MCP first; embedded chat and owner code tools become clients of
+it. Foundation verification needs no application model key. The earlier assistant
+proposal is superseded. Design approval, implementation, model activation and
+isolation qualification remain pending; no AI feature or public release exists.
 
 **New delivered increment:** Job Activity & Recovery makes existing hosted jobs
 inspectable without waiting. Engineers see recorded attempts/failures, refresh

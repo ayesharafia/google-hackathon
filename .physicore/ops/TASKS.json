@@ -553,7 +553,7 @@
     },
     {
       "id": "AI-CONTROL-001",
-      "title": "Project assistant and owner-only app development through controlled AI tools",
+      "title": "Model-neutral action foundation and PhysiCore MCP server",
       "kind": "implementation",
       "status": "candidate",
       "zone": "green",
@@ -561,13 +561,14 @@
         "AUDIT-001"
       ],
       "priority": 1,
-      "done_when": "After concrete design approval, demonstrate reviewed project edits and safe undo, context/permission/duplicate guards, separate operator access, and isolated allowed frontend code changes producing an explicitly confirmed local review branch, with targeted API/provider-fixture/container/browser checks and full interface-law review; no inferred live AI, release or scientific qualification.",
+      "done_when": "After revised concrete design approval, implement typed shared actions/policy, scoped AI grants, invocation/approval receipts and a real stdio MCP server. Demonstrate discover/read/inspect/propose/review/apply/undo/freeze/eligible-study/result/compare/export parity with the workbench; verify permissions, conflicts, duplicate admission, lifecycle, current/legacy clients, packaging and new browser controls. Model-provider activation, later domain/code adapters and hosted HTTP MCP are separately scoped; no inferred scientific or production qualification.",
       "source_refs": [
-        "docs/superpowers/specs/2026-10-26-agentic-workbench-design.md"
+        "docs/superpowers/specs/2026-10-26-ai-native-foundation-design.md",
+        "docs/architecture/ai-capability-map.md"
       ],
       "evidence": [],
       "scoped": false,
-      "notes": "Owner confirmed both project designs and application features/code. Proposed architecture awaits concrete design approval. Implementation has not started. Provider/model/budget activation and any GitHub publication/merge/deployment remain separate."
+      "notes": "Owner clarified that AI must underpin the whole product, future LLMs must operate it and an owned MCP server should support future development. Earlier assistant-first proposal was not approved and is superseded. Revised architecture awaits approval. No implementation started; no publication/deployment or paid model use authorized."
     }
   ]
 }

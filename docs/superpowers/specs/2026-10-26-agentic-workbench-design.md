@@ -1,7 +1,10 @@
 # Agentic workbench: project control and app development
 
-Status: PROPOSED for owner review, 26 October 2026. No AI implementation or
-provider activation is approved by this document. Baseline: main commit
+Status: SUPERSEDED PROPOSAL, 26 October 2026. The owner clarified that the product
+needs a model-neutral AI foundation and an owned MCP server. The active proposal
+is [AI-native foundation](2026-10-26-ai-native-foundation-design.md). This earlier
+assistant-first architecture was not approved and is retained as design history.
+No AI implementation or provider activation is approved by this document. Baseline: main commit
 `5de743c9fd682fd799b4d7abbdfd13b8e858aa11`.
 
 ## Owner intent and first release

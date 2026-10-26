@@ -1,18 +1,21 @@
 # Current approvals and pending decisions
 
-## 2026-10-26: agentic workbench design review pending
+## 2026-10-26: AI-native foundation/MCP design review pending
 
-Owner requested AI control inside the app and explicitly confirmed that it must
-cover both project designs and application features/code. This authorizes
-investigation and preparation of a concrete design. Proposed v1 architecture,
-permission boundaries, provider setup, project editing, isolated code branch
-workflow and acceptance are in
-`docs/superpowers/specs/2026-10-26-agentic-workbench-design.md`.
+Owner requested AI control inside the app and explicitly confirmed both project
+designs and application features/code. In response to design review, the owner
+clarified that the entire system must have an AI foundation, work with future
+LLMs and support an owned MCP server. The earlier assistant-first proposal was
+not approved. The revised model-neutral action/permission/resource architecture,
+MCP-first delivery and acceptance are in
+`docs/superpowers/specs/2026-10-26-ai-native-foundation-design.md`; the actual
+source coverage inventory is `docs/architecture/ai-capability-map.md`.
 
-Concrete design approval has not yet been received. No AI implementation,
-provider spending/private-data transfer, source promotion, GitHub publication,
-merge or deployment is inferred. In-app development needs separate owner access;
-the existing shared local token must not grant code execution authority.
+Concrete revised design approval has not yet been received. Foundation can be
+implemented/verified with a real MCP client without an application model key.
+No AI implementation, provider spending/private-data transfer, source promotion,
+GitHub publication, merge or deployment is inferred. Development needs separate
+owner access; a shared project credential cannot grant code execution authority.
 
 ## 2026-10-26: Job Activity & Recovery approved; main publication authorized
 
