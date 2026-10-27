@@ -381,6 +381,23 @@ class AgentService:
             return repo.get(pid)
         if action == "design.inspect":
             return operations.inspect_project(app, pid)
+        if action == "sources.list":
+            return app.state.source_library.page(pid, ctx.principal, query=args.query, after=args.after, limit=args.limit, project_only=True)
+        if action == "sources.inspect":
+            library = app.state.source_library
+            entry = library._entry(pid, args.entry_id, ctx.principal)
+            if entry["project_id"] != pid:
+                raise ProjectMissing("library entry unavailable in this project")
+            result = library.detail(pid, args.entry_id, ctx.principal)
+            dataset, manifest = result["dataset"], result["manifest"]
+            return {
+                "entry": result["entry"], "source_sha256": result["source_sha256"],
+                "original_sha256": manifest["file_sha256"], "manifest_sha256": entry["manifest_sha256"],
+                "source_description": dataset["source_description"],
+                "test_conditions": {key: dataset[key] for key in ("density_kg_m3", "axial_inflow_m_s", "pitch_deg", "max_continuous_duration_s", "power_basis", "torque_convention", "covered_intervals_rpm")},
+                "declared_units": manifest["selection"]["units"], "sample_count": len(dataset["points"]),
+                "qualification": result["qualification"],
+            }
         if action == "design.propose":
             return proposals.create(app, self.store, ctx, args)
         if action == "proposal.get":

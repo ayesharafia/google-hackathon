@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "kind": "completion",
+  "id": "AI-SOURCE-001",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "started_at": "2026-10-27T16:38:02+00:00",
+  "captured_at": "2026-10-27T16:38:51+00:00",
+  "baseline_head": "8b979f3fc812837c4baf657c4fc7ed68c0f9054d",
+  "current_head": "8b979f3fc812837c4baf657c4fc7ed68c0f9054d",
+  "changes": [
+    "docs/qa/agent-source-inspection-2026-10-27.md"
+  ],
+  "tests": [
+    {
+      "file": ".physicore/evidence/AI-SOURCE-001-test-20261027163832078867.json",
+      "exit_code": 0,
+      "argv": [
+        "python3",
+        "-m",
+        "pytest",
+        "tests/agent/test_source_actions.py",
+        "tests/projects/test_source_library.py",
+        "-q"
+      ]
+    }
+  ],
+  "audit_files": [],
+  "summary": "Project-owned rotor source listing and integrity-checked inspection available to chat and local MCP, with scoped authorization and bounded results."
+}

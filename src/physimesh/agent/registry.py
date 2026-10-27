@@ -53,6 +53,8 @@ ACTIONS = {
             "read",
             "Inspect recorded saved inputs. Readiness is not physical qualification.",
         ),
+        Action("sources.list", c.SourcePage, "read", "read", "List retained tabular rotor sources owned by this project, with bounded pagination."),
+        Action("sources.inspect", c.SourceEntry, "read", "read", "Inspect a project-owned retained rotor source, its declared test conditions, units and integrity-checked provenance."),
         Action(
             "design.propose",
             c.Propose,
@@ -150,7 +152,7 @@ ACTIONS = {
 PENDING = [
     "workspace_creation",
     "geometry",
-    "source_library",
+    "source_library_import_and_reuse",
     "source_binding",
     "remaining_authoring",
     "reports",

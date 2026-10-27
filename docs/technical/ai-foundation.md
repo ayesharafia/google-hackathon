@@ -1,6 +1,6 @@
 # AI foundation and MCP connection
 
-PhysiCore exposes a versioned action catalog for saved project work. A compatible MCP host can discover and call the same actions through the stdio adapter or the opt-in remote transport. The first release covers project inspection, selected draft edits, revisions, studies, comparison, exact result export and hosted job actions. Discover current availability in the workbench or catalog. Geometry, source authoring, additional input groups and application development are future adapters. The workbench includes a Groq chat using these same actions. External MCP clients provide their own model connection.
+PhysiCore exposes a versioned action catalog for saved project work. A compatible MCP host can discover and call the same actions through the stdio adapter or the opt-in remote transport. The first release covers project inspection, project-owned rotor-source listing and metadata inspection, selected draft edits, revisions, studies, comparison, exact result export and hosted job actions. Discover current availability in the workbench or catalog. Geometry, source authoring, additional input groups and application development are future adapters. The workbench includes a Groq chat using these same actions. External MCP clients provide their own model connection.
 
 ## Connect
 

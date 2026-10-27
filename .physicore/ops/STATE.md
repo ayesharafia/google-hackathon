@@ -2,6 +2,8 @@
 
 ## Current continuation: 27 October 2026
 
+- Owner approved project-scoped read-only rotor source actions. `sources.list` and `sources.inspect` expose bounded retained identity, units, conditions and verified provenance to chat and MCP without cross-project enumeration. Targeted source and agent suite passed 12 tests including a local MCP SDK client and hosted viewer. QA: `docs/qa/agent-source-inspection-2026-10-27.md`; no source authoring or physics change. AI-JOURNEY-001 is blocked pending a private live Groq retry after the usage limit, not marked complete.
+
 - Owner approved persistent per-user AI settings and project chat. Local implementation uses AES-GCM encrypted provider settings with a separately configured server secret; hosted actor isolation and explicitly shared local identity, save/replace/remove, status, and saved-key chat are implemented. The mock-provider browser verified save, refresh/reuse, reviewed approval/rejection and deletion. Agent tests passed 46 with one PostgreSQL integration skipped; see `docs/qa/persistent-ai-settings-2026-10-27.md` and setup `docs/technical/ai-settings.md`. No production secret, deployment or GitHub publication was performed. Real-provider testing of saved credentials, PostgreSQL, native accessibility and full action coverage remain open.
 
 - AI-JOURNEY-001 is in progress: the full explain/edit/human-review/freeze/run/summary path passed with a scripted provider and synthetic project. A separate disposable local workbench is open for the owner to enter a Groq key privately and test the real model; no real-model result is yet established. See `docs/qa/ai-journey-2026-10-27.md`. Remote hosted provider setup, live Claude/ChatGPT and wider action coverage remain open.

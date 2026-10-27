@@ -4,6 +4,8 @@
 
 The owner explicitly requested: "push the changes to github and keep working towards making this project whole agentic". Publish the current AI-native foundation, Groq chat, remote MCP/sign-in, encrypted per-user settings and their tests and evidence to the repository's main branch after verification. This grants no deployment, additional paid provider calls, branch deletion or scientific acceptance. The live reviewed edit-to-study journey and real hosted-provider/client validation remain open.
 
+The owner subsequently approved the read-only rotor-source inspection slice described in `.physicore/specs/agent-source-inspection.md`; the same request authorizes publishing that completed slice to main. No source import, binding, physical validation or deployment is authorized by this approval.
+
 ## 2026-10-27: Hosted provider sign-in approved
 
 Owner approved the local design in `docs/superpowers/specs/2026-10-27-hosted-provider-signin-proposal.md`, including simulated-provider tests. Real provider setup and deployment remain separate.

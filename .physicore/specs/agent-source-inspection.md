@@ -1,0 +1,3 @@
+# Agent rotor source inspection
+
+Owner approved on 27 October 2026: read-only project-owned source listing and inspection through the shared action catalog for chat and MCP. The listing is bounded and paginated. Inspection checks retained source integrity and returns identity, declared units, test conditions and provenance without interpreting measurements as validated performance. A scoped client cannot enumerate or inspect another project's entries, even if the ordinary human-facing library permits reuse. No import, binding, source modification, model or tolerance changes are included. Verify isolation, corruption, pagination, a real local MCP client and simulated chat. Real remote clients and live model behavior remain separate checks.

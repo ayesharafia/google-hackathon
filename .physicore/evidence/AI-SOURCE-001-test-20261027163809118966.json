@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "AI-SOURCE-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "tests/agent/test_source_actions.py",
+    "tests/projects/test_source_library.py",
+    "-q"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-27T16:38:09+00:00",
+  "started_at": "2026-10-27T16:38:02+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "8b979f3fc812837c4baf657c4fc7ed68c0f9054d",
+  "output": "...........                                                              [100%]\n11 passed in 1.88s\n\n"
+}

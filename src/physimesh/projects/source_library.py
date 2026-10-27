@@ -37,13 +37,16 @@ class SourceLibrary:
         self.projects.repository.get(project_id)
         return None
 
-    def page(self, project_id, principal=None, *, query='', after='', limit=25):
+    def page(self, project_id, principal=None, *, query='', after='', limit=25, project_only=False):
         org = self.authorize(project_id, principal)
         if not isinstance(query, str) or len(query) > 160 or type(limit) is not int or not 1 <= limit <= 50:
             raise ValueError('Library query/limit is outside its bounds.')
         if after and not re.fullmatch('[0-9a-f]{64}', after):
             raise ValueError('Invalid library cursor.')
         where, args = ['l.entry_id>?'], [after]
+        if project_only:
+            where.append('l.project_id=?')
+            args.append(project_id)
         if self.identity:
             where.append('EXISTS (SELECT 1 FROM platform_projects p JOIN org_members om '
                          'ON om.org_id=p.org_id LEFT JOIN project_members pm '

@@ -68,6 +68,16 @@ class Page(Project):
     limit: int = Field(default=25, ge=1, le=25)
 
 
+class SourcePage(Project):
+    query: str = Field(default="", max_length=160)
+    after: str = Field(default="", max_length=64, pattern=r"^(|[a-f0-9]{64})$")
+    limit: int = Field(default=25, ge=1, le=25)
+
+
+class SourceEntry(Project):
+    entry_id: Digest
+
+
 class Call(Strict):
     request_id: RequestID
     arguments: dict

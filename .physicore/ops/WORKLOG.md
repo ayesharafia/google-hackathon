@@ -470,3 +470,11 @@ HOSTED-OIDC-001 and REMOTE-MCP-001: provider sign-in and opt-in remote MCP integ
 - Evidence: .physicore/evidence/REMOTE-MCP-001-completion.json
 - Notes: Synthetic SDK and HTTPS browser checks pass; real provider, clients, PostgreSQL and production controls unverified
 - Next ready: no new task promoted
+
+## 2026-10-27T16:37:59+00:00 BLOCKED AI-JOURNEY-001
+Live reviewed edit-to-study test awaits a private saved-key retry after Groq rate or usage limit; scripted journey remains passing.
+
+## 2026-10-27T16:38:54+00:00 DONE AI-SOURCE-001
+- Evidence: .physicore/evidence/AI-SOURCE-001-completion.json
+- Notes: Scoped listing and integrity-checked inspection tested in simulated chat, local MCP and hosted viewer; physical applicability unverified.
+- Next ready: no new task promoted
