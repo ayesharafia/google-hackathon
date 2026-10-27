@@ -1,0 +1,23 @@
+# Remote MCP connector proposal
+
+Status: proposal for review, not implemented. The goal is to let compatible remote AI clients connect to PhysiCore and use the same project actions as the existing local MCP server and Groq chat.
+
+## Scope and architecture
+
+Add a Streamable HTTP MCP endpoint using the pinned official MCP SDK. Keep the existing stdio transport. Both expose the same action registry, resource definitions, validation and human review; a remote request must never become a trusted approval. The endpoint is disabled by default, operates in hosted individual-identity mode only and is enabled only with explicit HTTPS public-origin, OAuth issuer, audience, JWKS and protected-resource discovery configuration. It is not a public-demo endpoint.
+
+Use a configured external OAuth authorization server rather than writing a new identity provider. Publish standards-compliant protected-resource metadata pointing to that server. Validate signed access tokens against the configured issuer, audience, expiry and allowed algorithms; match issuer and subject to an already provisioned active PhysiCore user. Never accept an ID token as an access token or trust client-supplied user/project/role. Require a project-scoped consent record created by an authenticated user in the workbench: one client connection selects one project and a subset of read, propose, reviewed changes and study actions, with expiry and revocation. Match each request to its token's verified client identity and that consent record, then recheck current project membership on every call. Refuse missing, expired, revoked, wrong-audience or ambiguous authorizations. Hosted user session and project member lifecycle are independent from OAuth token validity and must both be checked. Consent cannot grant a role the user does not hold.
+
+Remote MCP resource and tool handlers call existing action services using an attenuated project context; no shared mutable per-connection credential or global actor. Calls use stable request IDs and existing pending-review/receipt semantics. A user confirms or rejects exact changes in the normal workbench. Tool responses honestly identify pending reviews, failures and retained evidence; no chat, credential management, shell, app code, deployment or scientific acceptance is exposed. Select a project when establishing consent; do not let knowledge of another project ID widen access.
+
+## Protocol and operations
+
+Serve Streamable HTTP with body and concurrency bounds, strict origin/host and proxy configuration, version negotiation and appropriate 401 discovery responses; never accept query-string credentials. Require TLS at the trusted edge, specify trusted proxies and avoid leaking bearer tokens or private data in logs. Preserve isolation across simultaneous users and clients. Token and consent are rechecked for each request and long-running work, including revocation and membership removal. An interrupted nontransactional action remains uncertain under the existing receipt contract. Maintain compatible behavior for supported MCP protocol versions; do not promise client support without an actual compatibility test.
+
+External provider setup, public hosting/tunnel, purchases, credentials and deployment are outside this implementation. Local tests use a disposable HTTPS or loopback fixture and synthetic issuer; no real account, provider or external calls. Without a configured authorization server and public endpoint, the feature is not usable from cloud AI clients.
+
+## Verification
+
+Use real MCP SDK clients over HTTP against disposable services. Test discovery, token validation and audience/issuer failures; absent, expired and revoked consent; membership removal; cross-project and concurrent-client isolation; limited roles; request-size and host/origin checks; approval cannot be forged; exactly-once retry behavior and existing action parity. Exercise synthetic OAuth authorization and workbench consent/revocation in a browser. Preserve stdio and existing project tests. Actual Claude and ChatGPT account integration, load-balanced deployment, external OAuth-provider behavior, security assessment and physical validation remain separate verification gates.
+
+Official references: [MCP transport](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports), [MCP authorization](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization), [ChatGPT custom MCP](https://help.openai.com/en/articles/12584461-connecting-custom-mcp-servers-in-chatgpt), [Claude custom connectors](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp).
