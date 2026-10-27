@@ -1,5 +1,5 @@
 import {mountRemoteConsent} from './remote-consent.js?v=remote-1';
-import {mountGroqChat} from './groq-chat.js?v=groq-1';
+import {mountGroqChat} from './groq-chat.js?v=groq-2';
 import {createReviewPackDownloader} from './review-pack.js?v=pack-1';
 import {mountJobActivity} from './job-activity.js?v=jobs-1';
 import {mountAgentWorkspace} from './agent-workspace.js?v=agent-1';
@@ -99,7 +99,7 @@ const agentPanel = mountAgentWorkspace($('agent-workspace'),{
     massNames:current?JSON.parse(current.snapshot_json).masses.items.map(item=>item.name):[]}),
   saved:async()=>{const c=context(),project=await api('/projects/'+current.project_id);if(isContext(c)&&!dirty)render(project);},
 });
-const groqChat=mountGroqChat($('groq-chat'),{api,exclusive:action,context:()=>({generation,connected,projectId:current?.project_id,dirty,publicAccess:isPublicAccess()}),saved:async()=>{const c=context(),project=await api('/projects/'+current.project_id);if(isContext(c)&&!dirty)render(project);}});
+const groqChat=mountGroqChat($('groq-chat'),{settingsRoot:$('ai-settings'),api,exclusive:action,context:()=>({generation,connected,projectId:current?.project_id,dirty,publicAccess:isPublicAccess()}),saved:async()=>{const c=context(),project=await api('/projects/'+current.project_id);if(isContext(c)&&!dirty)render(project);}});
 const remoteConsent=mountRemoteConsent($('remote-consent'),{api,exclusive:action,context:()=>({generation,connected,projectId:current?.project_id,publicAccess:isPublicAccess(),canWrite:!hosted||current?.role==='engineer'})});
 function message(text, error = false) { $('message').textContent = text; $('message').className = error ? 'error' : ''; }
 function controls() {

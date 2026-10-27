@@ -1,4 +1,5 @@
 import json
+import pytest
 
 AUTH = {"Authorization": "Bearer agent-test-token", "Origin": "http://testserver"}
 
@@ -12,6 +13,7 @@ def test_chat_reads_only_selected_project_and_returns_actual_result(workspace, m
     calls = []
 
     def fake(key, model, messages, tools, timeout):
+        assert "Do not claim capabilities" in messages[0]["content"]
         calls.append((messages, tools))
         if len(calls) == 1:
             return {
@@ -180,6 +182,32 @@ def test_chat_hides_provider_failure_and_limits_tools(workspace, monkeypatch):
         },
     )
     assert result.status_code == 400 and "synthetic-secret" not in result.text
+
+
+@pytest.mark.parametrize("code, expected", [
+    (400, "rejected"), (401, "authentication"), (403, "denied"),
+    (422, "rejected"), (429, "limit"), (503, "unavailable"),
+])
+def test_chat_reports_provider_status_without_exposing_provider_data(workspace, monkeypatch, code, expected):
+    import urllib.error
+    from physimesh.agent import chat
+
+    client, project = workspace
+    monkeypatch.setattr(chat, "secure_origin", lambda request: True)
+
+    class Opener:
+        def open(self, request, timeout):
+            assert request.get_header("User-agent") == "PhysiCore/1.0"
+            raise urllib.error.HTTPError(request.full_url, code, "synthetic-secret", {}, None)
+
+    monkeypatch.setattr(chat.urllib.request, "build_opener", lambda *args: Opener())
+    response = client.post(
+        "/api/drone/agent/chat", headers=AUTH,
+        json={"project_id": project["project_id"], "key": "synthetic-secret",
+              "model": "test", "prompt": "hi", "run_id": "e" * 32},
+    )
+    assert expected in response.json()["detail"].lower()
+    assert "synthetic-secret" not in response.text
 
 
 def test_stop_during_provider_call_prevents_subsequent_action(workspace, monkeypatch):

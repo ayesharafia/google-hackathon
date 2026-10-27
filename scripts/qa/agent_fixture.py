@@ -35,6 +35,7 @@ app = create_app(
         None,
         hosted_mode=args.mode == "hosted",
         public_access=args.mode == "public",
+        provider_encryption_key=os.environ.get("PHYSIMESH_PROVIDER_ENCRYPTION_KEY"),
         **(
             {
                 "remote_mcp_origin": "https://app.example",

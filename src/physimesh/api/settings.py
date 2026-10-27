@@ -4,7 +4,7 @@ from __future__ import annotations
 import pathlib
 import re
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass(frozen=True)
@@ -37,6 +37,7 @@ class Settings:
     hosted_signin_discovery_url: str | None = None
     hosted_signin_client_id: str | None = None
     hosted_signin_origin: str | None = None
+    provider_encryption_key: str | None = field(default=None, repr=False)
 
     def __post_init__(self) -> None:
         if not isinstance(self.public_access, bool):
@@ -129,4 +130,5 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         oidc_jwks_url=env.get('PHYSIMESH_OIDC_JWKS_URL'), monitoring_token=env.get('PHYSIMESH_MONITORING_TOKEN'),
         remote_mcp_origin=env.get('PHYSIMESH_REMOTE_MCP_ORIGIN'), remote_mcp_issuer=env.get('PHYSIMESH_REMOTE_MCP_ISSUER'), remote_mcp_jwks_url=env.get('PHYSIMESH_REMOTE_MCP_JWKS_URL'),
         hosted_signin_issuer=env.get('PHYSIMESH_HOSTED_SIGNIN_ISSUER'), hosted_signin_discovery_url=env.get('PHYSIMESH_HOSTED_SIGNIN_DISCOVERY_URL'), hosted_signin_client_id=env.get('PHYSIMESH_HOSTED_SIGNIN_CLIENT_ID'), hosted_signin_origin=env.get('PHYSIMESH_HOSTED_SIGNIN_ORIGIN'),
+        provider_encryption_key=env.get('PHYSIMESH_PROVIDER_ENCRYPTION_KEY'),
     )

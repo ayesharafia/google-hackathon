@@ -21,10 +21,28 @@ router = APIRouter(prefix="/api/drone/agent")
 MAX_STATE = 120_000
 
 
+class ProviderFailure(Exception):
+    """A safe, fixed provider failure category, never the provider's response."""
+
+    def __init__(self, category):
+        self.category = category
+
+
+PROVIDER_MESSAGES = {
+    "authentication": "Groq authentication failed. Check or replace the API key.",
+    "forbidden": "Groq denied access. Check the key's permissions and account.",
+    "request": "Groq rejected the request. The model or tool configuration may be incompatible.",
+    "limit": "Groq rate or usage limit reached. Check your account limits and try again later.",
+    "service": "Groq is temporarily unavailable. Try again later.",
+    "connection": "Could not connect to Groq. Check the server's network connection.",
+    "response": "Groq returned an invalid response. Try again or choose another model.",
+}
+
+
 class ChatInput(Strict):
     project_id: ID
-    key: str = Field(min_length=8, max_length=512, repr=False)
-    model: str = Field(min_length=1, max_length=128, pattern=r"^[A-Za-z0-9_./-]+$")
+    key: str = Field(default="", max_length=512, repr=False)
+    model: str = Field(default="", max_length=128, pattern=r"^[A-Za-z0-9_./-]*$")
     prompt: str = Field(default="", max_length=6000)
     continuation: str = Field(default="", max_length=300000, repr=False)
     dirty: bool = False
@@ -44,7 +62,11 @@ def groq_completion(key, model, messages, tools, timeout):
     req = urllib.request.Request(
         "https://api.groq.com/openai/v1/chat/completions",
         data=body,
-        headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"},
+        headers={
+            "Authorization": "Bearer " + key,
+            "Content-Type": "application/json",
+            "User-Agent": "PhysiCore/1.0",
+        },
         method="POST",
     )
     opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
@@ -54,8 +76,13 @@ def groq_completion(key, model, messages, tools, timeout):
         if len(raw) > 262144:
             raise ValueError("Provider response exceeds the limit.")
         return json.loads(raw)["choices"][0]["message"]
-    except (urllib.error.URLError, ValueError, KeyError, IndexError, TypeError, OSError):
-        raise ValueError("Groq request failed or returned an invalid response.") from None
+    except urllib.error.HTTPError as exc:
+        category = {400: "request", 401: "authentication", 403: "forbidden", 422: "request", 429: "limit"}.get(exc.code, "service")
+        raise ProviderFailure(category) from None
+    except (urllib.error.URLError, OSError):
+        raise ProviderFailure("connection") from None
+    except (ValueError, KeyError, IndexError, TypeError):
+        raise ProviderFailure("response") from None
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -104,6 +131,10 @@ def chat(request: Request, body: ChatInput):
     ctx = trusted(request, changing=True)
     if not secure_origin(request):
         raise HTTPException(403, "Use HTTPS or a loopback connection for provider keys.")
+    if not body.key:
+        from .provider_settings import settings_actor
+        key, model = request.app.state.provider_settings.resolve(settings_actor(request, ctx))
+        body = body.model_copy(update={"key": key, "model": model})
     run_key = (ctx.actor, body.project_id, body.run_id)
     with request.app.state.chat_run_lock:
         if run_key in request.app.state.chat_runs or len(request.app.state.chat_runs) >= 64:
@@ -112,6 +143,8 @@ def chat(request: Request, body: ChatInput):
         request.app.state.chat_runs[run_key] = cancelled
     try:
         return run(request, ctx, body, cancelled)
+    except ProviderFailure as exc:
+        raise HTTPException(502, PROVIDER_MESSAGES.get(exc.category, PROVIDER_MESSAGES["service"])) from None
     except Exception:
         # Provider messages and request bodies can contain secrets; never echo exceptions.
         raise HTTPException(
@@ -172,7 +205,7 @@ def run(request, ctx, body, cancelled):
             "messages": [
                 {
                     "role": "system",
-                    "content": "You are a PhysiCore assistant. Use only available tools and explicit user inputs. Never invent measurements, outcomes or scientific approval. The selected project is "
+                    "content": "You are a PhysiCore assistant. Use only available tools and explicit user inputs. Never invent measurements, outcomes or scientific approval. Do not claim capabilities, editable fields, analysis types, or completed actions unless the available tools and their descriptions support them. If a requested capability is unavailable, say so. A tool result is not proof of physical validation. The selected project is "
                     + body.project_id
                     + ".",
                 },

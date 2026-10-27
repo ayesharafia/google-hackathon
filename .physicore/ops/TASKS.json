@@ -701,6 +701,27 @@
         "M .physicore/ops/APPROVALS.md"
       ],
       "finished_at": "2026-10-27T10:24:57+00:00"
+    },
+    {
+      "id": "AI-JOURNEY-001",
+      "title": "Verify first design-to-study AI journey",
+      "done_when": "Demonstrate supported explanation, explicit edit, human review, frozen revision and retained study through chat without physical acceptance",
+      "kind": "regression",
+      "priority": 3,
+      "status": "in_progress",
+      "zone": "green",
+      "depends_on": [],
+      "source_refs": [
+        "docs/superpowers/specs/2026-10-27-groq-workbench-chat-design.md"
+      ],
+      "evidence": [],
+      "scoped": true,
+      "notes": "Evidence-backed task proposed by agent",
+      "started_at": "2026-10-27T10:28:39+00:00",
+      "started_head": "3d9d7f1b34273d5a4add28c5629f09a0a837d060",
+      "started_dirty": [
+        "M .physicore/ops/TASKS.json"
+      ]
     }
   ]
 }

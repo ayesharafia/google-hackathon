@@ -86,6 +86,9 @@ def create_app(settings: Settings) -> FastAPI:
     from ..agent.service import AgentService
     from ..agent.api import router as agent_router
     app.state.agent = AgentService(app)
+    from ..agent.provider_settings import ProviderSettings, router as provider_settings_router
+    app.state.provider_settings = ProviderSettings(app)
+    app.include_router(provider_settings_router)
     from ..platform.hosted_signin import HostedSignin, RedactOIDCQuery
     from ..platform.hosted_signin_api import router as signin_router
     app.state.hosted_signin = HostedSignin(app) if settings.hosted_signin_issuer else None
@@ -124,7 +127,7 @@ def create_app(settings: Settings) -> FastAPI:
 
     @app.exception_handler(RequestValidationError)
     async def validation_handler(request, exc):
-        if request.url.path == "/api/drone/agent/chat":
+        if request.url.path in ("/api/drone/agent/chat", "/api/drone/agent/provider-settings"):
             return JSONResponse({"detail": "Invalid chat request."}, status_code=422)
         from fastapi.exception_handlers import request_validation_exception_handler
         return await request_validation_exception_handler(request, exc)

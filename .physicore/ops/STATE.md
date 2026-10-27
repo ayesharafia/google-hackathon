@@ -2,6 +2,16 @@
 
 ## Current continuation: 27 October 2026
 
+- Owner approved persistent per-user AI settings and project chat. Local implementation uses AES-GCM encrypted provider settings with a separately configured server secret; hosted actor isolation and explicitly shared local identity, save/replace/remove, status, and saved-key chat are implemented. The mock-provider browser verified save, refresh/reuse, reviewed approval/rejection and deletion. Agent tests passed 46 with one PostgreSQL integration skipped; see `docs/qa/persistent-ai-settings-2026-10-27.md` and setup `docs/technical/ai-settings.md`. No production secret, deployment or GitHub publication was performed. Real-provider testing of saved credentials, PostgreSQL, native accessibility and full action coverage remain open.
+
+- AI-JOURNEY-001 is in progress: the full explain/edit/human-review/freeze/run/summary path passed with a scripted provider and synthetic project. A separate disposable local workbench is open for the owner to enter a Groq key privately and test the real model; no real-model result is yet established. See `docs/qa/ai-journey-2026-10-27.md`. Remote hosted provider setup, live Claude/ChatGPT and wider action coverage remain open.
+- First live chat produced a generic error with unknown cause. Added tested, static secret-free Groq failure categories; the disposable server is restarted on loopback and awaiting a fresh private key entry and retry. The exposed prior key needs revocation. No production server was restarted.
+- Owner identified the retired default model. Groq documents its decommission for free/developer tiers; replaced the default with its recommended tool-capable `openai/gpt-oss-120b`. The new default was verified in the disposable browser. Live model behavior remains unverified.
+- Owner's retry showed access denied. A no-key network probe isolated Cloudflare HTTP 1010 on the default Python user agent; an identifying PhysiCore user agent reached Groq authentication instead. Updated the adapter and tested the outgoing header and safe error categories; restarted the disposable server. Awaiting a live retry with a privately entered replacement key.
+- Live Groq chat subsequently answered and invoked `design.inspect` on synthetic data. It also claimed unsupported CFD/edits. The following explanation/proposal request hit a Groq rate/usage limit before creating a proposal. Added and tested an explicit instruction to avoid unsupported capability claims; this is not a guarantee and is not yet live-validated. Live reviewed edit, freeze, run and summary remain pending. See QA record.
+
+## Previous continuation: 27 October 2026
+
 - Owner approved hosted organization sign-in. Local implementation now provides
   OIDC authorization-code/PKCE sign-in for provisioned users, opaque hosted browser
   sessions, remote project consent and scoped MCP HTTP. A disposable HTTPS browser
