@@ -33,6 +33,10 @@ class Settings:
     remote_mcp_origin: str | None = None
     remote_mcp_issuer: str | None = None
     remote_mcp_jwks_url: str | None = None
+    hosted_signin_issuer: str | None = None
+    hosted_signin_discovery_url: str | None = None
+    hosted_signin_client_id: str | None = None
+    hosted_signin_origin: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.public_access, bool):
@@ -63,6 +67,19 @@ class Settings:
                 raise ValueError('Remote MCP origin must be a bare HTTPS origin.')
             if self.oidc_audience and self.oidc_audience == self.remote_mcp_origin.rstrip('/') + '/mcp/':
                 raise ValueError('Application and remote MCP audiences must be distinct.')
+        signin = (self.hosted_signin_issuer, self.hosted_signin_discovery_url, self.hosted_signin_client_id, self.hosted_signin_origin)
+        if any(signin):
+            from urllib.parse import urlsplit
+            from ..agent.remote_auth import https_url
+            if not all(signin) or not self.hosted_mode or not all(https_url(x) for x in (signin[0], signin[1], signin[3])):
+                raise ValueError('Hosted provider sign-in requires explicit hosted HTTPS configuration.')
+            issuer, discovery, origin = map(urlsplit,(signin[0], signin[1], signin[3]))
+            if (issuer.scheme,issuer.netloc) != (discovery.scheme,discovery.netloc) or issuer.query or discovery.query or origin.path not in ('','/') or origin.query:
+                raise ValueError('Provider discovery and browser origin configuration is invalid.')
+            if not re.fullmatch(r'[A-Za-z0-9._~:/-]{1,512}',signin[2]):
+                raise ValueError('Invalid hosted sign-in client ID.')
+            if self.remote_mcp_origin and (signin[3].rstrip('/') != self.remote_mcp_origin.rstrip('/') or signin[0] != self.remote_mcp_issuer):
+                raise ValueError('Sign-in and remote MCP must share the configured origin and issuer.')
         if self.s3_bucket and not self.s3_region:
             raise ValueError('private storage requires an explicit region')
         if self.s3_endpoint:
@@ -111,4 +128,5 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         oidc_issuer=env.get('PHYSIMESH_OIDC_ISSUER'), oidc_audience=env.get('PHYSIMESH_OIDC_AUDIENCE'),
         oidc_jwks_url=env.get('PHYSIMESH_OIDC_JWKS_URL'), monitoring_token=env.get('PHYSIMESH_MONITORING_TOKEN'),
         remote_mcp_origin=env.get('PHYSIMESH_REMOTE_MCP_ORIGIN'), remote_mcp_issuer=env.get('PHYSIMESH_REMOTE_MCP_ISSUER'), remote_mcp_jwks_url=env.get('PHYSIMESH_REMOTE_MCP_JWKS_URL'),
+        hosted_signin_issuer=env.get('PHYSIMESH_HOSTED_SIGNIN_ISSUER'), hosted_signin_discovery_url=env.get('PHYSIMESH_HOSTED_SIGNIN_DISCOVERY_URL'), hosted_signin_client_id=env.get('PHYSIMESH_HOSTED_SIGNIN_CLIENT_ID'), hosted_signin_origin=env.get('PHYSIMESH_HOSTED_SIGNIN_ORIGIN'),
     )

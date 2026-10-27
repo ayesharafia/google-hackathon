@@ -1,5 +1,10 @@
 # Current approvals and pending decisions
 
+## 2026-10-27: Hosted provider sign-in approved
+
+Owner approved the local design in `docs/superpowers/specs/2026-10-27-hosted-provider-signin-proposal.md`, including simulated-provider tests. Real provider setup and deployment remain separate.
+
+
 ## 2026-10-27: Remote MCP build approved
 
 Owner approved the local build described in `docs/superpowers/specs/2026-10-27-remote-mcp-proposal.md`, with synthetic provider tests. No live provider setup, publication, hosting or deployment is authorized.

@@ -12,6 +12,7 @@ import {restoreSession,connectSession,forgetSession,isPublicAccess} from './sess
 import {renderReadiness} from './engineering-readiness.js?v=readiness-1';
 import {createComparisonController} from './design-comparison.js?v=comparison-1';
 const $ = id => document.getElementById(id);
+let providerSigninEnabled = false;
 let token = '', connected = false, connectionReady = false, current = null, dirty = false, busy = false, generation = 0, study = null, viewer = null;
 let hosted=false, organization='', inventoryCursor='', inventoryNext=null, inventoryStack=[], activeJob=null;
 let layoutGeneration=0, viewSnapshot=null, viewRevision='', viewMode='draft', selectedCase=''; const geometryCache=new Map();
@@ -106,6 +107,7 @@ function controls() {
   agentPanel.sync();
   groqChat.sync();
   remoteConsent.sync();
+  $('organization-signin').hidden = !hosted || !providerSigninEnabled || connected;
   jobActivity.updateAccess();
   ['organization','logout'].forEach(id=>$(id).disabled=busy);
   document.querySelectorAll('#individual-login input,#individual-login button,#accept-invitation input,#accept-invitation button').forEach(el=>el.disabled=busy);
@@ -147,7 +149,7 @@ function controls() {
 }
 async function request(path, options = {}) {
   const requested=context(),headers = {...options.headers};
-  if(hosted){headers.Authorization='Bearer '+token;if(organization)headers['X-Organization-ID']=organization;if(current?.project_id)headers['X-Project-ID']=current.project_id;}
+  if(hosted){if(token)headers.Authorization='Bearer '+token;if(organization)headers['X-Organization-ID']=organization;if(current?.project_id)headers['X-Project-ID']=current.project_id;}
   const response = await fetch('/api/drone' + path, { ...options, credentials:'same-origin', cache:'no-store', headers, signal: AbortSignal.timeout(60000) });
   if(!isContext(requested))throw new Error('Workspace context changed; the previous response was ignored.');
   if(response.status===401){
@@ -422,7 +424,12 @@ async function initializeMode(){
       const legacy=document.querySelector('header a[href="/web/results.html"]');if(legacy)legacy.hidden=true;
       $('individual-login').hidden=false;document.querySelector('header span').textContent='Private engineering workspace';
       document.querySelector('footer').textContent='Private project access. Synthetic studies do not establish aircraft validation.';
-      connectionReady=true;controls();message('Sign in to open a private project.');return;
+      const signInResponse=await fetch('/api/oidc/status',{credentials:'same-origin',cache:'no-store'});
+      const signIn=signInResponse.ok?await signInResponse.json():{enabled:false,connected:false};
+      providerSigninEnabled=signIn.enabled;connectionReady=true;
+      if(signIn.connected){connected=true;++generation;await sessionOrganizations();await inventory();message('Signed in. Select a private project.');}
+      else message(new URLSearchParams(location.search).get('signin')==='failed'?'Organization sign-in failed. Try again or contact your administrator.':'Sign in to open a private project.');
+      controls();return;
     }
     connected=await restoreSession();connectionReady=true;sessionStatus();controls();
     if(connected)await loadWorkspace();else message('Enter the workspace access token to connect.');

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-OIDC-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/oidc_browser.mjs"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-27T10:21:18+00:00",
+  "started_at": "2026-10-27T10:17:27+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "b287a13e67787df4b624da2ecd5af8d022da96a9",
+  "output": "\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\npage.waitForFunction: TypeError: Cannot read properties of null (reading 'disabled')\n    at eval (eval at predicate (eval at evaluate (:311:30)), <anonymous>:1:41)\n    at predicate (eval at evaluate (:311:30), <anonymous>:7:27)\n    at next (eval at evaluate (:311:30), <anonymous>:29:33)\n    at eval (eval at evaluate (:311:30), <anonymous>:42:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at /Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone/scripts/qa/oidc_browser.mjs:6:177 {\n  log: []\n}\n\nNode.js v26.0.0\n"
+}

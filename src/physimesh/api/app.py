@@ -86,6 +86,11 @@ def create_app(settings: Settings) -> FastAPI:
     from ..agent.service import AgentService
     from ..agent.api import router as agent_router
     app.state.agent = AgentService(app)
+    from ..platform.hosted_signin import HostedSignin, RedactOIDCQuery
+    from ..platform.hosted_signin_api import router as signin_router
+    app.state.hosted_signin = HostedSignin(app) if settings.hosted_signin_issuer else None
+    app.include_router(signin_router)
+    app.add_middleware(RedactOIDCQuery)
     import secrets
     app.state.chat_signing_key = secrets.token_bytes(32)
     from threading import Lock
@@ -180,22 +185,32 @@ def create_app(settings: Settings) -> FastAPI:
             return await call_next(request)
         try:
             authorization = request.headers.get('authorization', '')
-            if not authorization.startswith('Bearer ') or len(authorization) > 16384:
-                raise InvalidSession('individual bearer session required')
-            token = authorization[7:]
-            def authenticate():
-                try:
-                    return app.state.identity.session(token)
-                except InvalidSession:
-                    if app.state.oidc is None:
-                        raise
-                    return app.state.identity.oidc_session(token, app.state.oidc.verify(token))
-            principal = await run_in_threadpool(authenticate)
-            def remote_session_only():
+            cookie_auth = not authorization and app.state.hosted_signin is not None
+            if cookie_auth:
+                from ..platform.hosted_signin import HOSTED_COOKIE
+                principal = await run_in_threadpool(app.state.hosted_signin.principal, request.cookies.get(HOSTED_COOKIE, ''))
+                if request.method not in ('GET','HEAD','OPTIONS') and not same_origin(request):
+                    raise Denied('Submit changes from this workspace page.')
+            else:
+                if not authorization.startswith('Bearer ') or len(authorization) > 16384:
+                    raise InvalidSession('individual bearer session required')
+                token = authorization[7:]
+                def authenticate():
+                    try:
+                        return app.state.identity.session(token)
+                    except InvalidSession:
+                        if app.state.oidc is None:
+                            raise
+                        return app.state.identity.oidc_session(token, app.state.oidc.verify(token))
+                principal = await run_in_threadpool(authenticate)
+            def restricted_session():
                 with app.state.metadata.connection() as db:
-                    return db.execute('SELECT 1 FROM remote_oauth_sessions WHERE token_hash=?', (principal.session_hash,)).fetchone() is not None
-            if await run_in_threadpool(remote_session_only):
-                raise InvalidSession('Remote MCP tokens cannot access application routes.')
+                    remote = db.execute('SELECT 1 FROM remote_oauth_sessions WHERE token_hash=?', (principal.session_hash,)).fetchone()
+                    browser = db.execute('SELECT 1 FROM hosted_browser_sessions WHERE token_hash=?', (principal.session_hash,)).fetchone() if app.state.hosted_signin else None
+                    return bool(remote) or (bool(browser) and not cookie_auth)
+            if await run_in_threadpool(restricted_session):
+                raise InvalidSession('Credential cannot access application routes.')
+            request.state.hosted_cookie = cookie_auth
             request.state.principal = principal
             project_id = None
             if path.startswith('/api/drone/projects/'):

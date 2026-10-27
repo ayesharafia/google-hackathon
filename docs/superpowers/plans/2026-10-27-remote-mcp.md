@@ -14,7 +14,7 @@
 
 Disabled by default; hosted authenticated mode; explicit HTTPS endpoint and OAuth settings; no real provider, paid call, deployment, publication or physics change. Per-request issuer/audience/token type/client validation, user and membership recheck, bounded consent and trusted human review. Test actual HTTP MCP SDK with synthetic tokens, parallel users, revocation and previous stdio behavior. Interface law and real browser checks apply to consent controls.
 
-## Delivery sequence
+## Delivery sequence completed locally
 
 1. Add a versioned remote consent migration and tests for authorized issuance, role attenuation, expiry, client binding and revocation. Reuse existing transactional lock and project authority.
 2. Add opt-in OAuth settings and JWT access-token verification; validate request metadata and explicit HTTPS issuer/audience/JWKS, return protected-resource discovery without exposing private data. Verify invalid token classes and HTTP security boundaries.

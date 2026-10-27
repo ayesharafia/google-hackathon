@@ -1,6 +1,6 @@
 # Hosted provider sign-in needed for remote MCP
 
-Status: proposal for review. The remote MCP work uncovered a missing prerequisite: hosted workbench login accepts passwords, while a provisioned OAuth/OIDC identity has no password login. The synthetic browser fixture links both identity types by direct database modification; that is test-only and is not a usable or safe production onboarding flow.
+Status: approved by the owner for local implementation on 27 October 2026. The remote MCP work uncovered a missing prerequisite: hosted workbench login accepts passwords, while a provisioned OAuth/OIDC identity has no password login. The synthetic browser fixture links both identity types by direct database modification; that is test-only and is not a usable or safe production onboarding flow.
 
 ## Proposed experience
 

@@ -154,6 +154,10 @@ class RemoteHTTP:
         if not self.valid_host(request):
             await refuse(400, "Invalid endpoint origin.")(scope, receive, send)
             return
+        from ..platform.hosted_signin import HOSTED_COOKIE
+        if HOSTED_COOKIE in request.cookies:
+            await refuse(403, 'Browser sessions are not remote MCP credentials.')(scope, receive, send)
+            return
         headers = scope.get("headers", [])
         authorization = [v for k, v in headers if k.lower() == b"authorization"]
         challenge = {

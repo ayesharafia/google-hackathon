@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-OIDC-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_hosted_signin.py"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-27T10:17:50+00:00",
+  "started_at": "2026-10-27T10:17:27+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "b287a13e67787df4b624da2ecd5af8d022da96a9",
+  "output": "EE                                                                       [100%]\n==================================== ERRORS ====================================\n_______ ERROR at setup of test_state_is_browser_bound_and_consumed_once ________\n\ntmp_path = PosixPath('/private/var/folders/fw/7f21wrbj7xnf7w919ljdj4r40000gn/T/pytest-of-bhupeshcholake/pytest-17/test_state_is_browser_bound_an0')\n\n    @pytest.fixture\n    def store(tmp_path):\n>       from physimesh.platform.hosted_signin import SigninTransactions\nE       ModuleNotFoundError: No module named 'physimesh.platform.hosted_signin'\n\ntests/agent/test_hosted_signin.py:10: ModuleNotFoundError\n______ ERROR at setup of test_only_one_concurrent_callback_consumes_state ______\n\ntmp_path = PosixPath('/private/var/folders/fw/7f21wrbj7xnf7w919ljdj4r40000gn/T/pytest-of-bhupeshcholake/pytest-17/test_only_one_concurrent_callb0')\n\n    @pytest.fixture\n    def store(tmp_path):\n>       from physimesh.platform.hosted_signin import SigninTransactions\nE       ModuleNotFoundError: No module named 'physimesh.platform.hosted_signin'\n\ntests/agent/test_hosted_signin.py:10: ModuleNotFoundError\n=========================== short test summary info ============================\nERROR tests/agent/test_hosted_signin.py::test_state_is_browser_bound_and_consumed_once\nERROR tests/agent/test_hosted_signin.py::test_only_one_concurrent_callback_consumes_state\n2 errors in 0.04s\n\n"
+}

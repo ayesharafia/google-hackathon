@@ -156,7 +156,6 @@ PENDING = [
     "reports",
     "collaboration",
     "owner_development",
-    "http_mcp",
 ]
 
 

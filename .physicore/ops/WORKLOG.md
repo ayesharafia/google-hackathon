@@ -457,3 +457,16 @@ REMOTE-MCP-001 partial: synthetic HTTP SDK and consent/browser tests pass. Found
 
 ## 2026-10-27T10:15:32+00:00 BLOCKED REMOTE-MCP-001
 Hosted OAuth-only workbench sign-in and account provisioning flow are missing; a reviewed design is required before finishing end-to-end connector verification.
+
+
+HOSTED-OIDC-001 and REMOTE-MCP-001: provider sign-in and opt-in remote MCP integrated and verified locally with synthetic provider and actual HTTPS browser. Existing password flow retained; live provider/client, PostgreSQL and deployment remain unverified. QA: docs/qa/hosted-signin-remote-mcp-2026-10-27.md.
+
+## 2026-10-27T10:24:57+00:00 DONE HOSTED-OIDC-001
+- Evidence: .physicore/evidence/HOSTED-OIDC-001-completion.json
+- Notes: Synthetic provider and browser checks pass; real provider and deployment unverified
+- Next ready: no new task promoted
+
+## 2026-10-27T10:25:17+00:00 DONE REMOTE-MCP-001
+- Evidence: .physicore/evidence/REMOTE-MCP-001-completion.json
+- Notes: Synthetic SDK and HTTPS browser checks pass; real provider, clients, PostgreSQL and production controls unverified
+- Next ready: no new task promoted

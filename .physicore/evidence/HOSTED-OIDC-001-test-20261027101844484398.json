@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-OIDC-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_hosted_signin.py"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-27T10:18:44+00:00",
+  "started_at": "2026-10-27T10:17:27+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "b287a13e67787df4b624da2ecd5af8d022da96a9",
+  "output": "...                                                                      [100%]\n3 passed in 0.24s\n\n"
+}

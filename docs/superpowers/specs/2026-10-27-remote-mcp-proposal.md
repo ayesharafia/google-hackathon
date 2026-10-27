@@ -1,6 +1,6 @@
 # Remote MCP connector proposal
 
-Status: owner approved local build on 27 October 2026; implementation in progress. The goal is to let compatible remote AI clients connect to PhysiCore and use the same project actions as the existing local MCP server and Groq chat.
+Status: owner approved; local implementation verified with synthetic provider and client on 27 October 2026. Real provider, client and deployment verification remain open. The goal is to let compatible remote AI clients connect to PhysiCore and use the same project actions as the existing local MCP server and Groq chat.
 
 ## Scope and architecture
 

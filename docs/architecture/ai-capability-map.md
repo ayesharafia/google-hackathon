@@ -1,7 +1,7 @@
 # AI capability map
 
 Source inspection: 26 October 2026, application baseline main `5de743c`.
-Status: first foundation implemented locally; later domain adapters remain planned. This map
+Status: local foundation, Groq chat, provider sign-in and remote MCP transport implemented; domain adapters remain planned. This map
 supports the [revised foundation design](../superpowers/specs/2026-10-26-ai-native-foundation-design.md).
 
 The goal is complete product coverage through one action registry. The MCP tools,
@@ -75,3 +75,5 @@ receives a clear unavailable reason; it is never reported as completed.
 
 The foundation can be verified using a real MCP SDK client without activating a
 paid model. Natural-language planning quality needs separate live-model evidence.
+
+Remote MCP is opt-in with scoped OAuth consent and local synthetic verification; actual provider/client compatibility and deployment qualification remain open. See `../technical/ai-foundation.md`.

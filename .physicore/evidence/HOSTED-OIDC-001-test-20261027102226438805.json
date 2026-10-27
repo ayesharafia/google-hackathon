@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-OIDC-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent",
+    "tests/projects",
+    "tests/platform/test_identity_jobs.py"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-27T10:22:26+00:00",
+  "started_at": "2026-10-27T10:17:27+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "b287a13e67787df4b624da2ecd5af8d022da96a9",
+  "output": ".............................s.......................................... [ 37%]\n........................................................................ [ 74%]\n..................................................                       [100%]\n193 passed, 1 skipped in 11.26s\n\n"
+}

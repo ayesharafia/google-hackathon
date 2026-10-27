@@ -97,6 +97,7 @@ def test_token_verification_requires_access_token_client_and_exact_audience():
     for bad in [
         token(claims, "JWT"),
         token({**claims, "aud": "other"}),
+        token({**claims, "aud": ["https://app.example/mcp", "another-resource"]}),
         token({**claims, "exp": int(time.time()) - 1}),
         token({k: v for k, v in claims.items() if k != "client_id"}),
     ]:

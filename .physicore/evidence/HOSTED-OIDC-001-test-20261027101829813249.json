@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "HOSTED-OIDC-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_hosted_signin.py"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-27T10:18:29+00:00",
+  "started_at": "2026-10-27T10:17:27+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "b287a13e67787df4b624da2ecd5af8d022da96a9",
+  "output": "..F                                                                      [100%]\n=================================== FAILURES ===================================\n_____ test_provider_validates_metadata_nonce_audience_and_signed_identity ______\n\n    def test_provider_validates_metadata_nonce_audience_and_signed_identity():\n        import jwt\n        from cryptography.hazmat.primitives.asymmetric import rsa\n>       from physimesh.platform.hosted_signin import Provider, digest\nE       ImportError: cannot import name 'Provider' from 'physimesh.platform.hosted_signin' (/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone/src/physimesh/platform/hosted_signin.py)\n\ntests/agent/test_hosted_signin.py:49: ImportError\n=========================== short test summary info ============================\nFAILED tests/agent/test_hosted_signin.py::test_provider_validates_metadata_nonce_audience_and_signed_identity\n1 failed, 2 passed in 0.23s\n\n"
+}

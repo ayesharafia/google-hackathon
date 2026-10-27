@@ -4,9 +4,9 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
 <title>PhysiCore | Design workbench</title>
-<link rel="stylesheet" href="/web/css/workbench.css?v=remote-1">
+<link rel="stylesheet" href="/web/css/workbench.css?v=signin-1">
 <script type="importmap">{"imports":{"three":"/web/vendor/three.module.min.js"}}</script>
-<script type="module" src="/web/js/workbench.js?v=remote-1"></script>
+<script type="module" src="/web/js/workbench.js?v=signin-1"></script>
 </head>
 <body>
 <header><a class="brand" href="/web/">PhysiCore</a><span>Local design workbench</span><a href="/web/results.html">Evidence desk</a></header>
@@ -20,6 +20,7 @@
 <p id="session-status" role="status">Opening workspace…</p>
 </div>
 <form id="individual-login" class="connection" hidden><label>Email<input id="login-email" type="email" autocomplete="username" required></label><label>Password<input id="login-password" type="password" autocomplete="current-password" required></label><button type="submit">Sign in</button></form>
+<a id="organization-signin" href="/api/oidc/start" hidden>Sign in with your organization</a>
 <div id="individual-session" hidden><label>Organization<select id="organization"></select></label><button id="logout" type="button">Sign out</button></div>
 <form id="accept-invitation" hidden><label>Invitation code<input id="invitation-code" type="password" autocomplete="off" required></label><button type="submit">Accept invitation</button></form>
 <p id="message" role="status" aria-live="polite">Loading workspace controls.</p>

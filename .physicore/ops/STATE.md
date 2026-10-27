@@ -2,10 +2,15 @@
 
 ## Current continuation: 27 October 2026
 
-- REMOTE-MCP-001 is in progress on `codex/ai-native-foundation`. Local opt-in HTTP MCP, project-scoped OAuth consent, per-request authorization and workbench controls have synthetic tests, including client isolation and remote token denial on ordinary routes. The hosted workbench cannot sign OAuth-only users in; browser QA used a test-only database identity link. A real connector is therefore not ready. Proposed prerequisite: `docs/superpowers/specs/2026-10-27-hosted-provider-signin-proposal.md`. PostgreSQL, real provider/client, production security and deployment remain unverified. Keep endpoint disabled and do not publish this partial work.
-
-
-- Owner selected Groq and approved the written chat design. GROQ-CHAT-001 adds authenticated project chat using existing actions, explicit review/continue, session-only key, stop and bounded calls. Simulated-provider and browser tests pass; see `docs/qa/groq-chat-2026-10-27.md`. Live provider behavior, multi-worker hosting and physical validity remain unverified. Existing shared tunnel and GitHub main do not contain this local branch. Full project action coverage, remote MCP and owner code development are later stages.
+- Owner approved hosted organization sign-in. Local implementation now provides
+  OIDC authorization-code/PKCE sign-in for provisioned users, opaque hosted browser
+  sessions, remote project consent and scoped MCP HTTP. A disposable HTTPS browser
+  completed sign-in, consent, remote proposal, human approval, retry and logout;
+  real provider/Claude/ChatGPT, PostgreSQL, production security and hosting remain
+  unverified. See `docs/qa/hosted-signin-remote-mcp-2026-10-27.md` and
+  `docs/technical/ai-foundation.md`. User data, original shared runtime and main
+  branch are untouched. Wider project action coverage and owner code tools remain
+  future work.
 
 ## Previous continuation: 26 October 2026
 

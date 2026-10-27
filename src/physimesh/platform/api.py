@@ -49,8 +49,27 @@ def identity(request):
 
 @router.post('/login')
 def login(request: Request, body: Login):
+    signin = getattr(request.app.state, 'hosted_signin', None)
+    cookie = ''
+    if signin:
+        from .hosted_signin import HOSTED_COOKIE
+        from physimesh.api.sessions import same_origin
+        cookie = request.cookies.get(HOSTED_COOKIE, '')
+        if cookie and not same_origin(request):
+            raise HTTPException(403, 'Sign in from this workspace page.')
     try:
-        return identity(request).login(body.email, body.password)
+        result = identity(request).login(body.email, body.password)
+        if cookie:
+            try:
+                old = signin.principal(cookie)
+                identity(request).revoke(old)
+            except InvalidSession:
+                pass
+            from fastapi.responses import JSONResponse
+            response = JSONResponse(result, headers={'Cache-Control': 'no-store'})
+            response.delete_cookie(HOSTED_COOKIE, path='/api', secure=True, httponly=True, samesite='strict')
+            return response
+        return result
     except InvalidSession as exc:
         raise HTTPException(401, str(exc)) from exc
 
@@ -69,6 +88,12 @@ def me(request: Request):
 @router.post('/logout')
 def logout(request: Request, all_sessions: bool = False):
     identity(request).revoke(request.state.principal, all_sessions=all_sessions)
+    if getattr(request.state, 'hosted_cookie', False):
+        from fastapi.responses import JSONResponse
+        from .hosted_signin import HOSTED_COOKIE
+        response=JSONResponse({'revoked': True},headers={'Cache-Control':'no-store'})
+        response.delete_cookie(HOSTED_COOKIE,path='/api',secure=True,httponly=True,samesite='strict')
+        return response
     return {'revoked': True}
 
 

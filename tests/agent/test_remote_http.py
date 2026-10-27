@@ -159,6 +159,15 @@ def test_remote_http_sdk_scoped_project_and_revocation(tmp_path):
                     json={"jsonrpc": "2.0", "id": 1, "method": "tools/list", "params": {}},
                 )
                 assert denied.status_code == 401
+                with_cookie = await mcp_http.post(
+                    resource,
+                    headers={
+                        "Accept": "application/json, text/event-stream",
+                        "Cookie": "physicore_hosted_session=synthetic",
+                    },
+                    json={"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}},
+                )
+                assert with_cookie.status_code == 403
                 writable = app.state.agent.remote_consents.create(
                     principal, pid, "mcp-client", ["read", "propose", "change"], 600
                 )

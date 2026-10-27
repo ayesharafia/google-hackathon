@@ -129,3 +129,6 @@ AI foundation: scoped MCP clients can inspect a project, propose reviewed edits 
 
 
 Groq chat can direct the implemented project actions after human review in local testing. Broader actions, remote MCP, live model and deployment qualification remain open.
+
+
+Remote MCP and organization sign-in now have a locally demonstrated scoped approval flow with simulated identity. Real customer/provider interoperability, deployment and scientific qualification remain open.
