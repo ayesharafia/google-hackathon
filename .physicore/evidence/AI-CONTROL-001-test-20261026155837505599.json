@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "AI-CONTROL-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_foundation.py"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-26T15:58:37+00:00",
+  "started_at": "2026-10-26T15:55:43+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "e334bd6ae94659860d9b9c232fcaa6484f52f0da",
+  "output": "FF                                                                       [100%]\n=================================== FAILURES ===================================\n__________ test_scoped_catalog_and_credentials_cannot_escape_gateway ___________\n\nworkspace = (<starlette.testclient.TestClient object at 0x10e5225d0>, {'project_id': 'project_a79d9e93273c4bffb9b6bebab7683bbe', 'title': 'Illustrative hover design', 'studies': [], 'studies_more': False, ...})\n\n    def test_scoped_catalog_and_credentials_cannot_escape_gateway(workspace):\n        c, p = workspace\n>       g = mint(c, p['project_id'])\n            ^^^^^^^^^^^^^^^^^^^^^^^^\n\ntests/agent/test_foundation.py:47: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nc = <starlette.testclient.TestClient object at 0x10e5225d0>\npid = 'project_a79d9e93273c4bffb9b6bebab7683bbe', groups = None\n\n    def mint(c, pid, groups=None):\n        response = c.post(ROOT+'/grants', headers=AUTH, json={\n            'project_id': pid, 'name': 'Synthetic MCP client',\n            'groups': groups or ['read', 'propose', 'change', 'study'],\n        })\n>       assert response.status_code == 201, response.text\nE       AssertionError: {\"detail\":\"Not Found\"}\nE       assert 404 == 201\nE        +  where 404 = <Response [404 Not Found]>.status_code\n\ntests/agent/test_foundation.py:27: AssertionError\n________ test_review_apply_duplicate_and_undo_are_bound_to_exact_draft _________\n\nworkspace = (<starlette.testclient.TestClient object at 0x10f9f8ad0>, {'project_id': 'project_790fe25d68e446faa3a49081c6e5f85a', 'title': 'Illustrative hover design', 'studies': [], 'studies_more': False, ...})\n\n    def test_review_apply_duplicate_and_undo_are_bound_to_exact_draft(workspace):\n        c, p = workspace\n>       pid = p['project_id']; g = mint(c, pid)\n                                   ^^^^^^^^^^^^\n\ntests/agent/test_foundation.py:63: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nc = <starlette.testclient.TestClient object at 0x10f9f8ad0>\npid = 'project_790fe25d68e446faa3a49081c6e5f85a', groups = None\n\n    def mint(c, pid, groups=None):\n        response = c.post(ROOT+'/grants', headers=AUTH, json={\n            'project_id': pid, 'name': 'Synthetic MCP client',\n            'groups': groups or ['read', 'propose', 'change', 'study'],\n        })\n>       assert response.status_code == 201, response.text\nE       AssertionError: {\"detail\":\"Not Found\"}\nE       assert 404 == 201\nE        +  where 404 = <Response [404 Not Found]>.status_code\n\ntests/agent/test_foundation.py:27: AssertionError\n=========================== short test summary info ============================\nFAILED tests/agent/test_foundation.py::test_scoped_catalog_and_credentials_cannot_escape_gateway\nFAILED tests/agent/test_foundation.py::test_review_apply_duplicate_and_undo_are_bound_to_exact_draft\n2 failed in 0.67s\n\n"
+}

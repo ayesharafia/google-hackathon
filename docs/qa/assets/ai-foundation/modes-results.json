@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Actual hosted viewer cannot enable change/study grant groups",
+    "Viewer-created credential performs a real saved-input read",
+    "Actual viewer proposal controls and API writes are both denied",
+    "Hosted logout clears credentials and disables AI controls",
+    "Public demo visibly explains why privileged AI connections are disabled",
+    "Public gateway is denied while existing manual project authoring remains available",
+    "Hosted-viewer and public pages have no JavaScript errors"
+  ],
+  "errors": []
+}

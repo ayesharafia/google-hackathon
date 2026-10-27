@@ -26,6 +26,23 @@ dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;backgrou
 
 [hidden]{display:none!important}
 
+/* An action review sheet beside the actual design; no model-specific shell. */
+#agent-workspace{margin:28px 0 36px;padding:24px;background:#d5e0d2;scroll-margin-top:24px;overflow-wrap:anywhere;container:agent-workspace/inline-size}
+#agent-workspace>h3{margin-top:0}#agent-workspace p{max-width:76ch}
+.agent-binding,.agent-status{min-height:24px}.agent-binding{font-weight:600;font-size:14px}.agent-status{margin:16px 0}
+.agent-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 20px;align-items:end;margin:20px 0}
+.agent-form label{margin:0}.agent-form>button{justify-self:start}.agent-form .agent-check{grid-column:1/-1;display:flex;align-items:center;gap:12px;font-weight:500}
+.agent-check input[type=checkbox]{flex:none;margin:0;order:-1;accent-color:var(--ink)}.agent-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0}
+#agent-workspace .agent-text-action{background:transparent;color:var(--ink);padding:10px 0;text-align:left}
+#agent-workspace .agent-text-action:hover:not(:disabled){color:#405c45;background:transparent}
+.agent-credential{background:#e8eee4;padding:20px;margin:20px 0}.agent-credential input{font:14px/1.5 ui-monospace,monospace}
+.agent-connection-row{margin:18px 0}.agent-connection-row p{margin-bottom:4px}.agent-review{margin:24px 0;padding:18px;background:#e5ece1}
+.agent-review h4{margin-top:0}.agent-values{overflow:auto;margin:16px 0;overscroll-behavior-x:contain}.agent-values table{min-width:460px}
+.agent-values th,.agent-values td{padding:12px}.agent-values td:first-child{min-width:150px;max-width:240px;overflow-wrap:anywhere}
+.agent-values td:not(:first-child){min-width:80px;white-space:nowrap}.agent-receipt{font-size:14px;margin:16px 0}
+@media(max-width:650px){#agent-workspace{padding:18px}.agent-form{grid-template-columns:1fr}.agent-credential{padding:16px}.agent-actions{align-items:stretch;flex-direction:column}.agent-actions button{text-align:left}.agent-review{padding:14px}}
+@container agent-workspace (max-width:500px){.agent-form{grid-template-columns:1fr}.agent-form>button{justify-self:stretch}.agent-actions{align-items:stretch;flex-direction:column}}
+
 #display-context,#layout-inputs,#study-summary{overflow-wrap:anywhere}#display-context{font-weight:600}#layout-inputs p{font-size:14px}#guided-readiness button{margin:6px 0}#studies button[aria-current=true],#revisions button[aria-current=true]{font-weight:800;text-decoration:underline;text-underline-offset:4px}
 #message,#revision-summary{overflow-wrap:anywhere}
 .session-panel{max-width:760px;margin:20px 0;color:var(--muted)}

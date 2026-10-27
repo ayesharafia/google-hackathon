@@ -19,6 +19,9 @@ class ReleaseBuild(build_py):
         root = Path(__file__).parent
         (package/'_build.json').unlink(missing_ok=True)
         shutil.copytree(root/'web', package/'resources/web', dirs_exist_ok=True)
+        optional_lock = package/'resources/locks/requirements-mcp.lock'
+        optional_lock.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(root/'requirements-mcp.lock', optional_lock)
         files = {str(p.relative_to(package)): hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in sorted(package.rglob('*')) if p.is_file() and '__pycache__' not in p.parts}
         try:
@@ -28,7 +31,8 @@ class ReleaseBuild(build_py):
             revision, dirty = os.environ.get('PHYSIMESH_BUILD_REVISION', 'unrecorded'), True
         record = {'schema_version': 'application_build_v1', 'revision': revision, 'dirty': dirty,
                   'resources': files, 'dependencies_sha256': hashlib.sha256(
-                      (root/'requirements-runtime.lock').read_bytes()).hexdigest()}
+                      (root/'requirements-runtime.lock').read_bytes()).hexdigest(),
+                  'optional_dependencies_sha256': {'mcp': hashlib.sha256(optional_lock.read_bytes()).hexdigest()}}
         raw = json.dumps(record, sort_keys=True, separators=(',', ':')).encode()
         record['build_sha256'] = hashlib.sha256(raw).hexdigest()
         (package/'_build.json').write_text(json.dumps(record, sort_keys=True)+'\n')

@@ -5,11 +5,9 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
-from physimesh.drone.authoring import inspect_inputs
 from physimesh.drone.conditioning import ConditionedMap, ConditioningPolicyV1
-from physimesh.drone.models import project_from_mapping, readiness
-from physimesh.projects.contracts import parse_snapshot
 from physimesh.projects.repository import DraftConflict, ProjectMissing
+from physimesh.agent import operations as agent_operations
 
 router = APIRouter(prefix='/api/drone/projects')
 
@@ -158,23 +156,7 @@ def history(request: Request, project_id: str, kind: str, limit: int = 25, after
 
 @router.get('/{project_id}/inspection')
 def inspection(request: Request, project_id: str):
-    def inspect():
-        project = request.app.state.projects.repository.get(project_id)
-        snapshot = parse_snapshot(project['snapshot_json'])
-        report = inspect_inputs(snapshot)
-        ready = readiness(project_from_mapping(snapshot), 'screening')
-        from physimesh.drone.capacity import hover_readiness
-        from physimesh.projects.performance import load_map, performance_refs
-        sources, errors = {}, []
-        for digest in performance_refs(snapshot):
-            try:
-                sources[digest] = load_map(request.app.state.projects.artifacts, digest)
-            except (ValueError, KeyError, TypeError) as exc:
-                errors.append(str(exc))
-        return {**report, 'draft_version': project['draft_version'],
-                'hover_readiness': hover_readiness(snapshot, sources, errors),
-                'screening_readiness': {'ready': ready.ready, 'blocking': ready.blocking}}
-    return operation(inspect)
+    return operation(lambda: agent_operations.inspect_project(request.app, project_id))
 
 
 @router.get('/{project_id}/geometry')
@@ -200,11 +182,8 @@ def save(request: Request, project_id: str, body: SaveDraft):
 
 @router.post('/{project_id}/revisions')
 def freeze(request: Request, project_id: str, body: FreezeDraft):
-    kwargs = {}
-    if request.app.state.settings.hosted_mode:
-        kwargs = {'organization_id': request.app.state.identity.authorize(request.state.principal, project_id),
-                  'author_identity_id': request.state.principal.user_id}
-    return operation(lambda: request.app.state.projects.freeze(project_id, body.expected_version, body.purpose, **kwargs))
+    return operation(lambda: agent_operations.freeze_project(request.app, project_id,
+        body.expected_version, body.purpose, getattr(request.state, 'principal', None)))
 
 
 @router.get('/{project_id}/revisions/{digest}')
@@ -214,14 +193,11 @@ def revision(request: Request, project_id: str, digest: str):
 
 @router.post('/{project_id}/studies')
 def run_study(request: Request, project_id: str, body: RunStudy):
+    result = operation(lambda: agent_operations.run_study(request.app, project_id,
+        body.revision_sha256, getattr(request.state, 'principal', None)))
     if request.app.state.settings.hosted_mode:
-        operation(lambda: request.app.state.projects.repository.revision(project_id, body.revision_sha256))
-        job = operation(lambda: request.app.state.jobs.submit(project_id, 'study',
-            {'revision_sha256': body.revision_sha256, 'model': request.app.state.studies.model_identity,
-             'application_build': request.app.state.build.get('build_sha256')},
-            submitted_by=request.state.principal.user_id))
-        return JSONResponse(job, status_code=202)
-    return operation(lambda: request.app.state.studies.run(project_id, body.revision_sha256))
+        return JSONResponse(result, status_code=202)
+    return result
 
 
 @router.get('/{project_id}/studies/{study}')
@@ -291,7 +267,7 @@ def review_pack(request: Request, project_id: str, study: str):
 
 @router.post('/{project_id}/comparisons')
 def compare_studies(request: Request, project_id: str, body: CompareStudies):
-    return operation(lambda: request.app.state.studies.compare(project_id, body.before, body.after))
+    return operation(lambda: agent_operations.compare_studies(request.app, project_id, body.before, body.after))
 
 
 def register_project(request, action):
@@ -320,10 +296,7 @@ def register_project(request, action):
 def job(request: Request, project_id: str, job_id: str):
     if not request.app.state.settings.hosted_mode:
         raise HTTPException(404, 'durable jobs require hosted mode')
-    from physimesh.platform.worker import accept_publication
-    retained = request.app.state.jobs.get(project_id, job_id)
-    operation(lambda: accept_publication(request.app, retained))
-    return retained
+    return operation(lambda: agent_operations.read_job(request.app, project_id, job_id))
 
 
 @router.post('/{project_id}/jobs/{job_id}/cancel')

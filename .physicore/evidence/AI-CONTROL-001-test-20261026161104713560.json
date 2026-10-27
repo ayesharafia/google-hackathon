@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "AI-CONTROL-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_foundation.py",
+    "tests/agent/test_mcp.py"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-26T16:11:04+00:00",
+  "started_at": "2026-10-26T15:55:43+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "e334bd6ae94659860d9b9c232fcaa6484f52f0da",
+  "output": "............                                                             [100%]\n12 passed in 2.86s\n\n"
+}

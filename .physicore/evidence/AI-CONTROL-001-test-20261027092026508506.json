@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "AI-CONTROL-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/agent_browser.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-27T09:20:26+00:00",
+  "started_at": "2026-10-26T15:55:43+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "e334bd6ae94659860d9b9c232fcaa6484f52f0da",
+  "output": "{\n  \"passed\": 24,\n  \"evidence\": \"docs/qa/assets/ai-foundation\"\n}\n\n"
+}

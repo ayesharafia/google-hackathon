@@ -1,5 +1,18 @@
 # Current approvals and pending decisions
 
+## 2026-10-26: AI-native foundation and MCP first approved
+
+Owner answered “Approve foundation and MCP first” to the revised written
+architecture. This authorizes the first-stage shared action registry/policy,
+scoped access, reviewed edits/undo, invocation records and a real stdio MCP
+connection with a design-to-study flow, targeted tests and full interface review.
+The approved design is `docs/superpowers/specs/2026-10-26-ai-native-foundation-design.md`.
+Optional MCP dependencies and the required metadata migration are in scope.
+No model-provider key or paid call is required. Remaining domain expansion,
+embedded chat, owner code execution, hosted HTTP MCP, GitHub publication and
+deployment remain separate scopes. All branches/source evidence/scientific gates
+are retained. Work proceeds in the managed `ai-native-foundation` worktree.
+
 ## 2026-10-26: AI-native foundation/MCP design review pending
 
 Owner requested AI control inside the app and explicitly confirmed both project

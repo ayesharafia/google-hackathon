@@ -1,0 +1,30 @@
+{
+  "checks": [
+    "Actual token browser session opens the saved project and AI connection controls",
+    "A scoped credential is shown once in a password field with working show/hide controls",
+    "Downloaded MCP configuration names the real adapter and a private credential-file path, without embedding its secret",
+    "Default connection cannot invoke mutations; the explicitly expanded connection still needs human approval",
+    "Real revoke control disables the issued credential at the server",
+    "Action discovery identifies implemented tools and explicitly planned adapters",
+    "Actual preview converts 8 declared minutes to 480 seconds and shows original/new values with units",
+    "An unsaved browser edit disables a prior proposal without replacing that input",
+    "Human Apply saves the exact reviewed change through the shared action transaction",
+    "Human Undo restores exact previous inputs as a new draft while retaining history",
+    "A model-prepared mutation remains pending and cannot approve itself, even with a browser cookie present",
+    "Pending before/after columns remain aligned and the phone table scrolls through the final unit column",
+    "The workbench approves an external client action and the client retry receives the same saved result",
+    "Receipt disclosure and inspection display the exact recorded result as text",
+    "desktop view keeps live text and controls within the panel gutters",
+    "phone view keeps live text and controls within the panel gutters",
+    "enlarged view keeps live text and controls within the panel gutters",
+    "Actual external freeze and study requests complete after human review and refresh retained workbench history",
+    "Original retained study bytes survive editing, undo and a new analysis unchanged",
+    "Project switching clears the credential and rejects a delayed prior action-history response",
+    "Connection controls follow native keyboard order with visible focus",
+    "No AI-client secret was retained in localStorage or sessionStorage",
+    "Forgetting browser access clears AI controls and private data",
+    "No browser JavaScript errors"
+  ],
+  "errors": [],
+  "limits": "Disposable local SQLite and synthetic retained inputs; CSS enlargement is not native zoom; no live model, hosted provider, screen-reader or physical qualification."
+}

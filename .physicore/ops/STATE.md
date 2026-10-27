@@ -2,18 +2,13 @@
 
 ## Current continuation: 26 October 2026
 
-- Owner clarified that AI must be the product foundation: future LLMs should
-  control the system through consistent actions, with an owned MCP server.
-  Earlier two-mode assistant proposal was not approved and is superseded.
-  Active design: `docs/superpowers/specs/2026-10-26-ai-native-foundation-design.md`;
-  source/capability coverage: `docs/architecture/ai-capability-map.md`.
-  Build order is shared typed action/policy foundation and real stdio MCP first,
-  then domain coverage, optional in-app model adapters and isolated owner code
-  tools. Foundation requires no application model key. Current official MCP
-  2026-07-28/SDK 2.x guidance was fetched. Concrete design approval is pending;
-  AI-CONTROL-001 remains an unscoped candidate. No AI code, model calls,
-  dependencies, sandbox build, runtime change or publication occurred. Local
-  design branch: `codex/agentic-workbench`. Retain all branches and runtime data.
+- Owner approved the AI-native foundation and MCP-first stage. Implemented in the
+  isolated `codex/ai-native-foundation` worktree: scoped project credentials,
+  discoverable actions, trusted review, version-bound edits and undo, receipts,
+  saved design-to-study actions, real stdio MCP and workbench controls. See
+  `docs/technical/ai-foundation.md` and `docs/qa/ai-foundation-2026-10-27.md`.
+  No model-provider activation, embedded chat, code worker, publication or
+  deployment. Physical validation and qualified engineering review remain open.
 
 - Owner approved “Proceed with Job Activity & Recovery”, including tests/browser/full interface review and main publication. JOBS-001 implemented: nonblocking hosted job/attempt inspection, manual refresh/pagination, explicit permitted recovery and associated-study navigation with draft preservation/context guards. Verified 148 Node tests (24 new), 27 existing Python regressions and 58 Chrome checks; four wheel assets/resource hashes and static protections pass. Full law review corrected state wrapping/selected-label contrast and distinguishes list IDs. QA: docs/qa/job-activity-2026-10-26.md. Reused-fixture failed rerun retained and explained; final fresh-fixture checks pass. No server/model/access/dependency changes or deployment. Implementation 65c54a8ed82cc1c8c2383c8e93fcd9bdadfaff4c published to main; exact remote SHA/all branch names verified. Receipt: .physicore/evidence/PUBLISH-2026-10-26-job-activity.json. Hosted mode only; provider/worker/endurance/restore/physical gates remain open.
 

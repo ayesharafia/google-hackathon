@@ -28,9 +28,13 @@ class ProjectService:
         return self.repository.create(title, snapshot_json(snapshot))
 
     def save(self, project_id: str, expected_version: int, raw: str) -> dict:
+        canonical = self.validate_snapshot(raw)
+        return self.repository.save(project_id, expected_version, canonical)
+
+    def validate_snapshot(self, raw: str) -> str:
         canonical = canonical_snapshot(raw)
         geometry_report(self.artifacts, parse_snapshot(canonical), verify_sources=True)
-        return self.repository.save(project_id, expected_version, canonical)
+        return canonical
 
     def geometry(self, project_id: str, revision_sha256: str | None = None) -> dict | None:
         if revision_sha256:

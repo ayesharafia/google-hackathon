@@ -1,7 +1,7 @@
-# Proposed AI capability map
+# AI capability map
 
 Source inspection: 26 October 2026, application baseline main `5de743c`.
-Status: design inventory. **No listed MCP tool is implemented yet.** This map
+Status: first foundation implemented locally; later domain adapters remain planned. This map
 supports the [revised foundation design](../superpowers/specs/2026-10-26-ai-native-foundation-design.md).
 
 The goal is complete product coverage through one action registry. The MCP tools,
@@ -14,10 +14,10 @@ proof that a feature is pure, asynchronous, hosted or scientifically qualified.
 | Domain | Existing evidence | Proposed actions/resources | Delivery |
 | --- | --- | --- | --- |
 | Contracts and discovery | `src/physimesh/api/contracts.py`, `api/settings.py` | Capability catalog, schemas, units, model regimes, mode/availability metadata | Foundation |
-| Workspace and projects | `api/projects.py`: `projects`, `create`, `project`, `register_project`; `projects/service.py` | Project list/create/read, scoped inventory and project context | Foundation |
+| Workspace and projects | `api/projects.py`: `projects`, `create`, `project`, `register_project`; `projects/service.py` | Project list/read and scoped context; project creation is not exposed to one-project grants | List/read foundation; creation later |
 | Design authoring | `projects/service.py`, `projects/sqlite.py`, `platform/postgres.py`; `web/js/input-editors.js` | Draft schema/read, typed proposal/apply/undo with expected version/hash | Foundation for payload/duration/existing mass/CG; remaining fields follow |
 | Input inspection | `api/projects.py`: `inspection`; `drone/authoring.py` | Separate mass/pack/case readiness evidence with missing inputs and exact draft binding | Foundation |
-| Revisions | `api/projects.py`: `freeze`, `revision`, `history` | Explicit freeze, immutable revision read and paginated history | Foundation |
+| Revisions | `api/projects.py`: `freeze`, `revision`, `history` | Explicit freeze, immutable revision read and paginated history | Foundation (revision read; broader history later) |
 | Studies | `projects/studies.py`; `api/projects.py`: `run_study`, `study`, `study_summary` | Run existing eligible model on frozen inputs; exact result/summary/trim/energy resources | Foundation |
 | Jobs | `platform/jobs.py`; `api/projects.py`: `jobs`, `job`, `cancel_job`, `retry_job` | Recorded status/attempts, explicit cancel/retry and mode limits | Foundation, hosted only |
 | Comparisons | `api/projects.py`: `compare_studies`; `projects/studies.py` | Compare retained studies, input changes, outcomes and comparison limitations | Foundation |
@@ -30,7 +30,7 @@ proof that a feature is pure, asynchronous, hosted or scientifically qualified.
 | Collaboration | `platform/api.py`, `platform/identity.py` | Scoped member/invitation workflow and review preparation/history | Domain expansion; final human decisions remain trusted interactions |
 | In-app AI conversation | No current model integration | Replaceable provider adapter using the action registry; selected context and actual usage | After foundation |
 | Application development | No current code runner | Owner task scope, source read, isolated patch/checks, new review branch and exact evidence | Separate owner adapter stage |
-| Operations and release | `api/app.py`: `health`, protected metrics; deployment files | Sanitized health/build metadata; separately authorized release workflows | Health metadata first; release separately scoped |
+| Operations and release | `api/app.py`: `health`, protected metrics; deployment files | Sanitized health/build metadata; separately authorized release workflows | Planned; release separately scoped |
 
 ## Important effects and exclusions
 

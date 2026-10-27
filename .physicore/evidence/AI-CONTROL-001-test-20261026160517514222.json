@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "AI-CONTROL-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_foundation.py"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-26T16:05:17+00:00",
+  "started_at": "2026-10-26T15:55:43+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "e334bd6ae94659860d9b9c232fcaa6484f52f0da",
+  "output": "F.                                                                       [100%]\n=================================== FAILURES ===================================\n__________ test_scoped_catalog_and_credentials_cannot_escape_gateway ___________\n\nworkspace = (<starlette.testclient.TestClient object at 0x10fef74d0>, {'project_id': 'project_ad6f09ce99f248af99b8d9d36d27c664', 'title': 'Illustrative hover design', 'studies': [], 'studies_more': False, ...})\n\n    def test_scoped_catalog_and_credentials_cannot_escape_gateway(workspace):\n        c, p = workspace\n        g = mint(c, p['project_id'])\n        headers = {'Authorization': 'Bearer '+g['token']}\n        catalog = c.get(ROOT+'/catalog', headers=headers)\n        assert catalog.status_code == 200\n        names = [a['id'] for a in catalog.json()['actions']]\n        assert 'design.propose' in names and not any('confirm' in a or 'development' in a for a in names)\n        assert c.get('/api/drone/projects', headers=headers).status_code == 401\n>       assert c.post(ROOT+'/grants', headers=headers, json={'project_id': p['project_id']}).status_code == 403\nE       AssertionError: assert 422 == 403\nE        +  where 422 = <Response [422 Unprocessable Content]>.status_code\nE        +    where <Response [422 Unprocessable Content]> = post(('/api/drone/agent' + '/grants'), headers={'Authorization': 'Bearer [redacted synthetic credential]'}, json={'project_id': 'project_ad6f09ce99f248af99b8d9d36d27c664'})\nE        +      where post = <starlette.testclient.TestClient object at 0x10fef74d0>.post\n\ntests/agent/test_foundation.py:54: AssertionError\n=========================== short test summary info ============================\nFAILED tests/agent/test_foundation.py::test_scoped_catalog_and_credentials_cannot_escape_gateway\n1 failed, 1 passed in 0.70s\n\n"
+}

@@ -1,8 +1,9 @@
 # PhysiCore AI-native foundation and MCP server
 
-Status: REVISED PROPOSAL for owner review, 26 October 2026. This supersedes the
-earlier proposed two-mode assistant architecture. No implementation, provider
-activation, publication or release approval is implied. Application baseline:
+Status: FIRST STAGE APPROVED by the owner on 26 October 2026 with “Approve
+foundation and MCP first”. This supersedes the earlier two-mode assistant
+proposal. Provider activation, later stages, publication and release remain
+separate scopes. Application baseline:
 `5de743c9fd682fd799b4d7abbdfd13b8e858aa11`.
 
 ## Owner requirement

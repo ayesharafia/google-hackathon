@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "id": "AI-CONTROL-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_foundation.py",
+    "tests/agent/test_mcp.py"
+  ],
+  "returncode": 2,
+  "captured_at": "2026-10-26T16:09:23+00:00",
+  "started_at": "2026-10-26T15:55:43+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "e334bd6ae94659860d9b9c232fcaa6484f52f0da",
+  "output": "\n==================================== ERRORS ====================================\n___________________ ERROR collecting tests/agent/test_mcp.py ___________________\n.venv/lib/python3.11/site-packages/_pytest/python.py:508: in importtestmodule\n    mod = import_path(\n.venv/lib/python3.11/site-packages/_pytest/pathlib.py:596: in import_path\n    importlib.import_module(module_name)\n../../../../.local/share/uv/python/cpython-3.11.16-macos-aarch64-none/lib/python3.11/importlib/__init__.py:126: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n<frozen importlib._bootstrap>:1204: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:1176: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:1147: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:690: in _load_unlocked\n    ???\n.venv/lib/python3.11/site-packages/_pytest/assertion/rewrite.py:188: in exec_module\n    exec(co, module.__dict__)\ntests/agent/test_mcp.py:15: in <module>\n    from physimesh.agent.mcp import Bridge, BridgeError, configured_bridge\nE     File \"/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone/src/physimesh/agent/mcp.py\", line 143\nE       'it cannot authorize tools or human approval.')))])\nE                                                       ^\nE   SyntaxError: closing parenthesis ')' does not match opening parenthesis '[' on line 139\n=========================== short test summary info ============================\nERROR tests/agent/test_mcp.py\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n1 error in 0.66s\n\n"
+}

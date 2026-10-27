@@ -191,18 +191,20 @@ class SQLiteProjects:
             return self._view(db, self._row(db, project_id))
 
     def save(self, project_id: str, expected_version: int, snapshot: str) -> dict:
+        with self._connection(write=True) as db:
+            return self.save_in_transaction(db, project_id, expected_version, snapshot)
+
+    def save_in_transaction(self, db, project_id: str, expected_version: int, snapshot: str) -> dict:
+        """Caller owns the transaction, allowing a draft and its action receipt to commit together."""
         parse_snapshot(snapshot)
         if type(expected_version) is not int or expected_version < 0:
             raise ValueError('expected_version must be a nonnegative integer')
-        with self._connection(write=True) as db:
-            row = self._row(db, project_id)
-            if row['version'] != expected_version:
-                raise DraftConflict(row['version'])
-            db.execute('UPDATE project_meta SET snapshot=?,version=version+1,updated_utc=? WHERE project_id=?',
-                       (snapshot, utc_now(), project_id))
-            saved = dict(self._row(db, project_id))
-        with self._connection() as db:
-            return self._view(db, saved)
+        row = self._row(db, project_id)
+        if row['version'] != expected_version:
+            raise DraftConflict(row['version'])
+        db.execute('UPDATE project_meta SET snapshot=?,version=version+1,updated_utc=? WHERE project_id=?',
+                   (snapshot, utc_now(), project_id))
+        return self._view(db, self._row(db, project_id))
 
     def freeze(self, project_id: str, expected_version: int, revision: DesignRevisionV1) -> dict:
         raw = dump_contract(revision)

@@ -123,3 +123,6 @@ requirement checks and a qualified measured-data pilot remain later milestones.
 Model/aircraft acceptance, real data and production security/endurance/recovery/
 hosting remain open. Publication has not changed the original shared server/tunnel or deployed a
 production service.
+
+
+AI foundation: scoped MCP clients can inspect a project, propose reviewed edits and use existing study evidence. Verified locally with synthetic data; model integration, production qualification and scientific acceptance remain future work.

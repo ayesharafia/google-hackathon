@@ -11,6 +11,8 @@ class BodyLimit:
         if scope['type'] != 'http':
             return await self.app(scope, receive, send)
         limit = self.upload_bytes+2_000_000 if scope['path'] == '/api/drone/import' else 6_000_000
+        if scope['path'].startswith('/api/drone/agent/'):
+            limit = 262144
         headers = dict(scope['headers'])
         declared = headers.get(b'content-length')
         try:

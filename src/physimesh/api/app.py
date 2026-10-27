@@ -78,6 +78,10 @@ def create_app(settings: Settings) -> FastAPI:
     from ..projects.source_library import SourceLibrary
     app.state.source_library = SourceLibrary(app.state.metadata, app.state.projects, app.state.identity)
     app.state.studies = LocalStudies(app.state.projects)
+    from ..agent.service import AgentService
+    from ..agent.api import router as agent_router
+    app.state.agent = AgentService(app)
+    app.include_router(agent_router)
     app.include_router(drone_router)
     app.include_router(results_router)
     app.include_router(contracts_router)
@@ -103,6 +107,22 @@ def create_app(settings: Settings) -> FastAPI:
         """Protect the whole drone namespace, including future routes [plan Task 1.5]."""
         path = request.url.path
         if not (path == '/api/drone' or path.startswith('/api/drone/')):
+            return await call_next(request)
+        agent_path = path == '/api/drone/agent' or path.startswith('/api/drone/agent/')
+        if agent_path and settings.public_access:
+            return JSONResponse({'detail': 'Agent access requires an authenticated workspace.'}, status_code=403)
+        authorization = request.headers.get('authorization', '')
+        if agent_path and authorization.startswith('Bearer pca_'):
+            delegated = (request.method == 'POST' and path.startswith('/api/drone/agent/actions/')) or (
+                request.method == 'GET' and (path in ('/api/drone/agent/catalog', '/api/drone/agent/resources',
+                    '/api/drone/agent/resource') or path.startswith(('/api/drone/agent/records/', '/api/drone/agent/exports/'))))
+            if not delegated:
+                return JSONResponse({'detail': 'AI-client credentials cannot perform trusted user controls.'}, status_code=403)
+            try:
+                request.state.agent_context = await run_in_threadpool(
+                    app.state.agent.policy.grant_context, token=authorization[7:])
+            except Denied as exc:
+                return JSONResponse({'detail': str(exc)}, status_code=403)
             return await call_next(request)
         if not settings.hosted_mode:
             if settings.public_access:
@@ -162,7 +182,7 @@ def create_app(settings: Settings) -> FastAPI:
                 if not project_id:
                     raise Denied('select a project before importing private geometry')
                 await run_in_threadpool(app.state.identity.authorize, principal, project_id, write=True)
-            elif not (path == '/api/drone/projects' or path.startswith(('/api/drone/platform/', '/api/drone/contracts'))
+            elif not (path == '/api/drone/projects' or path.startswith(('/api/drone/platform/', '/api/drone/contracts', '/api/drone/agent/'))
                       or path == '/api/drone/validate'):
                 # Legacy global screening/job/evidence hashes have no tenant ownership records.
                 raise Denied('this legacy route has no private project authorization')

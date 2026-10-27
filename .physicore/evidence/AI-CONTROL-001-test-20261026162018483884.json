@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "id": "AI-CONTROL-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent",
+    "tests/projects",
+    "tests/platform/test_identity_jobs.py",
+    "tests/platform/test_postgres_integration.py",
+    "tests/platform/test_reuse_pagination.py",
+    "tests/platform/test_organization_inventory.py"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-26T16:20:18+00:00",
+  "started_at": "2026-10-26T15:55:43+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "e334bd6ae94659860d9b9c232fcaa6484f52f0da",
+  "output": "........................................................................ [ 39%]\n........................................................................ [ 79%]\n.....................................                                    [100%]\n181 passed in 13.62s\n\n"
+}

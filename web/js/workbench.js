@@ -1,5 +1,6 @@
 import {createReviewPackDownloader} from './review-pack.js?v=pack-1';
 import {mountJobActivity} from './job-activity.js?v=jobs-1';
+import {mountAgentWorkspace} from './agent-workspace.js?v=agent-1';
 import {energyCaseMatches} from './mission-energy.js?v=energy-1';
 import {mountEditors} from './input-editors.js?v=source-explorer-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
@@ -87,9 +88,18 @@ const geometryPanel = mountGeometry({
   action,
   save: saveDraft,
 });
+const agentPanel = mountAgentWorkspace($('agent-workspace'),{
+  api,exclusive:action,
+  context:()=>({generation,connected,projectId:current?.project_id,version:current?.draft_version,
+    projectTitle:current?.title,
+    dirty,busy,publicAccess:isPublicAccess(),canWrite:!hosted||current?.role==='engineer',
+    massNames:current?JSON.parse(current.snapshot_json).masses.items.map(item=>item.name):[]}),
+  saved:async()=>{const c=context(),project=await api('/projects/'+current.project_id);if(isContext(c)&&!dirty)render(project);},
+});
 function message(text, error = false) { $('message').textContent = text; $('message').className = error ? 'error' : ''; }
 function controls() {
   updateContext();
+  agentPanel.sync();
   jobActivity.updateAccess();
   ['organization','logout'].forEach(id=>$(id).disabled=busy);
   document.querySelectorAll('#individual-login input,#individual-login button,#accept-invitation input,#accept-invitation button').forEach(el=>el.disabled=busy);

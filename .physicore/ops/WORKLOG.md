@@ -435,3 +435,11 @@ Revised-document local links, proposal/superseded status, permission/receipt/
 transport boundaries, pending task references and whitespace checks passed.
 Workflow doctor reports 14 tasks and zero ready tasks. Application/MCP tests were
 not run for this documentation-only revision.
+
+
+AI-CONTROL-001: implemented approved MCP-first foundation in isolated worktree. Focused Python, real PostgreSQL/MCP and browser checks pass; full details and limitations in docs/qa/ai-foundation-2026-10-27.md. No publication, deployment, provider call or physics acceptance.
+
+## 2026-10-27T09:22:27+00:00 DONE AI-CONTROL-001
+- Evidence: .physicore/evidence/AI-CONTROL-001-completion.json
+- Notes: Local MCP, project action, PostgreSQL and browser checks passed; no physical acceptance or publication
+- Next ready: no new task promoted

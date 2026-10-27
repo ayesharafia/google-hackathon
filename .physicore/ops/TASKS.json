@@ -555,20 +555,29 @@
       "id": "AI-CONTROL-001",
       "title": "Model-neutral action foundation and PhysiCore MCP server",
       "kind": "implementation",
-      "status": "candidate",
+      "status": "done",
       "zone": "green",
       "depends_on": [
         "AUDIT-001"
       ],
       "priority": 1,
-      "done_when": "After revised concrete design approval, implement typed shared actions/policy, scoped AI grants, invocation/approval receipts and a real stdio MCP server. Demonstrate discover/read/inspect/propose/review/apply/undo/freeze/eligible-study/result/compare/export parity with the workbench; verify permissions, conflicts, duplicate admission, lifecycle, current/legacy clients, packaging and new browser controls. Model-provider activation, later domain/code adapters and hosted HTTP MCP are separately scoped; no inferred scientific or production qualification.",
+      "done_when": "Approved first-stage registry, scoped grants, trusted reviews, exact edit apply/undo, shared design-to-study operations and real MCP/API/browser evidence; preserve physical models and existing contracts, no paid provider or publication.",
       "source_refs": [
-        "docs/superpowers/specs/2026-10-26-ai-native-foundation-design.md",
-        "docs/architecture/ai-capability-map.md"
+        "docs/superpowers/specs/2026-10-26-ai-native-foundation-design.md"
       ],
-      "evidence": [],
-      "scoped": false,
-      "notes": "Owner clarified that AI must underpin the whole product, future LLMs must operate it and an owned MCP server should support future development. Earlier assistant-first proposal was not approved and is superseded. Revised architecture awaits approval. No implementation started; no publication/deployment or paid model use authorized."
+      "evidence": [
+        ".physicore/evidence/AI-CONTROL-001-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Local MCP, project action, PostgreSQL and browser checks passed; no physical acceptance or publication",
+      "started_at": "2026-10-26T15:55:43+00:00",
+      "started_head": "e334bd6ae94659860d9b9c232fcaa6484f52f0da",
+      "started_dirty": [
+        " M .physicore/ops/TASKS.json",
+        "?? docs/superpowers/plans/2026-10-26-ai-foundation.md",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "finished_at": "2026-10-27T09:22:27+00:00"
     }
   ]
 }
