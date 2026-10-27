@@ -19,6 +19,8 @@ class AgentService:
         self.app = app
         self.store = Store(app.state.metadata)
         self.policy = Policy(app, self.store)
+        from .remote_consent import RemoteConsents
+        self.remote_consents = RemoteConsents(self)
 
     def context(self, request):
         return getattr(request.state, "agent_context", None) or self.policy.trusted(

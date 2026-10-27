@@ -30,6 +30,9 @@ class Settings:
     oidc_audience: str | None = None
     oidc_jwks_url: str | None = None
     monitoring_token: str | None = None
+    remote_mcp_origin: str | None = None
+    remote_mcp_issuer: str | None = None
+    remote_mcp_jwks_url: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.public_access, bool):
@@ -49,6 +52,17 @@ class Settings:
         oidc = (self.oidc_issuer, self.oidc_audience, self.oidc_jwks_url)
         if any(oidc) and not all(oidc):
             raise ValueError('OIDC issuer, audience and JWKS must be configured together')
+        remote = (self.remote_mcp_origin, self.remote_mcp_issuer, self.remote_mcp_jwks_url)
+        if any(remote):
+            from urllib.parse import urlsplit
+            from ..agent.remote_auth import https_url
+            if not all(remote) or not self.hosted_mode or not all(https_url(x) for x in remote):
+                raise ValueError('Remote MCP requires hosted mode and HTTPS origin, issuer and JWKS.')
+            origin = urlsplit(self.remote_mcp_origin)
+            if origin.path not in ('', '/') or origin.query or origin.fragment:
+                raise ValueError('Remote MCP origin must be a bare HTTPS origin.')
+            if self.oidc_audience and self.oidc_audience == self.remote_mcp_origin.rstrip('/') + '/mcp/':
+                raise ValueError('Application and remote MCP audiences must be distinct.')
         if self.s3_bucket and not self.s3_region:
             raise ValueError('private storage requires an explicit region')
         if self.s3_endpoint:
@@ -96,4 +110,5 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         allow_local_http_storage=env.get('PHYSIMESH_ALLOW_LOCAL_HTTP_STORAGE') == '1',
         oidc_issuer=env.get('PHYSIMESH_OIDC_ISSUER'), oidc_audience=env.get('PHYSIMESH_OIDC_AUDIENCE'),
         oidc_jwks_url=env.get('PHYSIMESH_OIDC_JWKS_URL'), monitoring_token=env.get('PHYSIMESH_MONITORING_TOKEN'),
+        remote_mcp_origin=env.get('PHYSIMESH_REMOTE_MCP_ORIGIN'), remote_mcp_issuer=env.get('PHYSIMESH_REMOTE_MCP_ISSUER'), remote_mcp_jwks_url=env.get('PHYSIMESH_REMOTE_MCP_JWKS_URL'),
     )

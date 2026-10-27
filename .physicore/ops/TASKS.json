@@ -603,6 +603,31 @@
         "M .physicore/ops/TASKS.json"
       ],
       "finished_at": "2026-10-27T09:34:24+00:00"
+    },
+    {
+      "id": "REMOTE-MCP-001",
+      "title": "Authenticated remote MCP access",
+      "done_when": "Opt-in hosted OAuth HTTP MCP with project consent, trusted review, SDK and browser verification",
+      "kind": "implementation",
+      "priority": 3,
+      "status": "blocked",
+      "zone": "green",
+      "depends_on": [],
+      "source_refs": [
+        "docs/superpowers/specs/2026-10-27-remote-mcp-proposal.md"
+      ],
+      "evidence": [],
+      "scoped": true,
+      "notes": "Hosted OAuth-only workbench sign-in and account provisioning flow are missing; a reviewed design is required before finishing end-to-end connector verification.",
+      "started_at": "2026-10-27T10:06:37+00:00",
+      "started_head": "5ebb5b37b92cc68d1ccda40cd1294e73dd17c62d",
+      "started_dirty": [
+        " M .physicore/ops/TASKS.json",
+        " M docs/superpowers/specs/2026-10-27-remote-mcp-proposal.md",
+        "?? docs/superpowers/plans/2026-10-27-remote-mcp.md",
+        "M .physicore/ops/APPROVALS.md"
+      ],
+      "blocked_at": "2026-10-27T10:15:32+00:00"
     }
   ]
 }

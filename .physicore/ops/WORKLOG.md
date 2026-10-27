@@ -451,3 +451,9 @@ GROQ-CHAT-001: implemented locally with simulated Groq tests and browser review/
 - Evidence: .physicore/evidence/GROQ-CHAT-001-completion.json
 - Notes: Local fake-provider and browser verification; live model and production qualification remain open
 - Next ready: no new task promoted
+
+
+REMOTE-MCP-001 partial: synthetic HTTP SDK and consent/browser tests pass. Found missing hosted OIDC workbench sign-in; test fixture uses a synthetic direct identity link. Feature remains unfinished and disabled by default. Docker was unavailable for PostgreSQL verification. See hosted-provider-signin proposal.
+
+## 2026-10-27T10:15:32+00:00 BLOCKED REMOTE-MCP-001
+Hosted OAuth-only workbench sign-in and account provisioning flow are missing; a reviewed design is required before finishing end-to-end connector verification.

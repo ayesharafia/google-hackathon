@@ -49,6 +49,19 @@ class Policy:
             if row is None or row["revoked"] or row["expires"] <= self.store.clock():
                 raise Denied("AI-client grant is missing, expired, revoked or exhausted.")
             row = dict(row)
+            remote = db.execute(
+                "SELECT consent_id FROM remote_grant_bindings WHERE grant_id=?", (row["grant_id"],)
+            ).fetchone()
+            if remote:
+                valid = db.execute(
+                    """SELECT 1 FROM remote_consents c JOIN sessions s ON s.token_hash=c.parent_session
+                    AND s.user_id=c.user_id JOIN users u ON u.user_id=c.user_id AND u.active=1
+                    WHERE c.consent_id=? AND c.revoked=0 AND c.expires>? AND s.revoked=0 AND s.expires_at>?
+                    AND c.project_id=?""",
+                    (remote["consent_id"], self.store.clock(), self.store.clock(), row["project_id"]),
+                ).fetchone()
+                if not valid:
+                    raise Denied("Remote project consent is no longer active.")
             principal = None
             if self.app.state.settings.hosted_mode:
                 session = db.execute(
@@ -184,6 +197,20 @@ class Policy:
                 or (project_id and row["project_id"] != project_id)
             ):
                 raise Denied("AI-client authority changed before admission.")
+            remote = db.execute(
+                "SELECT consent_id FROM remote_grant_bindings WHERE grant_id=?", (ctx.grant_id,)
+            ).fetchone()
+            if remote:
+                valid = db.execute(
+                    """SELECT c.consent_id FROM remote_consents c JOIN sessions s ON s.token_hash=c.parent_session
+                    AND s.user_id=c.user_id JOIN users u ON u.user_id=c.user_id AND u.active=1
+                    WHERE c.consent_id=? AND c.revoked=0 AND c.expires>? AND s.revoked=0 AND s.expires_at>?
+                    AND c.project_id=?"""
+                    + share,
+                    (remote["consent_id"], self.store.clock(), self.store.clock(), row["project_id"]),
+                ).fetchone()
+                if not valid:
+                    raise Denied("Remote project consent changed before admission.")
             if not self.app.state.settings.hosted_mode and not hmac.compare_digest(
                 row["binding"], self.binding()
             ):

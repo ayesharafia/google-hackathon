@@ -1,5 +1,10 @@
 # Current approvals and pending decisions
 
+## 2026-10-27: Remote MCP build approved
+
+Owner approved the local build described in `docs/superpowers/specs/2026-10-27-remote-mcp-proposal.md`, with synthetic provider tests. No live provider setup, publication, hosting or deployment is authorized.
+
+
 ## 2026-10-27: Groq workbench chat approved
 
 Owner selected Groq and approved the written design at `docs/superpowers/specs/2026-10-27-groq-workbench-chat-design.md`. Approved scope is local chat over existing project actions, simulated-provider tests and interface review. Other action adapters and remote MCP remain future work. No paid test calls, publication or deployment authorized.

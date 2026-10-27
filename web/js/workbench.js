@@ -1,3 +1,4 @@
+import {mountRemoteConsent} from './remote-consent.js?v=remote-1';
 import {mountGroqChat} from './groq-chat.js?v=groq-1';
 import {createReviewPackDownloader} from './review-pack.js?v=pack-1';
 import {mountJobActivity} from './job-activity.js?v=jobs-1';
@@ -98,11 +99,13 @@ const agentPanel = mountAgentWorkspace($('agent-workspace'),{
   saved:async()=>{const c=context(),project=await api('/projects/'+current.project_id);if(isContext(c)&&!dirty)render(project);},
 });
 const groqChat=mountGroqChat($('groq-chat'),{api,exclusive:action,context:()=>({generation,connected,projectId:current?.project_id,dirty,publicAccess:isPublicAccess()}),saved:async()=>{const c=context(),project=await api('/projects/'+current.project_id);if(isContext(c)&&!dirty)render(project);}});
+const remoteConsent=mountRemoteConsent($('remote-consent'),{api,exclusive:action,context:()=>({generation,connected,projectId:current?.project_id,publicAccess:isPublicAccess(),canWrite:!hosted||current?.role==='engineer'})});
 function message(text, error = false) { $('message').textContent = text; $('message').className = error ? 'error' : ''; }
 function controls() {
   updateContext();
   agentPanel.sync();
   groqChat.sync();
+  remoteConsent.sync();
   jobActivity.updateAccess();
   ['organization','logout'].forEach(id=>$(id).disabled=busy);
   document.querySelectorAll('#individual-login input,#individual-login button,#accept-invitation input,#accept-invitation button').forEach(el=>el.disabled=busy);

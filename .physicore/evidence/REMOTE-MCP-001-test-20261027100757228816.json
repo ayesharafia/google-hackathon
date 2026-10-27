@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "REMOTE-MCP-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_remote_consent.py"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-27T10:07:57+00:00",
+  "started_at": "2026-10-27T10:06:37+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "5ebb5b37b92cc68d1ccda40cd1294e73dd17c62d",
+  "output": "...F                                                                     [100%]\n=================================== FAILURES ===================================\n__________ test_remote_bound_grant_is_rechecked_when_consent_revoked ___________\n\nhosted = (<starlette.testclient.TestClient object at 0x10c0b1e10>, {'project_id': 'project_5ab6f57aed7e450f8596303c569e5411', '...9273bb', email='viewer@example.test', session_hash='1c5e6ee879f33ceaa00615fc4ba1c4dd7c1b43631c3a3e33de7fa25fcf5df8ef'))\n\n    def test_remote_bound_grant_is_rechecked_when_consent_revoked(hosted):\n        from physimesh.agent.remote_consent import RemoteConsents\n    \n        client, project, owner, _ = hosted\n        service = RemoteConsents(client.app.state.agent)\n        consent = service.create(owner, project[\"project_id\"], \"client\", [\"read\"], 3600)\n>       bound = service.bind(owner, \"client\")\n                ^^^^^^^^^^^^\nE       AttributeError: 'RemoteConsents' object has no attribute 'bind'\n\ntests/agent/test_remote_consent.py:113: AttributeError\n=========================== short test summary info ============================\nFAILED tests/agent/test_remote_consent.py::test_remote_bound_grant_is_rechecked_when_consent_revoked\n1 failed, 3 passed in 0.61s\n\n"
+}

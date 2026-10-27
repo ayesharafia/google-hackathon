@@ -36,8 +36,13 @@ def create_app(settings: Settings) -> FastAPI:
     """Create the API and source-checkout web shell; no physical inputs are defaulted."""
     @asynccontextmanager
     async def lifespan(application):
+        from contextlib import AsyncExitStack
         try:
-            yield
+            async with AsyncExitStack() as stack:
+                remote = getattr(application.state, 'remote_http', None)
+                if remote:
+                    await stack.enter_async_context(remote.manager.run())
+                yield
         finally:
             application.state.metadata.close()
     app = FastAPI(title="PhysiCore Drone", version="0.1.0", lifespan=lifespan)
@@ -89,6 +94,15 @@ def create_app(settings: Settings) -> FastAPI:
     from ..agent.chat import router as chat_router
     app.include_router(chat_router)
     app.include_router(agent_router)
+    if settings.remote_mcp_origin:
+        from ..agent.remote_http import RemoteHTTP
+        app.state.remote_http = RemoteHTTP(app)
+        app.mount('/mcp', app.state.remote_http)
+
+        @app.get('/.well-known/oauth-protected-resource/mcp/')
+        def remote_metadata(request: Request):
+            return app.state.remote_http.metadata(request)
+
     app.include_router(drone_router)
     app.include_router(results_router)
     app.include_router(contracts_router)
@@ -177,6 +191,11 @@ def create_app(settings: Settings) -> FastAPI:
                         raise
                     return app.state.identity.oidc_session(token, app.state.oidc.verify(token))
             principal = await run_in_threadpool(authenticate)
+            def remote_session_only():
+                with app.state.metadata.connection() as db:
+                    return db.execute('SELECT 1 FROM remote_oauth_sessions WHERE token_hash=?', (principal.session_hash,)).fetchone() is not None
+            if await run_in_threadpool(remote_session_only):
+                raise InvalidSession('Remote MCP tokens cannot access application routes.')
             request.state.principal = principal
             project_id = None
             if path.startswith('/api/drone/projects/'):

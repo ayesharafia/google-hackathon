@@ -103,7 +103,11 @@ def create_server(bridge):
     except ImportError:
         raise BridgeError('Install the pinned MCP extra: pip install "physimesh-drone[mcp]".') from None
 
+    def scoped(ctx):
+        return bridge(ctx) if callable(bridge) else bridge
+
     async def tools(ctx, params):
+        bridge = scoped(ctx)
         try:
             catalog = await bridge.fetch("/api/drone/agent/catalog")
             result = []
@@ -130,6 +134,7 @@ def create_server(bridge):
             raise MCPError(t.ErrorData(code=-32001, message=str(exc))) from None
 
     async def call(ctx, params):
+        bridge = scoped(ctx)
         try:
             catalog = await bridge.fetch("/api/drone/agent/catalog")
             action = next((a for a in catalog["actions"] if a["tool_name"] == params.name), None)
@@ -148,6 +153,7 @@ def create_server(bridge):
             return t.CallToolResult(isError=True, content=[t.TextContent(type="text", text=str(exc))])
 
     async def resources(ctx, params):
+        bridge = scoped(ctx)
         try:
             response = await bridge.fetch("/api/drone/agent/resources")
             return t.ListResourcesResult(
@@ -157,6 +163,7 @@ def create_server(bridge):
             raise MCPError(t.ErrorData(code=-32001, message=str(exc))) from None
 
     async def read(ctx, params):
+        bridge = scoped(ctx)
         try:
             data = await bridge.fetch("/api/drone/agent/resource?" + urlencode({"uri": str(params.uri)}))
             return t.ReadResourceResult(
@@ -168,6 +175,7 @@ def create_server(bridge):
             raise MCPError(t.ErrorData(code=-32001, message=str(exc))) from None
 
     async def prompts(ctx, params):
+        bridge = scoped(ctx)
         await bridge.fetch("/api/drone/agent/catalog")
         return t.ListPromptsResult(
             prompts=[
@@ -184,6 +192,7 @@ def create_server(bridge):
         )
 
     async def prompt(ctx, params):
+        bridge = scoped(ctx)
         if params.name != "review_project_v1":
             raise MCPError(t.ErrorData(code=-32602, message="Unknown prompt."))
         pid = (params.arguments or {}).get("project_id", "")

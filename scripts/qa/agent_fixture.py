@@ -6,6 +6,7 @@ import os
 import socket
 import tempfile
 from pathlib import Path
+from contextlib import nullcontext
 
 import uvicorn
 from fastapi.testclient import TestClient
@@ -34,6 +35,15 @@ app = create_app(
         None,
         hosted_mode=args.mode == "hosted",
         public_access=args.mode == "public",
+        **(
+            {
+                "remote_mcp_origin": "https://app.example",
+                "remote_mcp_issuer": "https://issuer.example",
+                "remote_mcp_jwks_url": "https://issuer.example/jwks",
+            }
+            if os.environ.get("PHYSIMESH_FAKE_REMOTE") == "1" and args.mode == "hosted"
+            else {}
+        ),
     )
 )
 if os.environ.get("PHYSIMESH_FAKE_GROQ") == "1":
@@ -88,12 +98,22 @@ password = "Synthetic-browser-agent-123"
 if args.mode == "hosted":
     identity = app.state.identity
     owner_id = identity.provision("owner@example.test", password=password)
+    if os.environ.get("PHYSIMESH_FAKE_REMOTE") == "1":
+        # Test-only fixture: create an explicit synthetic identity link; production has no linking flow yet.
+        with app.state.metadata.connection(write=True) as db:
+            db.execute(
+                "UPDATE users SET issuer=?,subject=? WHERE user_id=?",
+                ("https://issuer.example", "synthetic-subject", owner_id),
+            )
     identity.provision("viewer@example.test", password=password)
     login = identity.login("owner@example.test", password)
     owner = identity.session(login["token"])
     organization = identity.organization(owner_id, "Disposable agent browser fixture")
     headers = {"Authorization": "Bearer " + login["token"], "X-Organization-ID": organization}
-    with TestClient(app) as client:
+    client_context = (
+        nullcontext(TestClient(app)) if os.environ.get("PHYSIMESH_FAKE_REMOTE") == "1" else TestClient(app)
+    )
+    with client_context as client:
         project = client.post("/api/drone/projects/examples/hover", headers=headers).json()
         other = client.post(
             "/api/drone/projects", headers=headers, json={"title": "Other private project"}

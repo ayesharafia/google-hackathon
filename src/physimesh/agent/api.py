@@ -11,7 +11,9 @@ from physimesh.api.sessions import same_origin
 from physimesh.platform.identity import Denied
 from physimesh.platform.scoped_artifacts import artifact_scope
 
-from .contracts import Call, Confirm, GrantInput, Project, Study
+from .contracts import Call, Confirm, GrantInput, Project, Study, Strict, ID
+from pydantic import Field
+from typing import Literal
 from .store import encoded
 
 router = APIRouter(prefix="/api/drone/agent")
@@ -28,6 +30,57 @@ def trusted(request, *, changing=False):
     if changing and not same_origin(request):
         raise Denied("Confirm changes from this workspace page.")
     return ctx
+
+
+class RemoteConsentInput(Strict):
+    project_id: ID
+    client_id: str = Field(min_length=1, max_length=512)
+    groups: list[Literal["read", "propose", "change", "study"]] = Field(min_length=1, max_length=4)
+    lifetime_s: int = Field(default=3600, ge=60, le=86400)
+
+
+def remote_enabled(request):
+    if not getattr(request.app.state, "remote_http", None):
+        from fastapi import HTTPException
+
+        raise HTTPException(404, "Remote MCP is not configured.")
+
+
+@router.get("/remote-info")
+def remote_info(request: Request):
+    trusted(request)
+    remote = getattr(request.app.state, "remote_http", None)
+    return {"enabled": bool(remote), "endpoint": remote.resource if remote else None}
+
+
+@router.get("/remote-consents")
+def remote_consents(request: Request, project_id: str):
+    remote_enabled(request)
+    ctx = trusted(request)
+    operation(lambda: Project(project_id=project_id))
+    return {
+        "consents": operation(
+            lambda: service(request).remote_consents.list_for_project(ctx.principal, project_id)
+        )
+    }
+
+
+@router.post("/remote-consents", status_code=201)
+def create_remote_consent(request: Request, body: RemoteConsentInput):
+    remote_enabled(request)
+    ctx = trusted(request, changing=True)
+    return operation(
+        lambda: service(request).remote_consents.create(
+            ctx.principal, body.project_id, body.client_id, body.groups, body.lifetime_s
+        )
+    )
+
+
+@router.delete("/remote-consents/{consent_id}")
+def revoke_remote_consent(request: Request, consent_id: str):
+    remote_enabled(request)
+    ctx = trusted(request, changing=True)
+    return operation(lambda: service(request).remote_consents.revoke(ctx.principal, consent_id))
 
 
 @router.get("/catalog")

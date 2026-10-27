@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "REMOTE-MCP-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_remote_consent.py"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-27T10:06:49+00:00",
+  "started_at": "2026-10-27T10:06:37+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "5ebb5b37b92cc68d1ccda40cd1294e73dd17c62d",
+  "output": "FF                                                                       [100%]\n=================================== FAILURES ===================================\n______________ test_consent_binds_user_client_project_and_revokes ______________\n\nhosted = (<starlette.testclient.TestClient object at 0x10fd4a610>, {'project_id': 'project_9f58e931f51947f8b5c125c5efc7d681', '...693660', email='viewer@example.test', session_hash='f7265179b98b92c521e5a7ea4204913c9c98f1042669b444061e663e05cd58e6'))\n\n    def test_consent_binds_user_client_project_and_revokes(hosted):\n>       from physimesh.agent.remote_consent import RemoteConsents\nE       ModuleNotFoundError: No module named 'physimesh.agent.remote_consent'\n\ntests/agent/test_remote_consent.py:34: ModuleNotFoundError\n______ test_viewer_cannot_consent_to_writes_and_expired_session_is_denied ______\n\nhosted = (<starlette.testclient.TestClient object at 0x10fe03510>, {'project_id': 'project_6e24be9647ac4a21836dea1f25a942af', '...5859c4', email='viewer@example.test', session_hash='3e201105db240e3a39b8e36e33191a543035771061089dc523574105241d514a'))\n\n    def test_viewer_cannot_consent_to_writes_and_expired_session_is_denied(hosted):\n>       from physimesh.agent.remote_consent import RemoteConsents\nE       ModuleNotFoundError: No module named 'physimesh.agent.remote_consent'\n\ntests/agent/test_remote_consent.py:51: ModuleNotFoundError\n=========================== short test summary info ============================\nFAILED tests/agent/test_remote_consent.py::test_consent_binds_user_client_project_and_revokes\nFAILED tests/agent/test_remote_consent.py::test_viewer_cannot_consent_to_writes_and_expired_session_is_denied\n2 failed in 0.46s\n\n"
+}

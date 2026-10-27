@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "REMOTE-MCP-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/remote_browser.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-27T10:13:02+00:00",
+  "started_at": "2026-10-27T10:06:37+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "5ebb5b37b92cc68d1ccda40cd1294e73dd17c62d",
+  "output": "Remote consent creation, displayed scope, revocation, desktop/phone/enlarged captures pass. Synthetic test-only identity link; no real OAuth login tested.\n\n"
+}
