@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "GROQ-CHAT-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_chat.py"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-27T09:26:31+00:00",
+  "started_at": "2026-10-27T09:26:16+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "b93402a096ae63ef7f9472c68203391010f68e53",
+  "output": "FF                                                                       [100%]\n=================================== FAILURES ===================================\n_______ test_chat_reads_only_selected_project_and_returns_actual_result ________\n\nworkspace = (<starlette.testclient.TestClient object at 0x10a7fc510>, {'project_id': 'project_b59c2274da3d454aa066ce0927e5e5cf', 'title': 'Illustrative hover design', 'studies': [], 'studies_more': False, ...})\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10bd148d0>\n\n    def test_chat_reads_only_selected_project_and_returns_actual_result(workspace, monkeypatch):\n>       from physimesh.agent import chat\nE       ImportError: cannot import name 'chat' from 'physimesh.agent' (/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone/src/physimesh/agent/__init__.py)\n\ntests/agent/test_chat.py:7: ImportError\n_____________________ test_chat_cannot_use_another_project _____________________\n\nworkspace = (<starlette.testclient.TestClient object at 0x10bd39090>, {'project_id': 'project_52349629ae3544dc99fb63b68ba512fb', 'title': 'Illustrative hover design', 'studies': [], 'studies_more': False, ...})\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10bdb3fd0>\n\n    def test_chat_cannot_use_another_project(workspace, monkeypatch):\n>       from physimesh.agent import chat\nE       ImportError: cannot import name 'chat' from 'physimesh.agent' (/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone/src/physimesh/agent/__init__.py)\n\ntests/agent/test_chat.py:27: ImportError\n=========================== short test summary info ============================\nFAILED tests/agent/test_chat.py::test_chat_reads_only_selected_project_and_returns_actual_result\nFAILED tests/agent/test_chat.py::test_chat_cannot_use_another_project - Impor...\n2 failed in 0.19s\n\n"
+}

@@ -1,6 +1,6 @@
 # Groq workbench chat: first AI-native expansion
 
-Status: concrete chat direction approved 27 October 2026; written design for review. This is the first stage of the owner's broader request for complete project action coverage, a remotely accessible MCP server and in-app conversation. The existing local MCP foundation is implemented in `codex/ai-native-foundation`.
+Status: written design approved 27 October 2026. This is the first stage of the owner's broader request for complete project action coverage, a remotely accessible MCP server and in-app conversation. The existing local MCP foundation is implemented in `codex/ai-native-foundation`.
 
 ## Outcome and scope
 

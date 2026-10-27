@@ -578,6 +578,31 @@
         "M .physicore/ops/APPROVALS.md"
       ],
       "finished_at": "2026-10-27T09:22:27+00:00"
+    },
+    {
+      "id": "GROQ-CHAT-001",
+      "title": "Groq workbench chat",
+      "done_when": "Authenticated scoped chat uses existing actions and human review with bounded runs and session-only key; simulated provider and browser checks",
+      "kind": "implementation",
+      "priority": 3,
+      "status": "done",
+      "zone": "green",
+      "depends_on": [],
+      "source_refs": [
+        "docs/superpowers/specs/2026-10-27-groq-workbench-chat-design.md"
+      ],
+      "evidence": [
+        ".physicore/evidence/GROQ-CHAT-001-completion.json"
+      ],
+      "scoped": true,
+      "notes": "Local fake-provider and browser verification; live model and production qualification remain open",
+      "started_at": "2026-10-27T09:26:16+00:00",
+      "started_head": "b93402a096ae63ef7f9472c68203391010f68e53",
+      "started_dirty": [
+        "?? docs/superpowers/plans/2026-10-27-groq-chat.md",
+        "M .physicore/ops/TASKS.json"
+      ],
+      "finished_at": "2026-10-27T09:34:24+00:00"
     }
   ]
 }

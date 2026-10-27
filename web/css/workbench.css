@@ -203,3 +203,6 @@ dialog{max-width:min(620px,calc(100vw - 32px));border:1px solid #819b87;backgrou
 #jobs button[aria-pressed=true]{background:#a6bea9;color:var(--ink);font-weight:700}#jobs button{max-width:100%;white-space:pre-line;text-align:left;font-weight:500;line-height:1.45}
 #refresh-jobs,#more-jobs{background:#bfd0c0;color:var(--ink)}
 @container job-sheet (min-width:600px){.job-facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+#groq-chat{margin:28px 0 36px;padding:24px;background:#d5e0d2;container:groq/inline-size}#groq-chat h3{margin-top:0}.groq-setup{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.groq-setup button{justify-self:start}.groq-transcript{margin:20px 0}.groq-message{padding:12px 0;overflow-wrap:anywhere}.groq-message p{white-space:pre-wrap}.groq-review{margin:20px 0;overflow-wrap:anywhere}.groq-review pre{overflow:auto;max-height:320px;background:#e8eee4;padding:16px;white-space:pre}.groq-review button{margin:0 12px 12px 0}@container groq (max-width:500px){.groq-setup{grid-template-columns:1fr}.groq-setup button{justify-self:stretch}}
+#groq-chat textarea{min-height:90px;resize:vertical}

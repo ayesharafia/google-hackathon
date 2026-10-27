@@ -36,6 +36,54 @@ app = create_app(
         public_access=args.mode == "public",
     )
 )
+if os.environ.get("PHYSIMESH_FAKE_GROQ") == "1":
+    import physimesh.agent.chat as chat_module
+
+    def fake_groq(key, model, messages, tools, timeout):
+        assert key == "synthetic-groq-key"
+
+        def tool(name, args):
+            return {
+                "role": "assistant",
+                "content": None,
+                "tool_calls": [
+                    {
+                        "id": "action",
+                        "type": "function",
+                        "function": {"name": name, "arguments": json.dumps(args)},
+                    }
+                ],
+            }
+
+        if messages[-1]["role"] == "user":
+            if "duration" in messages[-1]["content"]:
+                return tool(
+                    "physicore_design_propose",
+                    {
+                        "project_id": project["project_id"],
+                        "expected_version": app.state.projects.repository.get(project["project_id"])[
+                            "draft_version"
+                        ],
+                        "edits": [{"field": "mission.duration_s", "value": 8.0, "unit": "min"}],
+                    },
+                )
+            return tool("physicore_design_get", {"project_id": project["project_id"]})
+        result = json.loads(messages[-1]["content"])
+        if result.get("action") == "design.propose":
+            return tool(
+                "physicore_proposal_apply",
+                {"project_id": project["project_id"], "proposal_id": result["data"]["proposal_id"]},
+            )
+        if result.get("status") == "rejected":
+            return {"role": "assistant", "content": "The change was rejected."}
+        return {
+            "role": "assistant",
+            "content": "The saved design is available."
+            if result.get("action") == "design.get"
+            else "The reviewed change was saved.",
+        }
+
+    chat_module.groq_completion = fake_groq
 password = "Synthetic-browser-agent-123"
 if args.mode == "hosted":
     identity = app.state.identity

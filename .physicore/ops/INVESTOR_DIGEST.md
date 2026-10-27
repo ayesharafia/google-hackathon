@@ -126,3 +126,6 @@ production service.
 
 
 AI foundation: scoped MCP clients can inspect a project, propose reviewed edits and use existing study evidence. Verified locally with synthetic data; model integration, production qualification and scientific acceptance remain future work.
+
+
+Groq chat can direct the implemented project actions after human review in local testing. Broader actions, remote MCP, live model and deployment qualification remain open.

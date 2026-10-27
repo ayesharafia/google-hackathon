@@ -1,5 +1,10 @@
 # Current approvals and pending decisions
 
+## 2026-10-27: Groq workbench chat approved
+
+Owner selected Groq and approved the written design at `docs/superpowers/specs/2026-10-27-groq-workbench-chat-design.md`. Approved scope is local chat over existing project actions, simulated-provider tests and interface review. Other action adapters and remote MCP remain future work. No paid test calls, publication or deployment authorized.
+
+
 ## 2026-10-26: AI-native foundation and MCP first approved
 
 Owner answered “Approve foundation and MCP first” to the revised written

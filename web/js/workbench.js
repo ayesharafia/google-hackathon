@@ -1,3 +1,4 @@
+import {mountGroqChat} from './groq-chat.js?v=groq-1';
 import {createReviewPackDownloader} from './review-pack.js?v=pack-1';
 import {mountJobActivity} from './job-activity.js?v=jobs-1';
 import {mountAgentWorkspace} from './agent-workspace.js?v=agent-1';
@@ -96,10 +97,12 @@ const agentPanel = mountAgentWorkspace($('agent-workspace'),{
     massNames:current?JSON.parse(current.snapshot_json).masses.items.map(item=>item.name):[]}),
   saved:async()=>{const c=context(),project=await api('/projects/'+current.project_id);if(isContext(c)&&!dirty)render(project);},
 });
+const groqChat=mountGroqChat($('groq-chat'),{api,exclusive:action,context:()=>({generation,connected,projectId:current?.project_id,dirty,publicAccess:isPublicAccess()}),saved:async()=>{const c=context(),project=await api('/projects/'+current.project_id);if(isContext(c)&&!dirty)render(project);}});
 function message(text, error = false) { $('message').textContent = text; $('message').className = error ? 'error' : ''; }
 function controls() {
   updateContext();
   agentPanel.sync();
+  groqChat.sync();
   jobActivity.updateAccess();
   ['organization','logout'].forEach(id=>$(id).disabled=busy);
   document.querySelectorAll('#individual-login input,#individual-login button,#accept-invitation input,#accept-invitation button').forEach(el=>el.disabled=busy);

@@ -155,7 +155,6 @@ PENDING = [
     "remaining_authoring",
     "reports",
     "collaboration",
-    "embedded_conversation",
     "owner_development",
     "http_mcp",
 ]

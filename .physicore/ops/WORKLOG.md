@@ -443,3 +443,11 @@ AI-CONTROL-001: implemented approved MCP-first foundation in isolated worktree. 
 - Evidence: .physicore/evidence/AI-CONTROL-001-completion.json
 - Notes: Local MCP, project action, PostgreSQL and browser checks passed; no physical acceptance or publication
 - Next ready: no new task promoted
+
+
+GROQ-CHAT-001: implemented locally with simulated Groq tests and browser review/approval/rejection; no paid calls or deployment. See docs/qa/groq-chat-2026-10-27.md.
+
+## 2026-10-27T09:34:24+00:00 DONE GROQ-CHAT-001
+- Evidence: .physicore/evidence/GROQ-CHAT-001-completion.json
+- Notes: Local fake-provider and browser verification; live model and production qualification remain open
+- Next ready: no new task promoted

@@ -1,6 +1,10 @@
 # PhysiCore Drone: v3 resume state
 
-## Current continuation: 26 October 2026
+## Current continuation: 27 October 2026
+
+- Owner selected Groq and approved the written chat design. GROQ-CHAT-001 adds authenticated project chat using existing actions, explicit review/continue, session-only key, stop and bounded calls. Simulated-provider and browser tests pass; see `docs/qa/groq-chat-2026-10-27.md`. Live provider behavior, multi-worker hosting and physical validity remain unverified. Existing shared tunnel and GitHub main do not contain this local branch. Full project action coverage, remote MCP and owner code development are later stages.
+
+## Previous continuation: 26 October 2026
 
 - Owner approved the AI-native foundation and MCP-first stage. Implemented in the
   isolated `codex/ai-native-foundation` worktree: scoped project credentials,

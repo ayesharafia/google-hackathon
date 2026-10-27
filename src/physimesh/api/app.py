@@ -81,6 +81,13 @@ def create_app(settings: Settings) -> FastAPI:
     from ..agent.service import AgentService
     from ..agent.api import router as agent_router
     app.state.agent = AgentService(app)
+    import secrets
+    app.state.chat_signing_key = secrets.token_bytes(32)
+    from threading import Lock
+    app.state.chat_run_lock = Lock()
+    app.state.chat_runs = {}
+    from ..agent.chat import router as chat_router
+    app.include_router(chat_router)
     app.include_router(agent_router)
     app.include_router(drone_router)
     app.include_router(results_router)
@@ -93,6 +100,15 @@ def create_app(settings: Settings) -> FastAPI:
         app.include_router(sessions_router)
     from ..platform.api import router as platform_router
     app.include_router(platform_router)
+
+    from fastapi.exceptions import RequestValidationError
+
+    @app.exception_handler(RequestValidationError)
+    async def validation_handler(request, exc):
+        if request.url.path == "/api/drone/agent/chat":
+            return JSONResponse({"detail": "Invalid chat request."}, status_code=422)
+        from fastapi.exception_handlers import request_validation_exception_handler
+        return await request_validation_exception_handler(request, exc)
 
     @app.exception_handler(Denied)
     async def denied_handler(request, exc):

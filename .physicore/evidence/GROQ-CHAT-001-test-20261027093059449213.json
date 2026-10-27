@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "id": "GROQ-CHAT-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent",
+    "tests/projects/test_local_studies.py",
+    "tests/platform/test_identity_jobs.py"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-27T09:30:59+00:00",
+  "started_at": "2026-10-27T09:26:16+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "b93402a096ae63ef7f9472c68203391010f68e53",
+  "output": "......................s...................                               [100%]\n41 passed, 1 skipped in 4.67s\n\n"
+}

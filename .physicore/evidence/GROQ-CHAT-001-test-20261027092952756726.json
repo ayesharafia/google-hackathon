@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "id": "GROQ-CHAT-001",
+  "kind": "test",
+  "argv": [
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/agent/test_chat.py"
+  ],
+  "returncode": 1,
+  "captured_at": "2026-10-27T09:29:52+00:00",
+  "started_at": "2026-10-27T09:26:16+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "b93402a096ae63ef7f9472c68203391010f68e53",
+  "output": "..F.                                                                     [100%]\n=================================== FAILURES ===================================\n_________ test_chat_review_requires_human_then_continues_with_receipt __________\n\nworkspace = (<starlette.testclient.TestClient object at 0x10df0d9d0>, {'project_id': 'project_dcb285f19b49475190b1cec6848a143b', 'title': 'Illustrative hover design', 'studies': [], 'studies_more': False, ...})\nmonkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10de29350>\n\n    def test_chat_review_requires_human_then_continues_with_receipt(workspace, monkeypatch):\n        from physimesh.agent import chat\n    \n        client, project = workspace\n        pid = project[\"project_id\"]\n        monkeypatch.setattr(chat, \"secure_origin\", lambda request: True)\n        proposal = client.post(\n            \"/api/drone/agent/actions/design.propose\",\n            headers=AUTH,\n            json={\n                \"request_id\": \"proposal001\",\n                \"arguments\": {\n                    \"project_id\": pid,\n                    \"expected_version\": project[\"draft_version\"],\n                    \"edits\": [{\"field\": \"mission.duration_s\", \"value\": 8.0, \"unit\": \"min\"}],\n                },\n            },\n        ).json()[\"data\"]\n        count = []\n    \n        def provider(key, model, messages, tools, timeout):\n            count.append(1)\n            if len(count) == 1:\n                return {\n                    \"role\": \"assistant\",\n                    \"content\": None,\n                    \"tool_calls\": [\n                        {\n                            \"id\": \"apply\",\n                            \"type\": \"function\",\n                            \"function\": {\n                                \"name\": \"physicore_proposal_apply\",\n                                \"arguments\": json.dumps(\n                                    {\"project_id\": pid, \"proposal_id\": proposal[\"proposal_id\"]}\n                                ),\n                            },\n                        }\n                    ],\n                }\n            assert json.loads(messages[-1][\"content\"])[\"status\"] == \"completed\"\n            return {\"role\": \"assistant\", \"content\": \"Applied.\"}\n    \n        monkeypatch.setattr(chat, \"groq_completion\", provider)\n        body = {\"project_id\": pid, \"key\": \"synthetic-key\", \"model\": \"test-model\", \"prompt\": \"Apply it\"}\n        first = client.post(\"/api/drone/agent/chat\", headers=AUTH, json=body).json()\n>       assert first[\"status\"] == \"awaiting_review\"\n               ^^^^^^^^^^^^^^^\nE       KeyError: 'status'\n\ntests/agent/test_chat.py:137: KeyError\n=========================== short test summary info ============================\nFAILED tests/agent/test_chat.py::test_chat_review_requires_human_then_continues_with_receipt\n1 failed, 3 passed in 0.28s\n\n"
+}

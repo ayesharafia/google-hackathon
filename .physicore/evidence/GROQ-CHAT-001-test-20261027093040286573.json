@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "GROQ-CHAT-001",
+  "kind": "test",
+  "argv": [
+    "node",
+    "scripts/qa/groq_browser.mjs"
+  ],
+  "returncode": 0,
+  "captured_at": "2026-10-27T09:30:40+00:00",
+  "started_at": "2026-10-27T09:26:16+00:00",
+  "repo": "/Users/bhupeshcholake/.codex/worktrees/ai-native-foundation/physicore drone",
+  "head": "b93402a096ae63ef7f9472c68203391010f68e53",
+  "output": "Browser passed: fake-provider read, rendered action, key storage/clear, responsive captures, no page errors.\n\n"
+}
