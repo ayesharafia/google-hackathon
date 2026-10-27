@@ -1,6 +1,6 @@
 # AI foundation and MCP connection
 
-PhysiCore exposes a versioned action catalog for saved project work. A compatible MCP host can discover and call the same actions through the stdio adapter; PhysiCore does not choose or host a language model. The first release covers project inspection, selected draft edits, revisions, studies, comparison, exact result export and hosted job actions. Discover current availability in the workbench or catalog. Geometry, source authoring, additional input groups and application development are future adapters. The local workbench also includes a Groq chat using these same actions.
+PhysiCore exposes a versioned action catalog for saved project work. A compatible MCP host can discover and call the same actions through the stdio adapter or the opt-in remote transport. The first release covers project inspection, selected draft edits, revisions, studies, comparison, exact result export and hosted job actions. Discover current availability in the workbench or catalog. Geometry, source authoring, additional input groups and application development are future adapters. The workbench includes a Groq chat using these same actions. External MCP clients provide their own model connection.
 
 ## Connect
 
@@ -9,7 +9,7 @@ PhysiCore exposes a versioned action catalog for saved project work. A compatibl
 3. Store the credential in a private file owned by the current user with permissions `600` on POSIX systems, or use a protected environment variable. Never commit it or share it in conversation. The credential is distinct from the workspace login and is limited to one project, parent authority, expiry and call count. Revoke it in the workbench when finished.
 4. Install the application with its optional MCP extra (`physimesh-drone[mcp]`), or use the repository's `requirements-mcp.lock` with hash verification in the intended environment. Configure the MCP host to run `python -m physimesh.agent.mcp`, with `PHYSICORE_API_URL` set to the authenticated application origin and `PHYSICORE_AGENT_TOKEN_FILE` set to the private file. The workbench can download a configuration template without the credential. Alternatively supply `PHYSICORE_AGENT_TOKEN` through the host's protected environment. File permission checks require POSIX; use protected environment storage on other systems.
 
-The adapter accepts HTTPS origins or loopback HTTP, rejects redirects and does not accept arbitrary file paths or URLs from model calls. It speaks stdio locally; this release does not expose a hosted MCP transport. The MCP host and its model provider are separate products and may have their own configuration and costs.
+The adapter accepts HTTPS origins or loopback HTTP, rejects redirects and does not accept arbitrary file paths or URLs from model calls. It speaks stdio locally. The separate opt-in hosted MCP transport is described below. The MCP host and its model provider are separate products and may have their own configuration and costs.
 
 ## Review and results
 
@@ -21,11 +21,11 @@ This interface does not certify a simulation or aircraft. Existing scientific ev
 
 ## Groq chat
 
-Open an authenticated saved project over HTTPS or loopback, enter a Groq API key and a tool-capable model ID in **Ask PhysiCore**, then send a message. The key is held in the current page and sent to the application for each run; clear it with the button or by switching project, signing out or closing the page. Prompts and relevant action results are sent to Groq and usage may be charged by Groq. Do not enter the key into the conversation itself.
+Configure a Groq key and model in **AI settings**, then open an authenticated saved project over HTTPS or loopback and send a message in **Ask PhysiCore**. The server must first be configured with an independent encryption secret; see [AI settings](ai-settings.md) for setup, access scope and key recovery. The key is saved encrypted and is not returned to the browser. Prompts and relevant action results are sent to Groq and usage may be charged by Groq. Do not enter the key into the conversation itself.
 
 The assistant can use only currently available actions and current project permissions. Save or discard unsaved edits before approving changes. The workbench shows the proposed values and exact review details; approve or reject, then select Continue. The actual receipt is retained independently of the model's explanation. Stop requests prevent subsequent tool calls after a current provider call or action returns; that in-flight work may complete.
 
-Conversation state is held in the browser as a signed, project-bound token, expires after 15 minutes and is lost on reload. A server restart invalidates it. The signing key and stop coordination are process-local; this implementation has not been qualified for multi-worker or load-balanced hosting. Provider requests have a 15-second socket timeout and the coordinator checks a 60-second deadline between steps, not a guarantee that an in-flight operation stops at that exact time. Live Groq behavior has not been tested.
+Conversation state is held in the browser as a signed, project-bound token, expires after 15 minutes and is lost on reload. A server restart invalidates it. The signing key and stop coordination are process-local; this implementation has not been qualified for multi-worker or load-balanced hosting. Provider requests have a 15-second socket timeout and the coordinator checks a 60-second deadline between steps, not a guarantee that an in-flight operation stops at that exact time. A live Groq session answered and inspected synthetic data, but the follow-up hit a usage limit; the saved-key flow and full live change-to-study journey remain unverified.
 
 ## Remote MCP and organization sign-in (local implementation)
 

@@ -1,7 +1,7 @@
 # AI capability map
 
-Source inspection: 26 October 2026, application baseline main `5de743c`.
-Status: local foundation, Groq chat, provider sign-in and remote MCP transport implemented; domain adapters remain planned. This map
+Source inspection: 26–27 October 2026; foundation and chat are on main at `33b945a`.
+Status: foundation, Groq chat with encrypted provider settings, provider sign-in and remote MCP transport implemented; domain adapters remain planned. This map
 supports the [revised foundation design](../superpowers/specs/2026-10-26-ai-native-foundation-design.md).
 
 The goal is complete product coverage through one action registry. The MCP tools,
@@ -28,7 +28,7 @@ proof that a feature is pure, asynchronous, hosted or scientifically qualified.
 | Battery and mission | `web/js/input-editors.js`, `advanced-editors.js`; `drone/authoring.py`, `contracts.py` | Typed existing authoring groups, case/segment edits and deterministic consistency checks | Domain expansion |
 | PDF and review pack | `api/projects.py`: `pdf_study`, `review_pack`, `prepared_study_pdf`; `projects/review_pack.py` | Explicit artifact preparation, existing report job/result, authorized download | Domain expansion |
 | Collaboration | `platform/api.py`, `platform/identity.py` | Scoped member/invitation workflow and review preparation/history | Domain expansion; final human decisions remain trusted interactions |
-| In-app AI conversation | `agent/chat.py`, `web/js/groq-chat.js` | Groq chat over currently available actions, selected project and reviewed mutations | Implemented locally; live provider and production hosting unverified |
+| In-app AI conversation | `agent/chat.py`, `agent/provider_settings.py`, `web/js/groq-chat.js` | Groq chat over currently available actions, selected project and reviewed mutations | Implemented; live read demonstrated on synthetic data; saved-key journey and production hosting unverified |
 | Application development | No current code runner | Owner task scope, source read, isolated patch/checks, new review branch and exact evidence | Separate owner adapter stage |
 | Operations and release | `api/app.py`: `health`, protected metrics; deployment files | Sanitized health/build metadata; separately authorized release workflows | Planned; release separately scoped |
 
