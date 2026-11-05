@@ -3,19 +3,19 @@
 import base64
 import hashlib
 import hmac
-import json
 import ipaddress
-from threading import Event
+import json
 import time
 import urllib.error
 import urllib.request
+from threading import Event
 from uuid import uuid4
 
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import Field
 
 from .api import trusted
-from .contracts import Call, ID, Strict
+from .contracts import ID, Call, Strict
 
 router = APIRouter(prefix="/api/drone/agent")
 MAX_STATE = 120_000
@@ -145,7 +145,7 @@ def chat(request: Request, body: ChatInput):
         return run(request, ctx, body, cancelled)
     except ProviderFailure as exc:
         raise HTTPException(502, PROVIDER_MESSAGES.get(exc.category, PROVIDER_MESSAGES["service"])) from None
-    except Exception:
+    except Exception:  # noqa: BLE001 - Keep provider/request secrets behind the fixed chat error.
         # Provider messages and request bodies can contain secrets; never echo exceptions.
         raise HTTPException(
             400, "Chat could not continue. Check the project, model, key and pending review."
