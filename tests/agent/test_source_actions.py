@@ -1,14 +1,14 @@
 """Agent reads must stay inside the selected project even in a shared library."""
-import json
 import asyncio
+import json
 import sys
 from pathlib import Path
 from uuid import uuid4
 
 from tests.agent.test_foundation import AUTH, ROOT, mint
-from tests.projects.test_source_library import RAW, SPEC
 from tests.agent.test_mcp import api_server  # noqa: F401
 from tests.agent.test_remote_consent import hosted  # noqa: F401
+from tests.projects.test_source_library import RAW, SPEC
 
 
 def request(client, token, action, arguments):
