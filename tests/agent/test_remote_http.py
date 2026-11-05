@@ -1,10 +1,12 @@
 import asyncio
 import time
-import jwt
+
 import httpx2
+import jwt
 from cryptography.hazmat.primitives.asymmetric import rsa
 from mcp.client.session import ClientSession
 from mcp.client.streamable_http import streamable_http_client
+
 from physimesh.api.app import create_app
 from physimesh.api.settings import Settings
 
@@ -115,36 +117,41 @@ def test_remote_http_sdk_scoped_project_and_revocation(tmp_path):
                 app.state.agent.remote_consents.create(principal, second_pid, "second-client", ["read"], 600)
 
             async def scoped_call(access, allowed, denied_id):
-                async with httpx2.AsyncClient(
-                    transport=httpx2.ASGITransport(app=app), headers={"Authorization": "Bearer " + access}
-                ) as transport:
-                    async with streamable_http_client(resource, http_client=transport) as (read, write):
-                        async with ClientSession(read, write) as session:
-                            await session.initialize()
-                            good = await session.call_tool("physicore_design_get", {"project_id": allowed})
-                            denied = await session.call_tool(
-                                "physicore_design_get", {"project_id": denied_id}
-                            )
-                            assert (
-                                good.model_dump(by_alias=True)["structuredContent"]["data"]["project_id"]
-                                == allowed
-                            )
-                            assert denied.model_dump(by_alias=True)["isError"] is True
+                async with (
+                    httpx2.AsyncClient(
+                        transport=httpx2.ASGITransport(app=app),
+                        headers={"Authorization": "Bearer " + access},
+                    ) as transport,
+                    streamable_http_client(resource, http_client=transport) as (read, write),
+                    ClientSession(read, write) as session,
+                ):
+                    await session.initialize()
+                    good = await session.call_tool("physicore_design_get", {"project_id": allowed})
+                    denied = await session.call_tool(
+                        "physicore_design_get", {"project_id": denied_id}
+                    )
+                    assert (
+                        good.model_dump(by_alias=True)["structuredContent"]["data"]["project_id"]
+                        == allowed
+                    )
+                    assert denied.model_dump(by_alias=True)["isError"] is True
 
             await asyncio.gather(scoped_call(token, pid, second_pid), scoped_call(token2, second_pid, pid))
             async with httpx2.AsyncClient(
                 transport=httpx2.ASGITransport(app=app), headers={"Authorization": "Bearer " + token}
             ) as mcp_http:
-                async with streamable_http_client(resource, http_client=mcp_http) as (read, write):
-                    async with ClientSession(read, write) as session:
-                        await session.initialize()
-                        tools = await session.list_tools()
-                        names = {tool.name for tool in tools.tools}
-                        assert "physicore_design_get" in names and "physicore_proposal_apply" not in names
-                        result = await session.call_tool("physicore_design_get", {"project_id": pid})
-                        assert (
-                            result.model_dump(by_alias=True)["structuredContent"]["data"]["project_id"] == pid
-                        )
+                async with (
+                    streamable_http_client(resource, http_client=mcp_http) as (read, write),
+                    ClientSession(read, write) as session,
+                ):
+                    await session.initialize()
+                    tools = await session.list_tools()
+                    names = {tool.name for tool in tools.tools}
+                    assert "physicore_design_get" in names and "physicore_proposal_apply" not in names
+                    result = await session.call_tool("physicore_design_get", {"project_id": pid})
+                    assert (
+                        result.model_dump(by_alias=True)["structuredContent"]["data"]["project_id"] == pid
+                    )
                 async with httpx2.AsyncClient(
                     transport=httpx2.ASGITransport(app=app), base_url=origin
                 ) as ordinary:
@@ -171,38 +178,40 @@ def test_remote_http_sdk_scoped_project_and_revocation(tmp_path):
                 writable = app.state.agent.remote_consents.create(
                     principal, pid, "mcp-client", ["read", "propose", "change"], 600
                 )
-                async with streamable_http_client(resource, http_client=mcp_http) as (read, write):
-                    async with ClientSession(read, write) as session:
-                        await session.initialize()
-                        proposal = await session.call_tool(
-                            "physicore_design_propose",
-                            {
-                                "project_id": pid,
-                                "expected_version": 1,
-                                "edits": [{"field": "mission.duration_s", "value": 8.0, "unit": "min"}],
-                            },
-                        )
-                        data = proposal.model_dump(by_alias=True)["structuredContent"]["data"]
-                        args = {
+                async with (
+                    streamable_http_client(resource, http_client=mcp_http) as (read, write),
+                    ClientSession(read, write) as session,
+                ):
+                    await session.initialize()
+                    proposal = await session.call_tool(
+                        "physicore_design_propose",
+                        {
                             "project_id": pid,
-                            "proposal_id": data["proposal_id"],
-                            "request_id": "exact_req_001",
-                        }
-                        pending = await session.call_tool("physicore_proposal_apply", args)
-                        result = pending.model_dump(by_alias=True)["structuredContent"]
-                        assert result["status"] == "awaiting_review"
-                        async with httpx2.AsyncClient(
-                            transport=httpx2.ASGITransport(app=app), base_url=origin
-                        ) as human:
-                            approved = await human.post(
-                                "/api/drone/agent/reviews/" + result["data"]["review_id"] + "/confirm",
-                                headers={"Authorization": "Bearer " + browser_token, "Origin": origin},
-                                json={"execute": True},
-                            )
-                            assert approved.status_code == 200, approved.text
-                            assert approved.json()["data"]["draft_version"] == 2
-                        retry = await session.call_tool("physicore_proposal_apply", args)
-                        assert retry.model_dump(by_alias=True)["structuredContent"] == approved.json()
+                            "expected_version": 1,
+                            "edits": [{"field": "mission.duration_s", "value": 8.0, "unit": "min"}],
+                        },
+                    )
+                    data = proposal.model_dump(by_alias=True)["structuredContent"]["data"]
+                    args = {
+                        "project_id": pid,
+                        "proposal_id": data["proposal_id"],
+                        "request_id": "exact_req_001",
+                    }
+                    pending = await session.call_tool("physicore_proposal_apply", args)
+                    result = pending.model_dump(by_alias=True)["structuredContent"]
+                    assert result["status"] == "awaiting_review"
+                    async with httpx2.AsyncClient(
+                        transport=httpx2.ASGITransport(app=app), base_url=origin
+                    ) as human:
+                        approved = await human.post(
+                            "/api/drone/agent/reviews/" + result["data"]["review_id"] + "/confirm",
+                            headers={"Authorization": "Bearer " + browser_token, "Origin": origin},
+                            json={"execute": True},
+                        )
+                        assert approved.status_code == 200, approved.text
+                        assert approved.json()["data"]["draft_version"] == 2
+                    retry = await session.call_tool("physicore_proposal_apply", args)
+                    assert retry.model_dump(by_alias=True)["structuredContent"] == approved.json()
                 app.state.agent.remote_consents.revoke(principal, writable["consent_id"])
 
     asyncio.run(exercise())
