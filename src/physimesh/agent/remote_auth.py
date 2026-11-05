@@ -3,6 +3,7 @@
 from urllib.parse import urlsplit
 
 import jwt
+
 from physimesh.platform.identity import Denied
 
 
