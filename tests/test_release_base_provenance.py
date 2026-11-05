@@ -550,3 +550,46 @@ def test_actual_ci_tag_plus_digest_reference(case):
     case.repository = "python:3.11.16-slim"
     case.rebuild_registry()
     case.prepare()
+
+
+@pytest.mark.parametrize('docker', [False, True])
+def test_gzip_saved_layers_preserve_verified_uncompressed_identity(module, monkeypatch, tmp_path, docker):
+    import gzip
+    case = BaseCase(module, monkeypatch, tmp_path, docker=docker)
+    original = case.layer
+    case.layer = gzip.compress(original, mtime=0)
+    case.write_archive()
+    case.prepare()
+    assert (case.output / 'blobs/sha256' / digest(original).split(':')[1]).read_bytes() == original
+
+
+@pytest.mark.parametrize('fault', ['crc', 'truncated', 'wrong-diffid', 'unknown-compression'])
+def test_layer_decode_fails_closed(module, fault):
+    import gzip
+    raw = gzip.compress(b'approved uncompressed layer', mtime=0)
+    expected = digest(b'approved uncompressed layer')
+    if fault == 'crc':
+        raw = raw[:-8] + bytes([raw[-8] ^ 1]) + raw[-7:]
+    elif fault == 'truncated':
+        raw = raw[:-4]
+    elif fault == 'wrong-diffid':
+        expected = digest(b'not the layer')
+    else:
+        raw = b'unsupported compression bytes'
+    with pytest.raises(ValueError):
+        module.verified_layer(raw, expected)
+
+
+def test_decompressed_layer_limit(module, monkeypatch):
+    import gzip
+    monkeypatch.setattr(module, 'MAX_MEMBER_BYTES', 64)
+    with pytest.raises(ValueError, match='size limit'):
+        module.verified_layer(gzip.compress(b'a'*65), digest(b'a'*65))
+
+
+def test_concatenated_gzip_members_bind_combined_bytes(module):
+    import gzip
+    raw = gzip.compress(b'first', mtime=0) + gzip.compress(b'second', mtime=0)
+    assert module.verified_layer(raw, digest(b'firstsecond')) == b'firstsecond'
+    with pytest.raises(ValueError):
+        module.verified_layer(raw, digest(b'first'))
