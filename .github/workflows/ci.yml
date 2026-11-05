@@ -13,7 +13,7 @@ jobs:
           python-version: '3.11.16'
       - run: |
           python -m venv .venv
-          .venv/bin/python -m pip install --require-hashes -r requirements-test.lock
+          .venv/bin/python -m pip install --require-hashes -r requirements-test.lock -r requirements-mcp.lock
           .venv/bin/python -m pip install --no-deps -e .
       - run: .venv/bin/python -m ruff check .
       - run: .venv/bin/python -m pytest -q -m 'not backend and not integration'
