@@ -133,4 +133,4 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         remote_mcp_origin=env.get('PHYSIMESH_REMOTE_MCP_ORIGIN'), remote_mcp_issuer=env.get('PHYSIMESH_REMOTE_MCP_ISSUER'), remote_mcp_jwks_url=env.get('PHYSIMESH_REMOTE_MCP_JWKS_URL'),
         hosted_signin_issuer=env.get('PHYSIMESH_HOSTED_SIGNIN_ISSUER'), hosted_signin_discovery_url=env.get('PHYSIMESH_HOSTED_SIGNIN_DISCOVERY_URL'), hosted_signin_client_id=env.get('PHYSIMESH_HOSTED_SIGNIN_CLIENT_ID'), hosted_signin_origin=env.get('PHYSIMESH_HOSTED_SIGNIN_ORIGIN'),
         provider_encryption_key=env.get('PHYSIMESH_PROVIDER_ENCRYPTION_KEY'),
-        )
+    )
