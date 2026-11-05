@@ -1,6 +1,8 @@
 import time
+
 import pytest
 from fastapi.testclient import TestClient
+
 from physimesh.api.app import create_app
 from physimesh.api.settings import Settings
 from physimesh.platform.identity import Denied
@@ -64,6 +66,7 @@ def test_viewer_cannot_consent_to_writes_and_expired_session_is_denied(hosted):
 def test_token_verification_requires_access_token_client_and_exact_audience():
     import jwt
     from cryptography.hazmat.primitives.asymmetric import rsa
+
     from physimesh.agent.remote_auth import AccessVerifier
 
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
