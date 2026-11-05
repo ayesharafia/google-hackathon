@@ -4,7 +4,7 @@
     "scripts/qa/workflow_gates.py": "1748732f2aabd6cb1928dc7f4b6c168f7704edb16032cd1a55bcd3942e808d54",
     "tests/test_workflow_gates.py": "be82836154275835fed63f1c39eaf94c1045dffe05480d155f83e322df122d3e",
     "specs/engineering/workflow-gates-v1.md": "76d66404446119fa813874f23b07c5cadad9d51093700cce5b82ac6f2ae960b7",
-    ".physicore/tools/workflow.py": "537782ea878776a9ed00bb51eb58bff838b0d8ccb6243c7514d8ff0e3eb0d170"
+    ".physicore/tools/workflow.py": "fb6ebc33f72b68f6868e14c93bd28dd9ba15274d7bdbc62d3a24757dd4612444"
   },
   "gates": [
     {
