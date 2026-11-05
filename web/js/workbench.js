@@ -4,7 +4,7 @@ import {createReviewPackDownloader} from './review-pack.js?v=pack-1';
 import {mountJobActivity} from './job-activity.js?v=jobs-1';
 import {mountAgentWorkspace} from './agent-workspace.js?v=agent-1';
 import {energyCaseMatches} from './mission-energy.js?v=energy-1';
-import {mountEditors} from './input-editors.js?v=source-explorer-1';
+import {mountEditors} from './input-editors.js?v=atmosphere-preview-1';
 import {createViewer} from './viewer3d.js?v=geometry-3';
 import {mountGeometry} from './geometry-upload.js?v=geometry-3';
 import {renderStudy,renderComparison} from './study-view.js?v=trim-1';
@@ -267,7 +267,7 @@ function showLayoutInputs(data){
   for(const rotor of data.rotors||[]){const line=document.createElement('p');line.dataset.rotorId=rotor.rotor_id;line.textContent='Rotor '+rotor.rotor_id+' · centre ['+(rotor.center_body_m||[]).join(', ')+'] m · axis ['+(rotor.axis_body||[]).join(', ')+'] · map '+(rotor.map_ref||'Unknown');out.append(line);}
   for(const component of data.assembly?.components||[]){const line=document.createElement('p');line.textContent='Component '+component.component_id+' · source '+component.source_sha256+' · source units '+(component.source_units||'Unknown')+' · translation ['+(component.transform?.translation_m||[]).join(', ')+'] m';out.append(line);}
 }
-async function guardedRequest(work){const request=generation,pid=current?.project_id,raw=$('snapshot').value;const result=await work();if(request!==generation||pid!==current?.project_id||raw!==$('snapshot').value)throw new Error('Inputs changed during import. Reopen the import step and review the current draft before binding.');return result;}
+async function guardedRequest(work,staleMessage='Inputs changed during import. Reopen the import step and review the current draft before binding.'){const request=generation,pid=current?.project_id,raw=$('snapshot').value;const result=await work();if(request!==generation||pid!==current?.project_id||raw!==$('snapshot').value)throw new Error(staleMessage);return result;}
 async function openProject(pid) {
   comparisons.invalidate('Opening a project. Compare its retained studies again.');
   geometryCache.clear();++layoutGeneration;
@@ -279,6 +279,7 @@ async function openProject(pid) {
 function editors() {
   mountEditors($('input-editors'), () => JSON.parse($('snapshot').value), updateDraft,
   inspectSavedInputs, dataset_json => guardedRequest(()=>api('/projects/performance-sources',payload('POST',{dataset_json}))),{
+      evaluateAtmosphere:inputs=>guardedRequest(()=>api('/atmosphere/evaluate',payload('POST',inputs)),'Draft changed while evaluating atmosphere. Preview again before applying.'),
       conditionMap:(digest,policy)=>guardedRequest(()=>api('/projects/performance-sources/'+digest+'/condition',payload('POST',{policy}))),
       importGeometry:(files,units)=>guardedRequest(()=>{const body=new FormData();body.append('source_units',units);[...files].forEach(file=>body.append('files',file));return api('/import',{method:'POST',body});}),
       sourceRequest:(path,init)=>guardedRequest(()=>api('/projects/'+current.project_id+'/source-library'+path,init)),
