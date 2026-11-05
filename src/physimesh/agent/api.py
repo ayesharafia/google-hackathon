@@ -1,19 +1,19 @@
 """Authenticated agent gateway and separate trusted human control endpoints."""
 
 import re
+from typing import Literal
 from uuid import uuid4
 
 from fastapi import APIRouter, Query, Request
 from fastapi.responses import Response
+from pydantic import Field
 
 from physimesh.api.projects import operation
 from physimesh.api.sessions import same_origin
 from physimesh.platform.identity import Denied
 from physimesh.platform.scoped_artifacts import artifact_scope
 
-from .contracts import Call, Confirm, GrantInput, Project, Study, Strict, ID
-from pydantic import Field
-from typing import Literal
+from .contracts import ID, Call, Confirm, GrantInput, Project, Strict, Study
 from .store import encoded
 
 router = APIRouter(prefix="/api/drone/agent")
