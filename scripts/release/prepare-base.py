@@ -1,12 +1,15 @@
 """Bind an offline OCI context to a registry-verified immutable base."""
 
 import argparse
+import gzip
 import hashlib
+import io
 import json
 import re
 import subprocess
 import tarfile
 import tempfile
+import zlib
 from pathlib import Path
 
 MAX_MEMBER_BYTES = 512 * 1024 * 1024
@@ -200,6 +203,26 @@ def verified_registry_config(base: str) -> str:
     return visit(root_digest, None, 0)
 
 
+def verified_layer(raw: bytes, diff_id: str) -> bytes:
+
+    if _sha256(raw) == diff_id:
+        return raw
+    if not raw.startswith(b"\x1f\x8b"):
+        raise ValueError("base layer digest mismatch")
+
+    limit = min(MAX_MEMBER_BYTES, 512 * 1024 * 1024)
+    try:
+        with gzip.GzipFile(fileobj=io.BytesIO(raw)) as stream:
+            uncompressed = stream.read(limit + 1)
+    except (EOFError, OSError, zlib.error) as exc:
+        raise ValueError("invalid gzip layer") from exc
+
+    if len(uncompressed) > limit:
+        raise ValueError("decompressed layer exceeds size limit")
+    if _sha256(uncompressed) != diff_id:
+        raise ValueError("base layer digest mismatch")
+    return uncompressed
+
 def prepare(base: str, root: Path) -> None:
     _immutable_ref(base)
     registry_config_digest = verified_registry_config(base)
@@ -307,9 +330,7 @@ def prepare(base: str, root: Path) -> None:
                 raise ValueError("base archive layer count mismatch")
             layers = []
             for path, digest in zip(layer_paths, diff_ids, strict=True):
-                raw = read(path)
-                if _sha256(raw) != digest:
-                    raise ValueError("base layer digest mismatch")
+                raw = verified_layer(read(path), digest)
                 layers.append(blob(raw, "application/vnd.oci.image.layer.v1.tar"))
 
     manifest = blob(
