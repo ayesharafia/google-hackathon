@@ -35,7 +35,7 @@ for doc in docs:
         assert (path.parent / target.split("#")[0]).is_file(), (doc, target)
         links += 1
 ledger = (root / docs[-1]).read_text()
-assert len(re.findall(r"^\| \d+\. ", ledger, re.M)) == 147
+assert len(re.findall(r"^\| \d+\. ", ledger, re.MULTILINE)) == 147
 assert "@container source-plot (min-width:600px)" in (root / "web/css/workbench.css").read_text()
 assets = {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
           for path in sorted((root / "docs/qa/assets/source-explorer").rglob("*")) if path.is_file()}

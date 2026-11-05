@@ -5,16 +5,16 @@ import json
 import os
 import socket
 import tempfile
-from pathlib import Path
 from contextlib import nullcontext
+from pathlib import Path
 
 import uvicorn
 from fastapi.testclient import TestClient
 
 from physimesh.api.app import create_app
 from physimesh.api.settings import Settings
-from physimesh.projects.examples import create_hover_example
 from physimesh.platform.scoped_artifacts import artifact_scope
+from physimesh.projects.examples import create_hover_example
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--runtime", required=True)

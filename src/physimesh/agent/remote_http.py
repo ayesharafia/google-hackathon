@@ -7,11 +7,12 @@ from starlette.concurrency import run_in_threadpool
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
+from physimesh.platform.identity import Denied, Principal, token_hash
+
 from . import api
 from .contracts import Call
 from .mcp import BridgeError, create_server
 from .remote_auth import AccessVerifier
-from physimesh.platform.identity import Denied, Principal, token_hash
 
 
 class ScopedBridge:
@@ -39,7 +40,7 @@ class ScopedBridge:
 
         try:
             return await run_in_threadpool(invoke)
-        except Exception:
+        except Exception:  # noqa: BLE001 - Sanitize action failures into the fixed BridgeError.
             raise BridgeError(
                 "Action denied or unavailable; inspect project permissions and state."
             ) from None
@@ -182,7 +183,7 @@ class RemoteHTTP:
                 return self.app.state.agent.policy.grant_context(grant_id=binding["grant_id"])
 
             ctx = await run_in_threadpool(authenticate)
-        except Exception:
+        except Exception:  # noqa: BLE001 - Fail closed with the existing generic authorization response.
             await refuse(401, "Remote authorization required.", challenge)(scope, receive, send)
             return
         scope.setdefault("state", {})["agent_context"] = ctx

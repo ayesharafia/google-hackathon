@@ -35,7 +35,7 @@ for name in docs:
         if "://" not in target and not target.startswith("#"):
             assert (path.parent / target.split("#")[0]).is_file(), (name, target)
             links += 1
-assert len(re.findall(r"^\| \d+\. ", (root / docs[-1]).read_text(), re.M)) == 147
+assert len(re.findall(r"^\| \d+\. ", (root / docs[-1]).read_text(), re.MULTILINE)) == 147
 work = Path(tempfile.mkdtemp(prefix="job-activity-wheel-", dir=root / ".backend"))
 result = subprocess.run(["uv", "build", "--wheel", "--out-dir", str(work)], cwd=root,
                         text=True, capture_output=True, timeout=90, check=False)

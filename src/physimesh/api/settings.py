@@ -60,6 +60,7 @@ class Settings:
         remote = (self.remote_mcp_origin, self.remote_mcp_issuer, self.remote_mcp_jwks_url)
         if any(remote):
             from urllib.parse import urlsplit
+
             from ..agent.remote_auth import https_url
             if not all(remote) or not self.hosted_mode or not all(https_url(x) for x in remote):
                 raise ValueError('Remote MCP requires hosted mode and HTTPS origin, issuer and JWKS.')
@@ -71,6 +72,7 @@ class Settings:
         signin = (self.hosted_signin_issuer, self.hosted_signin_discovery_url, self.hosted_signin_client_id, self.hosted_signin_origin)
         if any(signin):
             from urllib.parse import urlsplit
+
             from ..agent.remote_auth import https_url
             if not all(signin) or not self.hosted_mode or not all(https_url(x) for x in (signin[0], signin[1], signin[3])):
                 raise ValueError('Hosted provider sign-in requires explicit hosted HTTPS configuration.')

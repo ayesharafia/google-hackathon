@@ -52,8 +52,9 @@ def login(request: Request, body: Login):
     signin = getattr(request.app.state, 'hosted_signin', None)
     cookie = ''
     if signin:
-        from .hosted_signin import HOSTED_COOKIE
         from physimesh.api.sessions import same_origin
+
+        from .hosted_signin import HOSTED_COOKIE
         cookie = request.cookies.get(HOSTED_COOKIE, '')
         if cookie and not same_origin(request):
             raise HTTPException(403, 'Sign in from this workspace page.')
@@ -90,6 +91,7 @@ def logout(request: Request, all_sessions: bool = False):
     identity(request).revoke(request.state.principal, all_sessions=all_sessions)
     if getattr(request.state, 'hosted_cookie', False):
         from fastapi.responses import JSONResponse
+
         from .hosted_signin import HOSTED_COOKIE
         response=JSONResponse({'revoked': True},headers={'Cache-Control':'no-store'})
         response.delete_cookie(HOSTED_COOKIE,path='/api',secure=True,httponly=True,samesite='strict')

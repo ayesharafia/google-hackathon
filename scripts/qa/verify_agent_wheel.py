@@ -2,8 +2,8 @@
 import glob
 import hashlib
 import json
-from pathlib import Path
 import zipfile
+from pathlib import Path
 
 wheel = Path(glob.glob('.backend/agent-wheel/*.whl')[0])
 with zipfile.ZipFile(wheel) as archive:

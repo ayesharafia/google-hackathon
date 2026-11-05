@@ -23,6 +23,7 @@ from ..platform.scoped_artifacts import ScopedArtifacts, artifact_scope
 from ..projects.service import ProjectService
 from ..projects.sqlite import SQLiteProjects
 from ..projects.studies import LocalStudies
+from .atmosphere import router as atmosphere_router
 from .contracts import router as contracts_router
 from .projects import router as projects_router
 from .results import router as results_router
@@ -83,10 +84,11 @@ def create_app(settings: Settings) -> FastAPI:
     from ..projects.source_library import SourceLibrary
     app.state.source_library = SourceLibrary(app.state.metadata, app.state.projects, app.state.identity)
     app.state.studies = LocalStudies(app.state.projects)
-    from ..agent.service import AgentService
     from ..agent.api import router as agent_router
+    from ..agent.service import AgentService
     app.state.agent = AgentService(app)
-    from ..agent.provider_settings import ProviderSettings, router as provider_settings_router
+    from ..agent.provider_settings import ProviderSettings
+    from ..agent.provider_settings import router as provider_settings_router
     app.state.provider_settings = ProviderSettings(app)
     app.include_router(provider_settings_router)
     from ..platform.hosted_signin import HostedSignin, RedactOIDCQuery
@@ -111,6 +113,7 @@ def create_app(settings: Settings) -> FastAPI:
         def remote_metadata(request: Request):
             return app.state.remote_http.metadata(request)
 
+    app.include_router(atmosphere_router)
     app.include_router(drone_router)
     app.include_router(results_router)
     app.include_router(contracts_router)
@@ -127,6 +130,10 @@ def create_app(settings: Settings) -> FastAPI:
 
     @app.exception_handler(RequestValidationError)
     async def validation_handler(request, exc):
+        if request.url.path == "/api/drone/atmosphere/evaluate":
+            # Validation errors may contain NaN/Infinity inputs, which cannot
+            # be serialized by JSONResponse. Do not echo raw model inputs.
+            return JSONResponse({"detail": "Invalid atmosphere request."}, status_code=422)
         if request.url.path in ("/api/drone/agent/chat", "/api/drone/agent/provider-settings"):
             return JSONResponse({"detail": "Invalid chat request."}, status_code=422)
         from fastapi.exception_handlers import request_validation_exception_handler
@@ -236,7 +243,7 @@ def create_app(settings: Settings) -> FastAPI:
                     raise Denied('select a project before importing private geometry')
                 await run_in_threadpool(app.state.identity.authorize, principal, project_id, write=True)
             elif not (path == '/api/drone/projects' or path.startswith(('/api/drone/platform/', '/api/drone/contracts', '/api/drone/agent/'))
-                      or path == '/api/drone/validate'):
+                      or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate')):
                 # Legacy global screening/job/evidence hashes have no tenant ownership records.
                 raise Denied('this legacy route has no private project authorization')
             with artifact_scope(project_id):

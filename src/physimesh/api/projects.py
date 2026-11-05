@@ -5,9 +5,9 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel, ConfigDict, Field
 
+from physimesh.agent import operations as agent_operations
 from physimesh.drone.conditioning import ConditionedMap, ConditioningPolicyV1
 from physimesh.projects.repository import DraftConflict, ProjectMissing
-from physimesh.agent import operations as agent_operations
 
 router = APIRouter(prefix='/api/drone/projects')
 

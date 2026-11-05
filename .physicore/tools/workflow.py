@@ -137,7 +137,37 @@ def append_log(s):
     WORKLOG.parent.mkdir(parents=True,exist_ok=True)
     with WORKLOG.open('a',encoding='utf-8') as f:f.write('\n'+s+'\n')
 
-def main(argv=None):
+def reserve_gate_attempt(task_id, requested, budget):
+    """Reserve a run durably on this task start. No completion or review grant.
+
+    Lock before reading the queue, then atomically save the reservation before
+    executing any checks. A crash spends the reservation, never grants a retry.
+    Manifest changes cannot reset or enlarge the original budget.
+    """
+    if type(requested) is not int or type(budget) is not int or not 0 <= budget <= 2:
+        raise ValueError('Invalid gate attempt/budget')
+    OPS.mkdir(parents=True,exist_ok=True)
+    q=read_queue()
+    errors=validate(q)
+    if errors:raise ValueError('; '.join(errors))
+    t=task(q,task_id)
+    if t.get('status')!='in_progress' or not t.get('started_at'):
+        raise ValueError('Active task start required')
+    state=t.get('gate_attempts')
+    if state is None:
+        state={'started_at':t['started_at'],'max_repair_attempts':budget,'next_attempt':0}
+    if (not isinstance(state,dict) or state.get('started_at')!=t['started_at']
+        or state.get('max_repair_attempts')!=budget):
+        raise ValueError('Task start or fixed gate budget mismatch; cannot reset')
+    next_attempt=state.get('next_attempt')
+    if type(next_attempt) is not int or requested!=next_attempt or requested>budget:
+        raise ValueError('Gate attempt replay, out of order or budget exhausted')
+    state['next_attempt']=next_attempt+1
+    t['gate_attempts']=state
+    atomic_json(QUEUE,q)
+    return {'attempt':requested,'started_at':t['started_at'],'max_repair_attempts':budget}
+
+def _main_locked(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     sub=p.add_subparsers(dest='command',required=True)
     for key in ['doctor','next','refresh','status']:sub.add_parser(key)
@@ -145,13 +175,16 @@ def main(argv=None):
     s=sub.add_parser('audit');s.add_argument('id')
     s=sub.add_parser('scope');s.add_argument('id');s.add_argument('--title',required=True);s.add_argument('--acceptance',required=True);s.add_argument('--source',required=True)
     s=sub.add_parser('add');s.add_argument('id');s.add_argument('--title',required=True);s.add_argument('--acceptance',required=True);s.add_argument('--source',required=True);s.add_argument('--kind',choices=sorted(KINDS),default='implementation');s.add_argument('--priority',type=int,default=3);s.add_argument('--depends-on',action='append',default=[])
-    s=sub.add_parser('check');s.add_argument('id');s.add_argument('--timeout',type=int,default=90);s.add_argument('cmd',nargs=argparse.REMAINDER)
+    s=sub.add_parser('check');s.add_argument('id');s.add_argument('--timeout',type=int,default=90);s.add_argument('--gate-start');s.add_argument('--gate-attempt',type=int);s.add_argument('cmd',nargs=argparse.REMAINDER)
     s=sub.add_parser('proof');s.add_argument('id');s.add_argument('--summary',required=True);s.add_argument('--test',action='append',default=[],help='Relative result file created by check command')
     s=sub.add_parser('complete');s.add_argument('id');s.add_argument('--evidence',required=True);s.add_argument('--notes',required=True)
     s=sub.add_parser('block');s.add_argument('id');s.add_argument('--reason',required=True)
     s=sub.add_parser('reopen');s.add_argument('id');s.add_argument('--source',required=True)
+    s=sub.add_parser('reserve-gate-attempt');s.add_argument('id');s.add_argument('--attempt',type=int,required=True);s.add_argument('--budget',type=int,required=True)
     args=p.parse_args(argv)
     try:
+        if args.command=='reserve-gate-attempt':
+            print(json.dumps(reserve_gate_attempt(args.id,args.attempt,args.budget)));return 0
         q=read_queue();errs=validate(q)
         if errs:raise ValueError('; '.join(errs))
         if args.command=='doctor':
@@ -206,6 +239,11 @@ def main(argv=None):
             dest=EVIDENCE/(args.id+'-audit.json');atomic_json(dest,data)
             print(dest.relative_to(ROOT));return 0
         if args.command=='check':
+            if args.gate_start is not None or args.gate_attempt is not None:
+                gate=t.get('gate_attempts',{})
+                if (args.gate_start!=t.get('started_at') or gate.get('started_at')!=args.gate_start
+                    or type(args.gate_attempt) is not int or gate.get('next_attempt')!=args.gate_attempt+1):
+                    raise ValueError('Gate reservation/start no longer active; check not launched')
             cmd=args.cmd
             if cmd and cmd[0]=='--':cmd=cmd[1:]
             if not cmd:raise ValueError('No command given after --')
@@ -265,5 +303,24 @@ def main(argv=None):
         raise ValueError('Unknown command')
     except (OSError,ValueError,json.JSONDecodeError,subprocess.TimeoutExpired) as e:
         print('ERROR:',str(e),file=sys.stderr);return 2
+
+def main(argv=None):
+    # Serialize all queue readers/mutators, not only attempt reservation.
+    # Lock lives outside TASKS.json because atomic replacement changes its inode.
+    import fcntl
+    import time
+    OPS.mkdir(parents=True,exist_ok=True)
+    with (OPS/'GATE_ATTEMPTS.lock').open('a') as lock:
+        deadline=time.monotonic()+15
+        while True:
+            try:
+                fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+                break
+            except BlockingIOError:
+                if time.monotonic()>=deadline:
+                    print('ERROR: workflow queue busy; no state changed',file=sys.stderr)
+                    return 2
+                time.sleep(0.05)
+        return _main_locked(argv)
 
 if __name__=='__main__':raise SystemExit(main())

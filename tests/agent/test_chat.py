@@ -1,4 +1,5 @@
 import json
+
 import pytest
 
 AUTH = {"Authorization": "Bearer agent-test-token", "Origin": "http://testserver"}
@@ -190,6 +191,7 @@ def test_chat_hides_provider_failure_and_limits_tools(workspace, monkeypatch):
 ])
 def test_chat_reports_provider_status_without_exposing_provider_data(workspace, monkeypatch, code, expected):
     import urllib.error
+
     from physimesh.agent import chat
 
     client, project = workspace
@@ -213,6 +215,7 @@ def test_chat_reports_provider_status_without_exposing_provider_data(workspace, 
 def test_stop_during_provider_call_prevents_subsequent_action(workspace, monkeypatch):
     from concurrent.futures import ThreadPoolExecutor
     from threading import Event
+
     from physimesh.agent import chat
 
     client, project = workspace
@@ -349,9 +352,10 @@ def test_tool_call_limit_stops_repeating_model(workspace, monkeypatch):
 
 def test_hosted_viewer_sees_only_allowed_chat_tools(tmp_path, monkeypatch):
     from fastapi.testclient import TestClient
+
+    from physimesh.agent import chat
     from physimesh.api.app import create_app
     from physimesh.api.settings import Settings
-    from physimesh.agent import chat
 
     monkeypatch.setattr(chat, "secure_origin", lambda request: True)
     with TestClient(

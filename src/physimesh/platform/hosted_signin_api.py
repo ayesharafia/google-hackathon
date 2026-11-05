@@ -1,8 +1,10 @@
 """Opt-in browser OIDC endpoints; callbacks never expose provider tokens."""
 
 from urllib.parse import parse_qs
+
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse, RedirectResponse
+
 from .hosted_signin import HOSTED_COOKIE, TRANSACTION_COOKIE
 
 router = APIRouter(prefix="/api/oidc")
@@ -33,7 +35,7 @@ def status(request: Request):
     try:
         signin.principal(request.cookies.get(HOSTED_COOKIE, ""))
         connected = True
-    except Exception:
+    except Exception:  # noqa: BLE001 - Treat failed session checks as disconnected.
         connected = False
     return private(JSONResponse({"enabled": True, "connected": connected}))
 
@@ -45,7 +47,7 @@ def start(request: Request):
         metadata = signin.provider.metadata()
         tx = signin.transactions.create()
         location = signin.provider.authorize_url(metadata, tx)
-    except Exception:
+    except Exception:  # noqa: BLE001 - Preserve the generic sign-in unavailable response.
         raise HTTPException(503, "Organization sign-in is unavailable.") from None
     response = private(RedirectResponse(location, status_code=302))
     response.set_cookie(
@@ -86,8 +88,8 @@ def callback(request: Request):
         claims = signin.provider.exchange(metadata, code, tx["verifier"], tx["nonce_hash"])
         token = signin.issue(claims)
         success = True
-    except Exception:
-        pass
+    except Exception:  # noqa: BLE001 - Fail closed without exposing authentication details.
+        success = False
     response = private(
         RedirectResponse(
             "/web/workbench.html" if success else "/web/workbench.html?signin=failed", status_code=303

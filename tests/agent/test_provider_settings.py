@@ -1,6 +1,7 @@
 import base64
 
 from fastapi.testclient import TestClient
+
 from physimesh.api.app import create_app
 from physimesh.api.settings import Settings
 
@@ -50,9 +51,10 @@ def test_invalid_request_and_delegated_client_never_expose_key(workspace, monkey
 
 
 def test_ciphertext_is_actor_bound_and_tampering_is_rejected(tmp_path):
-    from physimesh.agent.provider_settings import ProviderInput
-    from fastapi import HTTPException
     import pytest
+    from fastapi import HTTPException
+
+    from physimesh.agent.provider_settings import ProviderInput
 
     settings = Settings(tmp_path, tmp_path / "jobs.sqlite", "agent-test-token", None, provider_encryption_key=MASTER)
     app = create_app(settings)
