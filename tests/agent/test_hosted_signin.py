@@ -1,6 +1,8 @@
 import concurrent.futures
+
 import pytest
 from fastapi.testclient import TestClient
+
 from physimesh.api.app import create_app
 from physimesh.api.settings import Settings
 
@@ -46,6 +48,7 @@ def test_only_one_concurrent_callback_consumes_state(store):
 def test_provider_validates_metadata_nonce_audience_and_signed_identity():
     import jwt
     from cryptography.hazmat.primitives.asymmetric import rsa
+
     from physimesh.platform.hosted_signin import Provider, digest
 
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
@@ -95,8 +98,10 @@ def test_provider_validates_metadata_nonce_audience_and_signed_identity():
 
 
 def test_provider_callback_issues_cookie_and_enforces_origin(tmp_path):
-    import time, jwt
-    from urllib.parse import urlsplit, parse_qs
+    import time
+    from urllib.parse import parse_qs, urlsplit
+
+    import jwt
     from cryptography.hazmat.primitives.asymmetric import rsa
 
     origin = "https://app.example"
