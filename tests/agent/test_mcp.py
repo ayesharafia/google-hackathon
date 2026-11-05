@@ -11,8 +11,8 @@ from uuid import uuid4
 import pytest
 import uvicorn
 
-from tests.agent.test_foundation import AUTH, ROOT, mint
 from physimesh.agent.mcp import Bridge, BridgeError, configured_bridge
+from tests.agent.test_foundation import AUTH, ROOT, mint
 
 
 @pytest.fixture
