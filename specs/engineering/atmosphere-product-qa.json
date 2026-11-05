@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "sources": {
+    "web/js/atmosphere-preview.js": "bb9bf396e6a92e8c27e72a0c421f8e4f521fbafd6b0c7b98b5036715df1e1df3",
+    "web/js/input-editors.js": "a942b60949ce1ca05313d3f08537ade8ae78299c6db2e307ec246b42fa4d2e3c",
+    "web/js/workbench.js": "8ccaa6cc55d418d2c5be2646d4b2b462991fc797b54e6a51f5fb43bebe624354",
+    "web/workbench.html": "0d39f466a9965a1265414a15a759238b89e6aecabf23f66967ddcb01e118cd15",
+    "tests/web/test_atmosphere_preview.mjs": "7bf64c083e44efd0e25792bef3fb4cb4d1dbc23cffb6d7dcf8605741ac07fa3c",
+    "scripts/qa/atmosphere_browser.py": "a5ec83ea2402b7357699056887ca07962bfa0b5d4d17e48fc0c5ee8bf1334fa9",
+    "specs/engineering/atmosphere-product-qa.md": "0e42adb4e639d33f8cac279709f9069057a327f7e506bd85c2aa5476d83fa21d",
+    "scripts/qa/workflow_gates.py": "1748732f2aabd6cb1928dc7f4b6c168f7704edb16032cd1a55bcd3942e808d54",
+    ".physicore/tools/workflow.py": "fb6ebc33f72b68f6868e14c93bd28dd9ba15274d7bdbc62d3a24757dd4612444",
+    "tests/test_atmosphere_browser.py": "f8aafd585b5e839c37ac170409ab077905c985bddfd76b1cd69b7acec1048313"
+  },
+  "gates": [
+    {
+      "id": "preview-contracts",
+      "argv": [
+        "node",
+        "--experimental-default-type=module",
+        "--test",
+        "tests/web/test_atmosphere_preview.mjs"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "browser-qa-refusal-receipts",
+      "argv": [
+        "python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_atmosphere_browser.py"
+      ],
+      "timeout_seconds": 60
+    },
+    {
+      "id": "browser-qa-lint",
+      "argv": [
+        "python",
+        "-m",
+        "ruff",
+        "check",
+        "scripts/qa/atmosphere_browser.py",
+        "tests/test_atmosphere_browser.py"
+      ],
+      "timeout_seconds": 60
+    }
+  ],
+  "max_repair_attempts": 2,
+  "review_required": true
+}
