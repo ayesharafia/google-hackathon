@@ -1,3 +1,4 @@
+import {mountAtmospherePreview} from './atmosphere-preview.js?v=atmosphere-preview-1';
 /* Native draft authoring; blank numeric fields preserve unknowns. */
 import {mountSourceLibrary} from './source-library.js?v=source-explorer-1';
 import {mountAdvanced} from './advanced-editors.js';
@@ -33,6 +34,7 @@ export function mountEditors(container,read,write,inspect,importMap,options={}){
   pf.append(field('Held reserve fraction',data.mission.reserve_policy?.value,v=>{data.mission.reserve_policy={kind:'fraction',value:v,convention:'held_usable_energy_fraction'};changed();}));pack.append(pf);
   const cases=node('section');cases.append(node('h3','Required alternative cases'),node('p','Static hover is the first trim regime. Other conditions require an eligible model.'));
   const atm=node('div');atm.className='fields';[['Absolute pressure, Pa','pressure_pa','number'],['Temperature, K','temperature_k','number'],['Atmosphere source','source','text']].forEach(([label,key,type])=>atm.append(field(label,data.atmosphere[key],v=>{data.atmosphere[key]=v;changed();},type)));cases.append(atm);
+  if(options.evaluateAtmosphere)mountAtmospherePreview(cases,{read,evaluate:options.evaluateAtmosphere,apply:next=>{data=next;rebuild();}});
   (data.mission.cases||[]).forEach((c,index)=>{
     const row=node('fieldset');row.append(node('legend','Case '+(index+1)),field('Case ID',c.name,v=>{c.name=v;changed();},'text'),field('Duration, s',c.duration_s,v=>{c.duration_s=v;changed();}),field('Case source / scope',c.source_note,v=>{c.source_note=v;changed();},'text'));
     row.append(choice('Case kind',c.kind,['hover','axial_climb'],v=>{c.kind=v;changed();}),
