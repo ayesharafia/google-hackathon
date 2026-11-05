@@ -4,6 +4,7 @@ import base64
 import hashlib
 import secrets
 import time
+
 from .identity import Denied
 
 
@@ -84,7 +85,7 @@ class Provider:
     def http_json(url, form=None):
         import json
         from urllib.parse import urlencode
-        from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHandler
+        from urllib.request import HTTPRedirectHandler, ProxyHandler, Request, build_opener
 
         class NoRedirect(HTTPRedirectHandler):
             def redirect_request(self, *args, **kwargs):
@@ -105,13 +106,14 @@ class Provider:
                 raise ValueError()
             value = json.loads(data)
             if not isinstance(value, dict):
-                raise ValueError()
+                raise TypeError()
             return value
-        except Exception:
+        except Exception:  # noqa: BLE001 - Hide provider response and transport details behind Denied.
             raise Denied("Identity provider is unavailable or returned invalid data.") from None
 
     def metadata(self):
         from urllib.parse import urlsplit
+
         from physimesh.agent.remote_auth import https_url
 
         data = self.http_json(self.discovery)
@@ -148,6 +150,7 @@ class Provider:
 
     def verify_id_token(self, token, metadata, nonce_hash):
         import hmac
+
         import jwt
 
         try:
@@ -280,7 +283,7 @@ class HostedSignin:
         return token
 
     def principal(self, token):
-        from .identity import token_hash, InvalidSession
+        from .identity import InvalidSession, token_hash
 
         if not token or len(token) > 256:
             raise InvalidSession("Browser session unavailable.")
