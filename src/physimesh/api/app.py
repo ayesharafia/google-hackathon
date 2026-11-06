@@ -26,6 +26,7 @@ from ..projects.studies import LocalStudies
 from .atmosphere import router as atmosphere_router
 from .cantilever import router as cantilever_router
 from .contracts import router as contracts_router
+from .dependencies import router as dependencies_router
 from .evaluation import router as evaluation_router
 from .fixed_wing import router as fixed_wing_router
 from .projects import router as projects_router
@@ -122,6 +123,7 @@ def create_app(settings: Settings) -> FastAPI:
     app.include_router(fixed_wing_router)
     app.include_router(thermal_router)
     app.include_router(cantilever_router)
+    app.include_router(dependencies_router)
     app.include_router(drone_router)
     app.include_router(results_router)
     app.include_router(contracts_router)
@@ -138,6 +140,8 @@ def create_app(settings: Settings) -> FastAPI:
 
     @app.exception_handler(RequestValidationError)
     async def validation_handler(request, exc):
+        if request.method == "POST" and request.url.path == "/api/drone/dependencies/plan":
+            return JSONResponse({"detail": "Invalid dependency plan request."}, status_code=422)
         if request.method == "POST" and request.url.path == "/api/drone/cantilever/screen":
             return JSONResponse({"detail": "Invalid cantilever screening request."}, status_code=422)
         if request.method == "POST" and request.url.path == "/api/drone/thermal/screen":
@@ -259,7 +263,7 @@ def create_app(settings: Settings) -> FastAPI:
                     raise Denied('select a project before importing private geometry')
                 await run_in_threadpool(app.state.identity.authorize, principal, project_id, write=True)
             elif not (path == '/api/drone/projects' or path.startswith(('/api/drone/platform/', '/api/drone/contracts', '/api/drone/agent/'))
-                      or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate', '/api/drone/evaluations/catalog', '/api/drone/evaluations/evaluate', '/api/drone/fixed-wing/screen', '/api/drone/thermal/screen', '/api/drone/cantilever/screen')):
+                      or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate', '/api/drone/evaluations/catalog', '/api/drone/evaluations/evaluate', '/api/drone/fixed-wing/screen', '/api/drone/thermal/screen', '/api/drone/cantilever/screen', '/api/drone/dependencies/plan')):
                 # Legacy global screening/job/evidence hashes have no tenant ownership records.
                 raise Denied('this legacy route has no private project authorization')
             with artifact_scope(project_id):
