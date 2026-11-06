@@ -1,3 +1,7 @@
+import {mountCantilever} from './cantilever-screening.js?v=beam-1';
+import {mountThermal} from './thermal-screening.js?v=thermal-1';
+import {mountFixedWing} from './fixed-wing-screening.js?v=wing-1';
+import {mountJourney} from './workbench-journey.js?v=journey-1';
 import {mountEvaluationPanel} from './reference-evaluation.js?v=reference-1';
 import {mountRemoteConsent} from './remote-consent.js?v=remote-1';
 import {mountGroqChat} from './groq-chat.js?v=groq-2';
@@ -21,6 +25,10 @@ let inspectionSerial=0;
 let trimSelection=null;
 const context = () => ({generation, token, organization, project:current?.project_id});
 const isContext = c => c.generation===generation && c.token===token && c.organization===organization && c.project===current?.project_id;
+const cantilever=mountCantilever($('cantilever-screening'),{api,readContext:context,isContext});
+const thermal=mountThermal($('thermal-screening'),{api,readContext:context,isContext});
+const fixedWing=mountFixedWing($('fixed-wing-screening'),{api,readContext:context,isContext});
+const journey=mountJourney($('workbench-journey'));
 const referenceEvaluation=mountEvaluationPanel($('reference-evaluation'),{api,readContext:context,isContext});
 const comparisons = createComparisonController({
   readContext: context, isContext,
@@ -49,6 +57,7 @@ const jobActivity=mountJobActivity({
   openStudy:digest=>action(()=>selectStudy(digest)),
 });
 function updateContext(){
+  journey.sync({connected,projectTitle:current?.title??null,draftVersion:current?.draft_version??null,dirty,viewMode,revision:viewRevision||null,study:study?.study_sha256??null});
   $('display-context').textContent=!current?'No project selected.':viewMode==='draft'?'Viewer: '+(dirty?'unsaved':'saved')+' draft version '+current.draft_version+'. Editor changes affect this draft only.':'Viewer: frozen revision '+viewRevision+' · '+(viewMode==='study'?'selected study '+study?.study_sha256:'selected revision')+'. Draft edits do not change this view.';
   $('show-draft-layout').disabled=!current||busy||viewMode==='draft';
   $('view-case').disabled=!study||viewMode!=='study'||busy;
@@ -105,6 +114,9 @@ const groqChat=mountGroqChat($('groq-chat'),{settingsRoot:$('ai-settings'),api,e
 const remoteConsent=mountRemoteConsent($('remote-consent'),{api,exclusive:action,context:()=>({generation,connected,projectId:current?.project_id,publicAccess:isPublicAccess(),canWrite:!hosted||current?.role==='engineer'})});
 function message(text, error = false) { $('message').textContent = text; $('message').className = error ? 'error' : ''; }
 function controls() {
+  fixedWing.syncContext();
+  thermal.syncContext();
+  cantilever.syncContext();
   referenceEvaluation.syncContext();
   if(!connected)referenceEvaluation.invalidate('Sign in or connect the workspace, then refresh the model catalog.');
   updateContext();
