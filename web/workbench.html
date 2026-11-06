@@ -6,8 +6,12 @@
 <title>PhysiCore | Design workbench</title>
 <link rel="stylesheet" href="/web/css/workbench.css?v=ai-settings-1">
 <link rel="stylesheet" href="/web/css/reference-evaluation.css?v=reference-1">
+<link rel="stylesheet" href="/web/css/workbench-journey.css?v=journey-1">
+<link rel="stylesheet" href="/web/css/fixed-wing-screening.css?v=wing-1">
+<link rel="stylesheet" href="/web/css/thermal-screening.css?v=thermal-1">
+<link rel="stylesheet" href="/web/css/cantilever-screening.css">
 <script type="importmap">{"imports":{"three":"/web/vendor/three.module.min.js"}}</script>
-<script type="module" src="/web/js/workbench.js?v=reference-1"></script>
+<script type="module" src="/web/js/workbench.js?v=wing-1"></script>
 </head>
 <body>
 <header><a class="brand" href="/web/">PhysiCore</a><span>Local design workbench</span><a href="/web/results.html">Evidence desk</a></header>
@@ -25,7 +29,11 @@
 <div id="individual-session" hidden><label>Organization<select id="organization"></select></label><button id="logout" type="button">Sign out</button></div>
 <form id="accept-invitation" hidden><label>Invitation code<input id="invitation-code" type="password" autocomplete="off" required></label><button type="submit">Accept invitation</button></form>
 <p id="message" role="status" aria-live="polite">Loading workspace controls.</p>
+<div id="workbench-journey"></div>
 <section id="reference-evaluation" aria-label="Reference evaluation"></section>
+<section id="fixed-wing-screening" aria-label="Fixed-wing supplied-coefficient screening"></section>
+<section id="thermal-screening" aria-label="Single-segment lumped thermal screening"></section>
+<section id="cantilever-screening"></section>
 <div class="workbench">
 <aside>
 <h2>Projects</h2>
@@ -81,7 +89,7 @@
 <div id="input-editors"></div>
 <details id="design-json"><summary>Design input JSON</summary><label for="snapshot">Complete versioned snapshot</label><textarea id="snapshot" spellcheck="false" disabled rows="18"></textarea></details>
 <div class="actions"><button id="save" type="button" disabled>Save draft</button><button id="reload" type="button" disabled>Reload saved draft</button><button id="freeze" type="button" disabled>Freeze saved revision</button><button id="export-draft" type="button" disabled>Export draft JSON</button></div>
-<section aria-labelledby="study-title"><h3 id="study-title">Bounded capacity study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen design</button><p id="job-progress" role="status" aria-live="polite"></p><button id="cancel-job" type="button" hidden>Cancel job</button><button id="retry-job" type="button" hidden>Retry failed job</button><div id="study-summary" aria-live="polite"></div><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
+<section id="study-controls" aria-labelledby="study-title"><h3 id="study-title">Bounded capacity study</h3><p>Run the saved, frozen design. Isolated maps and declared loads do not establish installed-aircraft validation.</p><button id="calculate" type="button" disabled>Evaluate frozen design</button><p id="job-progress" role="status" aria-live="polite"></p><button id="cancel-job" type="button" hidden>Cancel job</button><button id="retry-job" type="button" hidden>Retry failed job</button><div id="study-summary" aria-live="polite"></div><div id="study-report" aria-live="polite"><p>No local hover study evaluated.</p></div><div class="actions"><button id="export-study" type="button" disabled>Export retained JSON</button><button id="export-pdf" type="button" disabled>Export study PDF</button></div></section>
 <section id="job-activity" hidden aria-labelledby="job-activity-title"><h3 id="job-activity-title">Job activity &amp; recovery</h3><p>Inspect recorded execution attempts. A completed job does not establish physical validity.</p><div id="job-detail" tabindex="-1"></div></section>
 <section id="review-pack" aria-labelledby="review-pack-title">
 <h3 id="review-pack-title">Study Review Pack</h3>

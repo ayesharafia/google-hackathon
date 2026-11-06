@@ -1,0 +1,19 @@
+.thermal-screening{font-family:system-ui,sans-serif;line-height:1.5;max-width:960px;padding:20px;color:#172331;background:#fff;border:1px solid #c4ccd6;border-radius:10px;overflow-wrap:anywhere}
+.thermal-screening *{box-sizing:border-box;min-width:0}
+.thermal-screening h2{margin:0 0 12px;font-size:1.5rem}
+.thermal-screening .thermal-warning{padding:14px;background:#fff3cd;border:1px solid #a87910;border-radius:6px;color:#513900}
+.thermal-screening form,.thermal-screening label{display:grid;gap:10px}
+.thermal-screening form{gap:20px}
+.thermal-screening .thermal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.thermal-screening input,.thermal-screening textarea,.thermal-screening button{font:inherit;min-height:44px;padding:10px;width:100%;border:1px solid #7b8797;border-radius:5px;background:#fff;color:inherit}
+.thermal-screening textarea{resize:vertical}
+.thermal-screening button{background:#174e83;color:#fff;cursor:pointer;font-weight:600}
+.thermal-screening button:disabled{background:#e1e6ec;color:#526071;cursor:default}
+.thermal-screening summary{min-height:44px;padding:10px 0;cursor:pointer;font-weight:600}
+.thermal-screening :is(input,textarea,button,summary):focus-visible{outline:3px solid #2077c5;outline-offset:3px}
+.thermal-screening .thermal-result{border-top:1px solid #c4ccd6;padding-top:16px}
+.thermal-screening dl{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px 20px}
+.thermal-screening dt{font-weight:600}
+.thermal-screening dd{margin:0;overflow-wrap:anywhere}
+.thermal-screening .thermal-declaration,.thermal-screening [role=status]{white-space:pre-wrap}
+@media(max-width:600px){.thermal-screening{padding:14px}.thermal-screening .thermal-grid,.thermal-screening dl{grid-template-columns:1fr}.thermal-screening dd{margin-bottom:10px}}
