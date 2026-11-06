@@ -1,0 +1,12 @@
+# Mission battery arithmetic support
+- Constant-power mission energy is `E = P × dt`, in joules for watts and seconds.
+- Pack specific energy converts as `q = pack_Wh_per_kg × 3600`, in J/kg.
+- Reserve energy is `E_reserved = E × (1 + r)`.
+- With usable fraction `f`, required nominal energy is `E_battery = E_reserved / f`.
+- Battery mass is `battery_mass = E_reserved / (q * f)` kg; energy output is `MissionResult.mission_energy_wh = E / 3600` Wh and excludes reserve/usable adjustment.
+- This patch refuses nonfinite or subnormal results, positive underflow, and positive battery mass absorbed when added to base mass.
+- These are numerical support boundaries, not physical thresholds; some mathematically finite answers could exist with rescaling that is not implemented.
+- Legitimate zero-power cases remain supported with normal or zero total mass.
+- Convergence parameters and status are unchanged; no validation or qualification is claimed.
+- Separately, a tiny efficiency product in `electrical_power` can still cause `ZeroDivisionError`; that issue is outside this patch's scope.
+- Support for a future coupled mission full model is not claimed.
