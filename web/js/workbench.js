@@ -1,3 +1,4 @@
+import {mountEvaluationPanel} from './reference-evaluation.js?v=reference-1';
 import {mountRemoteConsent} from './remote-consent.js?v=remote-1';
 import {mountGroqChat} from './groq-chat.js?v=groq-2';
 import {createReviewPackDownloader} from './review-pack.js?v=pack-1';
@@ -20,6 +21,7 @@ let inspectionSerial=0;
 let trimSelection=null;
 const context = () => ({generation, token, organization, project:current?.project_id});
 const isContext = c => c.generation===generation && c.token===token && c.organization===organization && c.project===current?.project_id;
+const referenceEvaluation=mountEvaluationPanel($('reference-evaluation'),{api,readContext:context,isContext});
 const comparisons = createComparisonController({
   readContext: context, isContext,
   readSelection: () => ({before:$('compare-before').value, after:$('compare-after').value}),
@@ -103,6 +105,8 @@ const groqChat=mountGroqChat($('groq-chat'),{settingsRoot:$('ai-settings'),api,e
 const remoteConsent=mountRemoteConsent($('remote-consent'),{api,exclusive:action,context:()=>({generation,connected,projectId:current?.project_id,publicAccess:isPublicAccess(),canWrite:!hosted||current?.role==='engineer'})});
 function message(text, error = false) { $('message').textContent = text; $('message').className = error ? 'error' : ''; }
 function controls() {
+  referenceEvaluation.syncContext();
+  if(!connected)referenceEvaluation.invalidate('Sign in or connect the workspace, then refresh the model catalog.');
   updateContext();
   agentPanel.sync();
   groqChat.sync();
