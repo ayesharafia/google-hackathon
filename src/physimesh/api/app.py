@@ -25,6 +25,7 @@ from ..projects.sqlite import SQLiteProjects
 from ..projects.studies import LocalStudies
 from .atmosphere import router as atmosphere_router
 from .contracts import router as contracts_router
+from .evaluation import router as evaluation_router
 from .projects import router as projects_router
 from .results import router as results_router
 from .screening import router as screening_router
@@ -114,6 +115,7 @@ def create_app(settings: Settings) -> FastAPI:
             return app.state.remote_http.metadata(request)
 
     app.include_router(atmosphere_router)
+    app.include_router(evaluation_router)
     app.include_router(drone_router)
     app.include_router(results_router)
     app.include_router(contracts_router)
@@ -130,6 +132,8 @@ def create_app(settings: Settings) -> FastAPI:
 
     @app.exception_handler(RequestValidationError)
     async def validation_handler(request, exc):
+        if request.method == "POST" and request.url.path == "/api/drone/evaluations/evaluate":
+            return JSONResponse({"detail": "Invalid evaluation request."}, status_code=422)
         if request.url.path == "/api/drone/atmosphere/evaluate":
             # Validation errors may contain NaN/Infinity inputs, which cannot
             # be serialized by JSONResponse. Do not echo raw model inputs.
@@ -243,7 +247,7 @@ def create_app(settings: Settings) -> FastAPI:
                     raise Denied('select a project before importing private geometry')
                 await run_in_threadpool(app.state.identity.authorize, principal, project_id, write=True)
             elif not (path == '/api/drone/projects' or path.startswith(('/api/drone/platform/', '/api/drone/contracts', '/api/drone/agent/'))
-                      or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate')):
+                      or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate', '/api/drone/evaluations/catalog', '/api/drone/evaluations/evaluate')):
                 # Legacy global screening/job/evidence hashes have no tenant ownership records.
                 raise Denied('this legacy route has no private project authorization')
             with artifact_scope(project_id):
