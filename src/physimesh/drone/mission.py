@@ -33,7 +33,13 @@ def electrical_power(shaft_powers_w: list[float], eta_motor: list[float], eta_in
     for p, em, ei, ed in zip(shaft_powers_w, eta_motor, eta_inverter, eta_drive, strict=True):
         if not math.isfinite(p) or p < 0 or not all(math.isfinite(eta) and 0 < eta <= 1 for eta in (em, ei, ed)):
             raise ValueError('shaft power and efficiencies are invalid')
-        total += p/(em*ei*ed)
+        if p == 0:
+            continue
+        if em*ei*ed < sys.float_info.min:
+            smallest, middle, largest = sorted((em, ei, ed))
+            total += p/smallest/middle/largest
+        else:
+            total += p/(em*ei*ed)
     if not math.isfinite(total):
         raise ValueError('electrical power overflowed')
     return total
