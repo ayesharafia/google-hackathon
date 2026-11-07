@@ -107,6 +107,7 @@ def solve_hover(
     root_cutout_fraction,
     twist_law="constant",
     annuli=32,
+    pitch_root_rad=None,
 ) -> HoverSolution:
     """Assemble uniform midpoint annuli; reject unsupported numerical extremes.
 
@@ -125,8 +126,14 @@ def solve_hover(
     count = _integer(annuli, "annuli", 2048)
     if cutout >= 1.0:
         raise ValueError("root_cutout_fraction must be strictly between zero and one")
-    if type(twist_law) is not str or twist_law not in ("constant", "hyperbolic"):
-        raise ValueError("twist_law must be 'constant' or 'hyperbolic'")
+    if type(twist_law) is not str or twist_law not in ("constant", "hyperbolic", "linear"):
+        raise ValueError("twist_law must be 'constant', 'hyperbolic', or 'linear'")
+    if twist_law == "linear":
+        if pitch_root_rad is None:
+            raise ValueError("pitch_root_rad is required for linear twist")
+        root_pitch = _number(pitch_root_rad, "pitch_root_rad", zero=True)
+    elif pitch_root_rad is not None:
+        raise ValueError("pitch_root_rad is only supported for linear twist")
 
     try:
         width = _div(_normal(1.0 - cutout), float(count))
@@ -154,7 +161,15 @@ def solve_hover(
         momentum_terms, blade_terms, induced_terms, profile_terms = [], [], [], []
         local_balances = []
         for radial in radii:
-            theta = tip_pitch if twist_law == "constant" else _div(tip_pitch, radial)
+            if twist_law == "linear":
+                # Endpoints are at the cutout and tip, over the active span.
+                fraction = _div(_normal(radial - cutout), _normal(1.0 - cutout))
+                theta = _sum([
+                    _mul(_normal(1.0 - fraction), root_pitch),
+                    _mul(fraction, tip_pitch),
+                ])
+            else:
+                theta = tip_pitch if twist_law == "constant" else _div(tip_pitch, radial)
             theta_radial = _mul(theta, radial)
             if theta_radial == 0.0:
                 inflow = 0.0
