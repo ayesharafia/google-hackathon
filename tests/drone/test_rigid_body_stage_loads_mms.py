@@ -5,6 +5,7 @@ experiments. Mathematical loads convey no aircraft feasibility evidence.
 """
 import math
 import unittest
+from itertools import pairwise
 
 from physimesh.drone.rigid_body import RigidBodyState
 from physimesh.drone.rigid_body_stage_loads import propagate_rigid_body_stage_loads
@@ -139,7 +140,7 @@ class ManufacturedSolutionTests(unittest.TestCase):
             finals = []
             for h in HS:
                 calls = []
-                def callback(t, state):
+                def callback(t, state, calls=calls, branch=branch):
                     calls.append(t)
                     self.assertIs(type(t), float)
                     self.assertIs(type(state), RigidBodyState)
@@ -173,8 +174,8 @@ class ManufacturedSolutionTests(unittest.TestCase):
                 rows.append(row)
             for j, field in enumerate(FIELDS):
                 es = [row[j] for row in rows]
-                orders = [math.log2(a/b) for a, b in zip(es, es[1:])]
-                resolved = [min(a, b) > FLOORS[j] for a, b in zip(es, es[1:])]
+                orders = [math.log2(a/b) for a, b in pairwise(es)]
+                resolved = [min(a, b) > FLOORS[j] for a, b in pairwise(es)]
                 self.assertTrue(all(resolved[:2]), (field, es))
                 for order, use in zip(orders, resolved):
                     if use:
