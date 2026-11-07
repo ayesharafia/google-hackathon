@@ -241,4 +241,4 @@ def _propagate(initial, mass, tensor, gravity, dt, steps, load_function):
         "input_quaternion_norm_correction": correction,
         "max_preprojection_quaternion_norm_error": max_error,
         "final_quaternion_norm": _norm(state[6:10]),
-      }
+    }
