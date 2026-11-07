@@ -235,7 +235,7 @@ def test_exact_list_type_and_shape(path, kind):
     value = request()
     original = at(value, path)
     bad = {"tuple": lambda: tuple(original), "short": lambda: original[:-1],
-           "long": lambda: original + [0], "dict": lambda: {},
+           "long": lambda: original + [0], "dict": dict,
            "subclass": lambda: ListSubclass(original), "object": Malicious}[kind]()
     replace(value, path, bad)
     refused(value)
