@@ -48,6 +48,7 @@ def benchmark_refinement(
     root_cutout_fraction,
     twist_law="constant",
     annuli_counts=(8, 16, 32, 64, 128),
+    pitch_root_rad=None,
 ):
     """Compute refinement diagnostics without establishing physical validity."""
     if (
@@ -69,6 +70,8 @@ def benchmark_refinement(
         "root_cutout_fraction": root_cutout_fraction,
         "twist_law": twist_law,
     }
+    if twist_law == "linear" or pitch_root_rad is not None:
+        parameters["pitch_root_rad"] = pitch_root_rad
     first = solve_hover(**parameters, annuli=annuli_counts[0])
     reference = {"CT": None, "CPi": None, "CP0": None}
     if twist_law == "hyperbolic":
@@ -130,8 +133,11 @@ def benchmark_refinement(
             "Small-angle applicability: NOT_ESTABLISHED.",
             ("No qualification for tip effects, swirl, stall, Reynolds number, "
             "compressibility, ground effects, or interference."),
-            ("Hyperbolic CT/CPi integrands are linear and midpoint-exact; "
-            "roundoff errors do not establish convergence orders."),
+            ("Linear pitch interpolates from pitch_root_rad at "
+             "r=root_cutout_fraction to pitch_tip_rad at r=1."
+             if twist_law == "linear" else
+             "Hyperbolic CT/CPi integrands are linear and midpoint-exact; "
+             "roundoff errors do not establish convergence orders."),
             "Errors use rounded float references; cancellation to zero is allowed.",
             "No automatic dispatch or physical pass/fail assessment.",
         ],
