@@ -1,6 +1,7 @@
 """Independent numerical oracles; physical validation NOT_ESTABLISHED."""
 
 import math
+from itertools import pairwise
 
 import pytest
 
@@ -51,7 +52,7 @@ def check_refinement(states, exact):
         for component, reference in enumerate(expected):
             errors = [abs(state[field][component] - reference) for state in states]
             assert errors[-1] < 2e-7, (field, component, errors)
-            for coarse, fine in zip(errors, errors[1:]):
+            for coarse, fine in pairwise(errors):
                 if min(coarse, fine) > 5e-13:
                     order = math.log2(coarse / fine)
                     assert 3.7 <= order <= 4.4, (field, component, errors, order)
