@@ -5,6 +5,7 @@ kernel's own dependencies; the oracle does not use SciPy or kernel internals.
 """
 
 import math
+from itertools import pairwise
 
 import pytest
 
@@ -95,6 +96,6 @@ def test_rotating_body_force_coupled_closed_form_fourth_order(rate):
     # Each observable must converge independently; a combined norm could hide
     # a broken translation channel behind the attitude error (or vice versa).
     for field, values in errors.items():
-        orders = [math.log2(a/b) for a, b in zip(values, values[1:])]
+        orders = [math.log2(a/b) for a, b in pairwise(values)]
         assert all(3.7 < order < 4.3 for order in orders), (field, values, orders)
         assert values[-1] < 2e-7, (field, values)
