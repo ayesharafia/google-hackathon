@@ -327,4 +327,4 @@ def _propagate(initial, mass, tensor, force, moment, gravity, dt, steps):
         "final_angular_momentum_enu_kg_m2_s": momentum1.tolist(),
         "torque_free_relative_energy_drift": energy_drift,
         "torque_free_relative_angular_momentum_drift": momentum_drift,
-  }
+}
