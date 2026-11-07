@@ -46,25 +46,41 @@ def _envelope():
         "reasons": [],
         "limitations": [
             "Finite experimental numerical model; physical validation is not established.",
-            "Constant positive mass, full constant body inertia about the CG, explicit "
-            "ENU gravity and caller-supplied body force and CG moment only. Force "
-            "excludes gravity; no inferred aircraft loads or aircraft qualification.",
-            "Exact symmetry and scaled Cholesky SPD restrict numerical support; "
-            "physical inertia triangle admissibility is not assessed.",
-            "Conservative finite/normal checks and reported underflow, including "
-            "underflow to zero, can refuse arithmetic. Internal LAPACK loss of "
-            "significance is not fully detectable; diagnostic differences may be tiny.",
-            "Fixed-step RK4 supplies no accuracy, stability, convergence, condition-number "
-            "or horizon guarantee. Quaternion projection is not an error estimate.",
-            "Stage rotation and callback attitude are normalized, but quaternion "
-            "kinematics use raw stages. Exact constant-kernel parity is not promised.",
-            "Caller purity, determinism and sufficient smoothness are required and "
-            "not verified. Finite loads do not establish physical validity.",
-            "Callbacks are trusted local Python with unbounded runtime: no sandbox, "
-            "network enforcement, execution time limit or side-effect rollback. "
-            "Returned solver outputs are all-or-nothing.",
-            "Public sources support numerical formulations only; evidence for this "
-            "exact module and its load models remains unverified.",
+            (
+                "Constant positive mass, full constant body inertia about the CG, explicit "
+                "ENU gravity and caller-supplied body force and CG moment only. Force "
+                "excludes gravity; no inferred aircraft loads or aircraft qualification."
+            ),
+            (
+                "Exact symmetry and scaled Cholesky SPD restrict numerical support; "
+                "physical inertia triangle admissibility is not assessed."
+            ),
+            (
+                "Conservative finite/normal checks and reported underflow, including "
+                "underflow to zero, can refuse arithmetic. Internal LAPACK loss of "
+                "significance is not fully detectable; diagnostic differences may be tiny."
+            ),
+            (
+                "Fixed-step RK4 supplies no accuracy, stability, convergence, condition-number "
+                "or horizon guarantee. Quaternion projection is not an error estimate."
+            ),
+            (
+                "Stage rotation and callback attitude are normalized, but quaternion "
+                "kinematics use raw stages. Exact constant-kernel parity is not promised."
+            ),
+            (
+                "Caller purity, determinism and sufficient smoothness are required and "
+                "not verified. Finite loads do not establish physical validity."
+            ),
+            (
+                "Callbacks are trusted local Python with unbounded runtime: no sandbox, "
+                "network enforcement, execution time limit or side-effect rollback. "
+                "Returned solver outputs are all-or-nothing."
+            ),
+            (
+                "Public sources support numerical formulations only; evidence for this "
+                "exact module and its load models remains unverified."
+            ),
         ],
         "sources": [
             "https://arc.aiaa.org/doi/10.2514/1.G004578",
@@ -159,7 +175,7 @@ def _loads(function, time, value, attitude):
     )
     try:
         returned = function(time, snapshot)
-    except Exception:
+    except Exception:  # noqa: BLE001 - Callback failures become refusals; BaseException propagates.
         raise _LoadFailure from None
     try:
         if type(returned) is not tuple or len(returned) != 2:
