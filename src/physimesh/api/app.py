@@ -24,11 +24,13 @@ from ..projects.service import ProjectService
 from ..projects.sqlite import SQLiteProjects
 from ..projects.studies import LocalStudies
 from .atmosphere import router as atmosphere_router
+from .beam_fem_variable import router as beam_fem_variable_router
 from .cantilever import router as cantilever_router
 from .contracts import router as contracts_router
 from .dependencies import router as dependencies_router
 from .evaluation import router as evaluation_router
 from .fixed_wing import router as fixed_wing_router
+from .hover_bemt import router as hover_bemt_router
 from .projects import router as projects_router
 from .results import router as results_router
 from .screening import router as screening_router
@@ -123,6 +125,8 @@ def create_app(settings: Settings) -> FastAPI:
     app.include_router(fixed_wing_router)
     app.include_router(thermal_router)
     app.include_router(cantilever_router)
+    app.include_router(hover_bemt_router)
+    app.include_router(beam_fem_variable_router)
     app.include_router(dependencies_router)
     app.include_router(drone_router)
     app.include_router(results_router)
@@ -144,6 +148,10 @@ def create_app(settings: Settings) -> FastAPI:
             return JSONResponse({"detail": "Invalid dependency plan request."}, status_code=422)
         if request.method == "POST" and request.url.path == "/api/drone/cantilever/screen":
             return JSONResponse({"detail": "Invalid cantilever screening request."}, status_code=422)
+        if request.method == "POST" and request.url.path == "/api/drone/beam-fem-variable/evaluate":
+            return JSONResponse({"detail": "Invalid variable beam request."}, status_code=422)
+        if request.method == "POST" and request.url.path == "/api/drone/hover-bemt/evaluate":
+            return JSONResponse({"detail": "Invalid hover BEMT request."}, status_code=422)
         if request.method == "POST" and request.url.path == "/api/drone/thermal/screen":
             return JSONResponse({"detail": "Invalid thermal screening request."}, status_code=422)
         if request.method == "POST" and request.url.path == "/api/drone/fixed-wing/screen":
@@ -263,7 +271,7 @@ def create_app(settings: Settings) -> FastAPI:
                     raise Denied('select a project before importing private geometry')
                 await run_in_threadpool(app.state.identity.authorize, principal, project_id, write=True)
             elif not (path == '/api/drone/projects' or path.startswith(('/api/drone/platform/', '/api/drone/contracts', '/api/drone/agent/'))
-                      or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate', '/api/drone/evaluations/catalog', '/api/drone/evaluations/evaluate', '/api/drone/fixed-wing/screen', '/api/drone/thermal/screen', '/api/drone/cantilever/screen', '/api/drone/dependencies/plan')):
+                      or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate', '/api/drone/evaluations/catalog', '/api/drone/evaluations/evaluate', '/api/drone/fixed-wing/screen', '/api/drone/thermal/screen', '/api/drone/cantilever/screen', '/api/drone/hover-bemt/evaluate', '/api/drone/beam-fem-variable/evaluate', '/api/drone/dependencies/plan')):
                 # Legacy global screening/job/evidence hashes have no tenant ownership records.
                 raise Denied('this legacy route has no private project authorization')
             with artifact_scope(project_id):
