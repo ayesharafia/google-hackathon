@@ -163,4 +163,4 @@ def benchmark_variable_mms(*, length_m, E_pa, I_root_m4, outer_fibre_m,
             "https://ceae.colorado.edu/~regueiro/courses/CVEN4511_5511_notes.pdf",
             "https://www.osti.gov/biblio/759450",
         ],
-                             }
+    }
