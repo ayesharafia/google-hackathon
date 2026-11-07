@@ -9,6 +9,8 @@ There is no API integration, registry or dispatch integration, or physical quali
 Let `R` be radius [m], `Omega` angular speed [rad/s], `rho` density [kg/m³], `N` blade count, and `c` constant chord [m].
 Use nondimensional radius `r=y/R`, induced velocity `v=lambda*Omega*R`, solidity `sigma=N*c/(pi*R)`, lift slope `a` [rad⁻¹], and constant section drag coefficient `Cd`.
 Pitch angles are radians: `theta(r)=pitch_tip_rad` for `constant`, or `theta(r)=pitch_tip_rad/r` for `hyperbolic`.
+For `linear`, `theta=(1-t)*root+t*tip`, with `t=(r-r0)/(1-r0)`, `r0=root_cutout_fraction`, `root=pitch_root_rad`, and `tip=pitch_tip_rad`.
+The root endpoint is `theta(r0)` at the active-span root; it is not an extrapolated pitch at the hub `r=0`.
 The local hover balance is `lambda² + (sigma*a/8)*lambda - (sigma*a/8)*theta*r = 0`.
 The solver evaluates its nonnegative root as `lambda=2*theta*r/(1+sqrt(1+32*theta*r/(sigma*a)))`, avoiding subtraction in the root formula.
 With `r0=root_cutout_fraction` and `n=annuli`, uniform annuli span `r0..1`, with `dr=(1-r0)/n` and midpoints `r_j=r0+(j+1/2)*dr`.
@@ -36,9 +38,11 @@ Its units are coefficient per unit nondimensional radius `r`; it is not an annul
 
 Both entry points are keyword-only. Their shared required keywords are shown exactly in the runnable example below.
 `solve_hover` additionally accepts `annuli=32`; `benchmark_refinement` instead accepts `annuli_counts=(8, 16, 32, 64, 128)`.
-Both default to `twist_law="constant"`; the only other accepted value is `"hyperbolic"`, and the value must be a builtin `str`.
+Both default to `twist_law="constant"`; the other accepted values are `"hyperbolic"` and `"linear"`, and the value must be a builtin `str`.
+Both accept the optional keyword `pitch_root_rad=None`; a non-`None` value is required for `linear` and rejected for `constant` or `hyperbolic` with `ValueError`.
 Scalar physical inputs must be builtin `int` or `float`; booleans and other numeric types are rejected with `ValueError`.
-Values must convert to finite, normal floats and be positive, except `profile_drag_coefficient` and `pitch_tip_rad`, which may be zero.
+Values must convert to finite, normal floats and be positive, except `profile_drag_coefficient`, `pitch_tip_rad`, and the supplied `pitch_root_rad`, which may be zero.
+Both linear pitch endpoints must therefore be nonnegative finite-normal values or zero; increasing, decreasing, and equal endpoints are supported.
 `root_cutout_fraction` must satisfy `0<r0<1`; `blade_count` must be a builtin `int` in `1..32`, and `annuli` in `1..2048`.
 `annuli_counts` must be a builtin tuple of 3–8 builtin integers, each in `1..2048`, with every entry exactly twice its predecessor.
 These are numerical bounds, not a validated aerodynamic operating envelope.
@@ -49,6 +53,7 @@ This subtraction guard limits cancellation amplification to roughly `1/sqrt(epsi
 It is not a physical small-angle threshold. An accepted result does not guarantee a uniform error bound.
 Many finite extreme inputs are rejected; even the zero-pitch branch can reject derived overflow or mesh collapse before returning a result.
 For supported zero-pitch inputs, inflow, thrust, and induced power are zero; positive drag gives profile-only power, while zero drag gives zero total power and torque.
+For `linear`, this zero-pitch case requires both endpoints to be zero.
 
 `solve_hover` returns a frozen `HoverSolution` dataclass with tuple-valued radial, inflow, pitch, inflow-angle, and angle-of-attack arrays.
 Its scalar fields include the coefficients, dimensional loads, balances, and annulus count; `status="COMPUTED_EXPERIMENTAL"` and `physical_validation="NOT_ESTABLISHED"`.
@@ -91,11 +96,24 @@ This verifies second-order profile convergence analytically; doubling `n` quarte
 For `n=8,16,32,64,128`, reported `CP0_absolute_error` is approximately `1.9098593e-7, 4.7746483e-8, 1.1936621e-8, 2.9841552e-9, 7.4603880e-10`.
 `profile_observed_order=log2(coarse_error)-log2(fine_error)` is computed only when `0<fine_error<coarse_error`; otherwise it is `None`.
 References are rounded to floats before errors are subtracted; references and errors can round to zero. Apparent orders near cancellation are not reliable accuracy evidence.
-For constant pitch, `reference_kind="mesh_change_only"`, all reference values and absolute errors are `None`, and all observed orders are `None`.
+For constant or linear pitch, `reference_kind="mesh_change_only"`, all reference values and absolute errors are `None`, and all observed orders are `None`.
 Rows report absolute successive `CT_change` and `CP_change` (first row `None`); refinements are mesh-change diagnostics, not error bars.
+
+Using the same import and parameters, a linear benchmark with root pitch `0.16` and tip pitch `0.08` is:
+
+```python
+linear_report = benchmark_refinement(
+    radius_m=1.0, angular_speed_rad_s=100.0, density_kg_m3=1.225,
+    blade_count=2, chord_m=0.05, lift_curve_slope_per_rad=5.7,
+    profile_drag_coefficient=0.01, pitch_tip_rad=0.08,
+    root_cutout_fraction=0.2, twist_law="linear", pitch_root_rad=0.16,
+    annuli_counts=(8, 16, 32, 64, 128),
+)
+```
 
 ## Scope and sources
 
 There are no tip or hub loss factors, swirl, stall, Reynolds-dependent polars, compressibility, forward flight, climb/descent, ground effects, interference, coupled-aircraft effects, or structural-strength assessment.
 The cutout specifies an integration domain; it is not a validated hub-loss treatment. Small-angle applicability and physical qualification remain unestablished.
 The formulation follows [Georgia Tech combined blade-element/momentum notes](https://sankar.gatech.edu/AE6070/Combined.BE.Momentum.Theory.doc) and [Sumeet Kumar's BEMT notes](https://kumar-sumeet.github.io/HeliAeroNotes/Lectures/2_BET/2_BEMT.html); benchmark results verify numerical behavior only.
+[Sumeet Kumar's BET notes](https://kumar-sumeet.github.io/HeliAeroNotes/Lectures/2_BET/1_BET.html) provide pitch-law context; their uniform-inflow aggregate thrust formula is not used for the local BEMT balance above.
