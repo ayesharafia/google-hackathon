@@ -34,7 +34,7 @@ const thermal=mountThermal($('thermal-screening'),{api,readContext:context,isCon
 const tabulatedElectrothermal=mountTabulatedElectrothermal($('tabulated-electrothermal'),{request,readContext:context,isContext,isConnected:()=>connected});
 const tabulatedSolvedElectrothermal=mountTabulatedSolvedElectrothermal($('tabulated-solved-electrothermal'),{request,readContext:context,isContext,isConnected:()=>connected});
 const polarRotor=mountPolarRotor($('polar-rotor'),{request,readContext:context,isContext,isConnected:()=>connected});
-const diskPressure=mountDiskPressure($('disk-pressure'),{request,readContext:context,isContext,isConnected:()=>connected});
+const diskPressure=mountDiskPressure($('disk-pressure'),{request,readContext:context,isContext,isConnected:()=>connected,getRotorResponse:()=>polarRotor.currentResponseText()});
 const fixedWing=mountFixedWing($('fixed-wing-screening'),{api,readContext:context,isContext});
 const journey=mountJourney($('workbench-journey'));
 const referenceEvaluation=mountEvaluationPanel($('reference-evaluation'),{api,readContext:context,isContext});

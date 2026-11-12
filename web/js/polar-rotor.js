@@ -70,11 +70,18 @@ export function mountPolarRotor(root, {request, readContext, isContext, isConnec
   panel.append(actions, catalogDetails, label, help, status, states, projection, node('h4', 'Full raw response'), result, node('p', CAPTURE_LABEL), captureStatus); root.append(panel);
   let ctx = readContext(), online = Boolean(isConnected()), serial = 0, busy = false, catalogReady = false;
   let capture = null;
+  function captureChanged() {
+    if (typeof root.dispatchEvent === 'function') {
+      const CaptureEvent = doc.defaultView?.CustomEvent || globalThis.CustomEvent;
+      root.dispatchEvent(new CaptureEvent('polar-rotor-capture-changed', {bubbles: true}));
+    }
+  }
   function eraseResult() {
     capture = null; result.textContent = ''; result.hidden = true;
     states.replaceChildren(); states.hidden = true;
     projection.replaceChildren(); projection.hidden = true;
     captureStatus.textContent = 'Capture unavailable. Run a fresh recognized response first.';
+    captureChanged();
   }
   function controls() {
     refresh.disabled = busy || !online;
@@ -156,6 +163,7 @@ export function mountPolarRotor(root, {request, readContext, isContext, isConnec
         states.hidden = false;
         capture = {id, snapshot, rawCatalog, rawRequest: raw, rawResponse: text, httpStatus: response.status, status: topStatus};
         captureStatus.textContent = 'Current raw strings available for explicit local browser capture download. ' + CAPTURE_LABEL;
+        captureChanged();
       }
       // Presentation failure must never discard successful HTTP raw text/capture.
       try { renderPolarRotorPostpro(projection, data); } catch {
@@ -190,5 +198,7 @@ export function mountPolarRotor(root, {request, readContext, isContext, isConnec
   });
   status.textContent = online ? 'Explicitly refresh the catalog, then supply your request JSON.' : 'Connect the workspace, then explicitly refresh the catalog.';
   controls();
-  return {syncContext};
+  return {syncContext, currentResponseText: () =>
+    capture && capture.id === serial && isContext(capture.snapshot) &&
+    input.value === capture.rawRequest && Boolean(isConnected()) ? capture.rawResponse : null};
 }

@@ -88,7 +88,7 @@ function saveReport(doc, text) {
     try {anchor?.remove();} finally {if (url !== undefined) urls.revokeObjectURL(url);}
   }
 }
-export function mountDiskPressure(root, {request, isConnected, readContext = () => null, isContext = () => true}) {
+export function mountDiskPressure(root, {request, isConnected, readContext = () => null, isContext = () => true, getRotorResponse}) {
   const doc = root.ownerDocument;
   const node = (tag, text, key) => {
     const el = doc.createElement(tag);
@@ -103,11 +103,15 @@ export function mountDiskPressure(root, {request, isConnected, readContext = () 
   input.setAttribute('aria-describedby', 'disk-pressure-help'); label.append(input);
   const help = node('p', 'Sent exactly as entered, up to 16,777,216 UTF-8 bytes. The server rejects malformed JSON, duplicate keys and nonfinite constants. HTTP 200 alone establishes neither computational nor physical success. No private project study is saved.');
   help.id = 'disk-pressure-help';
+  const prefill = typeof getRotorResponse === 'function' ? node('button', 'Use current polar-rotor result', 'prefill') : null;
+  if (prefill) prefill.type = 'button';
   const run = node('button', 'Derive disk pressure', 'run'); run.type = 'button';
   const exportButton = node('button', 'Export canonical report', 'export'); exportButton.type = 'button';
   const download = node('button', 'Download canonical report', 'download'); download.type = 'button';
   const clear = node('button', 'Clear JSON and results', 'clear'); clear.type = 'button';
-  const actions = node('div'); actions.className = 'polar-rotor-actions'; actions.append(run, exportButton, download, clear);
+  const actions = node('div'); actions.className = 'polar-rotor-actions';
+  if (prefill) actions.append(prefill);
+  actions.append(run, exportButton, download, clear);
   const status = node('p', '', 'status'); status.setAttribute('role', 'status'); status.setAttribute('aria-live', 'polite');
   const projection = node('div', undefined, 'postpro');
   const result = node('pre', '', 'result'); result.hidden = true;
@@ -120,6 +124,7 @@ export function mountDiskPressure(root, {request, isConnected, readContext = () 
     renderDiskPressurePostpro(projection, undefined);
   }
   function controls() {
+    if (prefill) prefill.disabled = busy || !online || rotorResponseText() === null;
     run.disabled = busy || !online || Boolean(inputCheck(input.value));
     exportButton.disabled = busy || !online || !derivation || derivation.rawRequest !== input.value;
     download.disabled = busy || !online || !report || !derivation || derivation.rawRequest !== input.value;
@@ -140,9 +145,30 @@ export function mountDiskPressure(root, {request, isConnected, readContext = () 
   function httpFailure(response) {
     return 'HTTP ' + response.status + (response.status === 422 ? ' · Invalid disk pressure request.' : ' · Disk pressure request failed.');
   }
+  function rotorResponseText() {
+    try {const text = getRotorResponse(); return typeof text === 'string' ? text : null;} catch {return null;}
+  }
+  function inputChanged(message) {
+    ++serial; busy = false; erase();
+    status.textContent = message || inputCheck(input.value) || 'Input available. Explicitly derive to continue.'; controls();
+  }
   input.addEventListener('input', () => {
-    syncContext(); ++serial; busy = false; erase(); status.textContent = inputCheck(input.value) || 'Input available. Explicitly derive to continue.'; controls();
+    syncContext(); inputChanged();
   });
+  if (prefill) {
+    doc.addEventListener('polar-rotor-capture-changed', syncContext);
+    // Refresh freshness on panel interaction; no polling, requests or automatic derivation.
+    root.addEventListener('pointerenter', syncContext);
+    root.addEventListener('focusin', syncContext);
+    prefill.addEventListener('click', () => {
+      syncContext(); if (busy || !online) return;
+      const text = rotorResponseText();
+      if (text === null) {
+        erase(); status.textContent = 'No fresh polar-rotor result available. Run the polar-rotor panel first, or paste a sealed response.'; controls(); return;
+      }
+      input.value = text; inputChanged('Polar-rotor result loaded. Explicitly derive to continue.');
+    });
+  }
   clear.addEventListener('click', () => {
     syncContext(); if (busy) return;
     ++serial; input.value = ''; erase(); status.textContent = 'JSON and results cleared.'; controls();

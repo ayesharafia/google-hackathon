@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {PRESENTATION_LIMITS, projectDiskPressure, formatApprox, renderDiskPressurePostpro} from '../../web/js/disk-pressure-postpro.js';
 import {mountDiskPressure} from '../../web/js/disk-pressure.js';
+import {mountPolarRotor} from '../../web/js/polar-rotor.js';
 
 const STATE = 'This is a derived IDEALIZED ACTUATOR-DISK quantity from integrated annulus thrust, ' +
   'expressed as a derived disk pressure jump; NOT surface pressure, NOT a solved or CFD pressure field. ' +
@@ -36,11 +37,19 @@ function syntheticProjection() {
 }
 function dom() {
   const nodes = [], saves = [], events = [];
-  const doc = {createElement(tag) {
+  const documentListeners = new Map();
+  const doc = {
+    addEventListener(type, listener) {
+      if (!documentListeners.has(type)) documentListeners.set(type, []);
+      documentListeners.get(type).push(listener);
+    },
+    dispatchEvent(event) {for (const listener of documentListeners.get(event.type) || []) listener(event); return true;},
+    createElement(tag) {
     const listeners = new Map();
     const node = {tag, ownerDocument: doc, children: [], attrs: {}, dataset: {}, value: '', hidden: false,
       append(...children) {this.children.push(...children);}, replaceChildren(...children) {this.children = children;},
       setAttribute(key, value) {this.attrs[key] = String(value);}, addEventListener(key, fn) {listeners.set(key, fn);},
+      dispatchEvent(event) {listeners.get(event.type)?.(event); if (event.bubbles) doc.dispatchEvent(event); return true;},
       fire(key) {return listeners.get(key)?.();}, click() {events.push('click');}, remove() {events.push('remove');}};
     Object.defineProperty(node, 'innerHTML', {set() {throw new Error('Unsafe HTML sink');}});
     let text = '';
@@ -49,7 +58,9 @@ function dom() {
     nodes.push(node); return node;
   }};
   doc.body = {append() {events.push('append');}};
-  doc.defaultView = {URL: {createObjectURL(blob) {saves.push(blob); events.push('create'); return 'blob:synthetic-report';},
+  doc.defaultView = {CustomEvent: class {
+    constructor(type, {bubbles = false} = {}) {this.type = type; this.bubbles = bubbles; this.detail = null;}
+  }, URL: {createObjectURL(blob) {saves.push(blob); events.push('create'); return 'blob:synthetic-report';},
     revokeObjectURL() {events.push('revoke');}}};
   return {doc, nodes, saves, events, root: doc.createElement('section')};
 }
@@ -122,10 +133,10 @@ test('unavailable render still shows producer label and notice, with no numeric 
 
 const response = (text, status = 200) => ({status, text: async () => text});
 const deferred = () => {let resolve, reject; const promise = new Promise((yes, no) => {resolve = yes; reject = no;}); return {promise, resolve, reject};};
-function harness() {
+function harness(getRotorResponse) {
   const h = dom(), calls = [], queue = [];
   let online = true, generation = 1;
-  const mounted = mountDiskPressure(h.root, {isConnected: () => online, readContext: () => generation, isContext: value => value === generation,
+  const mounted = mountDiskPressure(h.root, {isConnected: () => online, readContext: () => generation, isContext: value => value === generation, getRotorResponse,
     request(path, options) {calls.push({path, options}); assert.ok(queue.length, 'request must be explicitly queued'); return queue.shift()();}});
   const el = key => h.nodes.find(node => node.dataset.testid === 'disk-pressure-' + key);
   return {...h, calls, mounted, el, queue: fn => queue.push(fn),
@@ -236,10 +247,120 @@ test('context changes clear the panel, and minimal connection-only injection is 
   h.connect(true); assert.equal(h.calls.length, 0); h.edit('{}'); h.change(); assert.equal(h.el('input').value, '');
   const d = dom(); assert.doesNotThrow(() => mountDiskPressure(d.root, {request() {assert.fail('automatic request');}, isConnected: () => false}));
 });
+test('optional prefill copies the fresh raw string without a request or automatic derivation', () => {
+  const raw = ' \n' + JSON.stringify(syntheticRotor()) + '\n ';
+  const h = harness(() => raw), button = h.el('prefill');
+  assert.equal(h.el('input').value, ''); assert.equal(h.calls.length, 0);
+  assert.equal(button.type, 'button'); assert.equal(button.textContent, 'Use current polar-rotor result');
+  assert.equal(button.disabled, false);
+  const actions = h.nodes.find(node => node.className === 'polar-rotor-actions');
+  assert.ok(actions.children.indexOf(button) < actions.children.indexOf(h.el('run')));
+  button.fire('click');
+  assert.equal(h.el('input').value, raw); assert.equal(h.calls.length, 0);
+  assert.equal(h.el('run').disabled, false); assert.equal(h.el('export').disabled, true);
+  assert.equal(h.el('status').textContent, 'Polar-rotor result loaded. Explicitly derive to continue.');
+  assert.equal(harness().el('prefill'), undefined, 'absent dependency retains the original controls');
+});
+test('prefill invalidates an existing derivation until another explicit Derive', async () => {
+  const raw = JSON.stringify(syntheticRotor()), h = harness(() => raw);
+  await derived(h); assert.equal(h.el('export').disabled, false);
+  const count = h.calls.length; h.el('prefill').fire('click');
+  assert.equal(h.calls.length, count); assert.equal(h.el('export').disabled, true);
+  assert.equal(h.el('download').disabled, true); assert.equal(h.el('result').hidden, true);
+  h.queue(async () => response(JSON.stringify(syntheticDerivation()))); await h.run();
+  assert.equal(h.calls.length, count + 1); assert.equal(h.el('export').disabled, false);
+});
+test('null and throwing rotor getters disable prefill without changing status on controls', () => {
+  for (const getter of [() => null, () => {throw new Error('PRIVATE_GETTER');}]) {
+    const h = harness(getter), before = h.el('status').textContent;
+    assert.equal(h.el('prefill').disabled, true);
+    assert.doesNotThrow(() => h.mounted.syncContext());
+    // Native disabled buttons do not dispatch a user click.
+    if (!h.el('prefill').disabled) h.el('prefill').fire('click');
+    assert.equal(h.el('input').value, ''); assert.equal(h.calls.length, 0);
+    assert.equal(h.el('status').textContent, before);
+  }
+});
+test('a rotor result that becomes stale at the handoff refuses prefill and erases derivation', async () => {
+  let text = JSON.stringify(syntheticRotor());
+  const h = harness(() => text); await derived(h);
+  const count = h.calls.length;
+  text = null; h.el('prefill').fire('click');
+  assert.equal(h.el('prefill').disabled, true); assert.equal(h.el('export').disabled, true);
+  assert.equal(h.el('result').hidden, true); assert.equal(h.calls.length, count);
+  assert.equal(h.el('status').textContent, 'No fresh polar-rotor result available. Run the polar-rotor panel first, or paste a sealed response.');
+});
+test('panel interaction refreshes a fake rotor getter as its result becomes fresh or stale', () => {
+  let text = null;
+  const h = harness(() => text); assert.equal(h.el('prefill').disabled, true);
+  text = JSON.stringify(syntheticRotor()); h.root.fire('pointerenter');
+  assert.equal(h.el('prefill').disabled, false); h.el('prefill').fire('click');
+  assert.equal(h.el('input').value, text); const status = h.el('status').textContent;
+  text = null; h.root.fire('focusin'); assert.equal(h.el('prefill').disabled, true);
+  assert.equal(h.el('status').textContent, status); assert.equal(h.calls.length, 0);
+});
+test('capture-change signal updates prefill without disk-panel pointer, focus or input events', () => {
+  let text = null;
+  const h = harness(() => text), status = h.el('status').textContent;
+  assert.equal(h.el('prefill').disabled, true);
+  text = JSON.stringify(syntheticRotor());
+  h.doc.dispatchEvent(new h.doc.defaultView.CustomEvent('polar-rotor-capture-changed', {bubbles: true}));
+  assert.equal(h.el('prefill').disabled, false);
+  text = null;
+  h.doc.dispatchEvent(new h.doc.defaultView.CustomEvent('polar-rotor-capture-changed', {bubbles: true}));
+  assert.equal(h.el('prefill').disabled, true);
+  assert.equal(h.el('status').textContent, status); assert.equal(h.el('input').value, '');
+  assert.equal(h.calls.length, 0);
+});
+test('real rotor mount signals capture storage, rerun, request edits and context invalidation without a payload', async () => {
+  const h = dom(), signals = [], requests = [];
+  let generation = 1;
+  const catalog = {catalog: {evaluation: 'polar_rotor_experimental', schema_version: 'polar_rotor_v1', limitations: []},
+    transport: {limits: {body_bytes: 1048576}}};
+  const raw = JSON.stringify({...syntheticRotor(), status: 'COMPUTED_EXPERIMENTAL'});
+  const context = {readContext: () => generation, isContext: value => value === generation, isConnected: () => true};
+  const rotor = mountPolarRotor(h.root, {...context, request: async path => {
+    requests.push(path);
+    return {ok: true, status: 200, text: async () => path.endsWith('/catalog') ? JSON.stringify(catalog) : raw};
+  }});
+  const diskRoot = h.doc.createElement('section');
+  mountDiskPressure(diskRoot, {...context, getRotorResponse: () => rotor.currentResponseText(),
+    request() {assert.fail('capture signals must not dispatch a disk-pressure request');}});
+  h.doc.addEventListener('polar-rotor-capture-changed', event => signals.push(event));
+  const el = id => h.nodes.find(node => node.dataset.testid === id);
+  const prefill = el('disk-pressure-prefill'); assert.equal(prefill.disabled, true);
+  el('polar-rotor-input').value = '{}'; el('polar-rotor-input').fire('input');
+  await el('polar-rotor-refresh').fire('click');
+  await el('polar-rotor-run').fire('click');
+  assert.equal(rotor.currentResponseText(), raw); assert.equal(prefill.disabled, false);
+  const storedCount = signals.length;
+  const rerun = el('polar-rotor-run').fire('click');
+  assert.equal(prefill.disabled, true); assert.equal(signals.length, storedCount + 1);
+  await rerun; assert.equal(prefill.disabled, false);
+  el('polar-rotor-input').value = '{"edited":true}'; el('polar-rotor-input').fire('input');
+  assert.equal(rotor.currentResponseText(), null); assert.equal(prefill.disabled, true);
+  await el('polar-rotor-run').fire('click'); assert.equal(prefill.disabled, false);
+  const beforeContext = signals.length;
+  generation++; rotor.syncContext();
+  assert.equal(rotor.currentResponseText(), null); assert.equal(prefill.disabled, true);
+  assert.equal(signals.length, beforeContext + 1);
+  assert.ok(signals.every(event => event.bubbles === true && event.detail === null));
+  assert.equal(el('disk-pressure-input').value, ''); assert.equal(requests.length, 4);
+});
+test('prefill cannot replace input while busy or disconnected', async () => {
+  const raw = JSON.stringify(syntheticRotor()), h = harness(() => raw), waiting = deferred();
+  h.edit(raw); h.queue(() => waiting.promise); const pending = h.run();
+  assert.equal(h.el('prefill').disabled, true); h.el('prefill').fire('click'); assert.equal(h.calls.length, 1);
+  waiting.resolve(response(JSON.stringify(syntheticDerivation()))); await pending;
+  assert.equal(h.el('export').disabled, false);
+  h.connect(false); assert.equal(h.el('prefill').disabled, true); h.el('prefill').fire('click');
+  assert.equal(h.el('input').value, ''); assert.equal(h.calls.length, 1);
+});
 test('workbench registers the section, mount and context synchronization using existing CSS', () => {
   const html = readFileSync(new URL('../../web/workbench.html', import.meta.url), 'utf8');
   const js = readFileSync(new URL('../../web/js/workbench.js', import.meta.url), 'utf8');
   assert.ok(html.indexOf('id="disk-pressure"') > html.indexOf('id="polar-rotor"'));
   assert.match(html, /<section id="disk-pressure" aria-label="Derived disk pressure workbench"><\/section>/);
   assert.match(js, /import \{mountDiskPressure\}/); assert.match(js, /diskPressure=mountDiskPressure/); assert.match(js, /diskPressure\.syncContext\(\)/);
+  assert.match(js, /getRotorResponse:\(\)=>polarRotor\.currentResponseText\(\)/);
 });
