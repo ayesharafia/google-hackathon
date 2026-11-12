@@ -1,0 +1,7 @@
+.tabulated-electrothermal { margin: 1rem 0; padding: .85rem 1rem; border: 1px solid #cbd5df; border-radius: .5rem; min-width: 0; }
+.tabulated-electrothermal > summary { cursor: pointer; font-weight: 600; }
+.tabulated-electrothermal label { display: block; margin-top: 1rem; }
+.tabulated-electrothermal textarea { display: block; box-sizing: border-box; width: 100%; margin-top: .4rem; font-family: ui-monospace, monospace; }
+.tabulated-electrothermal-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1rem 0; }
+.tabulated-electrothermal pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 32rem; overflow: auto; padding: .75rem; background: #f3f6f8; color: #172b3a; }
+.tabulated-electrothermal > p { max-width: 90ch; }
