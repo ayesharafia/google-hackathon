@@ -1,0 +1,67 @@
+V147 v2 spec - stable rotor kernel: branch-aware family, guard/replay coverage, refusal classification fix
+==========================================================================================================
+
+Authority: ongoing scientific-development request; reviewer direction via parent Nov12 16:18 IST.
+This AMENDS the v1 spec (sha256 8574bd4772f0fe2604b044f90669bcfa698d6f4c611b4ed59880c2b5bc077a6a);
+it does not modify, rerun, or replace the consumed R0 (harness sha256
+17681e9f511b8df452b5fe9448eafe466a25c8cb2ec6facb4eef8e4733a1446c, manifest sha256
+d1381b2607a00b4130ada39b79c92918b982e2c09e6688301ab118a116662ac0), which remains the immutable
+bounded evidence: 24/24 admission parity, 6 benign paired cases bit-identical under equal work,
+18 refusal cases whose numerics were never exercised, FAILED accounting retained.
+
+Concrete unresolved contract question for v2
+--------------------------------------------
+Stable composition behavior at 4 and 8 annuli and at elevated axial velocity - the cases R0
+declared but never made preflight-eligible - including the per-child guard/replay and child-quota
+accumulation paths that R0's 1/2-annulus computed cases barely exercised. Preflight eligibility
+is distinct from numerical success: non-convergence of an eligible case is a measured outcome,
+not a defect to tune away.
+
+Uniform branch-aware bracket rule (declared before execution, not fitted)
+-------------------------------------------------------------------------
+The inherited V135 contract condition is atan2(Ua, Ut) < psi_lower < psi_upper < pi/2, with
+Ut = angular_speed * annulus midpoint from the actual decomposition.
+Rule, applied mechanically and uniformly to every case:
+  branch_a  = atan2(case axial velocity, omega * midpoint_a) for each annulus a, using the
+              exact harness decomposition (Fraction boundaries rounded once to float,
+              midpoint = inner + 0.5 * width, identical to the request bytes);
+  psi_lower = max_a(branch_a) + 0.05 rad   (one declared uniform margin);
+  psi_upper = psi_lower + 0.55 rad          (same bracket width as R0's 0.35..0.9).
+One bracket per CASE (same for all its annuli). The margin and width are declared constants,
+not chosen per case and not chosen to improve convergence. Independent pre-computation on the
+exact decomposition admits all 24 declared cases (worst psi_upper = 1.218144 rad < pi/2 at
+stress_annuli8); the harness must recompute and print every actual branch angle and bracket
+from the request bytes themselves, and refuse to run if any psi_upper >= pi/2 or any
+annulus branch >= psi_lower. R0's illustrative branch angles quoted in chat were approximate
+and are superseded by these harness-computed values; do not cite chat values.
+
+Family
+------
+IDENTICAL grid to R0: cl {1,2,4} x annuli {1,2,4,8} x {base (pitch 0.5, axial 5),
+stress (pitch 0.65, axial 8)} = 12 primary + 12 stress = 24 cases total. Same polar tables,
+chord, geometry, and physical inputs as R0; ONLY the per-case solve bracket changes, by the
+uniform rule above. Same fixed max_evaluations 16 per annulus (aggregate <= 128 worst case,
+admitted identically under both contracts; stable ceilings unexercised). Budget-comparability
+argument and per-case actual-work reporting requirements from the v1 spec carry over unchanged.
+
+Refusal classification fix (v2 harness; R0 bytes untouched)
+-----------------------------------------------------------
+R0 classified preflight-refusal responses as case errors because they carry no evaluation seal
+and request_sha256=None. That is BY SOLVER DESIGN (preflight refusal precedes digest/seal).
+v2 measurement must classify each response as exactly one of:
+  SEALED_VERIFIED        - self-seal and request binding both verified;
+  UNSIGNED_REFUSAL_BY_DESIGN - refusal status (e.g. MODEL_INAPPLICABLE/SOLVER_UNSUPPORTED) with
+                           verbatim reasons, request_sha256 None, no seal, zero counts, empty outputs;
+  HARNESS_FAILURE        - anything else (partial/malformed/unexpected shape).
+execution_status fails only on HARNESS_FAILURE or harness errors, never on
+UNSIGNED_REFUSAL_BY_DESIGN. Refusal parity/divergence across solvers remains a reported KIND
+comparison. Eligibility refusals under v2's branch-aware rule are expected to be ZERO; any
+occurrence is reported, not hidden.
+
+Discipline carried over unchanged
+---------------------------------
+Equal budgets, raw work counts per case per solver, sealed-response retention, atomic
+no-overwrite artifacts, per-case wall/CPU caps, public entry points only, verbatim LABEL and
+NOT_ESTABLISHED lists, single admitted R0-style run per pinned v2 harness hash after
+pre-execution review, versioned hash + narrow diff note vs v1. No production/API/UI integration,
+no superiority claim, no physical-validation inference, no TN626 reopening, no persistence.

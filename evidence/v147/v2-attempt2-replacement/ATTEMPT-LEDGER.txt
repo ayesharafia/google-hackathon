@@ -1,0 +1,76 @@
+V147 v2 ATTEMPT LEDGER (supplemental v2, corrected; supersedes ledger sha256
+2b126ed61ae28c3d18a7d310662ab81160c1c26f02f8abaf57d3327a2c4b9377 of archive
+448041181d0b4d9fe509820d695debd15c0cf08c192ec16c83b7307c1928fee9, which remains
+immutable; correction: added independently derived summary, corrected attempt-1
+characterization, four reporting axes kept distinct)
+
+== ATTEMPTS ==
+Attempt of record: REPLACEMENT ATTEMPT (second admitted run), NOT a resume, NOT a
+retry disguised as original R0, NOT a new scientific version.
+Pinned harness sha256 (unchanged): 83c27ea507078b3ad61bbe17c753f8e1f749873551d9a1b0bf47af223a3d3fdb
+Basis tree: current-main 78dc3b8818d067cf1cc539fd53c43a4a36aa6527, clean.
+Authorization: inbound parent message 2026-11-12T16:36:21 IST (quoted verbatim in
+this agent's transcript): one explicitly labeled replacement attempt, same accepted
+hash, fresh distinct directory, foreground, sufficient timeout.
+
+Attempt 1 (consumed, retained, immutable):
+  /downloads/v147v2-r0-evidence-v1; archive sha256 39ed8a121b87965b6e15898bc93ffc27cf37c7c57940b2defd2e35adfa0f86dd
+  Cause: launcher error by the executing agent (detached background child killed by
+  the runtime when the shell call returned, ~10s in). Not a harness failure, not a
+  numerical anomaly, not an environment fault.
+  CORRECTED characterization (derived from its raw receipts, 7 completed cases):
+  4 of 7 have paired totals with deltas exactly 0.0 (base_cl1_annuli1,
+  base_cl2_annuli1/2/4); 3 of 7 completed but produced no paired totals
+  (base_cl1_annuli2/4/8, NOT_RUN_SECTION_NOT_CONVERGED, NOT_BRACKETED outer annuli,
+  work 14/18/36 residual evaluations respectively, EQUAL on both solvers).
+  The executing agent's earlier chat message blanket claim of "base-family deltas
+  exactly 0.0 with equal work (12 residuals/annulus)" for the attempt-1 partial was
+  WRONG as stated; its raw receipts were accurate. Corrected here per reviewer.
+
+Attempt 2 (this directory, valid replacement):
+  Foreground single shell call, ~33s, exit 0, execution_status COMPLETE.
+
+== INDEPENDENTLY DERIVED SUMMARY (from raw case.json/run.log receipts, not the
+harness memo; recomputed by the executing agent) ==
+1. ELIGIBILITY: 24/24 cases admitted by BOTH solvers; zero admission refusals;
+   zero one-contract-only refusals. (v2 branch-aware uniform brackets removed the
+   v1/R0 unsigned-refusal set entirely.)
+2. RESPONSE INTEGRITY: 48/48 responses SEALED_VERIFIED, request digests verified,
+   24/24 retained complete response files per solver, zero worker errors,
+   all worker exit codes 0.
+3. CONVERGENCE (per-annulus states, IDENTICAL between solvers in all 24 cases):
+   90 annuli per solver; 62 CONVERGED, 28 NOT_BRACKETED, 0 budget-exhausted.
+   NOT_BRACKETED distribution (legacy == stable):
+     base_cl1: annuli2 1, annuli4 3, annuli8 6
+     stress_cl1: annuli2 1, annuli4 3, annuli8 7
+     stress_cl2: annuli4 2, annuli8 5
+     all other cases: 0
+   Rotor states (both solvers): 16 COMPUTED, 8 NOT_RUN_SECTION_NOT_CONVERGED.
+4. PAIRED-TOTAL AVAILABILITY: 16 cases BOTH_COMPUTED; for every paired case all
+   three totals (total_thrust_n, total_torque_nm, shaft_power_w) differ by exactly
+   0.0 (48/48 quantity deltas bit-zero). 8 cases UNAVAILABLE_NO_PAIRED_TOTALS:
+   base_cl1_annuli2/4/8, stress_cl1_annuli2/4/8, stress_cl2_annuli4/8.
+5. WORK (actual residual evaluations used, EQUAL on both solvers in all 24 cases):
+   12: base/stress cl1_annuli1, cl2_annuli1, cl4_annuli1 (6 cases)
+   14: base_cl1_annuli2, stress_cl1_annuli2
+   18: base_cl1_annuli4, stress_cl1_annuli4
+   24: base/stress cl2_annuli2, cl4_annuli2 (4 cases)
+   26: stress_cl1_annuli8
+   28: stress_cl2_annuli4
+   36: base_cl1_annuli8
+   46: stress_cl2_annuli8
+   48: base_cl2_annuli4, base_cl4_annuli4, stress_cl4_annuli4 (3 cases)
+   96: base_cl2_annuli8, base_cl4_annuli8, stress_cl4_annuli8 (3 cases)
+   All requested budgets 16/annulus (<=128 aggregate both contracts); stable's
+   higher ceilings never exercised; no case touched the cap.
+6. KIND: zero kind differences; zero one-contract-only admission refusals.
+
+Label (verbatim from harness): numerical difference between two unvalidated solvers
+on identical synthetic inputs; not an error estimate, not physical accuracy, not a
+validation result. Not established: physical validation/accuracy/qualification/
+feasibility; error estimate/uncertainty/GCI; TN626 or CFD evidence; stable-solver
+acceptance, production readiness or superiority; runtime outside this fixed family.
+
+Discipline: harness bytes identical across attempts; no code/physics/grid/budget
+change; no full-family equivalence inferred from attempt-1 partials; prior v1
+harness 17681e9f... and v1 R0 manifest d1381b26... immutable; no production change.

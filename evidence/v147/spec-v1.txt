@@ -1,0 +1,84 @@
+V147 spec - stable rotor kernel: contract review support + untuned numerical benchmark
+======================================================================================
+
+Authority: ongoing scientific-development request (user "scientific+physical accuracy and
+keep moving" Nov12 11:28); parent scope confirmation Nov12 15:41 IST. This is internal
+research/testing. NOT physical validation, NOT a TN626 rerun, NOT an error bound or GCI,
+NOT accuracy evidence. Synthetic numerical comparison of two unvalidated solvers only.
+
+Objective
+---------
+Measure - do not presume - whether the authored-but-unaccepted stable rotor composition
+(src/physimesh/drone/stable_polar_rotor.py, schema stable_polar_rotor_v1, policy
+stable_deficit_binary64_v1) differs in robustness and numerical results from the shipped
+legacy V136 rotor evaluator (src/physimesh/drone/polar_rotor.py, polar_rotor_experimental)
+on one declared synthetic case family. Preserve "authoring only, acceptance pending"
+status: no API, UI, production path, fallback, or legacy-switch changes.
+
+Case family (declared upfront, untuned, no fitting)
+---------------------------------------------------
+Base: the existing synthetic fixture family (tests/drone/test_polar_rotor.py request_data;
+airfoil "invented-synthetic", flat cl/cd tables, tip 0.6 m, hub 0.2 m, 2 blades,
+omega 50 rad/s, axial 5 m/s, density 1.2 kg/m3, viscosity 1.8e-05 Pa*s, speed of sound 343 m/s).
+Solve block for every annulus of every case: psi_lower_rad 0.35, psi_upper_rad 0.9,
+angle_tolerance_rad 0.001, residual_tolerance_m2_s 0.01, max_evaluations 16.
+Grid: cl in {1.0, 2.0, 4.0} (cd held at 0.1) x annulus counts {1, 2, 4, 8}
+(contiguous equal-width split of [0.2, 0.6]) = 12 primary cases.
+Secondary stress family: same 12 cases with pitch_rad 0.65 (base 0.5) and
+imposed_axial_velocity_m_s 8.0, to probe convergence-budget behavior.
+Cardinality: 12 primary + 12 stress = 24 cases TOTAL (not 24 + 12).
+Each case is mapped schema-faithfully into BOTH request schemas (legacy polar_rotor_v1
+and stable stable_polar_rotor_v1 including its numerical_policy block); the physical
+inputs, polar tables, and solve tolerances are identical across the two mappings.
+
+Execution and admission
+-----------------------
+- One versioned harness script, authored under tests/drone/ following repo precedent
+  (cf. stable_polar_rotor_audit.py), executable with /tmp/venv311/bin/python, stdlib +
+  repo imports only, no network, no writes outside its declared output directory.
+- Both evaluators called only via their public evaluate entry points on deep-copied
+  requests. No monkeypatching, no internal-state access.
+- R0 discipline: ONE admitted execution per pinned harness sha256; any failure consumes
+  the attempt; corrections require a new versioned script hash and a narrow diff note.
+- Retain every raw sealed response for both solvers for all 24 cases; write a manifest
+  with sha256 of harness, each request, each response; manifest itself hashed.
+- Resource bound: declare and enforce a per-case wall/CPU cap; record actual usage;
+  overruns are failures, not retries.
+
+Budget comparability (separating solver behavior from allowed work)
+-------------------------------------------------------------------
+Contract bounds differ: legacy section_solve admits max_evaluations 2..16 per annulus
+and aggregate <= 128 per rotor; the stable contract admits 2..32 per annulus and
+aggregate <= 256. The declared family uses max_evaluations 16 for every annulus, so
+the worst case is 8 x 16 = 128 evaluations - admitted IDENTICALLY under both contracts.
+The stable contract's higher ceilings (32/annulus, 256 aggregate) are therefore never
+exercised by this family: any measured difference in convergence cannot be explained
+by allowed work. The harness must still report, per case per solver, the actual number
+of residual evaluations used alongside convergence counts, and must state this
+budget-comparability argument verbatim in its output. If any case is admitted by one
+solver's contract and refused by the other's, that is a KIND difference to report,
+not a failure to hide.
+
+Measurements per case per solver
+--------------------------------
+status, rotor_state, section_solve_result_count, residual/load/lookup result counts,
+number of converged annuli, integrated total_thrust_n / total_torque_nm / shaft_power_w
+(when COMPUTED), and failure reasons verbatim.
+Comparisons: signed and absolute deltas of thrust/torque/power between solvers per case,
+labeled verbatim: "numerical difference between two unvalidated solvers on identical
+synthetic inputs; not an error estimate, not physical accuracy, not a validation result."
+Robustness assessment: enumerate cases where outcomes differ in KIND (converged vs not,
+budget exhaustion, admission refusal, different section counts). Report which solver
+exhibits which outcome; no presumption that the stable path is better.
+
+Deliverables in the candidate packet
+------------------------------------
+harness script + sha256, manifest + sha256, all raw responses (or content-addressed
+archive), verbatim run log, and a short memo stating measured outcomes with the
+non-claim labels above. Explicit list of what was NOT established.
+
+Hard boundaries
+---------------
+No production solver/API/UI change. No legacy fallback. Closed TN626 records untouched.
+No persistence. No deployment. No measured data, no CFD fields, no physical claims.
+Legacy 36 null results immutable.
