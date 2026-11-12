@@ -1,5 +1,8 @@
 import {mountCantilever} from './cantilever-screening.js?v=beam-1';
 import {mountThermal} from './thermal-screening.js?v=thermal-1';
+import {mountTabulatedElectrothermal} from './tabulated-electrothermal.js?v=tabulated-1';
+import {mountTabulatedSolvedElectrothermal} from './tabulated-solved-electrothermal.js?v=solved-1';
+import {mountPolarRotor} from './polar-rotor.js?v=rotor-1';
 import {mountFixedWing} from './fixed-wing-screening.js?v=wing-1';
 import {mountJourney} from './workbench-journey.js?v=journey-1';
 import {mountEvaluationPanel} from './reference-evaluation.js?v=reference-1';
@@ -27,6 +30,9 @@ const context = () => ({generation, token, organization, project:current?.projec
 const isContext = c => c.generation===generation && c.token===token && c.organization===organization && c.project===current?.project_id;
 const cantilever=mountCantilever($('cantilever-screening'),{api,readContext:context,isContext});
 const thermal=mountThermal($('thermal-screening'),{api,readContext:context,isContext});
+const tabulatedElectrothermal=mountTabulatedElectrothermal($('tabulated-electrothermal'),{request,readContext:context,isContext,isConnected:()=>connected});
+const tabulatedSolvedElectrothermal=mountTabulatedSolvedElectrothermal($('tabulated-solved-electrothermal'),{request,readContext:context,isContext,isConnected:()=>connected});
+const polarRotor=mountPolarRotor($('polar-rotor'),{request,readContext:context,isContext,isConnected:()=>connected});
 const fixedWing=mountFixedWing($('fixed-wing-screening'),{api,readContext:context,isContext});
 const journey=mountJourney($('workbench-journey'));
 const referenceEvaluation=mountEvaluationPanel($('reference-evaluation'),{api,readContext:context,isContext});
@@ -116,6 +122,9 @@ function message(text, error = false) { $('message').textContent = text; $('mess
 function controls() {
   fixedWing.syncContext();
   thermal.syncContext();
+  tabulatedElectrothermal.syncContext();
+  tabulatedSolvedElectrothermal.syncContext();
+  polarRotor.syncContext();
   cantilever.syncContext();
   referenceEvaluation.syncContext();
   if(!connected)referenceEvaluation.invalidate('Sign in or connect the workspace, then refresh the model catalog.');

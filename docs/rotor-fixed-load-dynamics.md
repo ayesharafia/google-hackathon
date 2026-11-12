@@ -1,0 +1,16 @@
+# Rotor fixed-load dynamics
+- `evaluate_rotor_fixed_load_dynamics` uses evaluation `isolated_rotor_frozen_load_dynamics_experimental`.
+- The exact root fields are `evaluation`, `assembly`, `initial_state`, `inertia_body_kg_m2`, `dt_s`, `steps`, and `applicability_declaration`.
+- Accepted assemblies use initial common-air hover rotor loads.
+- Body force excludes gravity; body moment is the sum of rotor moments about the center of gravity.
+- Accepted JSON uses the `evaluate_rigid_body` constant-body-wrench RK4 kernel; actual forces/dynamics receives ENU gravity exactly once.
+- Only initial quaternion `[1,0,0,0]` and assembly gravity direction `[0,0,-1]` are supported.
+- Body FLU initially coincides with ENU.
+- Caller-supplied mass and inertia remain constant, with no evolution.
+- `dt_s` must be positive; `steps` must be an integer from 1 through 1000.
+- Loads remain frozen at initial air conditions and RPM; velocity and altitude do not update them.
+- No inflow, interference, gyroscopic effects, forward flight, trim, control, stability, energy/thermal feedback, or mass closure is modeled.
+- The accepted kernel rotates using raw RK4 stage quaternions; these rotations need not be orthogonal. This is not a normalized-stage callback method.
+- Step refinement is required; no accuracy or simulation-horizon guarantee is provided.
+- Structural preflight occurs before assembly; the integrator may still refuse inertia numerics after assembly.
+- Outputs and stage hashes are all-or-nothing, data-only results: final state plus existing diagnostics, with no claimed trajectory history, qualification, aircraft pass, API, or deployment.

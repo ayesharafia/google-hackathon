@@ -25,19 +25,66 @@ from ..projects.sqlite import SQLiteProjects
 from ..projects.studies import LocalStudies
 from .atmosphere import router as atmosphere_router
 from .beam_fem_variable import router as beam_fem_variable_router
+from .beam_modal import router as beam_modal_router
 from .cantilever import router as cantilever_router
 from .contracts import router as contracts_router
 from .dependencies import router as dependencies_router
 from .evaluation import router as evaluation_router
 from .fixed_wing import router as fixed_wing_router
+from .graph_mission import GraphMissionBodyLimit
+from .graph_mission import router as graph_mission_router
 from .hover_bemt import router as hover_bemt_router
+from .hover_thrust_target import HoverThrustTargetBodyLimit
+from .hover_thrust_target import router as hover_thrust_target_router
+from .ledger_dynamics_refinement import LedgerDynamicsRefinementBodyLimit
+from .ledger_dynamics_refinement import router as ledger_dynamics_refinement_router
+from .ledger_rotor_dynamics import LedgerRotorDynamicsBodyLimit
+from .ledger_rotor_dynamics import router as ledger_rotor_dynamics_router
+from .ledger_solved_dc_electrothermal import LedgerSolvedDCElectrothermalBodyLimit
+from .ledger_solved_dc_electrothermal import router as ledger_solved_dc_electrothermal_router
+from .ledger_solved_sensitivity import LedgerSolvedSensitivityBodyLimit
+from .ledger_solved_sensitivity import router as ledger_solved_sensitivity_router
+from .ledger_static_wrench import LedgerStaticWrenchBodyLimit
+from .ledger_static_wrench import router as ledger_static_wrench_router
+from .model_graph import ModelGraphBodyLimit
+from .model_graph import router as model_graph_router
+from .polar_rotor import PolarRotorBodyLimit
+from .polar_rotor import router as polar_rotor_router
 from .projects import router as projects_router
+from .reference_air_tabulated_hover import ReferenceAirTabulatedHoverBodyLimit
+from .reference_air_tabulated_hover import router as reference_air_tabulated_hover_router
+from .reference_air_tabulated_hover_thrust_target import ReferenceAirTabulatedHoverThrustTargetBodyLimit
+from .reference_air_tabulated_hover_thrust_target import (
+    router as reference_air_tabulated_hover_thrust_target_router,
+)
 from .results import router as results_router
+from .rotor_assembly import RotorAssemblyBodyLimit
+from .rotor_assembly import router as rotor_assembly_router
+from .rotor_fixed_load_dynamics import RotorFixedLoadDynamicsBodyLimit
+from .rotor_fixed_load_dynamics import router as rotor_fixed_load_dynamics_router
+from .rotor_thrust_target_assembly import RotorThrustTargetAssemblyBodyLimit
+from .rotor_thrust_target_assembly import router as rotor_thrust_target_assembly_router
 from .screening import router as screening_router
 from .sessions import COOKIE, BrowserSessions, same_origin, valid_bearer
 from .sessions import router as sessions_router
 from .settings import Settings, load_settings
+from .solved_dc_electrothermal import SolvedDCElectrothermalBodyLimit
+from .solved_dc_electrothermal import router as solved_dc_electrothermal_router
+from .solved_wrench_sensitivity import SolvedWrenchSensitivityBodyLimit
+from .solved_wrench_sensitivity import router as solved_wrench_sensitivity_router
+from .static_wrench_solve import StaticWrenchSolveBodyLimit
+from .static_wrench_solve import router as static_wrench_solve_router
+from .tabulated_electrothermal import TabulatedElectrothermalBodyLimit
+from .tabulated_electrothermal import router as tabulated_electrothermal_router
+from .tabulated_hover import TabulatedHoverBodyLimit
+from .tabulated_hover import router as tabulated_hover_router
+from .tabulated_rotor_assembly import TabulatedRotorAssemblyBodyLimit
+from .tabulated_rotor_assembly import router as tabulated_rotor_assembly_router
+from .tabulated_solved_electrothermal import TabulatedSolvedElectrothermalBodyLimit
+from .tabulated_solved_electrothermal import router as tabulated_solved_electrothermal_router
 from .thermal import router as thermal_router
+from .wrench_sensitivity import WrenchSensitivityBodyLimit
+from .wrench_sensitivity import router as wrench_sensitivity_router
 
 
 def create_app(settings: Settings) -> FastAPI:
@@ -56,6 +103,28 @@ def create_app(settings: Settings) -> FastAPI:
     app = FastAPI(title="PhysiCore Drone", version="0.1.0", lifespan=lifespan)
     from ..platform.body_limit import BodyLimit
     app.add_middleware(BodyLimit, upload_bytes=settings.max_upload_bytes)
+    app.add_middleware(ModelGraphBodyLimit)
+    app.add_middleware(GraphMissionBodyLimit)
+    app.add_middleware(RotorAssemblyBodyLimit)
+    app.add_middleware(RotorFixedLoadDynamicsBodyLimit)
+    app.add_middleware(RotorThrustTargetAssemblyBodyLimit)
+    app.add_middleware(SolvedWrenchSensitivityBodyLimit)
+    app.add_middleware(LedgerSolvedSensitivityBodyLimit)
+    app.add_middleware(SolvedDCElectrothermalBodyLimit)
+    app.add_middleware(LedgerSolvedDCElectrothermalBodyLimit)
+    app.add_middleware(TabulatedHoverBodyLimit)
+    app.add_middleware(TabulatedRotorAssemblyBodyLimit)
+    app.add_middleware(TabulatedElectrothermalBodyLimit)
+    app.add_middleware(TabulatedSolvedElectrothermalBodyLimit)
+    app.add_middleware(PolarRotorBodyLimit)
+    app.add_middleware(ReferenceAirTabulatedHoverBodyLimit)
+    app.add_middleware(ReferenceAirTabulatedHoverThrustTargetBodyLimit)
+    app.add_middleware(StaticWrenchSolveBodyLimit)
+    app.add_middleware(WrenchSensitivityBodyLimit)
+    app.add_middleware(LedgerRotorDynamicsBodyLimit)
+    app.add_middleware(LedgerStaticWrenchBodyLimit)
+    app.add_middleware(LedgerDynamicsRefinementBodyLimit)
+    app.add_middleware(HoverThrustTargetBodyLimit)
     app.state.settings = settings
     app.state.build = build_identity(verify=True)
     project_path = settings.db_path.parent/'projects.sqlite'
@@ -127,6 +196,29 @@ def create_app(settings: Settings) -> FastAPI:
     app.include_router(cantilever_router)
     app.include_router(hover_bemt_router)
     app.include_router(beam_fem_variable_router)
+    app.include_router(beam_modal_router)
+    app.include_router(model_graph_router)
+    app.include_router(graph_mission_router)
+    app.include_router(rotor_assembly_router)
+    app.include_router(rotor_fixed_load_dynamics_router)
+    app.include_router(rotor_thrust_target_assembly_router)
+    app.include_router(solved_wrench_sensitivity_router)
+    app.include_router(ledger_solved_sensitivity_router)
+    app.include_router(solved_dc_electrothermal_router)
+    app.include_router(ledger_solved_dc_electrothermal_router)
+    app.include_router(tabulated_hover_router)
+    app.include_router(tabulated_rotor_assembly_router)
+    app.include_router(tabulated_electrothermal_router)
+    app.include_router(tabulated_solved_electrothermal_router)
+    app.include_router(polar_rotor_router)
+    app.include_router(reference_air_tabulated_hover_router)
+    app.include_router(reference_air_tabulated_hover_thrust_target_router)
+    app.include_router(static_wrench_solve_router)
+    app.include_router(wrench_sensitivity_router)
+    app.include_router(ledger_rotor_dynamics_router)
+    app.include_router(ledger_static_wrench_router)
+    app.include_router(ledger_dynamics_refinement_router)
+    app.include_router(hover_thrust_target_router)
     app.include_router(dependencies_router)
     app.include_router(drone_router)
     app.include_router(results_router)
@@ -148,6 +240,8 @@ def create_app(settings: Settings) -> FastAPI:
             return JSONResponse({"detail": "Invalid dependency plan request."}, status_code=422)
         if request.method == "POST" and request.url.path == "/api/drone/cantilever/screen":
             return JSONResponse({"detail": "Invalid cantilever screening request."}, status_code=422)
+        if request.method == "POST" and request.url.path == "/api/drone/beam-modal/evaluate":
+            return JSONResponse({"detail": "Invalid modal beam request."}, status_code=422)
         if request.method == "POST" and request.url.path == "/api/drone/beam-fem-variable/evaluate":
             return JSONResponse({"detail": "Invalid variable beam request."}, status_code=422)
         if request.method == "POST" and request.url.path == "/api/drone/hover-bemt/evaluate":
@@ -271,7 +365,9 @@ def create_app(settings: Settings) -> FastAPI:
                     raise Denied('select a project before importing private geometry')
                 await run_in_threadpool(app.state.identity.authorize, principal, project_id, write=True)
             elif not (path == '/api/drone/projects' or path.startswith(('/api/drone/platform/', '/api/drone/contracts', '/api/drone/agent/'))
-                      or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate', '/api/drone/evaluations/catalog', '/api/drone/evaluations/evaluate', '/api/drone/fixed-wing/screen', '/api/drone/thermal/screen', '/api/drone/cantilever/screen', '/api/drone/hover-bemt/evaluate', '/api/drone/beam-fem-variable/evaluate', '/api/drone/dependencies/plan')):
+                      or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate', '/api/drone/evaluations/catalog', '/api/drone/evaluations/evaluate', '/api/drone/fixed-wing/screen', '/api/drone/thermal/screen', '/api/drone/cantilever/screen', '/api/drone/hover-bemt/evaluate', '/api/drone/beam-fem-variable/evaluate', '/api/drone/beam-modal/catalog', '/api/drone/beam-modal/evaluate', '/api/drone/model-graph/catalog', '/api/drone/model-graph/evaluate', '/api/drone/graph-mission/catalog', '/api/drone/graph-mission/evaluate', '/api/drone/rotor-assembly/catalog', '/api/drone/rotor-assembly/evaluate', '/api/drone/rotor-fixed-load-dynamics/catalog', '/api/drone/rotor-fixed-load-dynamics/evaluate', '/api/drone/rotor-thrust-target-assembly/catalog', '/api/drone/rotor-thrust-target-assembly/evaluate', '/api/drone/solved-wrench-sensitivity/catalog', '/api/drone/solved-wrench-sensitivity/evaluate', '/api/drone/ledger-solved-sensitivity/catalog', '/api/drone/ledger-solved-sensitivity/evaluate', '/api/drone/solved-dc-electrothermal/catalog', '/api/drone/solved-dc-electrothermal/evaluate', '/api/drone/ledger-solved-dc-electrothermal/catalog', '/api/drone/ledger-solved-dc-electrothermal/evaluate', '/api/drone/tabulated-rotor-assembly/catalog', '/api/drone/tabulated-rotor-assembly/evaluate', '/api/drone/tabulated-electrothermal/catalog', '/api/drone/tabulated-electrothermal/evaluate', '/api/drone/tabulated-solved-electrothermal/catalog', '/api/drone/tabulated-solved-electrothermal/evaluate', '/api/drone/tabulated-hover/catalog', '/api/drone/tabulated-hover/evaluate', '/api/drone/reference-air-tabulated-hover/catalog', '/api/drone/reference-air-tabulated-hover/evaluate', '/api/drone/reference-air-tabulated-hover-thrust-target/catalog', '/api/drone/reference-air-tabulated-hover-thrust-target/evaluate', '/api/drone/static-wrench-solve/catalog', '/api/drone/static-wrench-solve/evaluate', '/api/drone/wrench-sensitivity/catalog', '/api/drone/wrench-sensitivity/evaluate', '/api/drone/ledger-rotor-dynamics/catalog', '/api/drone/ledger-rotor-dynamics/evaluate', '/api/drone/ledger-static-wrench/catalog', '/api/drone/ledger-static-wrench/evaluate', '/api/drone/ledger-dynamics-refinement/catalog', '/api/drone/ledger-dynamics-refinement/evaluate', '/api/drone/hover-thrust-target/catalog', '/api/drone/hover-thrust-target/evaluate', '/api/drone/dependencies/plan')
+                      or (path in ('/api/drone/polar-rotor/catalog', '/api/drone/polar-rotor/evaluate')
+                          and request.scope.get('raw_path', path.encode()).split(b'?', 1)[0] == path.encode())):
                 # Legacy global screening/job/evidence hashes have no tenant ownership records.
                 raise Denied('this legacy route has no private project authorization')
             with artifact_scope(project_id):

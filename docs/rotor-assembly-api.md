@@ -1,0 +1,9 @@
+- `docs/rotor-assembly-api.md` specifies exactly two authenticated endpoints: `GET /api/drone/rotor-assembly/catalog` and `POST /api/drone/rotor-assembly/evaluate`.
+- Evaluation uses `isolated_rotor_static_assembly_experimental`, documented in `rotor-assembly.md`, with explicit body FLU axes, centres, mass, CG, spins, and a common-air reference graph. No arbitrary model dispatch, frame inference, or normalization.
+- Responses contain only selected-body forces, moments about CG, and numeric static residuals. They establish no trim, control, stability, installed physics, or aircraft safety.
+- Require strict UTF-8 JSON. Duplicate keys, nonfinite numbers, non-object roots, malformed input, or exceeded JSON limits return **422** with exactly `Invalid rotor assembly request.` Limits: **16,384 JSON values**, **depth 10**. Declared or streamed bodies exceeding **128 KiB** return **413**.
+- Semantically invalid input returns **200 `GRAPH_INVALID`**, without an admitted hash. Refused computation returns **200 `EXECUTION_FAILED`**, with empty final outputs.
+- Request/input SHA hashes identify admitted data only; never validation identity. Compute the response hash before adding its own field.
+- Inherit existing application authentication. Support bearer authentication and local cookies; local cookie-authenticated POSTs require same origin. Hosted routes accept only the exact paths; suffixes and trailing slashes are forbidden.
+- Limits: **15 rotors, 16 nodes, 32 targets, 8,192 annuli**.
+- Status: **local experimental, not deployed**. Physical, numerical, and runtime status: **`NOT_ESTABLISHED`**; feasibility: **`None`**. Test counts establish no additional claims.

@@ -1,0 +1,193 @@
+{
+  "actual_calls": 32,
+  "actual_polar_table_limits": {
+    "max": 8,
+    "min": 1,
+    "rows_max": 256,
+    "rows_min": 2
+  },
+  "actual_v133_limits": {
+    "core_work": {
+      "blade_count_max": 64,
+      "blade_count_min": 1,
+      "lookup_calls_max": 1
+    },
+    "input_json": {
+      "max_container_items": 256,
+      "max_depth": 10,
+      "max_integer_bits": 1023,
+      "max_nodes_including_keys": 32768,
+      "max_string_characters": 2000,
+      "root_depth": 1
+    },
+    "lookup_input_json": {
+      "max_container_items": 256,
+      "max_depth": 10,
+      "max_integer_bits": 1023,
+      "max_nodes_including_keys": 32768,
+      "max_string_characters": 2000,
+      "root_depth": 1
+    },
+    "lookup_output_json": {
+      "max_container_items": 256,
+      "max_depth": 12,
+      "max_integer_bits": 1023,
+      "max_nodes_including_keys": 8192,
+      "max_string_characters": 2000,
+      "root_depth": 1
+    },
+    "output_json": {
+      "max_container_items": 256,
+      "max_depth": 16,
+      "max_integer_bits": 1023,
+      "max_nodes_including_keys": 32768,
+      "max_string_characters": 2000,
+      "root_depth": 1
+    }
+  },
+  "actual_v133_request": {
+    "depth": 7,
+    "nodes_including_keys": 93,
+    "serialized_bytes": 769
+  },
+  "actual_v133_response": {
+    "depth": 9,
+    "nodes_including_keys": 563,
+    "serialized_bytes": 8241
+  },
+  "evaluator_wall_seconds": 0.7751117459999932,
+  "fixture": "baseline",
+  "gaps": [
+    "Maximum table/row and escaped declaration string counts, not maximal numeric token bytes.",
+    "Observed Linux process RSS high-water mark includes interpreter/imports; not incremental allocation.",
+    "One bounded fixture does not prove all admitted allocation, runtime or serialization maxima.",
+    "Canonical hashing uses whole serialized temporaries after streaming byte checks; no API acceptance claim."
+  ],
+  "guarded_rows": 32,
+  "limits": {
+    "core_work": {
+      "load_calls_max": 32,
+      "lookup_calls_max": 32,
+      "residual_calls_max": 32
+    },
+    "input_json": {
+      "max_container_items": 256,
+      "max_depth": 18,
+      "max_integer_bits": 1023,
+      "max_nodes_including_keys": 65536,
+      "max_serialized_bytes": 2097152,
+      "max_string_characters": 2000,
+      "root_depth": 1
+    },
+    "output_json": {
+      "max_container_items": 256,
+      "max_depth": 36,
+      "max_integer_bits": 1023,
+      "max_nodes_including_keys": 4194304,
+      "max_serialized_bytes": 134217728,
+      "max_string_characters": 2000,
+      "root_depth": 1
+    },
+    "residual_input_json": {
+      "max_container_items": 256,
+      "max_depth": 16,
+      "max_integer_bits": 1023,
+      "max_nodes_including_keys": 32768,
+      "max_serialized_bytes": 1048576,
+      "max_string_characters": 2000,
+      "root_depth": 1
+    },
+    "residual_output_json": {
+      "max_container_items": 256,
+      "max_depth": 28,
+      "max_integer_bits": 1023,
+      "max_nodes_including_keys": 131072,
+      "max_serialized_bytes": 4194304,
+      "max_string_characters": 2000,
+      "root_depth": 1
+    }
+  },
+  "one_residual_response": {
+    "depth": 11,
+    "nodes_including_keys": 1052,
+    "serialized_bytes": 14465
+  },
+  "peak_rss_kib_after": 40700,
+  "peak_rss_kib_before": 35964,
+  "references": [
+    {
+      "cases": 113,
+      "digits": 80,
+      "max_relative_errors": {
+        "deficit": {
+          "f": 1.1683705201575324e-06,
+          "observed": "1.805918928730634883847128065372716324436e-14"
+        },
+        "gamma": {
+          "f": 1.1683705201575324e-06,
+          "observed": "0.00000000001853916090295011513307188527197634380493"
+        },
+        "residual": {
+          "f": 1.1683705201575324e-06,
+          "observed": "1.454654098700712038845624444271544053929e-13"
+        }
+      },
+      "new_transition": [
+        36.97836504494759,
+        36.978365044947594
+      ],
+      "old_transition": [
+        36.29755781272286,
+        36.297557812722864
+      ],
+      "scope": "Fixed emitted K=1 and prescribed lift=.125; observed differences, not total source-geometry error."
+    },
+    {
+      "cases": 113,
+      "digits": 120,
+      "max_relative_errors": {
+        "deficit": {
+          "f": 1.1683705201575324e-06,
+          "observed": "1.805918928730634883847128065372716324436e-14"
+        },
+        "gamma": {
+          "f": 1.1683705201575324e-06,
+          "observed": "0.00000000001853916090295011513307188527197634380493"
+        },
+        "residual": {
+          "f": 1.1683705201575324e-06,
+          "observed": "1.454654098700712038845624444271544053929e-13"
+        }
+      },
+      "new_transition": [
+        36.97836504494759,
+        36.978365044947594
+      ],
+      "old_transition": [
+        36.29755781272286,
+        36.297557812722864
+      ],
+      "scope": "Fixed emitted K=1 and prescribed lift=.125; observed differences, not total source-geometry error."
+    }
+  ],
+  "request": {
+    "depth": 8,
+    "nodes_including_keys": 127,
+    "serialized_bytes": 1177
+  },
+  "response": {
+    "depth": 15,
+    "nodes_including_keys": 41607,
+    "serialized_bytes": 548661
+  },
+  "response_units": {
+    "depth": 12,
+    "nodes_including_keys": 7599,
+    "serialized_bytes": 78383
+  },
+  "rows_per_table": 3,
+  "solve_state": "EVALUATION_BUDGET_EXHAUSTED",
+  "status": "COMPUTED_EXPERIMENTAL",
+  "tables": 2,
+  "units_fraction_of_response_bytes": 0.14286235034019185
+}
