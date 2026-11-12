@@ -9,10 +9,12 @@ import pytest
 
 from physimesh.api import disk_pressure as api
 from physimesh.api.settings import Settings
+from physimesh.drone import polar_rotor as rotor
 from physimesh.drone import polar_rotor_disk_pressure as pressure
 from physimesh.drone import polar_rotor_disk_pressure_export as exporter
 from physimesh.drone.provenance import canonical_json, sha256_record
 
+from .test_polar_rotor import request_data as _request_data
 from .test_polar_rotor_api import raw_chunks
 from .test_polar_rotor_disk_pressure import synthetic_response as _synthetic_response
 
@@ -115,6 +117,33 @@ async def test_export_exact_and_independent_report_hash(client, derivation_respo
     assert output["report_canonical_sha256"] == sha256_record(output["report"])
     assert output["report_bytes"] == len(canonical_json(output["report"]).encode("utf-8"))
     assert sha256_record(derivation_response) == before
+
+
+@pytest.mark.anyio
+async def test_actual_sealed_rotor_response_derives_and_exports(client):
+    """Actual evaluator output from the existing synthetic test-only request fixture."""
+    sealed = rotor.evaluate_polar_rotor(_request_data.__wrapped__())
+    assert sealed["status"] == "COMPUTED_EXPERIMENTAL"
+    assert sealed["outputs"]["rotor_state"] == "COMPUTED"
+    assert sealed["evaluation_sha256"] == sha256_record({
+        key: value for key, value in sealed.items() if key != "evaluation_sha256"})
+    # This retained trace is output-shaped: the evaluate-input walker cannot admit it.
+    with pytest.raises(ValueError, match="Invalid polar rotor boundary"):
+        rotor._walk(sealed)
+    rotor._walk(sealed, output=True)
+    before = sha256_record(sealed)
+    response = await client.post(PATHS[0], json=sealed, headers=client.auth_headers)
+    assert response.status_code == 200
+    derived = response.json()
+    assert derived["status"] == "COMPUTED_EXPERIMENTAL"
+    assert derived["disk_pressure_state"] == "DERIVED"
+    assert sha256_record(sealed) == before
+    response = await client.post(PATHS[1], json=derived, headers=client.auth_headers)
+    assert response.status_code == 200
+    exported = response.json()
+    assert exported["status"] == "COMPUTED_EXPERIMENTAL"
+    assert exported["disk_pressure_report_state"] == "EXPORTED"
+    assert exported["outputs"]["report_canonical_sha256"] == sha256_record(exported["outputs"]["report"])
 
 
 @pytest.mark.anyio

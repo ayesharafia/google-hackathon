@@ -45,17 +45,22 @@ async def catalog():
                 "body_bytes": MAX_BODY_BYTES,
                 "body_bytes_constraint": "Independent limit on actual received request bytes, including "
                                          "UTF-8 encoding and whitespace; not a JSON node or response limit.",
-                "input_json_reference": "polar_rotor._walk input JSON limits",
+                "input_json_reference": "polar_rotor._walk(body, output=True) output-JSON limits "
+                                        "for sealed producer response bodies",
                 "response_json_reference": "V142/V143 output JSON walker limits",
                 "model_shape_reference": "V142/V143 sealed-envelope preflights",
                 "independent_bounds": "This transport has its own larger 16 MiB cap: a sealed polar-rotor "
                                       "response may exceed the V137 1 MiB evaluate budget; V136 responses "
                                       "have their own budget. Larger inputs are refused with HTTP 413; "
-                                      "callers derive from smaller annulus counts. JSON shape limits "
+                                      "callers derive from smaller annulus counts. Sealed producer response "
+                                      "bodies use polar_rotor output-JSON walker limits, not the evaluate "
+                                      "input-JSON limits. JSON shape limits "
                                       "apply independently and do not promise HTTP acceptance.",
             },
             "parsing": "Strict UTF-8 JSON object; duplicate keys and nonfinite constants rejected; "
-                       "polar_rotor._walk runs before workflow dispatch.",
+                       "request bodies are sealed producer responses validated with "
+                       "polar_rotor._walk(body, output=True) under output-JSON walker limits, "
+                       "not the evaluate input-JSON limits, before workflow dispatch.",
             "execution": "One derive_disk_pressure or export_disk_pressure_report call in the threadpool; "
                          "sealed outputs, units, counts, statuses, reasons, labels and hashes unchanged. "
                          "No physical model is run.",
@@ -76,7 +81,7 @@ async def derive(request: Request):
         body = json.loads(raw.decode("utf-8"), object_pairs_hook=_pairs, parse_constant=_constant)
         if type(body) is not dict:
             raise ValueError("Expected object")
-        _rotor._walk(body)
+        _rotor._walk(body, output=True)
     except (ValueError, TypeError, OverflowError, UnicodeError, RecursionError):
         raise HTTPException(422, "Invalid disk pressure request.") from None
     return await run_in_threadpool(_pressure.derive_disk_pressure, body)
@@ -89,7 +94,7 @@ async def export(request: Request):
         body = json.loads(raw.decode("utf-8"), object_pairs_hook=_pairs, parse_constant=_constant)
         if type(body) is not dict:
             raise ValueError("Expected object")
-        _rotor._walk(body)
+        _rotor._walk(body, output=True)
     except (ValueError, TypeError, OverflowError, UnicodeError, RecursionError):
         raise HTTPException(422, "Invalid disk pressure request.") from None
     return await run_in_threadpool(_exporter.export_disk_pressure_report, body)
