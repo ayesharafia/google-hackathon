@@ -13,6 +13,9 @@ class BodyLimit:
         limit = self.upload_bytes+2_000_000 if scope['path'] == '/api/drone/import' else 6_000_000
         if scope['path'].startswith('/api/drone/agent/'):
             limit = 262144
+        elif scope['path'].rstrip('/').startswith('/api/drone/disk-pressure/'):
+            # Preserve the disk-pressure transport's independent 16 MiB cap.
+            limit = 16777216
         headers = dict(scope['headers'])
         declared = headers.get(b'content-length')
         try:

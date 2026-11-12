@@ -29,6 +29,8 @@ from .beam_modal import router as beam_modal_router
 from .cantilever import router as cantilever_router
 from .contracts import router as contracts_router
 from .dependencies import router as dependencies_router
+from .disk_pressure import DiskPressureBodyLimit
+from .disk_pressure import router as disk_pressure_router
 from .evaluation import router as evaluation_router
 from .fixed_wing import router as fixed_wing_router
 from .graph_mission import GraphMissionBodyLimit
@@ -117,6 +119,7 @@ def create_app(settings: Settings) -> FastAPI:
     app.add_middleware(TabulatedElectrothermalBodyLimit)
     app.add_middleware(TabulatedSolvedElectrothermalBodyLimit)
     app.add_middleware(PolarRotorBodyLimit)
+    app.add_middleware(DiskPressureBodyLimit)
     app.add_middleware(ReferenceAirTabulatedHoverBodyLimit)
     app.add_middleware(ReferenceAirTabulatedHoverThrustTargetBodyLimit)
     app.add_middleware(StaticWrenchSolveBodyLimit)
@@ -211,6 +214,7 @@ def create_app(settings: Settings) -> FastAPI:
     app.include_router(tabulated_electrothermal_router)
     app.include_router(tabulated_solved_electrothermal_router)
     app.include_router(polar_rotor_router)
+    app.include_router(disk_pressure_router)
     app.include_router(reference_air_tabulated_hover_router)
     app.include_router(reference_air_tabulated_hover_thrust_target_router)
     app.include_router(static_wrench_solve_router)
@@ -366,7 +370,9 @@ def create_app(settings: Settings) -> FastAPI:
                 await run_in_threadpool(app.state.identity.authorize, principal, project_id, write=True)
             elif not (path == '/api/drone/projects' or path.startswith(('/api/drone/platform/', '/api/drone/contracts', '/api/drone/agent/'))
                       or path in ('/api/drone/validate', '/api/drone/atmosphere/evaluate', '/api/drone/evaluations/catalog', '/api/drone/evaluations/evaluate', '/api/drone/fixed-wing/screen', '/api/drone/thermal/screen', '/api/drone/cantilever/screen', '/api/drone/hover-bemt/evaluate', '/api/drone/beam-fem-variable/evaluate', '/api/drone/beam-modal/catalog', '/api/drone/beam-modal/evaluate', '/api/drone/model-graph/catalog', '/api/drone/model-graph/evaluate', '/api/drone/graph-mission/catalog', '/api/drone/graph-mission/evaluate', '/api/drone/rotor-assembly/catalog', '/api/drone/rotor-assembly/evaluate', '/api/drone/rotor-fixed-load-dynamics/catalog', '/api/drone/rotor-fixed-load-dynamics/evaluate', '/api/drone/rotor-thrust-target-assembly/catalog', '/api/drone/rotor-thrust-target-assembly/evaluate', '/api/drone/solved-wrench-sensitivity/catalog', '/api/drone/solved-wrench-sensitivity/evaluate', '/api/drone/ledger-solved-sensitivity/catalog', '/api/drone/ledger-solved-sensitivity/evaluate', '/api/drone/solved-dc-electrothermal/catalog', '/api/drone/solved-dc-electrothermal/evaluate', '/api/drone/ledger-solved-dc-electrothermal/catalog', '/api/drone/ledger-solved-dc-electrothermal/evaluate', '/api/drone/tabulated-rotor-assembly/catalog', '/api/drone/tabulated-rotor-assembly/evaluate', '/api/drone/tabulated-electrothermal/catalog', '/api/drone/tabulated-electrothermal/evaluate', '/api/drone/tabulated-solved-electrothermal/catalog', '/api/drone/tabulated-solved-electrothermal/evaluate', '/api/drone/tabulated-hover/catalog', '/api/drone/tabulated-hover/evaluate', '/api/drone/reference-air-tabulated-hover/catalog', '/api/drone/reference-air-tabulated-hover/evaluate', '/api/drone/reference-air-tabulated-hover-thrust-target/catalog', '/api/drone/reference-air-tabulated-hover-thrust-target/evaluate', '/api/drone/static-wrench-solve/catalog', '/api/drone/static-wrench-solve/evaluate', '/api/drone/wrench-sensitivity/catalog', '/api/drone/wrench-sensitivity/evaluate', '/api/drone/ledger-rotor-dynamics/catalog', '/api/drone/ledger-rotor-dynamics/evaluate', '/api/drone/ledger-static-wrench/catalog', '/api/drone/ledger-static-wrench/evaluate', '/api/drone/ledger-dynamics-refinement/catalog', '/api/drone/ledger-dynamics-refinement/evaluate', '/api/drone/hover-thrust-target/catalog', '/api/drone/hover-thrust-target/evaluate', '/api/drone/dependencies/plan')
-                      or (path in ('/api/drone/polar-rotor/catalog', '/api/drone/polar-rotor/evaluate')
+                      or (path in ('/api/drone/polar-rotor/catalog', '/api/drone/polar-rotor/evaluate',
+                                   '/api/drone/disk-pressure/catalog', '/api/drone/disk-pressure/derive',
+                                   '/api/drone/disk-pressure/export')
                           and request.scope.get('raw_path', path.encode()).split(b'?', 1)[0] == path.encode())):
                 # Legacy global screening/job/evidence hashes have no tenant ownership records.
                 raise Denied('this legacy route has no private project authorization')
