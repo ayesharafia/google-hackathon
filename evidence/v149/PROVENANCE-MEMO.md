@@ -28,6 +28,12 @@ Section: Eppler 387 (cambered). Source annotation (FORMAT01.TXT example): "clean
 to validate against LTPT data" - the source program's own cross-check statement against
 NASA Langley LTPT; not our validation.
 
+>>> MATERIAL MODEL-QUALITY CAVEAT (book section 2.5, cross-facility comparison): the
+UIUC E387 wind-tunnel MODEL was, per the book, "slightly decambered and warped at the
+trailing edge, which has an effect on the results" (comparison against NASA Langley
+LTPT, Delft and Stuttgart E387 data). E387A polar values are the measured data for
+THAT model as published; this source-stated caveat MUST accompany any future use. <<<
+
 ## 3. Measured vs digitized vs derived (kept distinct)
 - MEASURED: all cl/cd values - UIUC low-speed low-turbulence wind tunnel
   (MANIFEST.TXT). E387A.LFT: 8 Reynolds blocks (30100, 40500, 50800, 61300, 101900,
@@ -41,12 +47,30 @@ NASA Langley LTPT; not our validation.
   Vol 1 drag is book-tabulated; Vol 1 lift is NOT book-tabulated (digital-only).
 - DERIVED (this agent, labeled): envelope above; interpolation fitness; cambered
   classification (cl(0) > 0, Cm ~ -0.085 constant in Vol 1 lift files).
-- GAP (recorded, not filled): BOOK01.TXT was retrieved and is a 1,916-byte book
-  ANNOUNCEMENT, not the book body; the 317-page book is not freely hosted. Per-point
-  numeric uncertainty and per-run Mach therefore remain unavailable from the source at
-  no cost. No import spec may be written until uncertainty/conditions context is
-  resolved (physical/paid book - no spend authorized - or another primary statement).
-  Mach condition stays source-class only: "low-speed, low-turbulence tunnel".
+- BOOK CONTEXT RESOLVED 2026-11-12 (free primary): the complete Vol 1 book is
+  freely hosted by the author at
+  https://m-selig.ae.illinois.edu/uiuc_lsat/Low-Speed-Airfoil-Data-V1.pdf
+  (6,758,420 bytes, sha256 da6e1b71723a20c66ef6450011e42f3af26fc99147203daf2b2233ce14089de8).
+  Its front matter states "Copyright (C) 1995 ... All rights reserved": the DATA
+  license (section 4) does NOT cover the book body, so the PDF is retained INTERNAL
+  only; this archive records exact URL, hash and attributed findings instead.
+  Companion primary context retained internal-only on the same basis:
+  AIAA 96-0062 experiments paper (sha256 082e1a9d4476a104de1365d956f91a9226eec3fada7ed25557ec32d88c5f7711)
+  and JofAC spanwise-drag methodology paper (sha256 9fa52cdee6aa66fc47dbb3ba85724104fc554852b16a6d88639b8dd7a05c14dc),
+  both at m-selig.ae.illinois.edu/pubs/.
+- SOURCE-STATED UNCERTAINTY (book section 2.4, Coleman & Steele method; the source's
+  own facility estimates, quoted for context - NOT transferred error bars for any
+  PhysiCore prediction; no model-prediction-uncertainty upgrade): freestream velocity
+  within 0.5% (<0.3% excluding probe errors); cl overall 1.5% (lift-balance
+  calibration dominant); cd: instruments <1%, repeatability <1.5%, spanwise-rake
+  selection 3% at Re=100,000 reducing to ~1.5% at Re>=200,000; angle of attack
+  +/-0.08 deg (6-point calibration); tunnel turbulence intensity <0.1%; wall/wake
+  blockage corrections per book ch. 2. EXPLICIT LOW-Re CAVEAT (verbatim): "At
+  Re = 60,000 and below, the flow is dominated by laminar separation bubbles that
+  produce large variations in profile drag that make it difficult to confidently
+  assign a measure of accuracy."
+- Mach: low-speed tunnel class; per-run Mach not stated per polar. Any future
+  declared_mach_interval must carry this provenance, not an invented number.
 
 ## 4. License / reusable-data rights (verbatim, readme.TXT)
 "The airfoil performance data is copyrighted, and restrictions are placed on its use.
