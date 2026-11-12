@@ -63,7 +63,11 @@ THAT model as published; this source-stated caveat MUST accompany any future use
   PhysiCore prediction; no model-prediction-uncertainty upgrade): freestream velocity
   within 0.5% (<0.3% excluding probe errors); cl overall 1.5% (lift-balance
   calibration dominant); cd: instruments <1%, repeatability <1.5%, spanwise-rake
-  selection 3% at Re=100,000 reducing to ~1.5% at Re>=200,000; angle of attack
+  selection 3% at Re=100,000 reducing to ~1.5% at Re>=200,000 - noting per the
+  source that these spanwise figures come from a 95% confidence-interval
+  statistical analysis of the E374 airfoil at alpha=4 deg, stated by the source as
+  representative of the middle range of the drag polars: they are NOT E387-specific,
+  NOT universal, and NOT error bars for any PhysiCore prediction; angle of attack
   +/-0.08 deg (6-point calibration); tunnel turbulence intensity <0.1%; wall/wake
   blockage corrections per book ch. 2. EXPLICIT LOW-Re CAVEAT (verbatim): "At
   Re = 60,000 and below, the flow is dominated by laminar separation bubbles that
