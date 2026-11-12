@@ -1,0 +1,31 @@
+{
+  "conservative_response_bytes_upper_bound": 76178417,
+  "conservative_response_nodes_upper_bound": 8713174,
+  "input_bytes_allowance": 8388608,
+  "input_nodes_allowance": 262144,
+  "nested_child_depth_upper_bound": 40,
+  "parts": {
+    "max_expanded_parent_units": {
+      "depth": 16,
+      "nodes": 61685,
+      "serialized_bytes": 635866
+    },
+    "parent_skeleton_without_units_children_requests": {
+      "depth": 6,
+      "nodes": 345,
+      "serialized_bytes": 16047
+    },
+    "projected_requests_overhead_eight": {
+      "nodes": 392,
+      "serialized_bytes": 29032
+    }
+  },
+  "retained_child_bytes_allowance": 67108864,
+  "retained_child_nodes_allowance": 8388608,
+  "root_bytes_ceiling": 134217728,
+  "root_depth_ceiling": 40,
+  "root_nodes_ceiling": 16777216,
+  "scope": "Conservative canonical serialized/native-node envelope for guarded successful current-schema responses, NOT memory or runtime proof. Placeholder nodes/bytes deliberately overcount.",
+  "unused_nodes": 8064042,
+  "unused_serialized_bytes": 58039311
+}
