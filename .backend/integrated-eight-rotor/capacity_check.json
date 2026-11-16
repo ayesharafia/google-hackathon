@@ -1,0 +1,54 @@
+{
+  "results": [
+    {
+      "case": "centered_cg",
+      "rotor_capacity_n": 120.0,
+      "max_utilization_percent": 102.15260416666666,
+      "minimum_margin_n": -2.5831249999999955,
+      "allocation_within_limits": false,
+      "status": "ALLOCATION EXCEEDS LIMITS"
+    },
+    {
+      "case": "centered_cg",
+      "rotor_capacity_n": 130.0,
+      "max_utilization_percent": 94.29471153846154,
+      "minimum_margin_n": 7.4168750000000045,
+      "allocation_within_limits": true,
+      "status": "ALLOCATION WITHIN LIMITS"
+    },
+    {
+      "case": "centered_cg",
+      "rotor_capacity_n": 150.0,
+      "max_utilization_percent": 81.72208333333333,
+      "minimum_margin_n": 27.416875000000005,
+      "allocation_within_limits": true,
+      "status": "ALLOCATION WITHIN LIMITS"
+    },
+    {
+      "case": "offset_cg",
+      "rotor_capacity_n": 120.0,
+      "max_utilization_percent": 116.5991639910897,
+      "minimum_margin_n": -19.91899678930764,
+      "allocation_within_limits": false,
+      "status": "ALLOCATION EXCEEDS LIMITS"
+    },
+    {
+      "case": "offset_cg",
+      "rotor_capacity_n": 130.0,
+      "max_utilization_percent": 107.62999753023665,
+      "minimum_margin_n": -9.918996789307641,
+      "allocation_within_limits": false,
+      "status": "ALLOCATION EXCEEDS LIMITS"
+    },
+    {
+      "case": "offset_cg",
+      "rotor_capacity_n": 150.0,
+      "max_utilization_percent": 93.27933119287177,
+      "minimum_margin_n": 10.081003210692359,
+      "allocation_within_limits": true,
+      "status": "ALLOCATION WITHIN LIMITS"
+    }
+  ],
+  "qualification": "ALLOCATION_LIMIT_CHECK_ONLY",
+  "note": "Failure of this allocation does not prove that no alternative feasible allocation exists."
+}

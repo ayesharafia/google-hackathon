@@ -1,0 +1,218 @@
+{
+  "model": "static_four_axis_minimax",
+  "spin_directions": [
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1
+  ],
+  "torque_thrust_ratio_m": 0.02,
+  "results": {
+    "centered_150": {
+      "solved": true,
+      "within_capacity": true,
+      "maximum_utilization_percent": 81.72208333333336,
+      "thrust_n": [
+        122.583125,
+        122.58312500000018,
+        122.58312499999995,
+        122.58312499999984,
+        122.58312500000002,
+        122.58312500000007,
+        122.58312500000004,
+        122.58312499999987
+      ],
+      "force_residual_n": 0.0,
+      "roll_residual_nm": -1.0745399470458399e-14,
+      "pitch_residual_nm": -6.72949435616398e-14,
+      "yaw_residual_nm": 1.7763568394002505e-15,
+      "failed_rotor": null
+    },
+    "offset_150": {
+      "solved": true,
+      "within_capacity": true,
+      "maximum_utilization_percent": 88.49216238574353,
+      "thrust_n": [
+        132.73824357861517,
+        132.7382435786153,
+        128.77242308805148,
+        92.1177692641541,
+        96.08358975471785,
+        132.73824357861525,
+        132.73824357861545,
+        132.73824357861525
+      ],
+      "force_residual_n": -1.1368683772161603e-13,
+      "roll_residual_nm": -4.973799150320701e-14,
+      "pitch_residual_nm": -1.4921397450962104e-13,
+      "yaw_residual_nm": 0.0,
+      "failed_rotor": null
+    },
+    "failure_rotor_1": {
+      "solved": true,
+      "within_capacity": false,
+      "maximum_utilization_percent": 115.57247859538427,
+      "thrust_n": [
+        -0.0,
+        173.3587178930764,
+        173.3587178930764,
+        71.80753210692357,
+        143.61506421384718,
+        71.8075321069236,
+        173.3587178930764,
+        173.3587178930764
+      ],
+      "force_residual_n": 0.0,
+      "roll_residual_nm": 1.2170804589622428e-14,
+      "pitch_residual_nm": 2.842170943040401e-14,
+      "yaw_residual_nm": 0.0,
+      "failed_rotor": 1
+    },
+    "failure_rotor_2": {
+      "solved": true,
+      "within_capacity": false,
+      "maximum_utilization_percent": 115.57247859538428,
+      "thrust_n": [
+        173.35871789307643,
+        -0.0,
+        173.35871789307643,
+        173.35871789307643,
+        71.80753210692357,
+        143.6150642138472,
+        71.8075321069236,
+        173.35871789307643
+      ],
+      "force_residual_n": 2.2737367544323206e-13,
+      "roll_residual_nm": 0.0,
+      "pitch_residual_nm": 2.842170943040401e-14,
+      "yaw_residual_nm": 0.0,
+      "failed_rotor": 2
+    },
+    "failure_rotor_3": {
+      "solved": true,
+      "within_capacity": false,
+      "maximum_utilization_percent": 115.57247859538424,
+      "thrust_n": [
+        173.35871789307637,
+        173.35871789307637,
+        -0.0,
+        173.35871789307637,
+        173.35871789307637,
+        71.80753210692359,
+        143.6150642138472,
+        71.80753210692362
+      ],
+      "force_residual_n": 0.0,
+      "roll_residual_nm": -8.526512829121202e-14,
+      "pitch_residual_nm": -3.1481784618773365e-14,
+      "yaw_residual_nm": 0.0,
+      "failed_rotor": 3
+    },
+    "failure_rotor_4": {
+      "solved": true,
+      "within_capacity": false,
+      "maximum_utilization_percent": 115.57247859538428,
+      "thrust_n": [
+        71.80753210692357,
+        173.35871789307643,
+        173.35871789307643,
+        -0.0,
+        173.35871789307643,
+        173.35871789307643,
+        71.80753210692357,
+        143.6150642138472
+      ],
+      "force_residual_n": 1.1368683772161603e-13,
+      "roll_residual_nm": 5.684341886080802e-14,
+      "pitch_residual_nm": 8.526512829121202e-14,
+      "yaw_residual_nm": 0.0,
+      "failed_rotor": 4
+    },
+    "failure_rotor_5": {
+      "solved": true,
+      "within_capacity": false,
+      "maximum_utilization_percent": 115.57247859538424,
+      "thrust_n": [
+        143.6150642138472,
+        71.8075321069236,
+        173.35871789307637,
+        173.35871789307637,
+        -0.0,
+        173.35871789307637,
+        173.35871789307637,
+        71.8075321069236
+      ],
+      "force_residual_n": 0.0,
+      "roll_residual_nm": 4.263256414560601e-14,
+      "pitch_residual_nm": -8.526512829121202e-14,
+      "yaw_residual_nm": 0.0,
+      "failed_rotor": 5
+    },
+    "failure_rotor_6": {
+      "solved": true,
+      "within_capacity": false,
+      "maximum_utilization_percent": 115.57247859538424,
+      "thrust_n": [
+        71.8075321069236,
+        143.61506421384718,
+        71.80753210692359,
+        173.35871789307637,
+        173.35871789307637,
+        -0.0,
+        173.35871789307637,
+        173.35871789307637
+      ],
+      "force_residual_n": 0.0,
+      "roll_residual_nm": 5.684341886080802e-14,
+      "pitch_residual_nm": 0.0,
+      "yaw_residual_nm": 1.7763568394002505e-15,
+      "failed_rotor": 6
+    },
+    "failure_rotor_7": {
+      "solved": true,
+      "within_capacity": false,
+      "maximum_utilization_percent": 115.57247859538424,
+      "thrust_n": [
+        173.35871789307637,
+        71.8075321069236,
+        143.6150642138472,
+        71.80753210692362,
+        173.35871789307637,
+        173.35871789307637,
+        -0.0,
+        173.35871789307637
+      ],
+      "force_residual_n": 0.0,
+      "roll_residual_nm": 1.4210854715202004e-13,
+      "pitch_residual_nm": 5.78634439235978e-14,
+      "yaw_residual_nm": 0.0,
+      "failed_rotor": 7
+    },
+    "failure_rotor_8": {
+      "solved": true,
+      "within_capacity": false,
+      "maximum_utilization_percent": 115.57247859538428,
+      "thrust_n": [
+        173.35871789307643,
+        173.35871789307643,
+        71.80753210692359,
+        143.61506421384718,
+        71.80753210692356,
+        173.35871789307643,
+        173.35871789307643,
+        -0.0
+      ],
+      "force_residual_n": 0.0,
+      "roll_residual_nm": -5.684341886080802e-14,
+      "pitch_residual_nm": -5.684341886080802e-14,
+      "yaw_residual_nm": 0.0,
+      "failed_rotor": 8
+    }
+  },
+  "qualification": "ANALYTICAL_SOFTWARE_VERIFICATION_ONLY",
+  "physical_validation": "NOT_ESTABLISHED"
+}

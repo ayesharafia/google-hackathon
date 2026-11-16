@@ -1,0 +1,208 @@
+{
+  "results": {
+    "normal_150": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -280.82119938866356,
+        "maximum_nm": 280.82119938866356,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -280.8211993886635,
+        "maximum_nm": 280.8211993886637,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -4.386700000000001,
+        "maximum_nm": 4.386700000000001,
+        "bidirectional": true
+      }
+    },
+    "normal_200": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -628.4519837446278,
+        "maximum_nm": 628.4519837446278,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -628.4519837446277,
+        "maximum_nm": 628.4519837446278,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -12.386700000000001,
+        "maximum_nm": 12.386700000000001,
+        "bidirectional": true
+      }
+    },
+    "failed_1_200": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -288.76531871192844,
+        "maximum_nm": 288.76531871192856,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -192.95323374462777,
+        "maximum_nm": 628.4519837446278,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -12.386700000000001,
+        "maximum_nm": 4.386700000000001,
+        "bidirectional": true
+      }
+    },
+    "failed_2_200": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -628.4519837446278,
+        "maximum_nm": 204.18791503269952,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -204.1879150326994,
+        "maximum_nm": 628.4519837446278,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -4.386700000000001,
+        "maximum_nm": 12.386700000000001,
+        "bidirectional": true
+      }
+    },
+    "failed_3_200": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -628.4519837446278,
+        "maximum_nm": 192.95323374462794,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -288.76531871192844,
+        "maximum_nm": 288.76531871192856,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -12.386700000000001,
+        "maximum_nm": 4.3867,
+        "bidirectional": true
+      }
+    },
+    "failed_4_200": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -628.4519837446278,
+        "maximum_nm": 204.18791503269932,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -628.4519837446277,
+        "maximum_nm": 204.18791503269932,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -4.3867,
+        "maximum_nm": 12.386700000000001,
+        "bidirectional": true
+      }
+    },
+    "failed_5_200": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -288.76531871192856,
+        "maximum_nm": 288.76531871192856,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -628.4519837446277,
+        "maximum_nm": 192.95323374462794,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -12.386700000000001,
+        "maximum_nm": 4.386700000000001,
+        "bidirectional": true
+      }
+    },
+    "failed_6_200": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -204.1879150326993,
+        "maximum_nm": 628.4519837446278,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -628.4519837446278,
+        "maximum_nm": 204.18791503269935,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -4.386700000000001,
+        "maximum_nm": 12.386700000000001,
+        "bidirectional": true
+      }
+    },
+    "failed_7_200": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -192.95323374462782,
+        "maximum_nm": 628.4519837446278,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -288.76531871192844,
+        "maximum_nm": 288.76531871192844,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -12.386700000000001,
+        "maximum_nm": 4.3867,
+        "bidirectional": true
+      }
+    },
+    "failed_8_200": {
+      "roll": {
+        "feasible": true,
+        "minimum_nm": -204.1879150326993,
+        "maximum_nm": 628.4519837446279,
+        "bidirectional": true
+      },
+      "pitch": {
+        "feasible": true,
+        "minimum_nm": -204.18791503269924,
+        "maximum_nm": 628.4519837446278,
+        "bidirectional": true
+      },
+      "yaw": {
+        "feasible": true,
+        "minimum_nm": -4.3867,
+        "maximum_nm": 12.386700000000001,
+        "bidirectional": true
+      }
+    }
+  },
+  "qualification": "STATIC_AXIS_AUTHORITY_ONLY",
+  "aerodynamic_validation": "NOT_ESTABLISHED",
+  "dynamic_stability": "NOT_EVALUATED",
+  "physical_validation": "NOT_ESTABLISHED"
+}

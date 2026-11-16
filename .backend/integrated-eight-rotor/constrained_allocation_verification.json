@@ -1,0 +1,90 @@
+{
+  "results": [
+    {
+      "case": "centered_cg",
+      "capacity_n": 120.0,
+      "feasible": false,
+      "thrusts_n": null
+    },
+    {
+      "case": "centered_cg",
+      "capacity_n": 130.0,
+      "feasible": true,
+      "thrusts_n": [
+        100.3325,
+        130.0,
+        130.0,
+        130.0,
+        100.33249999999997,
+        130.0,
+        130.0,
+        130.0
+      ],
+      "residuals": [
+        0.0,
+        0.0,
+        -2.842170943040401e-14
+      ]
+    },
+    {
+      "case": "centered_cg",
+      "capacity_n": 150.0,
+      "feasible": true,
+      "thrusts_n": [
+        40.33250000000003,
+        149.99999999999997,
+        150.0,
+        150.0,
+        40.332499999999975,
+        150.0,
+        150.0,
+        150.0
+      ],
+      "residuals": [
+        0.0,
+        0.0,
+        -2.842170943040401e-14
+      ]
+    },
+    {
+      "case": "offset_cg",
+      "capacity_n": 120.0,
+      "feasible": false,
+      "thrusts_n": null
+    },
+    {
+      "case": "offset_cg",
+      "capacity_n": 130.0,
+      "feasible": false,
+      "thrusts_n": null
+    },
+    {
+      "case": "offset_cg",
+      "capacity_n": 150.0,
+      "feasible": true,
+      "thrusts_n": [
+        112.48024571907688,
+        103.77100856184623,
+        150.0,
+        150.0,
+        14.413745719076832,
+        150.0,
+        150.0,
+        150.0
+      ],
+      "residuals": [
+        0.0,
+        -5.684341886080802e-14,
+        -9.237055564881302e-14
+      ]
+    }
+  ],
+  "status": "STATIC_FEASIBILITY_VERIFICATION",
+  "physical_validation": "NOT_ESTABLISHED",
+  "notes": [
+    "Uses hypothetical rotor capacities",
+    "Checks vertical force and roll/pitch equilibrium",
+    "Does not check yaw, dynamics or motor physics",
+    "Feasible allocations are not necessarily optimal"
+  ]
+}

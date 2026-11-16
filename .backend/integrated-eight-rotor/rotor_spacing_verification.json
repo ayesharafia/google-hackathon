@@ -1,0 +1,23 @@
+{
+  "results": {
+    "radius_0.75_m": {
+      "rotor_radius_m": 0.75,
+      "minimum_center_spacing_m": 1.1480502970952693,
+      "minimum_disk_clearance_m": -0.3519497029047307,
+      "coplanar_disks_do_not_overlap": false,
+      "normal_ideal_power_w": 5280.720363284703,
+      "worst_failure_ideal_power_w": 6148.596778699838
+    },
+    "radius_0.50_m": {
+      "rotor_radius_m": 0.5,
+      "minimum_center_spacing_m": 1.1480502970952693,
+      "minimum_disk_clearance_m": 0.1480502970952693,
+      "coplanar_disks_do_not_overlap": true,
+      "normal_ideal_power_w": 7921.080544927055,
+      "worst_failure_ideal_power_w": 9222.895168049758
+    }
+  },
+  "qualification": "GEOMETRIC_AND_IDEAL_POWER_SCREENING",
+  "aerodynamic_interference": "NOT_EVALUATED",
+  "physical_validation": "NOT_ESTABLISHED"
+}

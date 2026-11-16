@@ -1,0 +1,133 @@
+{
+  "centered_cg": {
+    "mass_kg": 100.0,
+    "weight_n": 980.665,
+    "arm_radius_m": 1.5,
+    "cg_m": [
+      0.0,
+      0.0
+    ],
+    "rotors": [
+      {
+        "id": 1,
+        "x_m": 1.5,
+        "y_m": 0.0,
+        "required_thrust_n": 122.583125
+      },
+      {
+        "id": 2,
+        "x_m": 1.0606601717798214,
+        "y_m": 1.0606601717798212,
+        "required_thrust_n": 122.583125
+      },
+      {
+        "id": 3,
+        "x_m": 9.184850993605148e-17,
+        "y_m": 1.5,
+        "required_thrust_n": 122.583125
+      },
+      {
+        "id": 4,
+        "x_m": -1.0606601717798212,
+        "y_m": 1.0606601717798214,
+        "required_thrust_n": 122.583125
+      },
+      {
+        "id": 5,
+        "x_m": -1.5,
+        "y_m": 1.8369701987210297e-16,
+        "required_thrust_n": 122.583125
+      },
+      {
+        "id": 6,
+        "x_m": -1.0606601717798214,
+        "y_m": -1.0606601717798212,
+        "required_thrust_n": 122.583125
+      },
+      {
+        "id": 7,
+        "x_m": -2.755455298081545e-16,
+        "y_m": -1.5,
+        "required_thrust_n": 122.583125
+      },
+      {
+        "id": 8,
+        "x_m": 1.060660171779821,
+        "y_m": -1.0606601717798214,
+        "required_thrust_n": 122.583125
+      }
+    ],
+    "force_residual_n": 0.0,
+    "roll_moment_residual_nm": -5.684341886080802e-14,
+    "pitch_moment_residual_nm": 5.684341886080802e-14,
+    "yaw_equilibrium": "NOT_EVALUATED",
+    "thrust_capacity": "NOT_EVALUATED",
+    "qualification": "ANALYTICAL_SOFTWARE_VERIFICATION_ONLY"
+  },
+  "offset_cg": {
+    "mass_kg": 100.0,
+    "weight_n": 980.665,
+    "arm_radius_m": 1.5,
+    "cg_m": [
+      0.1,
+      -0.05
+    ],
+    "rotors": [
+      {
+        "id": 1,
+        "x_m": 1.5,
+        "y_m": 0.0,
+        "required_thrust_n": 138.92754166666666
+      },
+      {
+        "id": 2,
+        "x_m": 1.0606601717798214,
+        "y_m": 1.0606601717798212,
+        "required_thrust_n": 128.36174892976922
+      },
+      {
+        "id": 3,
+        "x_m": 9.184850993605148e-17,
+        "y_m": 1.5,
+        "required_thrust_n": 114.41091666666667
+      },
+      {
+        "id": 4,
+        "x_m": -1.0606601717798212,
+        "y_m": 1.0606601717798214,
+        "required_thrust_n": 105.24725321069235
+      },
+      {
+        "id": 5,
+        "x_m": -1.5,
+        "y_m": 1.8369701987210297e-16,
+        "required_thrust_n": 106.23870833333332
+      },
+      {
+        "id": 6,
+        "x_m": -1.0606601717798214,
+        "y_m": -1.0606601717798212,
+        "required_thrust_n": 116.80450107023078
+      },
+      {
+        "id": 7,
+        "x_m": -2.755455298081545e-16,
+        "y_m": -1.5,
+        "required_thrust_n": 130.75533333333334
+      },
+      {
+        "id": 8,
+        "x_m": 1.060660171779821,
+        "y_m": -1.0606601717798214,
+        "required_thrust_n": 139.91899678930764
+      }
+    ],
+    "force_residual_n": 0.0,
+    "roll_moment_residual_nm": 5.684341886080802e-14,
+    "pitch_moment_residual_nm": 5.684341886080802e-14,
+    "yaw_equilibrium": "NOT_EVALUATED",
+    "thrust_capacity": "NOT_EVALUATED",
+    "qualification": "ANALYTICAL_SOFTWARE_VERIFICATION_ONLY"
+  },
+  "status": "ANALYTICAL_TESTS_PASSED"
+}

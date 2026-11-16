@@ -1,0 +1,20 @@
+{
+  "project": "PHYSIMESH Integrated Eight-Rotor",
+  "governing_scenario": "failed_8",
+  "governing_command": "combined_negative",
+  "most_loaded_rotor": 7,
+  "required_thrust_n": 195.09,
+  "estimated_shaft_power_kw": 2.806,
+  "estimated_shaft_torque_nm": 8.933,
+  "estimated_electrical_power_kw": 3.118,
+  "assumed_rpm": 3000,
+  "assumed_figure_of_merit": 0.7,
+  "assumed_motor_efficiency": 0.9,
+  "motor_continuous_rating": null,
+  "motor_peak_rating": null,
+  "motor_torque_speed_map": null,
+  "esc_current_limit": null,
+  "battery_discharge_limit": null,
+  "physical_validation": "NOT_ESTABLISHED",
+  "status": "PROPULSION_REQUIREMENTS_PRELIMINARY"
+}

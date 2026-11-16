@@ -1,0 +1,150 @@
+{
+  "results": {
+    "normal": {
+      "governing_command": "combined_negative",
+      "peak_thrust_n": 137.95270967268254,
+      "total_ideal_power_w": 5280.720363284703,
+      "individual_rotor_power_w": [
+        778.71064413128,
+        778.7106441312802,
+        562.4776598350247,
+        491.26441839934535,
+        333.4250643939322,
+        778.7106441312802,
+        778.71064413128,
+        778.7106441312802
+      ]
+    },
+    "failed_1": {
+      "governing_command": "combined_negative",
+      "peak_thrust_n": 189.5245073271322,
+      "total_ideal_power_w": 6003.495918970659,
+      "individual_rotor_power_w": [
+        0.0,
+        1253.9459659199088,
+        1253.9459659199088,
+        82.49060994030773,
+        385.1875821282636,
+        520.0338632224526,
+        1253.9459659199088,
+        1253.9459659199088
+      ]
+    },
+    "failed_2": {
+      "governing_command": "combined_negative",
+      "peak_thrust_n": 186.30198214128617,
+      "total_ideal_power_w": 6087.5386136671,
+      "individual_rotor_power_w": [
+        1222.1006396483322,
+        0.0,
+        1005.9747895209707,
+        1222.1006396483322,
+        0.0,
+        819.4962555373022,
+        595.7656496638318,
+        1222.1006396483322
+      ]
+    },
+    "failed_3": {
+      "governing_command": "combined_positive",
+      "peak_thrust_n": 172.24727875889266,
+      "total_ideal_power_w": 5919.01142563172,
+      "individual_rotor_power_w": [
+        1086.4489192899296,
+        1086.4489192899296,
+        0.0,
+        1086.4489192899296,
+        1086.4489192899296,
+        72.47684200290759,
+        1073.1421584865786,
+        427.5967479825162
+      ]
+    },
+    "failed_4": {
+      "governing_command": "combined_negative",
+      "peak_thrust_n": 171.7775,
+      "total_ideal_power_w": 5810.29412080709,
+      "individual_rotor_power_w": [
+        759.6318285954703,
+        1082.0072601822594,
+        579.7539055853199,
+        0.0,
+        1082.0072601822594,
+        1082.0072601822594,
+        142.8793458972614,
+        1082.0072601822594
+      ]
+    },
+    "failed_5": {
+      "governing_command": "combined_positive",
+      "peak_thrust_n": 171.7775,
+      "total_ideal_power_w": 5796.316903366484,
+      "individual_rotor_power_w": [
+        1082.0072601822594,
+        302.3876748605494,
+        1082.0072601822594,
+        885.2702619064363,
+        0.0,
+        1082.0072601822594,
+        1082.0072601822594,
+        280.62992587046097
+      ]
+    },
+    "failed_6": {
+      "governing_command": "combined_negative",
+      "peak_thrust_n": 172.76182403646575,
+      "total_ideal_power_w": 6049.330895316134,
+      "individual_rotor_power_w": [
+        686.6168534737466,
+        1091.3207911008567,
+        0.0,
+        1063.460213743445,
+        1025.2914547963724,
+        0.0,
+        1091.3207911008567,
+        1091.3207911008567
+      ]
+    },
+    "failed_7": {
+      "governing_command": "combined_negative",
+      "peak_thrust_n": 182.75442827472204,
+      "total_ideal_power_w": 6011.6308859845885,
+      "individual_rotor_power_w": [
+        1187.3605669877525,
+        756.2151081254862,
+        479.32588599292507,
+        26.647623915167,
+        1187.3605669877525,
+        1187.3605669877525,
+        0.0,
+        1187.3605669877525
+      ]
+    },
+    "failed_8": {
+      "governing_command": "combined_negative",
+      "peak_thrust_n": 195.09459298522572,
+      "total_ideal_power_w": 6148.596778699838,
+      "individual_rotor_power_w": [
+        1309.629978339809,
+        1309.629978339809,
+        190.26466697874096,
+        672.8096868982856,
+        47.00251146357572,
+        1309.629978339809,
+        1309.629978339809,
+        0.0
+      ]
+    }
+  },
+  "assumed_radius_m": 0.75,
+  "assumed_density_kg_m3": 1.225,
+  "model": "ideal_isolated_actuator_disk",
+  "motor_power": "NOT_EVALUATED",
+  "electrical_power": "NOT_EVALUATED",
+  "torque": "NOT_EVALUATED",
+  "physical_validation": "NOT_ESTABLISHED",
+  "geometry_corrected_candidate_radius_m": 0.5,
+  "geometry_corrected_power_scale": 1.5,
+  "original_geometry_status": "COPLANAR_DISK_OVERLAP",
+  "corrected_geometry_status": "NONOVERLAPPING_COPLANAR_DISKS"
+}

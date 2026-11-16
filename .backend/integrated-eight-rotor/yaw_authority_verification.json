@@ -1,0 +1,109 @@
+{
+  "results": {
+    "capacity_150_normal": {
+      "feasible": true,
+      "min_yaw_nm": -4.386700000000001,
+      "max_yaw_nm": 4.386700000000001,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    },
+    "capacity_150_failed_1": {
+      "feasible": false,
+      "reason": "Force/roll/pitch constraints infeasible"
+    },
+    "capacity_150_failed_2": {
+      "feasible": false,
+      "reason": "Force/roll/pitch constraints infeasible"
+    },
+    "capacity_150_failed_3": {
+      "feasible": false,
+      "reason": "Force/roll/pitch constraints infeasible"
+    },
+    "capacity_150_failed_4": {
+      "feasible": false,
+      "reason": "Force/roll/pitch constraints infeasible"
+    },
+    "capacity_150_failed_5": {
+      "feasible": false,
+      "reason": "Force/roll/pitch constraints infeasible"
+    },
+    "capacity_150_failed_6": {
+      "feasible": false,
+      "reason": "Force/roll/pitch constraints infeasible"
+    },
+    "capacity_150_failed_7": {
+      "feasible": false,
+      "reason": "Force/roll/pitch constraints infeasible"
+    },
+    "capacity_150_failed_8": {
+      "feasible": false,
+      "reason": "Force/roll/pitch constraints infeasible"
+    },
+    "capacity_200_normal": {
+      "feasible": true,
+      "min_yaw_nm": -12.386700000000001,
+      "max_yaw_nm": 12.386700000000001,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    },
+    "capacity_200_failed_1": {
+      "feasible": true,
+      "min_yaw_nm": -12.386700000000001,
+      "max_yaw_nm": 4.386700000000001,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    },
+    "capacity_200_failed_2": {
+      "feasible": true,
+      "min_yaw_nm": -4.386700000000001,
+      "max_yaw_nm": 12.386700000000001,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    },
+    "capacity_200_failed_3": {
+      "feasible": true,
+      "min_yaw_nm": -12.386700000000001,
+      "max_yaw_nm": 4.3867,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    },
+    "capacity_200_failed_4": {
+      "feasible": true,
+      "min_yaw_nm": -4.3867,
+      "max_yaw_nm": 12.386700000000001,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    },
+    "capacity_200_failed_5": {
+      "feasible": true,
+      "min_yaw_nm": -12.386700000000001,
+      "max_yaw_nm": 4.386700000000001,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    },
+    "capacity_200_failed_6": {
+      "feasible": true,
+      "min_yaw_nm": -4.386700000000001,
+      "max_yaw_nm": 12.386700000000001,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    },
+    "capacity_200_failed_7": {
+      "feasible": true,
+      "min_yaw_nm": -12.386700000000001,
+      "max_yaw_nm": 4.3867,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    },
+    "capacity_200_failed_8": {
+      "feasible": true,
+      "min_yaw_nm": -4.3867,
+      "max_yaw_nm": 12.386700000000001,
+      "zero_yaw_available": true,
+      "bidirectional_yaw_authority": true
+    }
+  },
+  "assumed_torque_thrust_ratio_m": 0.02,
+  "qualification": "STATIC_SOFTWARE_VERIFICATION_ONLY",
+  "physical_validation": "NOT_ESTABLISHED"
+}
