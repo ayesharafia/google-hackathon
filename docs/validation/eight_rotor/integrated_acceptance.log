@@ -1,0 +1,168 @@
+Rotor failed: 1 at 3.0 s
+Final angles (deg): [0.0001 0.0772 0.0133]
+Final failed rotor thrust: 0.0 N
+Peak surviving thrust: 189.537 N
+Allocator failures: 0
+Steps at thrust limit: 0
+Minimum support (N): 844.871
+Final vertical speed (m/s): 0.0
+Altitude change (m): -0.0
+Peak descent speed (m/s): 0.1913
+Dynamic failure test: PASS
+Maximum altitude loss (m): 0.139
+Peak allocation errors [N,Nm,Nm,Nm]: [0. 0. 0. 0.]
+Peak actual errors [N,Nm,Nm,Nm]: [135.79423  13.7881  203.76034  12.06459]
+Peak actual error times (s): [3. 0. 3. 0.]
+Peak errors after 4s [N,Nm,Nm,Nm]: [ 5.50089  1.18762 25.24415  0.70761]
+Tracking settling times after failure (s): [1.5225e+00 2.5000e-03 4.7225e+00 7.5000e-03]
+Final tracking errors: [0.      0.00282 0.01931 0.00668]
+Tracking settled: True
+Integrated numerical acceptance: PASS
+Physical validation: NOT ESTABLISHED
+Rotor failed: 2 at 3.0 s
+Final angles (deg): [0.0418 0.043  0.0173]
+Final failed rotor thrust: 0.0 N
+Peak surviving thrust: 199.792 N
+Allocator failures: 0
+Steps at thrust limit: 0
+Minimum support (N): 873.766
+Final vertical speed (m/s): 0.0
+Altitude change (m): -0.0
+Peak descent speed (m/s): 0.1506
+Dynamic failure test: PASS
+Maximum altitude loss (m): 0.1094
+Peak allocation errors [N,Nm,Nm,Nm]: [4.2000e-04 0.0000e+00 0.0000e+00 5.3067e-01]
+Peak actual errors [N,Nm,Nm,Nm]: [106.89881 113.44361 113.45231  12.06459]
+Peak actual error times (s): [3. 3. 3. 0.]
+Peak errors after 4s [N,Nm,Nm,Nm]: [ 4.33005 14.18833 13.75382  0.98887]
+Tracking settling times after failure (s): [0.645  3.3075 3.2375 0.7825]
+Final tracking errors: [ 0.      -0.00654  0.01188  0.00944]
+Tracking settled: True
+Integrated numerical acceptance: PASS
+Physical validation: NOT ESTABLISHED
+Rotor failed: 3 at 3.0 s
+Final angles (deg): [0.0743 0.0001 0.0133]
+Final failed rotor thrust: 0.0 N
+Peak surviving thrust: 189.413 N
+Allocator failures: 0
+Steps at thrust limit: 0
+Minimum support (N): 846.476
+Final vertical speed (m/s): 0.0
+Altitude change (m): -0.0
+Peak descent speed (m/s): 0.1891
+Dynamic failure test: PASS
+Maximum altitude loss (m): 0.1373
+Peak allocation errors [N,Nm,Nm,Nm]: [0. 0. 0. 0.]
+Peak actual errors [N,Nm,Nm,Nm]: [134.18851 201.34306  13.7881   12.06459]
+Peak actual error times (s): [3. 3. 0. 0.]
+Peak errors after 4s [N,Nm,Nm,Nm]: [ 5.43585 24.50093  1.06152  0.70922]
+Tracking settling times after failure (s): [1.505e+00 4.755e+00 2.500e-03 5.000e-03]
+Final tracking errors: [ 0.      -0.01392  0.0024   0.00669]
+Tracking settled: True
+Integrated numerical acceptance: PASS
+Physical validation: NOT ESTABLISHED
+Rotor failed: 4 at 3.0 s
+Final angles (deg): [0.0406 0.0415 0.0172]
+Final failed rotor thrust: 0.0 N
+Peak surviving thrust: 199.784 N
+Allocator failures: 0
+Steps at thrust limit: 0
+Minimum support (N): 874.778
+Final vertical speed (m/s): 0.0
+Altitude change (m): -0.0
+Peak descent speed (m/s): 0.1492
+Dynamic failure test: PASS
+Maximum altitude loss (m): 0.1084
+Peak allocation errors [N,Nm,Nm,Nm]: [4.2000e-04 0.0000e+00 0.0000e+00 5.2013e-01]
+Peak actual errors [N,Nm,Nm,Nm]: [105.88729 112.37073 112.24143  12.06459]
+Peak actual error times (s): [3. 3. 3. 0.]
+Peak errors after 4s [N,Nm,Nm,Nm]: [ 4.28908 13.16309 14.03518  0.98701]
+Tracking settling times after failure (s): [0.645 3.3   3.295 0.775]
+Final tracking errors: [ 0.      -0.0066  -0.00688  0.00942]
+Tracking settled: True
+Integrated numerical acceptance: PASS
+Physical validation: NOT ESTABLISHED
+Rotor failed: 5 at 3.0 s
+Final angles (deg): [0.0019 0.0745 0.0133]
+Final failed rotor thrust: 0.0 N
+Peak surviving thrust: 189.426 N
+Allocator failures: 0
+Steps at thrust limit: 0
+Minimum support (N): 846.301
+Final vertical speed (m/s): 0.0
+Altitude change (m): -0.0
+Peak descent speed (m/s): 0.1893
+Dynamic failure test: PASS
+Maximum altitude loss (m): 0.1375
+Peak allocation errors [N,Nm,Nm,Nm]: [0. 0. 0. 0.]
+Peak actual errors [N,Nm,Nm,Nm]: [134.36371  13.7881  201.47658  12.06459]
+Peak actual error times (s): [3. 0. 3. 0.]
+Peak errors after 4s [N,Nm,Nm,Nm]: [ 5.44295  1.41391 24.51511  0.70904]
+Tracking settling times after failure (s): [1.5075e+00 2.5000e-03 4.7500e+00 5.0000e-03]
+Final tracking errors: [ 0.       0.00279 -0.01436  0.00669]
+Tracking settled: True
+Integrated numerical acceptance: PASS
+Physical validation: NOT ESTABLISHED
+Rotor failed: 6 at 3.0 s
+Final angles (deg): [0.044  0.0412 0.0173]
+Final failed rotor thrust: 0.0 N
+Peak surviving thrust: 199.794 N
+Allocator failures: 0
+Steps at thrust limit: 0
+Minimum support (N): 873.518
+Final vertical speed (m/s): 0.0
+Altitude change (m): -0.0
+Peak descent speed (m/s): 0.151
+Dynamic failure test: PASS
+Maximum altitude loss (m): 0.1096
+Peak allocation errors [N,Nm,Nm,Nm]: [4.3000e-04 0.0000e+00 0.0000e+00 5.3326e-01]
+Peak actual errors [N,Nm,Nm,Nm]: [107.14659 113.58582 113.57713  12.06459]
+Peak actual error times (s): [3. 3. 3. 0.]
+Peak errors after 4s [N,Nm,Nm,Nm]: [ 4.34008 14.65096 13.30409  0.98933]
+Tracking settling times after failure (s): [0.645  3.2375 3.2975 0.7825]
+Final tracking errors: [ 0.       0.01218 -0.00714  0.00945]
+Tracking settled: True
+Integrated numerical acceptance: PASS
+Physical validation: NOT ESTABLISHED
+Rotor failed: 7 at 3.0 s
+Final angles (deg): [0.0774 0.0018 0.0133]
+Final failed rotor thrust: 0.0 N
+Peak surviving thrust: 189.545 N
+Allocator failures: 0
+Steps at thrust limit: 0
+Minimum support (N): 844.696
+Final vertical speed (m/s): 0.0
+Altitude change (m): -0.0
+Peak descent speed (m/s): 0.1916
+Dynamic failure test: PASS
+Maximum altitude loss (m): 0.1391
+Peak allocation errors [N,Nm,Nm,Nm]: [0. 0. 0. 0.]
+Peak actual errors [N,Nm,Nm,Nm]: [135.96944 203.89385  13.7881   12.06459]
+Peak actual error times (s): [3. 3. 0. 0.]
+Peak errors after 4s [N,Nm,Nm,Nm]: [ 5.50799 25.27339  1.27009  0.70743]
+Tracking settling times after failure (s): [1.5225e+00 4.7200e+00 2.5000e-03 7.5000e-03]
+Final tracking errors: [0.      0.01975 0.00237 0.00668]
+Tracking settled: True
+Integrated numerical acceptance: PASS
+Physical validation: NOT ESTABLISHED
+Rotor failed: 8 at 3.0 s
+Final angles (deg): [0.0436 0.0443 0.0174]
+Final failed rotor thrust: 0.0 N
+Peak surviving thrust: 199.796 N
+Allocator failures: 0
+Steps at thrust limit: 0
+Minimum support (N): 872.507
+Final vertical speed (m/s): 0.0
+Altitude change (m): -0.0
+Peak descent speed (m/s): 0.1524
+Dynamic failure test: PASS
+Maximum altitude loss (m): 0.1107
+Peak allocation errors [N,Nm,Nm,Nm]: [4.4000e-04 0.0000e+00 0.0000e+00 5.4384e-01]
+Peak actual errors [N,Nm,Nm,Nm]: [108.15812 114.6587  114.788    12.06459]
+Peak actual error times (s): [3. 3. 3. 0.]
+Peak errors after 4s [N,Nm,Nm,Nm]: [ 4.38105 13.92018 14.78163  0.99121]
+Tracking settling times after failure (s): [0.6475 3.2375 3.2475 0.79  ]
+Final tracking errors: [0.      0.01242 0.01184 0.00947]
+Tracking settled: True
+Integrated numerical acceptance: PASS
+Physical validation: NOT ESTABLISHED
