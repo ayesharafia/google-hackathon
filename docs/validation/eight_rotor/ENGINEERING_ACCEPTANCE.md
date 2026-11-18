@@ -58,3 +58,34 @@ acceptance scope.
 - PROPULSION_REQUIREMENTS.md
 - propulsion_envelope.json
 - verify_propulsion_envelope.py
+
+## Integrated Model Consistency Review
+
+Static allocation and ideal-power consistency:
+- Checks performed: 139
+- Failed checks: 0
+- Result: PASS
+
+Dynamic configuration review:
+- Aircraft mass: 100 kg
+- Rotor-arm radius: 1.5 m
+- Rotor count: 8
+- Rotor geometry: loaded from centered-CG equilibrium case
+- Spin directions: alternating +/-1
+- Yaw torque/thrust ratio: 0.02 m
+- Assumed inertia: [20, 20, 35] kg m2
+- Actuator time constant: 0.20 s
+- Numerical timestep: 0.0025 s
+- Initial attitude disturbance: 10 degrees per axis
+- Failure initiation: 3.0 s
+- Individual thrust limit: 200 N
+
+Assessment:
+DEFINED NUMERICAL INTEGRATION VERIFICATION COMPLETED.
+
+The dynamic model is simplified, and physical propulsion
+performance, full nonlinear flight dynamics and integrated
+physical qualification remain unverified.
+
+Overall Activity 6 remains qualified by these limitations.
+Activity 7: EIGHT-ROTOR PHYSICAL VALIDATION NOT ESTABLISHED.
