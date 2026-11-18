@@ -1,0 +1,21 @@
+{
+  "governing_scenario": "failed_8",
+  "scenario_count": 9,
+  "assumed_rotor_radius_m": 0.5,
+  "assumed_rpm": 3000,
+  "assumed_figure_of_merit": 0.7,
+  "assumed_motor_efficiency": 0.9,
+  "provisional_margin": 1.2,
+  "system_electrical_power_w": 14639.516139761521,
+  "motor_electrical_power_w": 3118.1666150947835,
+  "motor_shaft_power_w": 2806.3499535853052,
+  "motor_shaft_torque_nm": 8.932889343176248,
+  "screening_targets": {
+    "system_power_w": 17567.419367713825,
+    "motor_electrical_power_w": 3741.79993811374,
+    "motor_shaft_power_w": 3367.619944302366,
+    "motor_torque_nm": 10.719467211811496
+  },
+  "hardware_limits_verified": false,
+  "physical_validation": "NOT_ESTABLISHED"
+}
