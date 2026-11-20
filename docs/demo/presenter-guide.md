@@ -135,26 +135,3 @@ human approval or certify aircraft performance.
 Sources: master `plan.md` §1.5/§7/§13; three-day plan §8/§10/§11/§12;
 `docs/validation/sphere_re100_loads.md`; retained `results.json`; illustrative
 `docs/demo/example_multirotor.yaml`; `docs/qa/results_page_checklist.md`.
-
-## Next-development workbench rehearsal receipt, 5 October 2026
-
-The current opt-in local workbench journey uses synthetic CT/CQ hover/climb maps,
-explicit conditioning bounds, frozen V4 studies and JSON/PDF exports. Introduce
-it as model/software demonstration only. The original MVP walkthrough above
-retains its historical scope and separate evidence identities.
-
-Two **automated** complete create → freeze → evaluate → download JSON/PDF
-rehearsals are timed in [the Chromium receipt](../qa/assets/next-development/receipt.json).
-Their machine-click durations are not human speaking or presentation durations.
-Both downloads finish and bind the retained bytes. A full browser-only
-[backup recording](assets/next-development-backup.webm) is retained with its
-SHA-256 in the receipt. Native zoom/mobile/conflict/geometry/comparison checks
-appear in the recording; there is no narration, client data or plaintext token.
-This recording is a technical backup, not a rehearsed client presentation.
-
-Before presenting: run the helper, check the target commit, inspect data scope,
-verify the two downloaded reports and rehearse twice **with the actual human
-presenter**, including explanations and questions. Log actual speaking durations
-and follow-ups here. Those human rehearsals remain pending. For a real design,
-wait for client-approved inputs, independent model review and engineer-owned
-scope/tolerances. Do not substitute this fast automated recording for those gates.

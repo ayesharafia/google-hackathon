@@ -36,8 +36,3 @@ starlette==1.7.0
 typing-extensions==4.16.0
 typing-inspection==0.4.4
 uvicorn==0.54.0
-
-# Approved tabular workbook parser and XML protection.
-defusedxml==0.7.1
-et-xmlfile==2.0.0
-openpyxl==3.1.5

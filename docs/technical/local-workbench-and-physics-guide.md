@@ -4,13 +4,7 @@ Checkpoint: 5 October 2026. This extends the historical MVP guide. Execution is 
 
 ## The user journey
 
-Open `/web/workbench.html` on the local API server. In private local mode, connect once with its configured workspace access token. An HttpOnly, SameSite cookie remembers this browser for 30 days across the workbench and evidence desk, including refreshes and server restarts. The token is not stored in browser storage. Use “Forget this browser” to revoke that browser’s access; rotating the server token invalidates all remembered browsers. Create a project with explicit unknowns, or create the labelled hover fixture. Author the mass ledger, payload placement, fixed pack, required cases, rotor locations/limits and chronological segments. Import an eligible `rotor_map_v1` JSON source and bind its returned original-byte hash to matching rotors.
-
-For an open shared workspace, start the server with `PHYSIMESH_PUBLIC_ACCESS=1` and no `PHYSIMESH_API_TOKEN`. Anyone with the server or tunnel URL can view and edit projects, upload geometry and save drafts without a token. Both desks open automatically and omit the connection and forget-browser controls. Public access stays enabled across refreshes and server restarts when that environment setting is kept. Hosted mode rejects this setting and continues to use individual project authorization.
-
-In **Aircraft geometry**, select one or more original STL files, explicitly choose their common source units, then select **Upload and preview**. The preview supports orbit, zoom and reset. Select **Save draft** to attach the import record and original files to the project; reopening restores the preview from authenticated, integrity-checked retained bytes. Uploading replacement files or removing geometry changes only the draft until saved. Frozen revisions retain their earlier geometry. A malformed or oversized upload leaves the current draft geometry unchanged. The existing default intake limits are 50 MB and one million triangles in total.
-
-An STL preview does not assign component roles, supply mass/inertia or establish mesh/CFD readiness. Source coordinates are converted to metres without inferring alignment with the declared rotor layout. Draft JSON exports contain immutable geometry references; original STL bytes remain in the server data root and must accompany that data root when transferring a project.
+Open `/web/workbench.html` on the local API server. Connect with its configured bearer token; the page retains the token in memory only. Create a project with explicit unknowns, or create the labelled hover fixture. Author the mass ledger, payload placement, fixed pack, required cases, rotor locations/limits and chronological segments. Import an eligible `rotor_map_v1` JSON source and bind its returned original-byte hash to matching rotors.
 
 Save the draft, inspect mass/readiness, freeze the saved version, then evaluate. Dirty inputs disable freeze/evaluation. Edits never alter an existing revision or result. A frozen revision is a software snapshot, not aircraft approval. Inspect every case, the common-payload checks, residuals and any chronological energy ledger. Export the exact JSON or its source-bound PDF. Compare retained studies within the same project; changed inputs do not prove causation.
 
@@ -21,11 +15,10 @@ Save the draft, inspect mass/readiness, freeze the saved version, then evaluate.
 | `projects/repository.py` | Repository protocol, records and conflict/not-found exceptions |
 | `projects/sqlite.py` | Transactional SQLite projects, expected-version saves, immutable revision and study associations |
 | `projects/service.py` | Draft parsing, canonical snapshots, project creation/save/freeze |
-| `projects/geometry.py` | Saved import/units/transform binding and retained STL byte integrity |
 | `projects/performance.py` | Original performance-source retention and integrity checks |
 | `projects/studies.py` | Frozen inputs/source/model binding, evaluation, first accepted result, read/export |
 | `projects/reports.py` | Deterministic qualified PDF and input-aware retained comparisons |
-| `api/projects.py` | Local and hosted project HTTP routes, saved-input inspection aggregation and error/status translation |
+| `api/projects.py` | Token-protected local HTTP routes, saved-input inspection aggregation and error/status translation |
 | `drone/authoring.py` | Installed and candidate mass/CG calculations |
 | `drone/performance.py` | Typed rotor map, coverage, interpolation and restricted convex profile |
 | `drone/trim.py` | Eligibility, linear constraints, allocation, certificate and independent recomputation |
@@ -34,11 +27,10 @@ Save the draft, inspect mass/readiness, freeze the saved version, then evaluate.
 | `drone/local_results.py` | Local V3 consistency and exact known-producer historical read policies |
 | `web/js/input-editors.js` | Native authoring, explicit unknowns, map import and saved-input inspection |
 | `web/js/workbench.js` | Serialized actions, version/dirty state, history and downloads |
-| `web/js/geometry-upload.js` | STL upload, draft attachment/removal, retained preview restoration |
 | `web/js/study-view.js` | Qualified outcome/energy/comparison display and keyboard-scrollable tables |
 | `web/js/viewer3d.js` | Real declared rotor disks/axes and candidate CG; orbit/zoom/reset |
 
-Paths in the table are under `src/physimesh/` except browser files. The viewer does not invent an airframe when CAD is unavailable. Workbench geometry and sphere native-field display use separate previews.
+Paths in the table are under `src/physimesh/` except browser files. The viewer does not invent an airframe when CAD is unavailable. Geometry intake and sphere native-field display remain separate existing paths.
 
 ## Persistence and identities
 
@@ -147,55 +139,3 @@ Verification at this checkpoint: 490 tests passed with three backend tests desel
 See [browser audit](../qa/local-workbench-design-audit.md), [PDF checks](../qa/local-reports.md), [historical review](../reviews/2026-10-05-historical-contract-claude.md), [equation fixtures](../validation/local-hover-and-energy.md) and [work order](../plans/2026-10-04-implementation-plan.md).
 
 Next independent local work: deterministic correlated uncertainty scenarios and reviewed external allowable limits, complete assembly authoring/repair, and recoverable execution. Historical-source numerical reproduction remains pending. Hosted access/operations are deferred by the user. Real geometry, measured rotor/installation data, validation tolerances and named human engineering acceptance remain required before client aircraft performance claims.
-
-## Conditioned hover/climb and failure-state pilot
-
-The opt-in model is `convex_axial_capacity_v2` / local result V4. Create the
-**synthetic noisy hover/climb** or **synthetic octo motor-out** example in the
-workbench, inspect declarations, freeze and evaluate. They are analytic CT/CQ
-fixtures, including synthetic uncertainty bounds and moment allowances. The
-original labelled hover example retains v1/V3 behavior.
-
-In **Condition a retained rotor map**, supply raw SHA-256, policy source, maximum
-relative torque residual, power/torque uncertainty and maximum hull shift/peak
-power fraction. Every number is required; no client tolerance is supplied.
-Conditioning retains a separate derived hash and preserves raw bytes. Binding
-the result to matching rotors is an explicit second action. Save/freeze after
-binding. Per-case matching-inflow source overrides remain separate.
-
-In each case, declare failed rotor IDs or exact axial inflow/world/body velocities,
-source overrides and per-axis torque-band moment allowances with source. For
-steady positive axial climb, body air-relative velocity is the negative of
-world climb velocity at zero attitude. Active sources must match density,
-inflow and pitch. Arbitrary attitudes, acceleration, inflow extrapolation,
-thermal/sag and general fault aerodynamics remain unsupported.
-
-**Deterministic joint scenarios** and **External payload caps** accept sourced
-versioned JSON arrays with explicit Apply-to-draft actions. See the schemas in
-`drone/scenarios.py`. Up to 16 of each are supported. The result displays nominal
-model capacity, deterministic common envelope and checked capped payload
-separately. Proposed caps are not declared approved; caller approval claims are
-not authenticated here. A capped payload below a feasible interval may refuse.
-
-Import STL with explicit source units under **Airframe geometry and rotor links**.
-Numeric transforms and rotor centres use the declared body frame. Choose rotor
-component references, save and reopen to verify placement. Geometry does not
-infer mass or loads. The preview shows retained airframe geometry, rotor disks,
-CG and current governing-case rotor limits. Editing inputs clears stale results.
-Comparisons show frozen input and active-constraint changes; causal attribution
-is not inferred. Integer/float JSON serialization alone is not an input change.
-
-A 409 draft conflict preserves unsaved inputs in a modal: export them, keep
-editing, or explicitly replace with the newest saved draft. Tokens remain in
-page memory. New API endpoints remain bearer-protected:
-`POST /api/drone/projects/performance-sources/{raw_hash}/condition` with
-`{"policy": {...}}`, realistic/motorout example POSTs, and
-`GET /api/drone/projects/geometry-sources/{hash}` for verified original STL bytes.
-
-Run browser acceptance with a Python containing Playwright and system Chromium
-and FFmpeg: `python scripts/qa/next_development_browser.py`. It starts/stops its
-own fresh isolated server and ephemeral credential, retains screenshots/receipt
-in `docs/qa/assets/next-development` and keeps downloads/database/recording in an
-ignored runtime directory. It uses actual Chromium native settings for 200%
-zoom and verifies DPR/layout reflow. Two timings are automated rehearsals,
-not human presenter timings or an API performance benchmark.

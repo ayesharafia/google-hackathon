@@ -1,7 +1,5 @@
 # PhysiCore Drone: implementation work order
 
-**Historical specification / reviewed snapshot.** Current slice status and execution order live only in [plan.md](../../plan.md#active-slice-status). The acceptance details below remain applicable; their snapshot status is not a current work queue.
-
 **Date:** 4 October 2026. **Starting snapshot:** `b524340048b284e3ce7c1b3447342345e9354a93`, on GitHub `main`.
 **Status:** approved delivery sequence with scoped local implementation underway. The broad slices remain open where acceptance or independent dependencies are outstanding; see section 9 for actual progress.
 **Authority:** [root production plan](../../plan.md), [Pilot-1 acceptance](../pilots/pilot-1.md) and the user's decisions. This document breaks that roadmap into executable slices without replacing its release gates. New paths/API names below are proposals.

@@ -17,7 +17,6 @@ from .performance import RotorMapV1
 from .screening_scope import pack_consistency
 
 MODEL_VERSION = 'convex_static_hover_v1'
-EXTENDED_MODEL_VERSION = 'convex_axial_capacity_v2'
 RESIDUAL_REL = 1e-8
 RESIDUAL_ABS_N = 1e-7
 RESIDUAL_ABS_NM = 1e-7
@@ -59,22 +58,9 @@ class HoverInputs:
     thrust_bounds: list[tuple[float, float]]
     payload_bounds: tuple[float, float]
     duration_s: float
-    inflow_m_s: float = 0.
-    failed_rotor_ids: tuple[str, ...] = ()
-    torque_band_allowance_nm: np.ndarray | None = None
 
 
 def prepare_hover(snapshot: dict, case: dict, sources: dict[str, RotorMapV1]) -> HoverInputs:
-    from .conditioning import ConditionedMap
-    settings = snapshot['fidelity'].get('local_pilot')
-    if not isinstance(settings, dict) or settings.get('model_version') not in (MODEL_VERSION, EXTENDED_MODEL_VERSION):
-        raise ValueError('declare a supported local_pilot model_version')
-    extended = settings['model_version'] == EXTENDED_MODEL_VERSION
-    if not extended and (settings.get('scenarios') or settings.get('allowable_caps')):
-        raise ValueError('scenarios and external caps require convex_axial_capacity_v2')
-    if extended and set(settings)-{'model_version', 'payload_domain_kg', 'auxiliary_power_w',
-                                  'scenarios', 'allowable_caps'}:
-        raise ValueError('extended model has undeclared/unsupported physical settings')
     frames = snapshot['units_and_frames']
     if not isinstance(frames, dict) or not isinstance(snapshot['fidelity'], dict):
         raise TypeError('frames and fidelity must be explicit mappings')
@@ -82,33 +68,25 @@ def prepare_hover(snapshot: dict, case: dict, sources: dict[str, RotorMapV1]) ->
                     'acceleration_target_m_s2', 'air_relative_velocity_body_m_s', 'angular_velocity_body_rad_s',
                     'angular_acceleration_body_rad_s2', 'source_note', 'body_force_body_n',
                     'body_moment_origin_body_nm', 'body_load_source', 'atmosphere', 'ground_clearance_m', 'mass_state'}
-    if extended:
-        allowed_case |= {'failed_rotor_ids', 'axial_inflow_m_s', 'performance_source_by_rotor',
-                         'torque_band_moment_allowance_nm', 'torque_band_allowance_source'}
     if set(case)-allowed_case or case.get('ground_clearance_m') is not None or case.get('mass_state') is not None:
         raise ValueError('case has unsupported physical declarations; initial profile uses explicit static ledger inputs')
     if frames.get('body_frame') != 'x_forward_y_left_z_up' or frames.get('world_frame') != 'ENU_z_up':
         raise ValueError('static profile requires the declared z-up body/world conventions')
-    for key in ('attitude_deg_zyx', 'acceleration_target_m_s2', 'angular_velocity_body_rad_s',
+    for key in ('attitude_deg_zyx', 'velocity_world_m_s', 'acceleration_target_m_s2',
+                'air_relative_velocity_body_m_s', 'angular_velocity_body_rad_s',
                 'angular_acceleration_body_rad_s2'):
         if np.any(vector(case.get(key), key) != 0):
             raise ValueError(key + ': nonzero conditions outside static-hover profile')
-    inflow = 0.
-    if extended and case.get('kind') == 'axial_climb':
-        inflow = number(case.get('axial_inflow_m_s'), 'declared axial climb inflow', positive=True)
-    elif case.get('kind') != 'hover' or case.get('axial_inflow_m_s', 0) != 0:
-        raise ValueError('case is outside hover or declared axial-climb coverage')
-    if (np.any(vector(case.get('velocity_world_m_s'), 'world velocity') != [0, 0, inflow])
-            or np.any(vector(case.get('air_relative_velocity_body_m_s'), 'air velocity relative to body')
-                      != [0, 0, -inflow])):
-        raise ValueError('axial conditions require world climb +z and body-relative air flow -z at declared inflow')
-    if (not isinstance(case.get('source_note'), str)
+    if (case.get('kind') != 'hover' or not isinstance(case.get('source_note'), str)
             or not case['source_note'].strip()):
         raise ValueError('declare a sourced static hover case')
     body_force = vector(case.get('body_force_body_n'), 'body_force_body_n')
     body_moment = vector(case.get('body_moment_origin_body_nm'), 'body_moment_origin_body_nm')
     if not isinstance(case.get('body_load_source'), str) or not case['body_load_source'].strip():
         raise ValueError('body_load_source: explicit load source required, including a zero-load fixture')
+    settings = snapshot['fidelity'].get('local_pilot')
+    if not isinstance(settings, dict) or settings.get('model_version') != MODEL_VERSION:
+        raise ValueError('declare local_pilot model_version ' + MODEL_VERSION)
     if snapshot['identity'].get('data_scope') not in ('analytic_fixture', 'client_unvalidated'):
         raise ValueError('declare analytic_fixture or client_unvalidated data_scope')
     low, high = settings.get('payload_domain_kg', (None, None))
@@ -145,14 +123,6 @@ def prepare_hover(snapshot: dict, case: dict, sources: dict[str, RotorMapV1]) ->
                    or re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,79}', r['rotor_id']) is None for r in rotors)
             or len({r['rotor_id'] for r in rotors}) != len(rotors)):
         raise ValueError('1-16 uniquely identified rotors required')
-    failed = case.get('failed_rotor_ids', [])
-    ids = {r['rotor_id'] for r in rotors}
-    if (not isinstance(failed, list) or any(not isinstance(r, str) for r in failed)
-            or len(set(failed)) != len(failed) or not set(failed) <= ids):
-        raise ValueError('failed_rotor_ids must uniquely identify declared rotors')
-    overrides = case.get('performance_source_by_rotor', {})
-    if not isinstance(overrides, dict) or not overrides.keys() <= ids:
-        raise ValueError('case performance sources must identify declared rotors')
     maps, profiles, limits, bounds = [], [], [], []
     for rotor in rotors:
         axis = vector(rotor.get('axis_body'), 'rotor axis')
@@ -161,21 +131,11 @@ def prepare_hover(snapshot: dict, case: dict, sources: dict[str, RotorMapV1]) ->
             raise ValueError('rotor axis must already be a unit vector')
         if type(rotor.get('rotation_sign')) is not int or rotor['rotation_sign'] not in (-1, 1):
             raise ValueError('rotation_sign must declare signed shaft rotation (+1 or -1)')
-        if inflow and np.any(axis != [0, 0, 1]):
-            raise ValueError('axial climb currently requires vertical +z rotor axes')
-        model = sources.get(overrides.get(rotor['rotor_id'], rotor.get('map_ref')))
+        model = sources.get(rotor.get('map_ref'))
         if model is None or rotor.get('configuration_id') != model.configuration_id:
             raise ValueError('rotor configuration must bind a retained map')
-        if rotor['rotor_id'] in failed:
-            maps.append(model); limits.append(0.); bounds.append((0., 0.))
-            profiles.append({'thrust': np.array([0., 1.]), 'rpm': np.array([0., 1.]), 'power': np.array([0., 0.]),
-                             'power_slopes': np.array([0.]), 'power_offsets': np.array([0.]),
-                             'torque_slope': 0., 'torque_offset': 0.})
-            continue
-        if isinstance(model, ConditionedMap) and not extended:
-            raise ValueError('conditioned maps require convex_axial_capacity_v2 and explicit torque-band allowances')
         profile = model.convex_static_profile()
-        model.evaluate(model.points[0].rpm, density=density, inflow=inflow, pitch=rotor.get('pitch_deg'))
+        model.evaluate(model.points[0].rpm, density=density, inflow=0, pitch=rotor.get('pitch_deg'))
         if duration > model.max_continuous_duration_s:
             raise ValueError('case exceeds map continuous-duration coverage')
         declared = rotor.get('sustained_limits', {})
@@ -188,25 +148,13 @@ def prepare_hover(snapshot: dict, case: dict, sources: dict[str, RotorMapV1]) ->
         limit = min(number(declared.get('max_electrical_power_w'), 'rotor continuous input power', positive=True),
                     voltage * number(declared.get('max_input_current_a'), 'rotor DC input current', positive=True))
         bounds.append((model.points[0].thrust_n,
-                       model.evaluate(maximum_rpm, density=density, inflow=inflow,
+                       model.evaluate(maximum_rpm, density=density, inflow=0,
                                       pitch=rotor['pitch_deg'])['thrust_n']))
         maps.append(model); profiles.append(profile); limits.append(limit)
-    allowance = None
-    uncertainty = sum((np.abs(np.array(r['axis_body']))*p.get('torque_error_bound_nm', 0.)
-                       for r, p in zip(rotors, profiles, strict=True)), np.zeros(3))
-    if np.any(uncertainty > 0):
-        allowance = vector(case.get('torque_band_moment_allowance_nm'), 'declared torque-band moment allowance')
-        source = case.get('torque_band_allowance_source')
-        if np.any(allowance < 0) or not isinstance(source, str) or not source.strip():
-            raise ValueError('nonnegative torque-band moment allowances and their source are required')
-        if np.any(uncertainty > allowance+1e-10):
-            raise ValueError('independent rotor torque interval exceeds declared moment allowance: '
-                             + str(uncertainty.tolist()))
     return HoverInputs(snapshot, case, rotors, maps, profiles, position, empty.total_mass_kg,
                        empty.cg_body_m, density, body_force, body_moment,
                        number(settings.get('auxiliary_power_w'), 'auxiliary watts'),
-                       pack['derived_usable_energy_j'], voltage, pack_limit, limits, bounds, (low, high), duration,
-                       inflow, tuple(failed), allowance)
+                       pack['derived_usable_energy_j'], voltage, pack_limit, limits, bounds, (low, high), duration)
 
 
 def constraints(inputs: HoverInputs, *, payload_kg=None):
@@ -244,9 +192,6 @@ def bound_origins(inputs: HoverInputs, *, fixed_payload=False):
                 'upper': ('physical' if rotor['sustained_limits']['max_rpm'] <= model.points[-1].rpm
                           else 'coverage')}
                for rotor, model, (lo, _hi) in zip(inputs.rotors, inputs.maps, inputs.thrust_bounds, strict=True)]
-    for i, rotor in enumerate(inputs.rotors):
-        if rotor['rotor_id'] in inputs.failed_rotor_ids:
-            origins[i] = {'lower': 'physical', 'upper': 'physical'}
     origins += [{'lower': 'physical', 'upper': 'physical'} for _ in inputs.rotors]
     origins += [{'lower': ('fixed_candidate' if fixed_payload else 'physical'
                            if inputs.payload_bounds[0] == 0 else 'analyst_domain'),
@@ -255,15 +200,8 @@ def bound_origins(inputs: HoverInputs, *, fixed_payload=False):
 
 
 def source_domain_gaps(inputs: HoverInputs):
-    from .conditioning import ConditionedMap
     gaps = []
     for rotor, model in zip(inputs.rotors, inputs.maps, strict=True):
-        if rotor['rotor_id'] in inputs.failed_rotor_ids:
-            continue
-        if isinstance(model, ConditionedMap):
-            # An upper power envelope's contradiction is not a proof that the
-            # underlying measured/true rotor cannot achieve the requested state.
-            gaps.append({'rotor_id': rotor['rotor_id'], 'gap': 'conditioned_surrogate'})
         if model.points[0].rpm > 0:
             gaps.append({'rotor_id': rotor['rotor_id'], 'gap': 'below_retained_rpm'})
         if rotor['sustained_limits']['max_rpm'] > model.points[-1].rpm:
@@ -332,10 +270,7 @@ def recompute(inputs: HoverInputs, payload: float, thrusts: np.ndarray) -> dict:
     commands = []; power = inputs.auxiliary_w
     for rotor, model, profile, thrust in zip(inputs.rotors, inputs.maps, inputs.profiles, thrusts, strict=True):
         rpm = float(np.interp(thrust, profile['thrust'], profile['rpm']))
-        point = ({'rpm': 0., 'thrust_n': 0., 'shaft_torque_nm': 0., 'electrical_power_w': 0.,
-                  'scope': 'Declared failed rotor: zero thrust, torque and input power; installed drag is not inferred.'}
-                 if rotor['rotor_id'] in inputs.failed_rotor_ids else
-                 model.evaluate(rpm, density=inputs.density, inflow=inputs.inflow_m_s, pitch=rotor['pitch_deg']))
+        point = model.evaluate(rpm, density=inputs.density, inflow=0, pitch=rotor['pitch_deg'])
         f = np.array(rotor['axis_body'])*point['thrust_n']
         reaction = -rotor['rotation_sign']*np.array(rotor['axis_body'])*point['shaft_torque_nm']
         force += f; moment += np.cross(np.array(rotor['center_body_m'])-mass.cg_body_m, f)+reaction
@@ -343,17 +278,9 @@ def recompute(inputs: HoverInputs, payload: float, thrusts: np.ndarray) -> dict:
         commands.append({**point, 'rotor_id': rotor['rotor_id'], 'signed_rpm': rotor['rotation_sign']*rpm,
                          'force_body_n': f.tolist(), 'reaction_torque_body_nm': reaction.tolist(),
                          'dc_input_current_a': point['electrical_power_w']/inputs.voltage_v})
-    report = {'payload_kg': payload, 'total_mass_kg': mass.total_mass_kg, 'cg_body_m': mass.cg_body_m.tolist(),
+    return {'payload_kg': payload, 'total_mass_kg': mass.total_mass_kg, 'cg_body_m': mass.cg_body_m.tolist(),
             'force_residual_n': force.tolist(), 'moment_residual_cg_nm': moment.tolist(),
             'electrical_power_w': power, 'energy_required_j': power*inputs.duration_s, 'commands': commands}
-    if inputs.torque_band_allowance_nm is not None:
-        band = sum((np.abs(np.array(r['axis_body']))*p.get('torque_error_bound_nm', 0.)
-                    for r, p in zip(inputs.rotors, inputs.profiles, strict=True)), np.zeros(3))
-        report['torque_band_moment_interval_nm'] = {'lower': (moment-band).tolist(),
-                                                   'upper': (moment+band).tolist(),
-                                                   'allowance': inputs.torque_band_allowance_nm.tolist(),
-                                                   'source_note': inputs.case['torque_band_allowance_source']}
-    return report
 
 
 def solve_hover(inputs: HoverInputs, *, payload_kg=None) -> dict:
@@ -400,10 +327,6 @@ def solve_hover(inputs: HoverInputs, *, payload_kg=None) -> dict:
         violations.append('force residual')
     if max(abs(v) for v in report['moment_residual_cg_nm']) > moment_tol:
         violations.append('moment residual')
-    interval = report.get('torque_band_moment_interval_nm')
-    if interval and any(max(abs(lo), abs(hi)) > allowed+moment_tol for lo, hi, allowed
-                        in zip(interval['lower'], interval['upper'], interval['allowance'], strict=True)):
-        violations.append('independent torque-band moment interval')
     if power > min(inputs.pack_limit_w, inputs.usable_j/inputs.duration_s) + 1e-7:
         violations.append('pack power/current or case energy')
     for command, limit, rotor in zip(report['commands'], inputs.rotor_limits_w, inputs.rotors, strict=True):
@@ -421,9 +344,7 @@ def solve_hover(inputs: HoverInputs, *, payload_kg=None) -> dict:
     if abs(solved.x[-1]-inputs.payload_bounds[1]) < 1e-6:
         active.append('declared_payload_domain_upper')
     for rotor, thrust, (_, hi) in zip(inputs.rotors, solved.x[:n], inputs.thrust_bounds, strict=True):
-        if rotor['rotor_id'] in inputs.failed_rotor_ids:
-            active.append(rotor['rotor_id']+'_failed_zero_output')
-        elif abs(thrust-hi) < 1e-6:
+        if abs(thrust-hi) < 1e-6:
             active.append(rotor['rotor_id'] + '_map_or_rpm_upper')
     for command, limit in zip(report['commands'], inputs.rotor_limits_w, strict=True):
         if abs(command['electrical_power_w']-limit) < 1e-6:

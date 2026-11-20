@@ -9,19 +9,16 @@ requires-python = ">=3.11"
 dependencies = [
   "numpy>=1.26", "scipy>=1.11", "pyyaml>=6", "matplotlib>=3.8",
   "fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2.6", "python-multipart>=0.0.9",
-  "reportlab>=5.0.1,<6", "openpyxl==3.1.5", "defusedxml==0.7.1", "cryptography>=44,<51",
+  "reportlab>=5.0.1,<6",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "httpx>=0.27", "ruff>=0.4"]
-hosted = ["psycopg[binary,pool]>=3.2,<4", "boto3>=1.40,<2", "PyJWT[crypto]>=2.10,<3"]
-mcp = ["mcp==2.3.0"]
 
 # Runtime schema resource required by Task 2.5 [ASSUMPTION: setuptools packaging].
 [tool.setuptools.package-data]
 "physimesh.drone" = ["schema/*.yaml"]
 "physimesh.postpro" = ["schema/*.json"]
-"physimesh.solver" = ["openfoam_templates/**/*"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -29,8 +26,7 @@ where = ["src"]
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 testpaths = ["tests"]
-markers = ["backend: needs the pinned OpenFOAM container (run in the backend CI job)",
-           "integration: requires an explicitly provisioned PostgreSQL/S3-compatible test service"]
+markers = ["backend: needs the pinned OpenFOAM container (run in the backend CI job)"]
 
 [tool.ruff]
 line-length = 110

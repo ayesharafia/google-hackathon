@@ -27,19 +27,8 @@ class ArtifactStore:
         if not isinstance(sha, str) or re.fullmatch(r"[0-9a-f]{64}", sha) is None:
             raise ValueError("artifact ID must be a lowercase SHA-256 digest")
 
-    @staticmethod
-    def _sync_directory(path: pathlib.Path) -> None:
-        """Persist directory entries on the local POSIX store."""
-        fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
-        try:
-            os.fsync(fd)
-        finally:
-            os.close(fd)
-
-    def _atomic_write(self, target: pathlib.Path, data: bytes, *, verify_existing: bool = False) -> None:
+    def _atomic_write(self, target: pathlib.Path, data: bytes) -> None:
         target.parent.mkdir(parents=True, exist_ok=True)
-        # Persist a newly created object shard before acknowledging retention.
-        self._sync_directory(target.parent.parent)
         fd, tmp = tempfile.mkstemp(dir=target.parent)
         try:
             with os.fdopen(fd, "wb") as fh:
@@ -50,12 +39,8 @@ class ArtifactStore:
             try:
                 os.link(tmp, target)
             except FileExistsError:
-                if verify_existing:
-                    with target.open("rb") as retained:
-                        if retained.read(len(data) + 1) != data:
-                            raise ValueError("retained artifact byte integrity failed")
+                pass
             os.unlink(tmp)
-            self._sync_directory(target.parent)
         except BaseException:
             if os.path.exists(tmp):
                 os.unlink(tmp)
@@ -66,7 +51,7 @@ class ArtifactStore:
         record = {**meta, "kind": kind, "size": len(data)}
         encoded = json.dumps(record, sort_keys=True, allow_nan=False).encode("utf-8")
         sha = hashlib.sha256(data).hexdigest()
-        self._atomic_write(self._obj(sha), data, verify_existing=True)
+        self._atomic_write(self._obj(sha), data)
         self._atomic_write(self.root / "meta" / f"{sha}.json",
                            encoded)
         return sha
