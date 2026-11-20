@@ -7,7 +7,6 @@ voltage sag, ageing and structure can demand more mass.
 from __future__ import annotations
 
 import math
-import sys
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
@@ -33,13 +32,7 @@ def electrical_power(shaft_powers_w: list[float], eta_motor: list[float], eta_in
     for p, em, ei, ed in zip(shaft_powers_w, eta_motor, eta_inverter, eta_drive, strict=True):
         if not math.isfinite(p) or p < 0 or not all(math.isfinite(eta) and 0 < eta <= 1 for eta in (em, ei, ed)):
             raise ValueError('shaft power and efficiencies are invalid')
-        if p == 0:
-            continue
-        if em*ei*ed < sys.float_info.min:
-            smallest, middle, largest = sorted((em, ei, ed))
-            total += p/smallest/middle/largest
-        else:
-            total += p/(em*ei*ed)
+        total += p/(em*ei*ed)
     if not math.isfinite(total):
         raise ValueError('electrical power overflowed')
     return total
@@ -49,14 +42,7 @@ def size_battery(mass_without_battery_kg: float, p_elec_of_mass: Callable[[float
                  duration_s: float, e_pack_wh_per_kg: float, f_usable: float,
                  reserve_fraction: float, rel_tol: float, max_iterations: int,
                  divergence_mass_kg: float) -> MissionResult:
-    """m_batt = (E_mission + E_reserve) / (e_pack f_usable)  [M-E47], constant-power segment.
-
-    Numerical support requires finite normal converted pack and usable capacities,
-    mission joules, reserved joules, battery mass, mission Wh and total mass.
-    Zero power permits zero energies and battery mass; total mass may be zero
-    only when base and battery masses are zero. Positive battery mass must
-    increase the base mass. Unsupported results raise ValueError.
-    """
+    """m_batt = (E_mission + E_reserve) / (e_pack f_usable)  [M-E47], constant-power segment."""
     if not math.isfinite(mass_without_battery_kg) or mass_without_battery_kg < 0:
         raise ValueError('finite nonnegative mass without battery required')
     if not math.isfinite(reserve_fraction) or reserve_fraction < 0:
@@ -72,11 +58,6 @@ def size_battery(mass_without_battery_kg: float, p_elec_of_mass: Callable[[float
         if v is None or not math.isfinite(v) or not v > 0:
             raise ValueError(f"{name} must be supplied and > 0")
     e_pack = e_pack_wh_per_kg * WH_TO_J
-    if not math.isfinite(e_pack) or e_pack < sys.float_info.min:
-        raise ValueError('converted pack capacity outside numerical support')
-    usable_capacity = e_pack * f_usable
-    if not math.isfinite(usable_capacity) or usable_capacity < sys.float_info.min:
-        raise ValueError('usable capacity outside numerical support')
     m = mass_without_battery_kg
     hist: list[float] = []
     for it in range(1, max_iterations + 1):
@@ -84,26 +65,14 @@ def size_battery(mass_without_battery_kg: float, p_elec_of_mass: Callable[[float
         if not math.isfinite(p) or p < 0:
             raise ValueError('power model must return finite nonnegative watts')
         e = p * duration_s
-        if not math.isfinite(e) or (p > 0 and e < sys.float_info.min):
-            raise ValueError('mission joules outside numerical support')
-        reserved_j = e * (1.0 + reserve_fraction)
-        if not math.isfinite(reserved_j) or (e > 0 and reserved_j < sys.float_info.min):
-            raise ValueError('reserved joules outside numerical support')
-        mb = reserved_j / usable_capacity
-        if not math.isfinite(mb) or (reserved_j > 0 and mb < sys.float_info.min):
-            raise ValueError('battery mass outside numerical support')
-        mission_wh = e / WH_TO_J
-        if not math.isfinite(mission_wh) or (e > 0 and mission_wh < sys.float_info.min):
-            raise ValueError('mission Wh outside numerical support')
+        mb = e * (1.0 + reserve_fraction) / (e_pack * f_usable)
         m_new = mass_without_battery_kg + mb
-        if (not math.isfinite(m_new)
-                or (0 < m_new < sys.float_info.min)
-                or (mb > 0 and m_new == mass_without_battery_kg)):
-            raise ValueError('total mass outside numerical support')
+        if not math.isfinite(m_new):
+            raise ValueError('mass-energy iteration overflowed')
         hist.append(m_new)
         if m_new > divergence_mass_kg:
-            return MissionResult("diverged", it, m_new, mb, p, mission_wh, hist)
+            return MissionResult("diverged", it, m_new, mb, p, e / WH_TO_J, hist)
         if abs(m_new - m) <= rel_tol * m_new:
-            return MissionResult("converged", it, m_new, mb, p, mission_wh, hist)
+            return MissionResult("converged", it, m_new, mb, p, e / WH_TO_J, hist)
         m = m_new
-    return MissionResult("max_iterations", max_iterations, m_new, mb, p, mission_wh, hist)
+    return MissionResult("max_iterations", max_iterations, m_new, mb, p, e / WH_TO_J, hist)

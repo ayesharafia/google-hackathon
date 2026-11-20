@@ -69,9 +69,7 @@ def prepare_sequence(snapshot: dict, inputs: dict) -> list[dict]:
     total = math.fsum(record['duration_s'] for record in records)
     # No cooling/reset model: continuous coverage must span the complete flight.
     if any(total > model.max_continuous_duration_s for name, case in inputs.items()
-           if any(s['case_id'] == name for s in records)
-           for rotor, model in zip(case.rotors, case.maps, strict=True)
-           if rotor['rotor_id'] not in case.failed_rotor_ids):
+           if any(s['case_id'] == name for s in records) for model in case.maps):
         raise ValueError('sequence exceeds retained continuous-duration coverage; no cooling reset is assumed')
     return records
 

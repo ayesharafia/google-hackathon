@@ -4,18 +4,15 @@ from __future__ import annotations
 import re
 
 from .mission_capacity import prepare_sequence, sequence_case_inputs, solve_sequence
-from .trim import EXTENDED_MODEL_VERSION, MODEL_VERSION, prepare_hover, solve_hover
+from .trim import MODEL_VERSION, prepare_hover, solve_hover
 
 
 def allocation(case, *, payload_kg=None):
     """Inputs are already eligible. Unexpected solver/recompute failures stay unresolved."""
     try:
-        result = solve_hover(case, payload_kg=payload_kg)
+        return solve_hover(case, payload_kg=payload_kg)
     except (ValueError, TypeError, KeyError, OverflowError, RuntimeError) as exc:
-        result = {'outcome': 'unresolved', 'reason': 'allocation failed after input eligibility: ' + str(exc)}
-    if case.snapshot['fidelity']['local_pilot']['model_version'] == EXTENDED_MODEL_VERSION:
-        result.update(failed_rotor_ids=list(case.failed_rotor_ids), axial_inflow_m_s=case.inflow_m_s)
-    return result
+        return {'outcome': 'unresolved', 'reason': 'allocation failed after input eligibility: ' + str(exc)}
 
 
 def hover_readiness(snapshot: dict, maps: dict, source_errors=()) -> dict:
@@ -53,22 +50,11 @@ def hover_readiness(snapshot: dict, maps: dict, source_errors=()) -> dict:
             prepare_sequence(snapshot, sequence_case_inputs(snapshot, maps, prepared))
         except (ValueError, TypeError, KeyError, OverflowError) as exc:
             blocking.append(str(exc))
-    return {'method': snapshot['fidelity'].get('local_pilot', {}).get('model_version'),
-            'eligible': not blocking, 'blocking': blocking,
+    return {'method': MODEL_VERSION, 'eligible': not blocking, 'blocking': blocking,
             'cases': records, 'qualification': 'Input eligibility only; trim and capacity are not yet established.'}
 
 
 def capacity_from_snapshot(snapshot: dict, maps: dict) -> dict:
-    result = nominal_capacity(snapshot, maps)
-    if result['model_version'] == EXTENDED_MODEL_VERSION:
-        from .scenarios import assess_scenarios_and_caps
-        return assess_scenarios_and_caps(snapshot, maps, result)
-    return result
-
-
-def nominal_capacity(snapshot: dict, maps: dict) -> dict:
-    version = snapshot['fidelity'].get('local_pilot', {}).get('model_version')
-    extended = version == EXTENDED_MODEL_VERSION
     declared = snapshot['mission'].get('cases')
     if not isinstance(declared, list) or not 1 <= len(declared) <= 8:
         raise ValueError('1-8 explicit cases required for the bounded local pilot')
@@ -94,8 +80,7 @@ def nominal_capacity(snapshot: dict, maps: dict) -> dict:
         records.append({'case_id': case['name'], 'required': case.get('required', True), **result})
     needed = [record for record in records if record['required']]
     failures = [record for record in needed if record['outcome'] != 'feasible']
-    report = {'schema_version': 'local_mission_capacity_v4' if extended else 'local_mission_capacity_v3',
-              'model_version': EXTENDED_MODEL_VERSION if extended else MODEL_VERSION,
+    report = {'schema_version': 'local_mission_capacity_v3', 'model_version': MODEL_VERSION,
               'payload_lower_bound_kg': None, 'limiting_case_id': None, 'cases': records,
               'engineering_approval': 'pending',
               'data_scope': ('analytic_fixture' if any(m.source_kind == 'analytic_fixture' for m in maps.values())
@@ -105,13 +90,6 @@ def nominal_capacity(snapshot: dict, maps: dict) -> dict:
                                'No installed-aircraft validation or operational payload approval.',
               'mission_semantics': ('required_cases_and_ordered_sequence' if snapshot['mission'].get('sequence')
                                     else 'required_alternative_cases')}
-    if extended:
-        from .conditioning import ConditionedMap
-        report['conditioning_sources'] = {digest: model.evidence() for digest, model in maps.items()
-                                          if isinstance(model, ConditionedMap)}
-        report['qualification'] = ('Local frozen-input static hover / axial climb allocation with declared '
-                                   'failure states and optional conditioned maps. Torque bands are checked '
-                                   'against sourced allowances; no flight or installed-aircraft approval.')
     sequence = None
     if snapshot['mission'].get('sequence'):
         try:
