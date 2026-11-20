@@ -29,7 +29,14 @@ class ArtifactStore:
 
     @staticmethod
     def _sync_directory(path: pathlib.Path) -> None:
-        """Persist directory entries on the local POSIX store."""
+        """Persist directory entries on POSIX; Windows supports local development only.
+
+        Windows has no portable directory fsync through Python's os API. File
+        fsync, atomic hard-link publication and existing-byte verification still
+        apply there, but power-loss durability of directory entries is unqualified.
+        """
+        if os.name == "nt":
+            return
         fd = os.open(path, os.O_RDONLY | os.O_DIRECTORY)
         try:
             os.fsync(fd)

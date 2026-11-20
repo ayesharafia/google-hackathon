@@ -1,5 +1,12 @@
 # PhysiCore Drone: v3 resume state
 
+## Local hackathon verification: 20 November 2026
+
+- User requested local frontend verification on `hackathon` only. Isolated checkout at `C:\Users\aishr\Downloads\Drone-Project-main\Drone-Project-hackathon`, base `df3a407e1574e885a5bb9130885e68ddd4c47505`; no publication or other-branch changes.
+- Python 3.11.18 `.venv`, private-token local data and loopback server on port 8768 configured. Start/restart with `scripts/start_hackathon.ps1`; frontend `/web/hackathon.html`.
+- Fixed empty/nonfinite STL preview acceptance, same-file retry, Windows-only directory-sync crash in artifact storage; added missing mpmath dev dependency. No physics or flight-critical changes. Windows directory power-loss durability remains unqualified.
+- Verified real Chrome intake/export flow, live authenticated STL API, 109 targeted Python tests, 118 isolated reference tests and 362 Node tests (1 skipped). Full suite not completed; unrelated repository lint has 32 findings. Detailed commands, failed attempts and limitations: `docs/qa/hackathon-local-2026-11-20.md`. No CFD or grid-independence execution claim.
+
 ## Current continuation: 27 October 2026
 
 - Owner approved project-scoped read-only rotor source actions. `sources.list` and `sources.inspect` expose bounded retained identity, units, conditions and verified provenance to chat and MCP without cross-project enumeration. Targeted source and agent suite passed 12 tests including a local MCP SDK client and hosted viewer. QA: `docs/qa/agent-source-inspection-2026-10-27.md`; no source authoring or physics change. AI-JOURNEY-001 is blocked pending a private live Groq retry after the usage limit, not marked complete.
@@ -67,3 +74,9 @@
 - Scientific limits: SCI001-SCI003/DATA001 pending; reviewer UNASSIGNED, real aircraft inputs/customer accuracy UNKNOWN; DR-01 and V4 review remain pending. Imports and passing checks grant no physical acceptance.
 - Other retained preparation: constants ledger and fixed-pack provenance; AUDIT-002 established no local capacity bypass and left broader boolean-mass handling as a separate reproduction proposal.
 - Open release gates: measured validation, qualified/independent review, aircraft acceptance, security/endurance/restore/provider/hosting. Do not claim industry certification or demonstrated customer willingness to pay.
+
+- User follow-up: replaced the hackathon old-workbench handoff with /web/simple-workflow.html (Configure → Review → Export). New browser test and existing intake regression passed; no project API dependency or solver execution. Details in the local hackathon QA record.
+
+- Connected optional simple-workflow component panels to existing fixed-wing, isolated-hover BEMT and cantilever endpoints; no equations changed. Three real synthetic browser computations and 292 related Python tests passed. Exact component records export separately; aircraft remains NOT_SIMULATED. Server verified running on 127.0.0.1:8768. See local QA record.
+
+- Fixed-wing-only Run simulation setup and existing coefficient-screening submit added. Mission defaults copied from the user's current tab: 300 kg, 1000 m, 70 m/s, 15 min. Verified real in-app screening with synthetic coefficients; no aircraft verdict or CFD claim. Original tab/STL untouched.

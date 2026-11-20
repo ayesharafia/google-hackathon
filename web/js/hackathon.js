@@ -1,15 +1,17 @@
+import {mountComponentCalculations} from './simple-calculations.js?v=airspeed-independent';
 import {createViewer} from './viewer3d.js?v=geometry-3';
 import {STLLoader} from '/web/vendor/STLLoader.js';
 
 const $ = id => document.getElementById(id);
-const state = {aircraft:'multirotor', step:1, geometry:[], viewer:null, viewing:false, loading:false};
+const state = {aircraft:document.body.dataset.initialAircraft||'multirotor', step:1, geometry:[], viewer:null, viewing:false, loading:false, notes:''};
+let componentCalculations=null;
 const unitScale = {m:1,mm:.001,cm:.01,in:.0254,ft:.3048};
 const fieldIds = ['payload','altitude','speed','duration','mass','rotors','diameter','rpm','wingarea','length','viscosity'];
 const names = {multirotor:'Multirotor', 'fixed-wing':'Fixed-wing',hybrid:'Hybrid VTOL',helicopter:'Helicopter',tiltrotor:'Tiltrotor'};
 const objectiveNames = {hover:'Hover and payload',rotor:'Rotor performance',aero:'Full-aircraft aerodynamics',dynamics:'Flight dynamics and rotor-out'};
 
 function number(id) {
-  const raw = $(id).value.trim();
+  const raw = $(id)?.value.trim() ?? '';
   return raw === '' ? null : Number(raw);
 }
 function isFiniteInRange(v,min,max=Infinity) {return v !== null && Number.isFinite(v) && v >= min && v <= max;}
@@ -41,6 +43,21 @@ function physicsDecision() {
     model='Full-aircraft external CFD';
     requirements.push('Reviewed watertight CAD, component roles and boundary patches','Validated turbulence and rotating-rotor coupling as needed','OpenFOAM-compatible case, mesh-quality gates and multi-grid validation');
     reasons.push('General drone/rotor-airframe CFD is not qualified in this branch.');
+    status='UNSUPPORTED';
+  } else if (objective==='propulsion') {
+    model='Propulsion assessment';
+    requirements.push('Declared propeller or rotor geometry and operating points','Verified motor, battery and propulsion performance data','Reviewed propulsion operating limits and efficiency evidence');
+    reasons.push('Complete propulsion-system analysis is unavailable; isolated-hover rotor calculations exclude motor and battery performance.');
+    status='UNSUPPORTED';
+  } else if (objective==='structure') {
+    model='Structural assessment';
+    requirements.push('Declared materials and structural geometry','Reviewed loads, constraints and connections','Verified structural model and allowable limits');
+    reasons.push('Full-aircraft structural analysis is unavailable; an ideal beam check is a separate component calculation.');
+    status='UNSUPPORTED';
+  } else if (objective==='full') {
+    model='Full analysis: Aero, Propulsion and Structure';
+    requirements.push('Aero: reviewed geometry, flow conditions and qualified aerodynamic evidence','Propulsion: verified propeller or rotor, motor and battery data','Structure: declared materials, loads, constraints and allowable limits','Reviewed coupling and consistent operating conditions across all three disciplines');
+    reasons.push('Coupled full-aircraft execution is unavailable. Separate component checks do not constitute Full analysis.');
     status='UNSUPPORTED';
   } else {
     model='Simplified static allocation / numerical rotor-out dynamics';
@@ -85,7 +102,7 @@ function renderAtmosphere(){
 function setSafeText(el,text){el.textContent=text;}
 function showStep(step){
   state.step=step;
-  for(let i=1;i<=4;i++) $('step-'+i).hidden=i!==step;
+  document.querySelectorAll('main > .stage').forEach(section=>{section.hidden=section.id!=='step-'+step;});
   document.querySelectorAll('[data-step]').forEach(button=>{
     const n=Number(button.dataset.step);
     button.classList.toggle('active',n===step);
@@ -105,11 +122,25 @@ function decisionCard(title,desc,kind='warn'){
 }
 function renderPhysics(){
   renderAtmosphere();
+  const summary=$('mission-summary');
+  if(summary){
+    summary.replaceChildren();
+    const entries=[['Aircraft',names[state.aircraft]],['Analysis focus',$('objective').selectedOptions[0].textContent],
+      ['Payload',given(number('payload'))?number('payload')+' kg':'Not entered'],
+      ['Altitude',given(number('altitude'))?number('altitude')+' m':'Not entered'],
+      ['Speed',given(number('speed'))?number('speed')+' m/s':'Not entered'],
+      ['Duration',given(number('duration'))?number('duration')+' min':'Not entered'],
+      ['Geometry',state.geometry.length+' file(s)']];
+    for(const [label,value] of entries){
+      const row=document.createElement('div'),title=document.createElement('strong'),text=document.createElement('span');
+      title.textContent=label+': ';text.textContent=value;row.append(title,text);summary.append(row);
+    }
+  }
   const plan=physicsDecision();
   const root=$('physics-plan');root.replaceChildren();
-  const kind=plan.status==='UNSUPPORTED'?'error':plan.status==='EXPERIMENTAL'?'warn':'ok';
-  root.append(decisionCard(plan.status==='UNSUPPORTED'?'Unsupported CFD capability':plan.status==='EXPERIMENTAL'?'Experimental physics model':'Restricted workflow available',
-    plan.model+'. The current page does not execute the solver.',kind));
+  const kind=document.body.dataset.workflow==='simple'?'warn':plan.status==='UNSUPPORTED'?'error':plan.status==='EXPERIMENTAL'?'warn':'ok';
+  root.append(decisionCard(document.body.dataset.workflow==='simple'&&['full','aero','propulsion','structure','rotor'].includes($('objective').value)?'Component calculations available below':plan.status==='UNSUPPORTED'?'Unsupported analysis capability':plan.status==='EXPERIMENTAL'?'Experimental physics model':'Restricted workflow available',
+    plan.model+(document.body.dataset.workflow==='simple'?'. Optional component checks below use explicit model inputs; they do not establish full-aircraft validity.':'. The current page does not execute the solver.'),kind));
   if (plan.reasons.length) {
     const sub=document.createElement('b');sub.textContent='Missing information or limitations';root.append(sub);
     const ul=document.createElement('ul');plan.reasons.forEach(reason=>{const li=document.createElement('li');li.textContent=reason;ul.append(li);});root.append(ul);
@@ -124,22 +155,40 @@ function checkRow(label,ok,more){
   const text=document.createElement('small');text.style.display='block';text.style.color='#72849b';text.style.marginTop='3px';text.textContent=more;
   content.append(b,text);item.append(marker,content);return item;
 }
+function flightAssessment(){
+  const failures=componentCalculations?.failures()??[];
+  const reasons=failures.map(item=>item.discipline+': '+item.reason);
+  if(!validCore())reasons.push('Complete valid payload, altitude, speed and duration inputs.');
+  if(!state.geometry.length)reasons.push('No aircraft geometry has been supplied.');
+  else if(state.geometry.some(g=>g.role==='unassigned'))reasons.push('Choose a component role for every uploaded geometry file.');
+  reasons.push('A complete aircraft flight simulation has not been run or validated.');
+  reasons.push('Individual component checks cannot establish flight success or flight failure.');
+  return {outcome:'NOT_DETERMINED',label:'Flight outcome: Not determined',failed_checks:failures,reasons};
+}
 function renderPreflight(){
   const plan=physicsDecision(), pre=$('preflight');
   const rolesComplete=state.geometry.length>0&&state.geometry.every(g=>g.role!=='unassigned');
   const adv=given(number('mass')) && (!isRotorcraft() || isFiniteInRange(number('rotors'),1,32));
-  pre.replaceChildren(
+  if(document.body.dataset.workflow==='simple'){
+    const assessment=flightAssessment();
+    const title=document.createElement('h2');title.textContent=assessment.label;
+    const why=document.createElement('p');why.textContent=assessment.failed_checks.length?'Why: some component checks could not be completed.':'Why: there is not enough evidence for a flight verdict.';
+    const list=document.createElement('ul');for(const reason of assessment.reasons){const item=document.createElement('li');item.textContent=reason;list.append(item);}
+    pre.replaceChildren(title,why,list);
+  }else pre.replaceChildren(
     checkRow('Mission data',validCore(),'Payload, altitude, speed and duration must be valid.'),
-    checkRow('STL geometry preview',state.geometry.length>0,'Local geometry preview only; original CAD must be saved to a project.'),
+    checkRow('STL geometry preview',state.geometry.length>0,'Local geometry preview only; keep the original STL files with your export.'),
     checkRow('Component roles',rolesComplete,'Part roles must be explicitly declared; automatic recognition is not qualified.'),
     checkRow('Detailed engineering inputs',adv,'Mass, rotor geometry and verified source data depend on the physics model.'),
     checkRow('Scientific model qualification',false,'Selected model: '+plan.model+'; aircraft-specific solver verification is still required.'),
     checkRow('Mesh independence',false,'No solver runs, measured cell counts, or independent three-mesh results yet.')
   );
-  const box=$('run-reason');box.replaceChildren(decisionCard('Numerical solver not connected to this screen',
-    'Export the exact user-declared intake and continue in the existing engineering workbench. Model and grid studies must be independently verified.', 'warn'));
+  const box=$('run-reason');box?.replaceChildren(decisionCard(document.body.dataset.workflow==='simple'?'Export intake and any component records':'Numerical solver not connected to this screen',
+    'Download the declared inputs, preflight notes and any completed component records. No full-aircraft CFD or physical validation is established.', 'warn'));
 }
 function refresh(){
+  if($('fixed-wing-launch'))$('fixed-wing-launch').hidden=state.aircraft!=='fixed-wing';
+  componentCalculations?.invalidate();
   const geom=state.geometry.length>0, inputs=validCore(), plan=physicsDecision();
   $('geometry-indicator').textContent=geom?'✓':'○';$('geometry-indicator').classList.toggle('ok',geom);
   $('geometry-check').textContent=geom?`${state.geometry.length} geometry file(s) previewed`:'Geometry missing';
@@ -147,7 +196,7 @@ function refresh(){
   $('inputs-check').textContent=inputs?'Mission inputs valid':'Complete mission inputs';
   $('physics-indicator').textContent=plan.status==='PARTIAL'?'✓':'!';
   $('physics-indicator').classList.toggle('ok',plan.status==='PARTIAL');
-  $('physics-check').textContent=plan.status==='UNSUPPORTED'?'CFD not qualified':plan.status==='EXPERIMENTAL'?'Experimental model':'Physics requirements pending';
+  $('physics-check').textContent=plan.status==='UNSUPPORTED'?'Analysis not qualified':plan.status==='EXPERIMENTAL'?'Experimental model':'Physics requirements pending';
   if(state.step>=2)renderPhysics();
   if(state.step>=3)renderPreflight();
 }
@@ -158,7 +207,6 @@ function setAircraft(kind){
     b.classList.toggle('active',chosen);b.setAttribute('aria-pressed',String(chosen));
   });
   $('objective').value=kind==='fixed-wing'?'aero':'hover';
-  if(kind==='helicopter')$('rotors').value='1';
   refresh();
 }
 async function sha256(buffer){
@@ -212,8 +260,11 @@ async function handleFiles(files) {
       if(file.size>50_000_000||totalBytes>50_000_000)throw new Error('STL input exceeds 50 MB total upload limit.');
       const buffer=await file.arrayBuffer();
       const parsed=loader.parse(buffer);
-      const n=parsed.getAttribute('position').count/3;
+      const positions=parsed.getAttribute('position');
+      const n=positions.count/3;
+      const validPositions=positions.array.every(Number.isFinite);
       parsed.dispose();
+      if(!Number.isInteger(n)||n<1||!validPositions)throw new Error('STL must contain complete triangles with finite coordinates.');
       totalTriangles+=n;
       if(totalTriangles>1_000_000)throw new Error('Geometry exceeds one million triangles.');
       read.push({name:file.name,bytes:file.size,triangles:n,buffer,sha256:await sha256(buffer),role:'unassigned'});
@@ -231,12 +282,15 @@ function exportIntake(){
     schema:'physimesh.hackathon.simulation_intake.v1',
     document_type:'user_declared_analysis_intake_NOT_SOLVER_RESULT',
     generated_at_utc:new Date().toISOString(),
+    workflow:document.body.dataset.workflow==='simple'?'simple_analysis':'hackathon_intake',
+    component_calculations:componentCalculations?.records() ?? [],
+    flight_assessment:flightAssessment(),
     aircraft_configuration:state.aircraft,
     objective:$('objective').value,
     input_units:{payload:'kg',altitude:'m',speed:'m/s',duration:'min',mass:'kg',rotors:'count',
                  diameter:'m',rpm:'1/min',wingarea:'m2',length:'m',viscosity:'m2/s'},
     declared_inputs:values,
-    user_notes:$('notes').value,
+    user_notes:state.notes,
     geometry:{source_units:$('geometry-units').value||null,files:state.geometry.map(x=>({
       filename:x.name,sha256_original_bytes:x.sha256,byte_count:x.bytes,triangle_count_preview:x.triangles,declared_role:x.role
     })),source_bytes_included:false,topology_validated:false},
@@ -255,13 +309,17 @@ function exportIntake(){
 document.querySelectorAll('.aircraft-option').forEach(b=>b.addEventListener('click',()=>setAircraft(b.dataset.aircraft)));
 document.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>showStep(Number(b.dataset.step))));
 document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>showStep(Number(b.dataset.goto))));
-fieldIds.forEach(id=>$(id).addEventListener('input',refresh));
+fieldIds.forEach(id=>$(id)?.addEventListener('input',refresh));
 $('objective').addEventListener('change',refresh);
 $('geometry-units').addEventListener('change',()=>{
   if(state.geometry.length){state.geometry=[];renderFiles();$('geometry-status').textContent='Source units changed. Re-upload geometry for a correct preview.';}
   refresh();
 });
-$('geometry-files').addEventListener('change',event=>handleFiles(event.target.files));
+$('geometry-files').addEventListener('change',event=>{
+  const files=Array.from(event.target.files||[]);
+  event.target.value=''; // Allow retrying the same file after choosing units or correcting an error.
+  handleFiles(files);
+});
 const drop=$('geometry-drop');
 drop.addEventListener('dragover',event=>{event.preventDefault();drop.classList.add('dragging');});
 drop.addEventListener('dragleave',()=>drop.classList.remove('dragging'));
@@ -269,13 +327,16 @@ drop.addEventListener('drop',event=>{event.preventDefault();drop.classList.remov
 $('continue').addEventListener('click',()=>showStep(2));
 $('physics-back').addEventListener('click',()=>showStep(1));
 $('physics-next').addEventListener('click',()=>showStep(3));
-$('export').addEventListener('click',exportIntake);
+$('export')?.addEventListener('click',exportIntake);
 $('example').addEventListener('click',()=>{
-  const example={payload:10,altitude:500,speed:0,duration:15,mass:100,rotors:8,diameter:1,rpm:3000,length:1,viscosity:0.000015};
+  const example={payload:10,altitude:500,speed:0,duration:15};
   Object.entries(example).forEach(([id,value])=>$(id).value=String(value));
-  $('notes').value='Illustrative input values for UI evaluation only; not validated hardware or flight performance.';
-  $('advanced').open=true;
+  state.notes='Illustrative mission input values for UI evaluation only; not validated hardware or flight performance.';
   refresh();
 });
 $('inputs-form').addEventListener('submit',event=>event.preventDefault());
 refresh();
+
+if($('component-calculations')) componentCalculations=mountComponentCalculations($('component-calculations'));
+
+$('setup-fixed-wing')?.addEventListener('click',()=>{if(state.aircraft!=='fixed-wing')return;showStep(2);const panel=document.querySelector('[data-calculation="aero"]');if(panel){panel.open=true;panel.scrollIntoView({block:'start'});panel.querySelector('input')?.focus();}});

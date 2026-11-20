@@ -4,16 +4,16 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
 <title>PHYSIMESH — Drone Simulation</title>
-<link rel="stylesheet" href="/web/css/hackathon.css?v=1">
+<link rel="stylesheet" href="/web/css/hackathon.css?v=2">
 <script type="importmap">{"imports":{"three":"/web/vendor/three.module.min.js"}}</script>
-<script type="module" src="/web/js/hackathon.js?v=1"></script>
+<script type="module" src="/web/js/hackathon.js?v=5"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to simulation configuration</a>
 <header class="topbar">
   <div class="brandmark"><span class="logo">✳</span><div><b>PhysiCore<span class="reg">®</span></b><small>PHYSIMESH ENGINE</small></div></div>
   <div class="productname"><b>Drone Simulation</b><small>Physics-controlled engineering workbench</small></div>
-  <div class="topactions"><span class="devtag">HACKATHON · DEVELOPMENT</span><a href="/web/workbench.html" class="light-link">Advanced workbench ↗</a></div>
+  <div class="topactions"><span class="devtag">HACKATHON · DEVELOPMENT</span><a href="/web/simple-workflow.html" class="light-link">New analysis workflow ↗</a></div>
 </header>
 <div class="app-shell">
   <nav class="steps" aria-label="Simulation stages">
@@ -32,11 +32,11 @@
         <section class="panel aircraft-panel" aria-labelledby="aircraft-title">
           <div class="panel-heading"><span class="count">01</span><div><h2 id="aircraft-title">Aircraft type</h2><p>Choose the closest configuration</p></div></div>
           <div class="aircraft-options" role="group" aria-label="Aircraft configuration">
-            <button type="button" class="aircraft-option active" data-aircraft="multirotor" aria-pressed="true"><span class="craft-symbol">✣</span><span><b>Multirotor</b><small>Quad, hexa, octo</small></span><span class="radio-dot"></span></button>
-            <button type="button" class="aircraft-option" data-aircraft="fixed-wing" aria-pressed="false"><span class="craft-symbol">✈</span><span><b>Fixed-wing</b><small>Conventional wing</small></span><span class="radio-dot"></span></button>
-            <button type="button" class="aircraft-option" data-aircraft="hybrid" aria-pressed="false"><span class="craft-symbol">✈</span><span><b>Hybrid VTOL</b><small>Wing and rotors</small></span><span class="radio-dot"></span></button>
-            <button type="button" class="aircraft-option" data-aircraft="helicopter" aria-pressed="false"><span class="craft-symbol">⊕</span><span><b>Helicopter</b><small>Single main rotor</small></span><span class="radio-dot"></span></button>
-            <button type="button" class="aircraft-option" data-aircraft="tiltrotor" aria-pressed="false"><span class="craft-symbol">⊗</span><span><b>Tiltrotor</b><small>Transition flight</small></span><span class="radio-dot"></span></button>
+            <button type="button" class="aircraft-option active" data-aircraft="multirotor" aria-pressed="true"><span class="craft-symbol craft-multirotor" aria-hidden="true"></span><span><b>Multirotor</b><small>Quad, hexa, octo</small></span><span class="radio-dot"></span></button>
+            <button type="button" class="aircraft-option" data-aircraft="fixed-wing" aria-pressed="false"><span class="craft-symbol craft-fixed-wing" aria-hidden="true"></span><span><b>Fixed-wing</b><small>Conventional wing</small></span><span class="radio-dot"></span></button>
+            <button type="button" class="aircraft-option" data-aircraft="hybrid" aria-pressed="false"><span class="craft-symbol craft-hybrid" aria-hidden="true"></span><span><b>Hybrid VTOL</b><small>Wing and rotors</small></span><span class="radio-dot"></span></button>
+            <button type="button" class="aircraft-option" data-aircraft="helicopter" aria-pressed="false"><span class="craft-symbol craft-helicopter" aria-hidden="true"></span><span><b>Helicopter</b><small>Single main rotor</small></span><span class="radio-dot"></span></button>
+            <button type="button" class="aircraft-option" data-aircraft="tiltrotor" aria-pressed="false"><span class="craft-symbol craft-tiltrotor" aria-hidden="true"></span><span><b>Tiltrotor</b><small>Transition flight</small></span><span class="radio-dot"></span></button>
           </div>
           <div class="help-note"><b>Design principle</b><span>You choose the goal; physics validity decides which simulations can run.</span></div>
         </section>
@@ -55,24 +55,14 @@
         <section class="panel inputs-panel" aria-labelledby="inputs-title">
           <div class="panel-heading"><span class="count">03</span><div><h2 id="inputs-title">Mission & key inputs</h2><p>Only essential values up front</p></div></div>
           <form id="inputs-form">
-            <label>Analysis objective <select id="objective"><option value="hover">Hover & payload assessment</option><option value="rotor">Rotor performance</option><option value="aero">Full-aircraft aerodynamics (CFD)</option><option value="dynamics">Flight stability / rotor-out</option></select></label>
             <div class="input-row"><label for="payload">Payload mass <span>kg</span></label><input id="payload" type="number" step="any" min="0" placeholder="Enter payload" required></div>
             <div class="input-row"><label for="altitude">Operating altitude <span>m</span></label><input id="altitude" type="number" step="any" min="0" max="32000" placeholder="Above sea level" required></div>
             <div class="input-row"><label for="speed">Flight speed <span>m/s</span></label><input id="speed" type="number" step="any" min="0" placeholder="0 for hover" required></div>
             <div class="input-row"><label for="duration">Mission duration <span>min</span></label><input id="duration" type="number" step="any" min="0.01" placeholder="Time in minutes" required></div>
-            <details id="advanced"><summary>Advanced engineering inputs <span>⌄</span></summary>
-              <div class="advanced-content">
-                <p>Required inputs depend on the selected physics. Unknown values remain unknown; none are invented.</p>
-                <label for="mass">Aircraft empty mass (kg) <input id="mass" type="number" step="any" min="0" placeholder="Excluding payload"></label>
-                <label for="rotors">Number of rotors <input id="rotors" type="number" step="1" min="1" max="32" placeholder="For multirotor analysis"></label>
-                <label for="diameter">Rotor diameter (m) <input id="diameter" type="number" step="any" min="0" placeholder="Measured rotor geometry"></label>
-                <label for="rpm">Rotor operating speed (RPM) <input id="rpm" type="number" step="any" min="0" placeholder="Measured or specified"></label>
-                <label for="wingarea">Wing reference area (m²) <input id="wingarea" type="number" step="any" min="0" placeholder="For fixed-wing analyses"></label>
-                <label for="length">Reference length / chord (m) <input id="length" type="number" step="any" min="0" placeholder="For Reynolds number"></label>
-                <label for="viscosity">Kinematic viscosity (m²/s) <input id="viscosity" type="number" step="any" min="0" placeholder="Required for exact Re"></label>
-                <label for="notes">Constraints and engineering notes <textarea id="notes" rows="2" maxlength="1500" placeholder="Known rotor data, power limits, expected operating conditions…"></textarea></label>
-              </div>
-            </details>
+            <div class="analysis-focus">
+            <label for="objective">Analysis focus</label><select id="objective"><option value="hover">Hover & payload assessment</option><option value="rotor">Rotor performance</option><option value="full">Full analysis (Aero, Propulsion & Structure)</option><option value="aero">Aero</option><option value="propulsion">Propulsion</option><option value="structure">Structure</option><option value="dynamics">Flight stability / rotor-out</option></select>
+              <p class="fineprint">Choose Full analysis or an individual analysis focus.</p>
+            </div>
             <div class="input-actions"><button type="button" class="secondary" id="example">Load illustrative example</button><button type="button" class="primary" id="continue">Review physics <span>→</span></button></div>
           </form>
         </section>
@@ -101,9 +91,9 @@
       <div class="page-heading"><div><p class="eyebrow">STEP 03 / SIMULATION</p><h1 id="run-title">Simulation readiness</h1><p>Review missing requirements before asking the numerical solver to run.</p></div><button type="button" class="quiet" data-goto="1">← Configuration</button></div>
       <div class="run-grid">
         <section class="panel"><div class="panel-heading"><span class="count">07</span><div><h2>Preflight checklist</h2><p>No unverified physics shortcuts</p></div></div><div id="preflight" class="preflight"></div></section>
-        <section class="panel action-panel"><div class="panel-heading"><span class="count">08</span><div><h2>Next action</h2><p>Use the existing validated workflow</p></div></div><div id="run-reason" class="decision-block"></div>
-        <button type="button" id="export" class="primary export">↓ Export simulation intake (.json)</button><a href="/web/workbench.html" class="workbench-link">Open existing engineering workbench ↗</a>
-        <p class="fineprint">This interface does not submit a CFD job or claim mesh independence. Source STL bytes must also be imported into the saved project.</p></section>
+        <section class="panel action-panel"><div class="panel-heading"><span class="count">08</span><div><h2>Next action</h2><p>Start a new, self-contained analysis</p></div></div><div id="run-reason" class="decision-block"></div>
+        <button type="button" id="export" class="primary export">↓ Export simulation intake (.json)</button><a href="/web/simple-workflow.html" class="workbench-link">Open simple workflow →</a>
+        <p class="fineprint">This interface does not submit a CFD job or claim mesh independence. Keep the original STL files alongside your exported intake.</p></section>
       </div>
     </section>
 

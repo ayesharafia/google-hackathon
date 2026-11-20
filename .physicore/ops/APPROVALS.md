@@ -236,3 +236,15 @@ and chronological budget use. No measurements or physical approval were added.
 SCI001-SCI003 and DATA001 remain pending. The next safe audit will trace whether
 separate individual-mass validation is preserved through actual app callers;
 this source observation is not a demonstrated runtime defect.
+
+## 2026-11-21: Hackathon publication request
+
+The user explicitly requested: "first commit the code in github branch" in this chat.
+Scope: the accumulated simple-workflow/frontend, local Windows setup compatibility,
+icons, QA scripts and evidence changes from this session, targeting hackathon in
+PhysiCoreEngine12/Drone-Project. No authorization to modify main or
+validation/drone-trl4, force-push, deploy, or change validated physics is implied.
+Before publication, origin/hackathon was found at ab595eedf3ff94806d06aa6d5fdfb23391a33c5e,
+three commits ahead of the tested local base df3a407e1574e885a5bb9130885e68ddd4c47505.
+Those upstream commits include an integration and explicit revert of backend
+restoration. Commit local work first; do not overwrite the newer remote history.
