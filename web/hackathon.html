@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/web/favicon.svg" type="image/svg+xml">
+<title>PHYSIMESH — Drone Simulation</title>
+<link rel="stylesheet" href="/web/css/hackathon.css?v=1">
+<script type="importmap">{"imports":{"three":"/web/vendor/three.module.min.js"}}</script>
+<script type="module" src="/web/js/hackathon.js?v=1"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to simulation configuration</a>
+<header class="topbar">
+  <div class="brandmark"><span class="logo">✳</span><div><b>PhysiCore<span class="reg">®</span></b><small>PHYSIMESH ENGINE</small></div></div>
+  <div class="productname"><b>Drone Simulation</b><small>Physics-controlled engineering workbench</small></div>
+  <div class="topactions"><span class="devtag">HACKATHON · DEVELOPMENT</span><a href="/web/workbench.html" class="light-link">Advanced workbench ↗</a></div>
+</header>
+<div class="app-shell">
+  <nav class="steps" aria-label="Simulation stages">
+    <button type="button" data-step="1" class="active" aria-current="step"><i>1</i><span>Configuration</span></button>
+    <span class="stepline"></span>
+    <button type="button" data-step="2"><i>2</i><span>Physics & mesh</span></button>
+    <span class="stepline"></span>
+    <button type="button" data-step="3"><i>3</i><span>Simulation</span></button>
+    <span class="stepline"></span>
+    <button type="button" data-step="4"><i>4</i><span>Results</span></button>
+  </nav>
+  <main id="main">
+    <section class="stage" id="step-1" aria-labelledby="stage-title">
+      <div class="page-heading"><div><p class="eyebrow">STEP 01 / CONFIGURATION</p><h1 id="stage-title">Set up your aircraft</h1><p>Start with the essentials. PHYSIMESH organizes the physics requirements around your design.</p></div><div class="heading-meta"><span class="dot amber"></span> Engineering intake · No simulation running</div></div>
+      <div class="config-grid">
+        <section class="panel aircraft-panel" aria-labelledby="aircraft-title">
+          <div class="panel-heading"><span class="count">01</span><div><h2 id="aircraft-title">Aircraft type</h2><p>Choose the closest configuration</p></div></div>
+          <div class="aircraft-options" role="group" aria-label="Aircraft configuration">
+            <button type="button" class="aircraft-option active" data-aircraft="multirotor" aria-pressed="true"><span class="craft-symbol">✣</span><span><b>Multirotor</b><small>Quad, hexa, octo</small></span><span class="radio-dot"></span></button>
+            <button type="button" class="aircraft-option" data-aircraft="fixed-wing" aria-pressed="false"><span class="craft-symbol">✈</span><span><b>Fixed-wing</b><small>Conventional wing</small></span><span class="radio-dot"></span></button>
+            <button type="button" class="aircraft-option" data-aircraft="hybrid" aria-pressed="false"><span class="craft-symbol">✈</span><span><b>Hybrid VTOL</b><small>Wing and rotors</small></span><span class="radio-dot"></span></button>
+            <button type="button" class="aircraft-option" data-aircraft="helicopter" aria-pressed="false"><span class="craft-symbol">⊕</span><span><b>Helicopter</b><small>Single main rotor</small></span><span class="radio-dot"></span></button>
+            <button type="button" class="aircraft-option" data-aircraft="tiltrotor" aria-pressed="false"><span class="craft-symbol">⊗</span><span><b>Tiltrotor</b><small>Transition flight</small></span><span class="radio-dot"></span></button>
+          </div>
+          <div class="help-note"><b>Design principle</b><span>You choose the goal; physics validity decides which simulations can run.</span></div>
+        </section>
+        <section class="panel geometry-panel" aria-labelledby="geometry-title">
+          <div class="panel-heading"><span class="count">02</span><div><h2 id="geometry-title">Aircraft geometry</h2><p>Upload your design to inspect it in 3D</p></div></div>
+          <div class="file-controls"><label for="geometry-files" class="upload-button">↑ Upload STL geometry</label><input id="geometry-files" type="file" accept=".stl,model/stl" multiple><label class="units-label" for="geometry-units">Units <select id="geometry-units"><option value="">Select units</option><option value="m">metres</option><option value="mm">millimetres</option><option value="cm">centimetres</option><option value="in">inches</option><option value="ft">feet</option></select></label></div>
+          <div id="geometry-drop" class="geometry-drop" tabindex="0" role="group" aria-label="STL preview drop zone">
+            <div id="geometry-view"></div>
+            <div id="geometry-placeholder" class="geometry-placeholder"><svg viewBox="0 0 360 210" aria-hidden="true" class="craft-diagram"><g stroke="#6b87a8" stroke-width="2" fill="none"><path d="M180 78 L120 42 M180 78 L240 42 M180 105 L120 150 M180 105 L240 150" stroke-width="10" stroke-linecap="round" opacity=".4"/><ellipse cx="180" cy="95" rx="20" ry="54" fill="#e2eaf3" stroke="#4c7197"/><path d="M180 41 L180 148 M165 72 L195 72" stroke="#36557b"/><circle cx="120" cy="42" r="31" stroke-dasharray="5 5"/><circle cx="240" cy="42" r="31" stroke-dasharray="5 5"/><circle cx="120" cy="150" r="31" stroke-dasharray="5 5"/><circle cx="240" cy="150" r="31" stroke-dasharray="5 5"/><circle cx="120" cy="42" r="7" fill="#6b87a8"/><circle cx="240" cy="42" r="7" fill="#6b87a8"/><circle cx="120" cy="150" r="7" fill="#6b87a8"/><circle cx="240" cy="150" r="7" fill="#6b87a8"/></g></svg><strong>No geometry uploaded</strong><span>Upload an STL model to rotate and inspect your aircraft</span><small>Drag STL files here or use the upload button</small></div>
+            <div class="viewer-chip" id="viewer-chip" hidden>Drag to rotate · Scroll to zoom</div>
+          </div>
+          <div id="geometry-status" class="geometry-status" role="status" aria-live="polite">Geometry is required for CFD. Source units must be declared.</div>
+          <div id="geometry-list" class="file-list" aria-label="Uploaded component roles"></div>
+          <p class="fineprint">3D preview does not certify watertight geometry, component identity or CFD mesh readiness.</p>
+        </section>
+        <section class="panel inputs-panel" aria-labelledby="inputs-title">
+          <div class="panel-heading"><span class="count">03</span><div><h2 id="inputs-title">Mission & key inputs</h2><p>Only essential values up front</p></div></div>
+          <form id="inputs-form">
+            <label>Analysis objective <select id="objective"><option value="hover">Hover & payload assessment</option><option value="rotor">Rotor performance</option><option value="aero">Full-aircraft aerodynamics (CFD)</option><option value="dynamics">Flight stability / rotor-out</option></select></label>
+            <div class="input-row"><label for="payload">Payload mass <span>kg</span></label><input id="payload" type="number" step="any" min="0" placeholder="Enter payload" required></div>
+            <div class="input-row"><label for="altitude">Operating altitude <span>m</span></label><input id="altitude" type="number" step="any" min="0" max="32000" placeholder="Above sea level" required></div>
+            <div class="input-row"><label for="speed">Flight speed <span>m/s</span></label><input id="speed" type="number" step="any" min="0" placeholder="0 for hover" required></div>
+            <div class="input-row"><label for="duration">Mission duration <span>min</span></label><input id="duration" type="number" step="any" min="0.01" placeholder="Time in minutes" required></div>
+            <details id="advanced"><summary>Advanced engineering inputs <span>⌄</span></summary>
+              <div class="advanced-content">
+                <p>Required inputs depend on the selected physics. Unknown values remain unknown; none are invented.</p>
+                <label for="mass">Aircraft empty mass (kg) <input id="mass" type="number" step="any" min="0" placeholder="Excluding payload"></label>
+                <label for="rotors">Number of rotors <input id="rotors" type="number" step="1" min="1" max="32" placeholder="For multirotor analysis"></label>
+                <label for="diameter">Rotor diameter (m) <input id="diameter" type="number" step="any" min="0" placeholder="Measured rotor geometry"></label>
+                <label for="rpm">Rotor operating speed (RPM) <input id="rpm" type="number" step="any" min="0" placeholder="Measured or specified"></label>
+                <label for="wingarea">Wing reference area (m²) <input id="wingarea" type="number" step="any" min="0" placeholder="For fixed-wing analyses"></label>
+                <label for="length">Reference length / chord (m) <input id="length" type="number" step="any" min="0" placeholder="For Reynolds number"></label>
+                <label for="viscosity">Kinematic viscosity (m²/s) <input id="viscosity" type="number" step="any" min="0" placeholder="Required for exact Re"></label>
+                <label for="notes">Constraints and engineering notes <textarea id="notes" rows="2" maxlength="1500" placeholder="Known rotor data, power limits, expected operating conditions…"></textarea></label>
+              </div>
+            </details>
+            <div class="input-actions"><button type="button" class="secondary" id="example">Load illustrative example</button><button type="button" class="primary" id="continue">Review physics <span>→</span></button></div>
+          </form>
+        </section>
+      </div>
+      <section class="bottom-bar" aria-label="Engineering readiness"><div><span class="indicator" id="geometry-indicator">○</span><span id="geometry-check">Geometry missing</span></div><div><span class="indicator" id="inputs-indicator">○</span><span id="inputs-check">Complete mission inputs</span></div><div><span class="indicator" id="physics-indicator">○</span><span id="physics-check">Physics eligibility pending</span></div></section>
+    </section>
+
+    <section class="stage" id="step-2" hidden aria-labelledby="physics-title">
+      <div class="page-heading"><div><p class="eyebrow">STEP 02 / PHYSICS & MESH</p><h1 id="physics-title">Physics before meshing</h1><p>Transparent automatic recommendations. Unqualified models cannot be silently selected.</p></div><button type="button" class="quiet" data-goto="1">← Modify inputs</button></div>
+      <div class="review-grid">
+        <section class="panel"><div class="panel-heading"><span class="count">04</span><div><h2>Atmosphere & regime</h2><p>Calculated from declared operating conditions</p></div></div>
+          <div class="metric-grid"><div><span>Temperature</span><b id="atm-temperature">—</b></div><div><span>Air density</span><b id="atm-density">—</b></div><div><span>Mach number</span><b id="atm-mach">—</b></div><div><span>Reynolds number</span><b id="atm-re">—</b></div></div>
+          <p class="fineprint">ISA estimate for preview only. Reynolds number requires reference length and viscosity.</p>
+        </section>
+        <section class="panel"><div class="panel-heading"><span class="count">05</span><div><h2>Physics selection</h2><p>Eligibility is not the same as scientific validation</p></div></div><div id="physics-plan" class="decision-block" role="status"></div></section>
+        <section class="panel"><div class="panel-heading"><span class="count">06</span><div><h2>Automatic mesh strategy</h2><p>Proposed levels for future solver execution</p></div></div>
+          <div class="mesh-levels"><div><span class="mesh-icon coarse"></span><b>Coarse</b><small>Baseline</small></div><div><span class="mesh-icon medium"></span><b>Medium</b><small>Refined</small></div><div><span class="mesh-icon fine"></span><b>Fine</b><small>Verification</small></div></div>
+          <div class="requirement"><b>Mesh-independence gate</b><span>Minimum 3 executed meshes; quantity convergence, conservation, and suitable GCI. More refinement if needed.</span></div>
+          <p class="fineprint">This page generates a plan, not an OpenFOAM mesh. Actual cell counts and mesh quality must come from executed cases.</p>
+        </section>
+      </div>
+      <div class="stage-actions"><button type="button" class="secondary" id="physics-back">← Back</button><button type="button" class="primary" id="physics-next">Prepare simulation →</button></div>
+    </section>
+
+    <section class="stage" id="step-3" hidden aria-labelledby="run-title">
+      <div class="page-heading"><div><p class="eyebrow">STEP 03 / SIMULATION</p><h1 id="run-title">Simulation readiness</h1><p>Review missing requirements before asking the numerical solver to run.</p></div><button type="button" class="quiet" data-goto="1">← Configuration</button></div>
+      <div class="run-grid">
+        <section class="panel"><div class="panel-heading"><span class="count">07</span><div><h2>Preflight checklist</h2><p>No unverified physics shortcuts</p></div></div><div id="preflight" class="preflight"></div></section>
+        <section class="panel action-panel"><div class="panel-heading"><span class="count">08</span><div><h2>Next action</h2><p>Use the existing validated workflow</p></div></div><div id="run-reason" class="decision-block"></div>
+        <button type="button" id="export" class="primary export">↓ Export simulation intake (.json)</button><a href="/web/workbench.html" class="workbench-link">Open existing engineering workbench ↗</a>
+        <p class="fineprint">This interface does not submit a CFD job or claim mesh independence. Source STL bytes must also be imported into the saved project.</p></section>
+      </div>
+    </section>
+
+    <section class="stage" id="step-4" hidden aria-labelledby="results-title">
+      <div class="page-heading"><div><p class="eyebrow">STEP 04 / RESULTS</p><h1 id="results-title">Verified results only</h1><p>Contours, loads and grid-independence graphs appear here after a qualified solver workflow is connected.</p></div></div>
+      <section class="panel empty-results"><span class="results-icon">⌁</span><h2>No solver results available</h2><p>This prototype has not executed a CFD study. No calculated thrust, drag, payload capacity or grid convergence will be fabricated.</p><div class="input-actions"><button type="button" class="secondary" data-goto="1">Edit configuration</button><a class="primary link-button" href="/web/results.html">Open existing evidence desk ↗</a></div></section>
+    </section>
+  </main>
+</div>
+<footer>PHYSIMESH · Physics-controlled AI · Engineering decisions require validated inputs and evidence. <span>Prototype frontend · Hackathon branch</span></footer>
+</body>
+</html>
