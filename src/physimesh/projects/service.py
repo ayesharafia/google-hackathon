@@ -11,7 +11,8 @@ from physimesh.drone import models
 from physimesh.drone.snapshot_hash import snapshot_sha256
 
 from .contracts import DesignRevisionV1, Reason, parse_snapshot, snapshot_json
-from .repository import DraftConflict, ProjectRepository
+from .geometry import geometry_report, source_bytes
+from .repository import DraftConflict, ProjectMissing, ProjectRepository
 from .sqlite import canonical_snapshot, utc_now
 
 
@@ -27,20 +28,40 @@ class ProjectService:
         return self.repository.create(title, snapshot_json(snapshot))
 
     def save(self, project_id: str, expected_version: int, raw: str) -> dict:
-        return self.repository.save(project_id, expected_version, canonical_snapshot(raw))
+        canonical = self.validate_snapshot(raw)
+        return self.repository.save(project_id, expected_version, canonical)
 
-    def freeze(self, project_id: str, expected_version: int, purpose: str) -> dict:
+    def validate_snapshot(self, raw: str) -> str:
+        canonical = canonical_snapshot(raw)
+        geometry_report(self.artifacts, parse_snapshot(canonical), verify_sources=True)
+        return canonical
+
+    def geometry(self, project_id: str, revision_sha256: str | None = None) -> dict | None:
+        if revision_sha256:
+            raw = self.repository.revision(project_id, revision_sha256).snapshot_json
+        else:
+            raw = self.repository.get(project_id)['snapshot_json']
+        return geometry_report(self.artifacts, parse_snapshot(raw))
+
+    def geometry_source(self, project_id: str, digest: str, revision_sha256: str | None = None) -> bytes:
+        report = self.geometry(project_id, revision_sha256)
+        if report is None or digest not in {component['source_sha256'] for component in report['components']}:
+            raise ProjectMissing('STL is not attached to this project or revision')
+        return source_bytes(self.artifacts, digest)
+
+    def freeze(self, project_id: str, expected_version: int, purpose: str, *,
+               organization_id='local', author_identity_id='local_operator') -> dict:
         project = self.repository.get(project_id)
         if project['draft_version'] != expected_version:
             raise DraftConflict(project['draft_version'])
         snapshot = parse_snapshot(project['snapshot_json'])
-        from .performance import load_map
-        for rotor in snapshot['rotors']:
-            if rotor.get('map_ref'):
-                try:
-                    load_map(self.artifacts, rotor['map_ref'])
-                except KeyError as exc:
-                    raise ValueError('rotor-map source is not retained') from exc
+        geometry_report(self.artifacts, snapshot, verify_sources=True)
+        from .performance import load_map, performance_refs
+        for digest in performance_refs(snapshot):
+            try:
+                load_map(self.artifacts, digest)
+            except KeyError as exc:
+                raise ValueError('rotor-map source is not retained') from exc
         # Imported geometry references are byte identities, not inferred source claims.
         for component in snapshot['assembly'].get('components', []):
             digest = component.get('source_sha256')
@@ -54,8 +75,8 @@ class ProjectService:
                     raise ValueError('geometry source byte integrity failed')
         report = models.readiness(models.project_from_mapping(snapshot), purpose)
         revision = DesignRevisionV1(
-            organization_id='local', project_id=project_id, snapshot_json=project['snapshot_json'],
-            snapshot_sha256=snapshot_sha256(snapshot), author_identity_id='local_operator',
+            organization_id=organization_id, project_id=project_id, snapshot_json=project['snapshot_json'],
+            snapshot_sha256=snapshot_sha256(snapshot), author_identity_id=author_identity_id,
             created_utc=utc_now(), readiness_purpose=purpose,
             readiness_reasons=tuple(Reason(code='missing_input', field_path='readiness', message=text)
                                     for text in report.blocking), approval='draft')
