@@ -1,15 +1,14 @@
 import {createViewer} from './viewer3d.js';
-import {restoreSession, connectSession, forgetSession, isPublicAccess} from './session.js?v=public-3';
 const $=id=>document.getElementById(id);
 const el=(tag,text)=>{const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node;};
 const fmt=(value,digits=5)=>typeof value==='number'?value.toFixed(digits):'Unavailable';
-let connected=false,connectionReady=false,connecting=false,result=null,example=null,surfaceViewer=null,importViewer=null,urls=[],groupId='',publication=null;
-async function api(path,options={}){const response=await fetch('/api/drone'+path,{...options,credentials:'same-origin',cache:'no-store',signal:AbortSignal.timeout(60000)});if(response.status===401){connected=false;sessionControls();throw new Error('Browser access expired or was forgotten. Reconnect to continue.');}if(!response.ok){let detail;try{detail=(await response.json()).detail;}catch{detail='HTTP '+response.status;}throw new Error(typeof detail==='string'?detail:JSON.stringify(detail));}return response;}
+let token='',result=null,example=null,surfaceViewer=null,importViewer=null,urls=[],groupId='',publication=null;
+async function api(path,options={}){const response=await fetch('/api/drone'+path,{...options,headers:{Authorization:'Bearer '+token,...options.headers}});if(!response.ok){let detail;try{detail=(await response.json()).detail;}catch{detail='HTTP '+response.status;}throw new Error(typeof detail==='string'?detail:JSON.stringify(detail));}return response;}
 async function json(path,body){return (await api(path,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})).json();}
 function message(text,error=false){$('connection-status').textContent=text;$('connection-status').className=error?'error':'';}
 async function plot(id){const record=result.plots.find(p=>p.recipe.plot_id===id);if(!record)throw new Error('No retained plot '+id);const figure=el('figure'),img=el('img');const blob=await (await api(`/plots/${groupId}/${id}.png`)).blob();const url=URL.createObjectURL(blob);urls.push(url);img.src=url;img.alt=record.caption;img.loading='lazy';figure.append(img);const caption=el('figcaption');caption.append(el('strong',id.replaceAll('_',' ')),el('span',record.caption));const details=el('details');details.append(el('summary','Recipe and source hashes'),el('pre',JSON.stringify(record,null,2)));caption.append(details);figure.append(caption);return figure;}
 async function optionalPlot(id){if(result.plots.some(p=>p.recipe.plot_id===id))return plot(id);const figure=el('figure');figure.className='withheld-view';figure.append(el('figcaption',id.replaceAll('_',' ')+': view withheld because native slice geometry or sensitivity failed the registered policy. See Limits of this record and the exported slice eligibility report.'));return figure;}
-async function flow(){const level=$('mesh-level').value;$('mesh-level').disabled=true;try{const figures=await Promise.all(['speed','pressure','vorticity'].map(name=>optionalPlot(level+'_'+name)));$('flow-gallery').replaceChildren(...figures);}finally{$('mesh-level').disabled=!connected;}}
+async function flow(){const level=$('mesh-level').value;$('mesh-level').disabled=true;try{const figures=await Promise.all(['speed','pressure','vorticity'].map(name=>optionalPlot(level+'_'+name)));$('flow-gallery').replaceChildren(...figures);}finally{$('mesh-level').disabled=false;}}
 function legend(){if(!surfaceViewer||!result.surfaces.length)return;const field=$('surface-field').value,range=surfaceViewer.setField(field);if(range)$('surface-legend').textContent=(field==='pressure'?'Gauge pressure':'Wall shear magnitude')+` [Pa] · display ${fmt(range.range[0])} to ${fmt(range.range[1])} · native extrema ${fmt(range.trueRange[0])} to ${fmt(range.trueRange[1])} · native face values, no smoothing.`;}
 async function loadGroup(){groupId=$('group').value;message('Reading retained evidence…');result=await json('/results/'+groupId);publication=await json('/results/'+groupId+'/publication');urls.forEach(URL.revokeObjectURL);urls=[];
  $('case-label').textContent=result.label;$('result-status').textContent=result.status==='numerical_checks_passed'?'Numerical consistency passed; validation pending':'Diagnostic evidence only; numerical checks incomplete';$('evidence').textContent='Evidence: '+result.evidence+' · independent review '+result.independent_review;$('provenance').textContent=`Study ${groupId} | package revision SHA-256 ${publication.identity.package_revision_sha256} | identity ${publication.origin} | backend ${result.provenance.image_digest} | run-group SHA-256 ${result.provenance.run_group_sha256}`;
@@ -20,58 +19,10 @@ async function loadGroup(){groupId=$('group').value;message('Reading retained ev
  if(result.surfaces.length){try{surfaceViewer??=createViewer($('surface-view'));const data=await json(`/surfaces/${groupId}/fine_sphere.json`);surfaceViewer.showSurface(data);$('surface-field').disabled=false;$('reset-view').disabled=false;legend();}catch(error){$('surface-view').replaceChildren(el('p','3D viewer unavailable: '+error.message));}}
  $('export').disabled=false;message('Retained results loaded. No aircraft validation claim.');
 }
-function sessionControls() {
-  $('connection').hidden=!connectionReady||connected; $('disconnect').hidden=!connected||isPublicAccess();
-  $('disconnect').disabled=connecting; $('token').disabled=connecting;
-  document.querySelector('#connection button').disabled=connecting;
-  $('session-status').textContent=!connectionReady?'Opening workspace…':isPublicAccess()?'Open workspace. No sign-in required.':connected?'Connected. This browser is remembered for 30 days.':'Connect once to remember this browser for 30 days.';
-  if(!connected)['group','export','surface-field','reset-view','mesh-level','calculate','missing-case','energy-limit','upload','readiness'].forEach(id=>$(id).disabled=true);
-}
-async function loadWorkspace(){
-  sessionControls();
-  const inventory=await json('/results');
-  $('group').replaceChildren(...inventory.groups.map(g=>{const option=el('option',g.label);option.value=g.run_group_id;return option;}));
-  $('group').disabled=!inventory.groups.length;
-  ['upload','readiness'].forEach(id=>$(id).disabled=false);
-  if(!inventory.groups.length){
-    message('No published results in this workspace yet.');
-    $('group').replaceChildren(el('option','No published runs'));
-    $('case-label').textContent='No published case in this workspace.';
-    $('loads').querySelector('td').textContent='No published load results.';
-    $('surface-view').replaceChildren(el('p','No published surface in this workspace yet.'));
-    $('capacity').textContent='No published screening example in this workspace. Create a labelled hover example in the design workbench.';
-    $('example-inputs').textContent='No published example loaded.';
-    return;
-  }
-  await loadGroup();
-  example=await json('/examples/screening');
-  $('example-inputs').textContent=JSON.stringify(example.screening_request,null,2);
-  $('battery-assumptions').textContent=JSON.stringify(example.battery_loops.assumptions,null,2);
-  $('battery-fixtures').replaceChildren(...example.battery_loops.cases.map(c=>{const row=el('tr');[c.name,c.duration_s/60,c.pack_wh_per_kg,c.status,fmt(c.total_mass_kg,2),fmt(c.battery_mass_kg,2)].forEach(v=>row.append(el('td',v)));return row;}));
-  ['calculate','missing-case'].forEach(id=>$(id).disabled=false);
-  $('energy-limit').disabled=!example.energy_limit_request;
-}
-async function connectionAction(work){
-  if(connecting)return;
-  connecting=true;sessionControls();
-  try{await work();}catch(error){message(error.message,true);}
-  finally{connecting=false;sessionControls();}
-}
-$('connection').addEventListener('submit',event=>{
-  event.preventDefault();if(connecting)return;
-  const accessToken=$('token').value;$('token').value='';
-  connectionAction(async()=>{connected=await connectSession(accessToken);await loadWorkspace();});
-});
-$('disconnect').addEventListener('click',()=>connectionAction(async()=>{await forgetSession();location.reload();}));
+$('connection').addEventListener('submit',async event=>{event.preventDefault();token=$('token').value;message('Connecting…');try{const inventory=await json('/results');if(!inventory.groups.length)throw new Error('No published results. Run the demo assembly command first.');$('group').replaceChildren(...inventory.groups.map(g=>{const option=el('option',g.label);option.value=g.run_group_id;return option;}));$('group').disabled=false;await loadGroup();example=await json('/examples/screening');$('example-inputs').textContent=JSON.stringify(example.screening_request,null,2);$('battery-assumptions').textContent=JSON.stringify(example.battery_loops.assumptions,null,2);$('battery-fixtures').replaceChildren(...example.battery_loops.cases.map(c=>{const row=el('tr');[c.name,c.duration_s/60,c.pack_wh_per_kg,c.status,fmt(c.total_mass_kg,2),fmt(c.battery_mass_kg,2)].forEach(v=>row.append(el('td',v)));return row;}));['calculate','missing-case','upload','readiness'].forEach(id=>$(id).disabled=false);$('energy-limit').disabled=!example.energy_limit_request;}catch(error){message(error.message,true);}});
 $('group').addEventListener('change',()=>loadGroup().catch(e=>message(e.message,true)));$('mesh-level').addEventListener('change',()=>flow().catch(e=>message(e.message,true)));$('surface-field').addEventListener('change',legend);$('reset-view').addEventListener('click',()=>surfaceViewer?.reset());
 $('export').addEventListener('click',async()=>{try{const blob=await (await api(`/runs/${groupId}/export`)).blob(),url=URL.createObjectURL(blob),link=el('a');link.href=url;link.download=`sphere-${groupId}-${publication.identity.package_revision_sha256}.zip`;link.textContent='Save evidence ZIP';link.id='evidence-download';$('evidence-download')?.remove();$('export').after(link);urls.push(url);message('Evidence ZIP ready. Use Save evidence ZIP to download.');}catch(error){message(error.message,true);}});
 async function capacity(missing=false,energyLimit=false){if(!example)return;const body=structuredClone(energyLimit?example.energy_limit_request:example.screening_request);if(missing)body.case_inputs.pop();$('capacity').textContent='Checking every declared case…';try{const report=await json('/screening',body);$('capacity').replaceChildren();if(report.max_payload_kg===null){$('capacity').append(el('h3',report.outcome==='infeasible_limits'?'Operating point exceeds supplied limits':report.outcome==='unsupported_scope'?'Capacity requires a supported trim model':'Capacity unavailable: inputs incomplete'),el('p',report.interpretation),...report.blocking.map(text=>el('p',text)));const details=el('details');details.append(el('summary','Reasons and supplied limits'),el('pre',JSON.stringify(report,null,2)));$('capacity').append(details);return;}const value=el('div',fmt(report.max_payload_kg,2));value.className='capacity-value';value.append(el('span','kg vertical screening ceiling'));$('capacity').append(value,el('p',`Limiting case: ${report.limiting_case_id==='climb'?'short acceleration margin (climb)':report.limiting_case_id} · ${report.status}. Empty airframe: ${fmt(report.empty_airframe_mass_kg,1)} kg.`));const table=el('table'),head=el('thead'),hr=el('tr');['Case','Payload ceiling, kg','Force z, N','Electric kW','Energy MJ'].forEach(text=>hr.append(el('th',text)));head.append(hr);const tb=el('tbody');report.cases.forEach(c=>{const row=el('tr');[c.case_id,fmt(c.max_payload_kg,2),fmt(c.vertical_force_n,1),fmt(c.electrical_power_w/1000,1),fmt(c.energy_required_j/1e6,2)].forEach(v=>row.append(el('td',v)));tb.append(row);});table.append(head,tb);const wrapper=el('div');wrapper.className='table-scroll';wrapper.append(table);$('capacity').append(wrapper,el('p','Constant-point screening only. Trim, payload CG, structure and trajectories remain unevaluated.'),el('p',`Pack consistency: ${fmt(report.pack_consistency.pack_mass_kg,1)} kg battery; ${fmt(report.pack_consistency.derived_usable_energy_j/1e6,2)} MJ with reserve held back from usable pack energy once. Supplied parameters are not physically validated.`));const detail=el('details');detail.append(el('summary','Bound sources, rotor diagnostics and limits'),el('pre',JSON.stringify(report,null,2)));$('capacity').append(detail);}catch(error){$('capacity').textContent=error.message;}}
 $('calculate').addEventListener('click',()=>capacity());$('missing-case').addEventListener('click',()=>capacity(true));$('energy-limit').addEventListener('click',()=>capacity(false,true));
 $('import-form').addEventListener('submit',async event=>{event.preventDefault();const files=[...$('stl-files').files],units=$('units').value;if(!units||!files.length)return;$('import-status').textContent='Reading geometry and checking topology…';const form=new FormData();form.append('source_units',units);files.forEach(file=>form.append('files',file));try{const report=await (await api('/import',{method:'POST',body:form})).json();$('import-status').replaceChildren(el('p',`${report.triangle_count.toLocaleString()} triangles · ${report.shell_count} shells · ${fmt(report.surface_area_m2,5)} m²`),el('p',report.note),el('p','Unresolved: '+report.unresolved_inputs.join('; ')),el('p',`Topology issue groups: ${report.topology_issues.length}`));const detail=el('details');detail.append(el('summary','Import record and geometry hash'),el('pre',JSON.stringify(report,null,2)));$('import-status').append(detail);importViewer??=createViewer($('import-view'));importViewer.showStl(await Promise.all(files.map(file=>file.arrayBuffer())),report.unit_scale_to_m);}catch(error){$('import-status').textContent=error.message;}});
 $('readiness').addEventListener('click',async()=>{try{const project=await json('/project-template'),report=await json('/validate',{project,purpose:'screening'});$('readiness-report').replaceChildren(el('h3','Inputs incomplete'),...report.blocking.map(text=>el('p',text)));}catch(error){$('readiness-report').textContent=error.message;}});
-
-connectionAction(async()=>{
-  message('Opening workspace…');
-  try{connected=await restoreSession();}finally{connectionReady=true;}
-  if(connected)await loadWorkspace();else message('Enter the workspace access token to connect.');
-});

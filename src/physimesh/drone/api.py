@@ -8,6 +8,7 @@ from typing import Annotated
 import numpy as np
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 
+from ..core.artifacts import ArtifactStore
 from .frames import rotation_matrix_zyx
 from .geometry import topology, weld
 from .provenance import canonical_json, sha256_record
@@ -56,7 +57,7 @@ async def import_stl(request: Request, source_units: Annotated[str, Form()],
                  "translation_m": translation.tolist()}
     transform_sha = sha256_record(transform)
     rotation_matrix = rotation_matrix_zyx(*np.deg2rad(rotation))
-    store = request.app.state.projects.artifacts
+    store = ArtifactStore(settings.data_root / "artifacts")
     components = []
     all_triangles = []
     issues = []
@@ -119,8 +120,7 @@ async def import_stl(request: Request, source_units: Annotated[str, Form()],
                        "transform": transform, "schema": "geometry_import_v1"}
     revision = store.put_bytes(canonical_json(revision_record).encode(), kind="geometry_revision",
                                meta={"source_sha256": hashes})
-    report = {"schema_version": "geometry_import_report_v1",
-            "status": "read_ok", "geometry_revision_sha256": revision,
+    return {"status": "read_ok", "geometry_revision_sha256": revision,
             "unit_scale_to_m": scale,
             "conversion": {"from": source_units, "to": "m", "factor": scale},
             "transform": {**transform, "sha256": transform_sha},
@@ -136,6 +136,3 @@ async def import_stl(request: Request, source_units: Annotated[str, Form()],
             "unresolved_inputs": [*(f"assembly.components[{c['component_id']}].role" for c in components),
                                   "rotors"],
             "note": NOTE}
-    report_sha = store.put_bytes(canonical_json(report).encode(), kind="geometry_import_report",
-                                 meta={"geometry_revision_sha256": revision})
-    return {**report, "report_sha256": report_sha}

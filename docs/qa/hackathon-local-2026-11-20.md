@@ -109,3 +109,19 @@ In a separate in-app test tab, verified defaults, switching to Multirotor hides 
 
 ## Independent airspeed — 21 November 2026
 Removed mission-speed copying and the read-only restriction from fixed-wing airspeed. Airspeed starts blank and is explicitly entered relative to surrounding air. Mission edits invalidate results but preserve the independently entered airspeed. Browser regression passed with mission speed 70 m/s and aerodynamic airspeed 50 m/s; after changing mission speed to 80 m/s, airspeed remained 50 m/s. Real coefficient screening and exact result hashes passed. First test expected text 50 rather than the entered 50.0; corrected the assertion and reran successfully. No backend equations changed.
+
+## 2026-11-21: publication with owner-selected upstream rollback
+
+Merged origin/hackathon ab595ee, preserving its backend rollback. Conflicts in
+pyproject.toml and src/physimesh/core/artifacts.py resolved to upstream exactly.
+Earlier passing browser/component results above describe the pre-rollback code,
+not this merged revision. No validated physics was changed by our integration.
+
+Actual merged checks:
+- node --check web/js/hackathon.js and web/js/simple-calculations.js passed.
+- Application factory construction passed with explicit private development token/data directory.
+- .venv/Scripts/python.exe -m pytest -q tests/drone/test_fixed_wing.py tests/drone/test_fixed_wing_application.py tests/drone/test_cantilever.py tests/drone/test_cantilever_application.py tests/drone/test_hover_bemt_request.py tests/drone/test_hover_bemt_application.py: 158 failed, 134 passed, 1 warning in 59.09s.
+- Failures include removed Settings.hosted_mode and /api/session returning 404. The simple workflow's session-dependent calculations are incompatible with this rollback. Backend restoration intentionally omitted per owner instruction.
+- git diff --cached origin/hackathon --check passed. A check against the old local parent reported whitespace in upstream PDF files; those files were preserved.
+- CI retains lint, unit/reference tests and a manual-only backend job; no CI success or solver execution claimed.
+- Existing running process was not restarted; its loaded backend is not evidence for the merged revision. No new end-to-end browser pass claimed.

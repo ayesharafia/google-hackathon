@@ -80,3 +80,5 @@
 - Connected optional simple-workflow component panels to existing fixed-wing, isolated-hover BEMT and cantilever endpoints; no equations changed. Three real synthetic browser computations and 292 related Python tests passed. Exact component records export separately; aircraft remains NOT_SIMULATED. Server verified running on 127.0.0.1:8768. See local QA record.
 
 - Fixed-wing-only Run simulation setup and existing coefficient-screening submit added. Mission defaults copied from the user's current tab: 300 kg, 1000 m, 70 m/s, 15 min. Verified real in-app screening with synthetic coefficients; no aircraft verdict or CFD claim. Original tab/STL untouched.
+
+- 2026-11-21: owner selected upstream backend rollback for hackathon publication. Integrated ab595ee without restoring backend/dependencies. Merged checks: 134 passed, 158 failed (removed hosted_mode/session API); JavaScript syntax and configured app construction passed. Earlier browser passes apply to pre-rollback code. See local QA record. Running server not restarted.

@@ -248,3 +248,5 @@ Before publication, origin/hackathon was found at ab595eedf3ff94806d06aa6d5fdfb2
 three commits ahead of the tested local base df3a407e1574e885a5bb9130885e68ddd4c47505.
 Those upstream commits include an integration and explicit revert of backend
 restoration. Commit local work first; do not overwrite the newer remote history.
+
+2026-11-21 follow-up: user said 'do the rollback we don''t need that' in response to the backend restoration choice. Preserve origin/hackathon backend rollback, integrate frontend work and publish to hackathon only. No backend restoration or force push.

@@ -17,31 +17,3 @@ Local records are immutable observations, including unresolved outcomes. Wall-cl
 Supported retained local V1/V2 records are read without migrating their bytes in place. Unknown V2 producer fingerprints with incomplete evidence may be refused; arbitrary edited-tree histories are not guaranteed readable. V2 introduced chronological energy. V3 adds mandatory individual bounds for every participating case, consistent aggregate attribution and common-candidate checks. Known historical V2 producer generations dispatch by exact retained source fingerprint: the first `07b9f19` policy and corrected `0db6bb0`/`3f9b01d` policies remain available. Later or unknown V2 producers must satisfy the stronger evidence checks; absence of bounds cannot select a weaker policy. Every historical record has a visible historical qualifier in browser/PDF; reading them does not requalify earlier physics under V3. The specification of each new study also binds its result schema version. An older model fingerprint remains associated with the old study; rerunning changed code creates another specification hash. The fingerprint is a local source/library identity, not an immutable deployment attestation.
 
 The initial profile excludes variable-power trajectories, nonzero inflow, maneuvers, thermal/sag state and battery resizing. Constant-power integration is exact (`P*duration`); it needs no numerical quadrature. Variable-power quadrature and independently reviewed uncertainty scenarios remain separate IP11/IP12 extensions.
-
-## Opt-in extended local V4
-
-`convex_axial_capacity_v2` emits `local_mission_capacity_v4`; the original v1
-profile continues to emit V3. V4 inherits V3 participating bounds, common
-candidate, sequence ledger and outcome consistency checks. It adds exact
-failed-rotor zero commands, matching axial inflow, sourced torque-band intervals,
-raw/conditioned policy receipts, deterministic scenarios and separate allowable
-cap evidence. Certificates relying on conditioned upper power surrogates are
-unsupported physical claims. No older bytes are migrated or requalified.
-
-The specification binds `semantic_model_identity_v1`: a retained explicit
-numerical dependency manifest, its hash and NumPy/SciPy versions. Old full-tree
-fingerprints remain historical identities. Renderer identity remains separate;
-API/UI/report-only changes leave capacity identity unchanged.
-
-A deterministic envelope requires all declared scenarios and nominal to be
-feasible, the actual minimum and a complete independently recomputed common
-candidate for every participating case and ordered energy ledger. An external
-cap requires a meaningful source, scope and reference for caller-declared
-approval, separately reported minimum, and all-scenario/common-candidate checks
-at the capped payload. Neither a caller declaration nor typed consistency
-validation authenticates engineering approval. Scalars without required checks
-refuse. Partial uncertainty coverage has no supported envelope or probability.
-
-See [ADR-0005](../decisions/ADR-0005-conditioned-axial-profile.md) and
-[validation](../validation/capacity-uncertainty.md) for the bounded interpretation.
-Independent physics review and real-engineering acceptance remain pending.

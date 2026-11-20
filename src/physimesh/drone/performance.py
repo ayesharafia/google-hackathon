@@ -50,10 +50,7 @@ class RotorMapV1(Record):
         if self.power_basis == 'electrical' and (self.efficiency is not None or self.efficiency_source is not None):
             raise ValueError('measured electrical watts cannot apply efficiency again')
         for point in self.points:
-            omega = (point.rpm / 60.0) * (2.0 * math.pi)
-            absorbed = point.shaft_torque_nm * omega
-            if not math.isfinite(absorbed):
-                raise ValueError('absorbed shaft demand must be finite')
+            absorbed = point.shaft_torque_nm * point.rpm * 2 * math.pi / 60
             if point.power_w + 1e-9 * max(1, absorbed) < absorbed:
                 raise ValueError('power is smaller than torque times angular speed')
             if self.power_basis == 'shaft' and not math.isclose(point.power_w, absorbed, rel_tol=1e-9, abs_tol=1e-9):
@@ -70,7 +67,7 @@ class RotorMapV1(Record):
             raise ValueError('source description cannot be blank')
         return self
 
-    def check_query(self, rpm: float, *, density: float, inflow: float, pitch: float) -> None:
+    def evaluate(self, rpm: float, *, density: float, inflow: float, pitch: float) -> dict:
         if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)
                for v in (rpm, density, inflow, pitch)):
             raise ValueError('query values must be finite numbers')
@@ -82,27 +79,17 @@ class RotorMapV1(Record):
             raise ValueError('pitch outside map coverage')
         if not any(low <= rpm <= high for low, high in self.covered_intervals_rpm):
             raise ValueError('RPM query outside explicitly covered intervals')
-
-    def evaluate(self, rpm: float, *, density: float, inflow: float, pitch: float) -> dict:
-        self.check_query(rpm, density=density, inflow=inflow, pitch=pitch)
         x = [point.rpm for point in self.points]
         power = float(np.interp(rpm, x, [point.power_w for point in self.points]))
         torque = float(np.interp(rpm, x, [p.shaft_torque_nm for p in self.points]))
-        omega = (rpm / 60.0) * (2.0 * math.pi)
-        shaft = torque * omega
-        thrust = float(np.interp(rpm, x, [p.thrust_n for p in self.points]))
-        if not all(math.isfinite(v) for v in (power, torque, shaft, thrust)):
-            raise ValueError('interpolated rotor values and shaft demand must be finite')
+        shaft = torque*rpm*2*math.pi/60
         if self.power_basis == 'shaft':
             power = shaft
         elif power+1e-9*max(1., shaft) < shaft:
             raise ValueError('interpolated electrical watts below absorbed shaft demand')
-        electrical = power if self.power_basis == 'electrical' else power / self.efficiency
-        if not math.isfinite(electrical):
-            raise ValueError('electrical power must be finite')
-        return {'rpm': rpm, 'thrust_n': thrust,
+        return {'rpm': rpm, 'thrust_n': float(np.interp(rpm, x, [p.thrust_n for p in self.points])),
                 'shaft_torque_nm': torque,
-                'electrical_power_w': electrical,
+                'electrical_power_w': power if self.power_basis == 'electrical' else power / self.efficiency,
                 'scope': 'Isolated fixed-condition curve; installed-aircraft validation pending.'}
 
     def convex_static_profile(self) -> dict:
@@ -114,31 +101,21 @@ class RotorMapV1(Record):
             if not np.allclose(torque, torque[0], rtol=1e-10, atol=1e-10):
                 raise ValueError('initial linear trim supports shaft curves only with constant absorbed torque')
             power = power / self.efficiency
-        if not all(np.all(np.isfinite(v)) for v in (x, torque, power)):
-            raise ValueError('trim profile samples and electrical power must be finite')
         if (len(self.covered_intervals_rpm) != 1 or self.covered_intervals_rpm[0]
                 != (self.points[0].rpm, self.points[-1].rpm)):
             raise ValueError('trim profile requires one explicitly covered full RPM interval')
         if np.any(np.diff(x) <= 0):
             raise ValueError('trim profile requires strictly increasing thrust')
         slopes = np.diff(power) / np.diff(x)
-        if not np.all(np.isfinite(slopes)):
-            raise ValueError('trim profile power slopes must be finite')
         if np.any(slopes < 0) or np.any(np.diff(slopes) < -1e-10):
             raise ValueError('trim profile requires nondecreasing convex electrical power versus thrust')
         q_slope = float((torque[-1] - torque[0]) / (x[-1] - x[0]))
         q_offset = float(torque[0] - q_slope * x[0])
-        offsets = power[:-1] - slopes * x[:-1]
-        fitted_torque = q_slope * x + q_offset
-        if (not math.isfinite(q_slope) or not math.isfinite(q_offset)
-                or not np.all(np.isfinite(offsets))
-                or not np.all(np.isfinite(fitted_torque))):
-            raise ValueError('trim profile coefficients and reconstructed torque must be finite')
-        if not np.allclose(torque, fitted_torque, rtol=1e-10, atol=1e-10):
+        if not np.allclose(torque, q_slope * x + q_offset, rtol=1e-10, atol=1e-10):
             raise ValueError('trim profile requires affine absorbed torque versus thrust')
         if q_slope < 0:
             raise ValueError('trim profile requires nondecreasing absorbed torque')
         return {'thrust': x, 'power': power, 'power_slopes': slopes,
-                'power_offsets': offsets,
+                'power_offsets': power[:-1] - slopes * x[:-1],
                 'torque_slope': q_slope, 'torque_offset': q_offset,
                 'rpm': np.array([point.rpm for point in self.points])}

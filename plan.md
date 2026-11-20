@@ -1,102 +1,10 @@
 # PhysiCore Drone: production development plan
 
-**Current operating workflow:** [PhysiCore Autonomy Portfolio v3](.physicore/ops/WORKFLOW.md)
-replaces the old simulation-kit orchestration at the owner's request. Resume from
-[STATE.md](.physicore/ops/STATE.md) and [TASKS.json](.physicore/ops/TASKS.json).
-Default to one bounded task per broad prompt; preserve existing feature-specific
-evidence/approval scopes and retain all branches.
-
 **Planning baseline:** 3 October 2026, commit `66611667aa0d9614f6e5c066db7410b7d7a30a03`, branch `mvp/3day`.
 **Deployment decision:** private hosted web app for the team and invited clients.
 **Document status:** development specification and work order. Future tasks are uncompleted; this document does not establish production readiness or aircraft validation.
 
-**Working method:** read [AGENTS.md](AGENTS.md) and relevant v3 policy. Apply
-[scientific gates](.physicore/ops/SCIENTIFIC_GATES.md) to the actual model and
-claimed use, with qualified approvals where needed. The
-[22 October kickoff](reports/drone-kickoff-2026-10-22.md) populates
-[ROADMAP.md](ROADMAP.md) with scoped historical evidence and qualification work.
-The active slice table below retains detailed implementation/release status;
-the roadmap records physics ladder evidence. DR-01 is awaiting scientist review,
-with reviewer unassigned and customer accuracy unknown. The kickoff does not
-change recorded physics acceptance or complete a release gate.
-
-**Active roadmap:** the table below is the single source of current slice status. Sections 1–16 retain the broader development specifications and release gates. The dated plans are historical specifications, not competing work queues. The user authorized execution of the 5 October direction; real client inputs and a named engineering owner are still unavailable (confirmed 5 October).
-
-**21 October implementation authority:** the user approved and authorized the [client delivery plan](docs/production/client-delivery-plan.md). Its C00–C12 work packages extend this roadmap from consolidated main `d2e7862`; hosting remains deferred and the current-model/real-data/human gates remain open.
-
-## Active slice status
-
-States distinguish implementation from acceptance: **local subset** is historical scoped behavior; **review pending** is implemented/tested but not independently accepted; **blocked** requires an external input; **conditional** requires the stated trigger. No status here promotes aircraft evidence or completes a broader release gate.
-
-| ID | State | Evidence/specification | Blocker or next action |
-|---|---|---|---|
-| C00 | baseline reproduced; external owners pending | [Client delivery specification](docs/production/client-delivery-plan.md#c00-baseline-and-acceptance-contract-35-days) | Main d2e7862; 615 software tests passed before this slice; named human/model/operations approvers still unavailable |
-| C01 | blocked on independent model/human acceptance | [Model review checklist](docs/qa/model-review-checklist.md) | Same-family review cannot satisfy cross-family model acceptance; preserve numerical closure |
-| C02 | bounded tabular intake/catalog implemented; real client qualification pending | [Client delivery specification](docs/production/client-delivery-plan.md#c02-engineering-intake-and-provenance-815-days) | See IMPORT-001 and SOURCE-EXPLORE-001 below for literal unit mapping, retained provenance and source inspection. Real aircraft inputs/source quality/engineering qualification remain pending |
-| C03 / C06 | implementation in progress | [Client delivery specification](docs/production/client-delivery-plan.md) | Frozen-view context, guarded navigation and shared summary/PDF implemented; see [execution evidence](docs/qa/client-workflow-foundation-2026-10-21.md); full workbench/report milestones remain open |
-| UI-001 / C03 | bounded Engineering Readiness implemented and checked | [22 October UI evidence](docs/qa/engineering-readiness-2026-10-22.md) | Separate mass/pack/per-case checks, editor actions and stale/context guards; 20 UI unit tests, 26 existing regressions and 18 browser checks pass. Sources/qualified acceptance remain unassessed/pending; no model promotion or hosting release |
-| UI-002 / C02 | bounded guided source binding implemented and checked | [22 October source-binding evidence](docs/qa/rotor-source-binding-2026-10-22.md) | Explicit matching selections, stale/context refusal and retained bytes/revision preservation; 35 combined UI unit tests, 26 existing regressions and 28 browser checks pass. Configuration matching grants no physical acceptance |
-| IMPORT-001 / C02 | CSV/XLSX rotor import and authorized library implemented and checked locally | [22 October importer evidence](docs/qa/tabular-library-2026-10-22.md) | Explicit units/declarations, retained raw/map/manifest, project-safe reuse and readonly inspection; 187 Python checks, 35 Node tests and 44 browser checks pass. Optional S3/provider integration and real-aircraft acceptance remain open |
-| COMPARE-001 / C03 | bounded retained Design Comparisons implemented and checked | [23 October comparison evidence](docs/qa/design-comparisons-2026-10-23.md) | Grouped whole-input changes, before/after cases/limits, exact JSON and stale selection/context guards; 48 Node, 35 existing Python and 15 browser checks pass. Existing numeric permission and pending scientific acceptance preserved; main publication authorized, no hosting release |
-| ENERGY-001 / C06 | bounded retained Mission Energy Budget implemented and checked | [23 October energy evidence](docs/qa/mission-energy-2026-10-23.md) | Exact recorded J/W/s budget/segments and guarded frozen-case navigation; 61 Node, 65 existing Python and 31 browser checks pass. No new energy calculation or reserve adjustment; main publication authorized, qualified science/hosting gates remain open |
-| PACK-001 / C06 | bounded Study Review Pack implemented and checked | [23 October pack evidence](docs/qa/study-review-pack-2026-10-23.md) | Exact result/frozen inputs, PDF/receipt, rotor-source closure and checksum ZIP; 74 Python, 81 Node and 46 Chrome checks pass. Permissions/limits/stale guards checked; Linux producer, providers and physical qualification remain open. Main publication authorized; original runtime unchanged |
-| TRIM-001 / C03 | bounded Case Trim Evidence implemented and checked | [23 October trim evidence](docs/qa/case-trim-evidence-2026-10-23.md) | Exact per-point rotor commands, residual/policy/interval evidence and guarded frozen-case navigation; 100 Node, 41 existing Python and 65 browser checks pass. Mission and individual case candidates stay separate; no model promotion or hosting release |
-| SOURCE-EXPLORE-001 / C02 | bounded Rotor Source Explorer implemented and checked | [23 October source explorer](docs/qa/rotor-source-explorer-2026-10-23.md) | Discrete retained points, exact row/value selection, declared coverage and electrical/shaft basis; 124 Node, 45 existing Python and 68 browser checks pass. Existing permissions/binding and bytes preserved; main publication authorized, no physical promotion or deployment |
-| JOBS-001 / C07 | bounded hosted Job Activity & Recovery implemented and checked | [26 October job evidence](docs/qa/job-activity-2026-10-26.md) | Nonblocking exact job/attempt inspection, manual refresh/pagination, explicit permitted recovery and associated-study navigation; 148 Node, 27 existing Python and 58 Chrome checks pass. Broader queue/recovery/endurance/provider/production gates remain open; main publication authorized, no deployment |
-| C04 / C05 | model review/data gated | [Client delivery specification](docs/production/client-delivery-plan.md) | Stateful V5 and required operating envelopes follow accepted model foundations and sourced data |
-| C07 | bounded accounting implementation in progress | [Client delivery specification](docs/production/client-delivery-plan.md#c07-security-accounting-and-recovery-2035-days) | Artifact reservations and worker admission implemented with regression coverage; GC, retention, audit, lease authority and full crash matrix remain pending |
-| C08 | partial evidence; endurance qualification pending | [Client delivery specification](docs/production/client-delivery-plan.md) | Budgeted short soak exists; full 24-hour/provider/restore/scale targets remain open |
-| C09 / C10 / C11 | external-input gated | [Client delivery specification](docs/production/client-delivery-plan.md) | Real measurements/engineer, later hosting/policies and final client acceptance required |
-| C12 | conditional qualified extensions | [Client delivery specification](docs/production/client-delivery-plan.md) | Separate data/model/campaign gates; no advanced aircraft claim inferred |
-| Local storage and CI fixes | bounded plumbing review and implementation CI passed | [14 October followup](docs/qa/local-reliability-followup-2026-10-14.md) | CI verified implementation head `5f5ffe4`: 606 unit/118 reference, worker/PostgreSQL, installed wheel/images, browser and sphere smoke; full vendor backend skipped; model/real-data/hosting gates remain open |
-| A07 | monitored local smoke and forced-stop recovery verified; merged via PR #20 | [Harness scope](docs/qa/bounded-soak.md), [21 October evidence](docs/qa/roadmap-followup-2026-10-21.md), [actual observations](docs/qa/soak-harness-2026-10-21.json) | Issue #15; real study/PDF journey, duration/storage/memory/SIGINT stops and active-job cancellation/stale-completion denial performed; 26 helper tests pass; 24-hour/provider qualification remains pending |
-| A06 | declaration helper verified; merged via PR #20 | [Intake scope](docs/qa/intake-readiness.md), [14 October execution](docs/qa/a06-execution-2026-10-14.md), [21 October follow-up](docs/qa/roadmap-followup-2026-10-21.md) | Issue #14; malformed electrical metadata no longer falsely invalidates a bound mission; 32 intake tests independently rerun; source verification, human ownership and engineering acceptance remain unverified |
-| A05 | helper verified; merged via PR #20 | [Drill scope](docs/qa/disk-pressure-drill.md), [14 October execution](docs/qa/a05-execution-2026-10-14.md), [actual observations](docs/qa/a05-observations-2026-10-14.json) | Issue #13; 19 targeted tests and injected storage/retry/fence CLI passed; actual exhaustion/worker/provider/pinned CI remain unverified |
-| A01–A02 | implemented; merged via PR #20 | [Reconciliation](docs/qa/baseline-reconciliation.md), [model review checklist](docs/qa/model-review-checklist.md), [14 October evidence](docs/qa/roadmap-implementation-2026-10-14.md) | Issue #10; same-family documentation QA/review complete; independent model and human gates remain pending |
-| A03 | helper tested; external profiling pending | [Submission diagnostics](docs/qa/submission-profiling.md), [actual receipt](docs/qa/submission-diagnostics-2026-10-14.json) | Issue #11; 11 targeted tests and six API admissions/cancellations passed in unpinned Python 3.12; pinned CI/PostgreSQL/concurrency unverified |
-| U01 / N0.5 / IP07 / IP10 | software verified; model review pending | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md), [fresh V4 baseline](docs/qa/production-baseline-2026-10-06.md) | [Byte-identical wheel/image receipts](docs/qa/production-release-2026-10-06.json), packaged resources/locked runtime and expanded CI; independent current-model review and human acceptance still gate physics |
-| U02 / N3.2 / IP16 | implemented; local audit retained | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md) | Bounded 1,000-project inventory/history and verified reuse; [repeat audit](docs/qa/production-performance-2026-10-06.md) retains all overloads; submission target, schema caching and 24-hour/provider tests remain open |
-| U03 / IP13 | local integration verified | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md) | Real PostgreSQL 50-writer/version checks, S3-compatible HTTP fixtures and migrations; production provider/bucket/restore decisions pending |
-| U04 / IP14–IP15 / IP17 | fixture journey and recovery verified | [Execution evidence](docs/qa/production-platform-execution-2026-10-06.md), [operations](docs/production/operations.md) | Sessions/roles/invitations/review exports; queued bounded studies/reports and fencing; hosted CFD/IdP flow, long soak and provider recovery remain pending |
-| U05 / N2.4 / IP05 / IP11 | review gated | [Production upgrade](docs/production/upgrade.md) | User selected mission/powertrain; current-model review precedes physics extension; analytic fixtures then real-data qualification |
-| N0.1 | blocked | [Scope proposal](docs/plans/2026-10-05-next-development-plan.md) | Client scope agreement and named engineer; no invented ADR-0004 decision |
-| N0.2 | blocked | [Data request](docs/client/aircraft-data-request.md) | Recipient and explicit sending instruction; no message sent |
-| N0.3 | implemented | This table | Review with roadmap changes |
-| N0.4 | browser checked | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Native 200% zoom, real downloads, 409 preservation; broader/client UX pending |
-| N0.5 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Semantic module closure and historical compatibility tests pass; independent review |
-| N1.1 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Versioned retained conservative envelope/torque bands pass fixtures; independent review |
-| N1.2 | authorized; review gated | [MILP option](docs/plans/2026-10-05-next-development-plan.md) | First real map exceeds declared conditioning tolerance; retain LP default |
-| N1.3 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | 60 noise seeds plus API/browser/report/restart fixtures; real maps unavailable |
-| N1.4 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Varying-torque shaft/electrical equivalence; efficiency once; independent review |
-| N2.1 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Quad certificate and feasible octo/zero commands; independent review |
-| N2.2 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Exact matching-inflow climb and unsupported sign/coverage tests; independent review |
-| N2.3 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Joint scenarios, common-candidate energy and separately sourced caps; independent review |
-| N2.4 | authorized; review gated | [Variable-power specification](docs/plans/2026-10-05-next-development-plan.md) | U05 leads next engineering work after current-model review; real data not required for labelled analytic fixtures |
-| N3.1 | local subset | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Declared-mm airframe, numeric rotor/link round trip, governing-limit preview; real geometry pending |
-| N3.2 | implemented | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Retained input/constraint comparison; JSON numeric round-trip fix; standard review pending |
-| N3.3 | local subset | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Two timed automated journeys and retained recording; human presenter rehearsals pending |
-| N4.1 | blocked | [Client intake request](docs/client/aircraft-data-request.md) | D04–D06 and named client engineer |
-| N4.2 | blocked | [Validation specification](docs/plans/2026-10-05-next-development-plan.md) | Real held-out measurements and engineer-owned tolerances |
-| N4.3 | blocked | [Report specification](docs/plans/2026-10-05-next-development-plan.md) | Real inputs, independent review and human scope acceptance |
-| N5 / IP13–IP15 / IP17 | local subsets implemented | [Hosted specifications](docs/plans/2026-10-04-implementation-plan.md#ip13-hosted-metadata-and-private-artifact-adapters) | U03/U04 local adapters/access/study-report workers verified; D01–D03/D07 gate external deployment |
-| IP01 | local subset | [Local checkpoint](docs/qa/local-workbench-merge.md) | Hosted authoring/permissions remain outside this subset |
-| IP02 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Real approved mass ledger unavailable |
-| IP03 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Broader case eligibility tracked in N2 |
-| IP04 | local subset | [Model scope](docs/decisions/ADR-0003-static-hover-profile.md) | Measured-map acceptance tracked in N1 |
-| IP05 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Sag/thermal/real sustained limits unavailable |
-| IP06 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Only declared supported wrench inputs |
-| IP07 | local subset | [Independent bounded review](docs/reviews/2026-10-05-local-hover-claude.md) | Extensions tracked in N1/N2 |
-| IP08 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Restricted LP model; no general aircraft optimum |
-| IP09 | local subset | [Browser audit](docs/qa/local-workbench-design-audit.md) | N0.4 and real-data gates |
-| IP10 | local subset | [Historical compatibility review](docs/reviews/2026-10-05-historical-contract-claude.md) | New semantics require versioned successor |
-| IP11 | local subset | [Hover/energy evidence](docs/validation/local-hover-and-energy.md) | Constant segments only; U05/N2.4 authorized after model review |
-| IP12 | review pending | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | N2.3 implementation shares evidence; independent acceptance pending |
-| IP16 | local subset | [Report evidence](docs/qa/local-reports.md) | Assembly N3.1; hosted client review depends on N5 |
-| IP18 | blocked | N4 above | D04–D06, real validation and hosted release gates |
-| I01 | capability only | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Exact-image regular-point p/U/vorticity probe; independent accuracy/direction/refinement review pending |
-| I02 | preregistered | [Execution receipt](docs/qa/next-development-execution-2026-10-05.md) | Controlled domain/surface protocol retained before probe; full campaign unrun |
-
-Next acceptance sequence: independent cross-family model/contract review → human fixture presentation → real client intake and engineer-owned tolerances when available. Mission/powertrain work is now authorized by the 6 October upgrade; current-model review precedes its physics extension. MILP remains data/coverage driven. Hosting depends on D01–D03. On 14 October the user confirmed that hosting is undecided and remains their later decision; continue local development. No new physics merge or release tag precedes the required review and engineering acceptance.
+**Current implementation work order:** [4 October implementation plan](docs/plans/2026-10-04-implementation-plan.md). Its original starting point was GitHub `main` at `b524340`; that baseline remains historical. On 5 October, [PR #5](https://github.com/PhysiCoreEngine12/Drone-Project/pull/5) merged the reviewed local workbench checkpoint `f6fc497` into `main` at `8fe3cf7`. Saved projects/revisions, local authoring, retained maps, restricted hover capacity, constant-segment fixed-pack energy, comparisons and reports now exist within their recorded synthetic scope. Next independent model slice: IP12 deterministic correlated scenarios and sourced allowable limits. Remaining browser download/zoom/conflict-dialog checks, assembly/repair, recoverable jobs and evidence investigations stay open. See [the current backend and formula guide](docs/technical/local-workbench-and-physics-guide.md) and [checkpoint receipt](docs/qa/local-workbench-merge.md). No full master task or production gate is completed by these local subsets.
 
 The product must answer a practical question: **given this approved aircraft design, how much payload can it carry across the required mission?** It must show which condition limits that payload, what evidence supports the answer, and which assumptions could change it. The client should be able to inspect the design, compare revisions, and leave with an understandable, reproducible engineering report.
 
@@ -215,7 +123,7 @@ flowchart LR
     Worker --> Monitor
 ```
 
-The diagram expresses target responsibilities. U03/U04 now implement local hosted metadata, private artifacts, access and study/report workers; external deployment and hosted CFD remain pending in the active status table.
+The diagram expresses planned responsibilities. These hosted modules do not yet exist.
 
 ### Recommended stack, subject to recorded hosting decisions
 

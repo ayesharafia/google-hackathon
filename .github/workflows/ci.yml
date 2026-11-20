@@ -4,89 +4,36 @@ on:
   pull_request:
   workflow_dispatch:
 jobs:
-  platform:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11.16'
-      - run: |
-          python -m venv .venv
-          .venv/bin/python -m pip install --require-hashes -r requirements-test.lock -r requirements-mcp.lock
-          .venv/bin/python -m pip install --no-deps -e .
-      - run: .venv/bin/python -m ruff check .
-      - run: .venv/bin/python -m pytest -q -m 'not backend and not integration'
-      - run: ../.venv/bin/python -m pytest -q
+          python-version: '3.11'
+      - run: python -m pip install -r requirements.lock
+      - run: ruff check .
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r requirements.lock
+      - run: python -m pip install --no-deps -e .
+      - run: python -m pytest -q -m "not backend"
+      - run: python -m pytest -q
         working-directory: reference_impl
-      - run: .venv/bin/python scripts/qa/platform_smoke.py
-      - name: Bounded roadmap harness journeys
-        run: |
-          .venv/bin/python scripts/qa/disk_pressure_drill.py --receipt .backend/roadmap-qa/disk-pressure.json
-          .venv/bin/python scripts/qa/intake_readiness.py --input tests/fixtures/intake_readiness/complete.json --output .backend/roadmap-qa/intake-complete.json
-          .venv/bin/python scripts/qa/bounded_soak.py --seconds 30 --requests 32 --journeys 1 --storage-bytes 67108864 --memory-bytes 1073741824 --receipt .backend/roadmap-qa/soak.json
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: bounded-roadmap-evidence
-          path: .backend/roadmap-qa
-          retention-days: 14
-      - run: .venv/bin/python scripts/qa/worker_failure_drill.py --receipt .backend/worker-failure.json
-      - run: |
-          .venv/bin/python scripts/qa/platform_services.py start
-          .venv/bin/python scripts/qa/platform_services.py test
-      - if: always()
-        run: .venv/bin/python scripts/qa/platform_services.py stop
-      - name: Installed wheel and offline release images
-        env:
-          PHYSIMESH_PYTHON_BASE: python:3.11.16-slim@sha256:e41613d42d4891e4930f79523f93f81bbc7632584ec65e36ab055f41a800b41e
-        run: |
-          .venv/bin/python scripts/release/download-wheels.py
-          SOURCE_DATE_EPOCH=$(git show -s --format=%ct HEAD) .venv/bin/python -m build --wheel --no-isolation
-          python -m venv .backend/release-venv
-          .backend/release-venv/bin/python -m pip install --no-index --find-links dist/wheelhouse --require-hashes -r requirements-runtime.lock
-          .backend/release-venv/bin/python -m pip install --no-deps dist/*.whl
-          .venv/bin/python scripts/release/verify-wheel.py --python .backend/release-venv/bin/python
-          PATH="$PWD/.venv/bin:$PATH" bash scripts/release/build-images.sh
-          .venv/bin/python scripts/release/verify-images.py
-      - name: Install browser recording dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes --no-install-recommends ffmpeg
-      - name: Browser journeys, local and private
-        env:
-          PHYSIMESH_CHROMIUM_EXECUTABLE: /usr/bin/google-chrome
-        run: |
-          PHYSIMESH_BROWSER_EVIDENCE_DIR=.backend/browser-local .venv/bin/python scripts/qa/next_development_browser.py
-          PHYSIMESH_BROWSER_EVIDENCE_DIR=.backend/browser-private .venv/bin/python scripts/qa/hosted_browser.py
-          .venv/bin/python scripts/qa/client_workflow_browser.py
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: browser-evidence
-          path: |
-            .backend/browser-local
-            .backend/browser-private
-  sphere:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11.16'
-      - run: |
-          python -m pip install --require-hashes -r requirements-test.lock
-          python -m pip install --no-deps -e .
-      - run: python -m pytest -q tests/backend/test_sphere_smoke.py
-  vendor_backend:
+  backend:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11.16'
-      - run: python -m pip install --require-hashes -r requirements-test.lock
+          python-version: '3.11'
+      - run: python -m pip install -r requirements.lock
       - run: python -m pip install --no-deps -e .
       - name: Fetch and verify exact vendor tutorials
         shell: bash

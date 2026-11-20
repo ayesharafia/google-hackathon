@@ -16,14 +16,3 @@ Please provide the approved design inputs below so PhysiCore can calculate suppo
 The report will state the approved design revision, payload bound, limiting case/component, residuals, input/model coverage and remaining uncertainty. Incomplete or unsupported cases receive a precise reason and withhold the mission headline. Synthetic examples and the sphere verification do not validate your aircraft. Please confirm a private transfer channel and permitted recipients before sending confidential design files.
 
 Prepared for client review; this request has not been sent to anyone by the agent. No recipient/contact or human approval is invented.
-
-For the conditioned-map pilot, include the **original, unedited point files**,
-repeat measurements and uncertainty derivations (state relative-error denominator),
-shaft/electrical power basis and efficiency evidence, full valid RPM intervals,
-configuration identity, density/pitch/inflow and continuous duty. Supply separate
-matching-inflow climb measurements; hover scaling is not accepted. The engineer
-must own torque-fit residual tolerances, power-envelope shift limits and the
-per-axis moment discrepancy/control allowances. Correlated joint scenarios must
-state which mass, environment, performance and loads change together and why.
-External structural/operational caps need source, scope and approval reference.
-A suggested fixture tolerance is not a client flight-acceptance value.

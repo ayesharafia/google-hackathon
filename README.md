@@ -7,35 +7,8 @@ retained as historical references. Python 3.11; FastAPI orchestration;
 OpenFOAM solves flow equations. The saved-design workbench now calculates
 restricted static-hover payload bounds and fixed-pack constant-segment energy
 from retained rotor maps. The original supplied-point screening example remains
-available. An opt-in versioned profile adds conditioned maps, axial climb,
-motor-out, deterministic joint scenarios and separately sourced caps. Synthetic
-examples do not establish a real aircraft capacity.
+available. Synthetic examples do not establish a real aircraft capacity.
 [M§0, M§4]
-
-## Project working method
-
-The owner replaced the old simulation-kit workflow with **PhysiCore Autonomy
-Portfolio v3** on 22 October 2026. Start with [AGENTS.md](AGENTS.md), the
-[current resume state](.physicore/ops/STATE.md) and the
-[v3 Work protocol](.physicore/ops/WORKFLOW.md). A broad “Work” request advances
-one meaningful bounded task by default; specific requests take priority.
-
-The [task ledger](.physicore/ops/TASKS.json), [work log](.physicore/ops/WORKLOG.md)
-and [approvals](.physicore/ops/APPROVALS.md) replace the old backlog/journal/inboxes.
-Use [scientific gates](.physicore/ops/SCIENTIFIC_GATES.md) where the task touches
-physics. Existing feature-specific approvals, tolerances and evidence retain
-their scope. See the [migration record](docs/working-method/portfolio-v3-adoption-2026-10-22.md).
-
-From the repository root:
-
-```sh
-.venv/bin/python .physicore/tools/workflow.py doctor
-.venv/bin/python .physicore/tools/workflow.py next
-```
-
-The old role/command files and policies are retained only as
-[historical snapshots](.physicore/legacy/sim-kit-2026-10-22/README.md).
-No background service, external orchestration API or company HQ is installed.
 
 ## Setup
 
@@ -58,15 +31,10 @@ Backend tests need Docker and a confirmed, immutable OpenFOAM image pin.
 No CFD capability or aircraft feasibility is established by unit tests. Missing
 design inputs remain unknown and block dependent work. [M§2, M§26, M§27]
 
-The [14 October repo audit and next-milestone plan](docs/plans/2026-10-14-next-development-plan.md)
-proposes measured-map qualification first, then scenarios and allowable limits,
-assembly-linked evidence and a reviewed real-aircraft pilot. It updates the
-sequence in the earlier work orders while retaining their release requirements.
-
 Continue with the task dependencies and release gates in [plan.md](plan.md). The
 [4 October implementation work order](docs/plans/2026-10-04-implementation-plan.md)
 details saved projects, authoring, rotor maps, trim, capacity, energy and hosted delivery.
-P00.1, P00.2 and [P01.1 contracts](docs/contracts/production-data.md) are complete within their bounded scopes. [Contract acceptance](docs/qa/production-contracts-review.md) records final Claude review and checks. The local [Pilot-1](docs/pilots/pilot-1.md) fixture path has scoped implementation; [checkpoint acceptance](docs/qa/local-workbench-merge.md) records its remaining limits. The opt-in conditioned hover/climb, motor-out and deterministic-scenario profile is implemented on the current review branch; independent physics acceptance remains pending. See [execution evidence](docs/qa/next-development-execution-2026-10-05.md). Historical equation IDs and old plan section/task references
+P00.1, P00.2 and [P01.1 contracts](docs/contracts/production-data.md) are complete within their bounded scopes. [Contract acceptance](docs/qa/production-contracts-review.md) records final Claude review and checks. The local [Pilot-1](docs/pilots/pilot-1.md) fixture path has scoped implementation; [checkpoint acceptance](docs/qa/local-workbench-merge.md) records its remaining limits. Next independent model work is deterministic scenarios and sourced allowable limits. Historical equation IDs and old plan section/task references
 resolve to the archived master plan. The separate 2D PhysiMesh product remains
 untouched; integration is through a versioned export contract.
 
@@ -89,30 +57,14 @@ server, connect with that token, and create the labelled hover example. Save,
 inspect, freeze and evaluate it; change a design input and retain a second study
 for comparison. Opening the HTML with `file://` cannot provide the project API.
 
-For a workspace anyone can use, set `PHYSIMESH_PUBLIC_ACCESS=1` before starting
-the server. This mode needs no API token or remembered browser access. Anyone
-with the server or tunnel link can open and edit projects, upload STL geometry
-and save drafts. Both the workbench and evidence desk open without sign-in.
-
 Keep the data directory to retain projects, revisions, maps and results across
 restarts. The tracked `.gitignore` excludes `.backend/` from normal Git staging;
 project data is not distributed with the code. Execution is local and synchronous;
 individual identity, recoverable jobs and engineering approval remain pending.
 See [the current backend/formula guide](docs/technical/local-workbench-and-physics-guide.md)
 for model eligibility, outcome semantics, reports and exact limitations. The
-[browser audit](docs/qa/local-workbench-design-audit.md) records the historical in-app host limitation and the new standard-Chromium
-download, native 200% zoom, conflict and geometry checks.
-
-## Import spreadsheet measurements and reuse rotor sources
-
-The rotor editor now accepts CSV/modern Excel measurement tables through explicit
-column and unit mapping, a conversion/error preview and a persistent source
-library. Original files and conversion manifests remain traceable. Library reuse
-preserves project permissions and requires explicit matching-rotor assignment.
-See [the import/library guide](docs/technical/tabular-rotor-library.md) for required
-measurements, test declarations, limits and provenance exports. Restart a running
-source-checkout API to load the new routes after updating/installing dependencies.
-This does not qualify real aircraft performance or change the shared access mode.
+[browser audit](docs/qa/local-workbench-design-audit.md) records the in-app host's
+canceled downloads and remaining browser acceptance.
 
 ## Verify the frozen production baseline
 
@@ -189,9 +141,7 @@ export PHYSIMESH_API_TOKEN
 
 The token prompt uses zsh. In bash use `read -s -p 'Choose a local session token: ' PHYSIMESH_API_TOKEN`.
 Open [the local evidence desk](http://127.0.0.1:8766/web/results.html) and enter
-that token once. An HttpOnly cookie remembers browser access for 30 days across
-refreshes and both desks; use **Forget this browser** to revoke it. The workspace
-token is never retained in localStorage or sessionStorage. The sphere solve took
+that token. No browser storage is used for credentials. The sphere solve took
 about 16 minutes across three meshes on the audited local machine; timings vary.
 Rerunning the commands reuses completed runs only after checking generated input
 and retained output hashes, regenerates plots, and checks immutable package bytes.
