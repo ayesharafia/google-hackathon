@@ -250,3 +250,5 @@ Those upstream commits include an integration and explicit revert of backend
 restoration. Commit local work first; do not overwrite the newer remote history.
 
 2026-11-21 follow-up: user said 'do the rollback we don''t need that' in response to the backend restoration choice. Preserve origin/hackathon backend rollback, integrate frontend work and publish to hackathon only. No backend restoration or force push.
+
+2026-11-21: user redirected publication to https://github.com/ayesharafia/google-hackathon. Authorized destination is hackathon on this repository, retaining the selected backend rollback. Remote advertised no refs before publication. No force push, deployment, or other branch changes authorized.
