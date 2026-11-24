@@ -11,6 +11,12 @@ from physimesh.drone.provenance import sha256_record
 router = APIRouter(prefix="/api/drone/fixed-wing")
 
 
+@router.get("/access")
+def access() -> dict:
+    """Confirm access through the application's existing bearer middleware."""
+    return {"connected": True}
+
+
 def _validate_finite_number(value: object) -> int | float:
     if type(value) not in (int, float):
         raise ValueError("A finite number is required.")

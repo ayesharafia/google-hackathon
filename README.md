@@ -165,3 +165,14 @@ demo steps, claim limits and outstanding presentation checks.
 the formulas, data flow, API, solver configuration, evidence checks and limitations.
 
 The full guide is also published in [Notion](https://app.notion.com/p/3ed6ce44c2b681f2a04ad78ce659c211).
+
+## Token-free local hackathon workflow
+
+On Windows, run `powershell -ExecutionPolicy Bypass -File scripts/start_hackathon.ps1`
+and open http://127.0.0.1:8768/web/simple-workflow.html. The launcher enables
+`PHYSIMESH_LOCAL_NO_AUTH=1`, binds to loopback, and reuses the existing local data.
+No development token or Connect button is needed for component calculations.
+For an equivalent manual start, set `PHYSIMESH_LOCAL_NO_AUTH=1` and
+`PHYSIMESH_DATA_ROOT`, then launch uvicorn on `127.0.0.1:8768`.
+Token-free API requests require a local hostname and refuse cross-origin browser
+requests. Other configurations retain the existing bearer-token requirement.

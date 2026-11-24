@@ -18,13 +18,16 @@ class Settings:
     bind_host: str = "127.0.0.1"  # Private development binding [plan Task 1.5].
     max_upload_bytes: int = 50_000_000
     max_triangles: int = 1_000_000
+    local_no_auth: bool = False
 
     def __post_init__(self) -> None:
-        if not isinstance(self.api_token, str) or not self.api_token.strip():
+        if not self.local_no_auth and (not isinstance(self.api_token, str) or not self.api_token.strip()):
             raise ValueError("PHYSIMESH_API_TOKEN is required")
         if (self.openfoam_image_digest is not None
                 and re.fullmatch(r"[^\s@]+@sha256:[0-9a-f]{64}", self.openfoam_image_digest) is None):
             raise ValueError("PHYSIMESH_OPENFOAM_IMAGE_DIGEST must be an immutable SHA-256 reference")
+        if self.local_no_auth and self.bind_host not in {"127.0.0.1", "::1", "localhost"}:
+            raise ValueError("Token-free mode requires a loopback bind host")
         if not self.bind_host:
             raise ValueError("PHYSIMESH_BIND_HOST cannot be empty")
         if self.max_upload_bytes <= 0 or self.max_triangles <= 0:
@@ -33,8 +36,9 @@ class Settings:
 
 def load_settings(env: Mapping[str, str]) -> Settings:
     """Load explicit paths and credentials; missing design/backend values are never guessed."""
-    token = env.get("PHYSIMESH_API_TOKEN")
-    if not token:
+    local_no_auth = env.get("PHYSIMESH_LOCAL_NO_AUTH") == "1"
+    token = env.get("PHYSIMESH_API_TOKEN", "")
+    if not token and not local_no_auth:
         raise ValueError("PHYSIMESH_API_TOKEN is required; refusing unauthenticated startup")
     root = env.get("PHYSIMESH_DATA_ROOT")
     if not root:
@@ -48,4 +52,5 @@ def load_settings(env: Mapping[str, str]) -> Settings:
         env.get("PHYSIMESH_BIND_HOST", "127.0.0.1"),
         int(env.get("PHYSIMESH_MAX_UPLOAD_BYTES", "50000000")),
         int(env.get("PHYSIMESH_MAX_TRIANGLES", "1000000")),
+        local_no_auth=local_no_auth,
     )

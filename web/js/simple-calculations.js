@@ -31,26 +31,17 @@ const finite=v=>typeof v==='number'&&Number.isFinite(v);
 
 export function mountComponentCalculations(root) {
   const doc=root.ownerDocument, saved=new Map(), failures=new Map(), panels=new Map();
-  let generation=0, connected=false, connecting=false;
+  let generation=0, connected=false;
   const node=(tag,text,cls)=>{const n=doc.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
   root.append(node('h2','Optional component calculations'),node('p','Run an existing backend model with explicit data. Each result is independent. Fixed-wing airspeed is entered independently from mission flight speed; all model inputs must be supplied. No combined aircraft result is calculated.'));
-  const connection=node('form'), token=node('input'), connect=node('button','Connect'), forget=node('button','Disconnect'), access=node('p','Checking local access…');
-  token.type='password';token.autocomplete='off';token.id='calculation-token';
-  const tokenLabel=node('label','Development access token');tokenLabel.htmlFor=token.id;
-  connect.type='submit';forget.type='button';access.setAttribute('role','status');
-  connection.className='calculation-access';connection.append(tokenLabel,token,connect,forget);root.append(connection,access);
-  const info=node('p','Use your local development token to run calculations. It is never included in exports.','fineprint');root.append(info);
-  function updateAccess(){token.hidden=tokenLabel.hidden=connect.hidden=connected;forget.hidden=!connected;access.textContent=connected?'Connected to local calculations.':'Not connected. Enter your development access token.';panels.forEach(p=>p.update());}
+  const access=node('p','Checking local calculations...');access.setAttribute('role','status');root.append(access);
+  function updateAccess(){access.textContent=connected?'Local calculations ready.':'Local calculations unavailable. Start the local server and reload this page.';panels.forEach(p=>p.update());}
   function invalidate(){++generation;saved.clear();failures.clear();panels.forEach(p=>p.clear());}
-  connection.addEventListener('submit',async e=>{
-    e.preventDefault();if(connecting)return;connecting=true;connect.disabled=true;invalidate();connected=false;
-    const credential=token.value;token.value='';
-    try{const r=await fetch('/api/session',{method:'POST',credentials:'same-origin',headers:{Authorization:'Bearer '+credential}});const data=await r.json();connected=r.ok&&data.connected===true;}catch{connected=false;}
-    connecting=false;connect.disabled=false;updateAccess();
-  });
-  forget.addEventListener('click',async()=>{invalidate();connected=false;updateAccess();try{await fetch('/api/session',{method:'DELETE',credentials:'same-origin'});}catch{access.textContent='Disconnected here; server sign-out could not be confirmed.';}});
-  const initialGeneration=generation;
-  fetch('/api/session',{credentials:'same-origin'}).then(async r=>{const data=await r.json();if(generation===initialGeneration&&!connecting){connected=r.ok&&data.connected===true;updateAccess();}}).catch(()=>{if(generation===initialGeneration)updateAccess();});
+  async function checkAccess(){
+    try{const r=await fetch('/api/drone/fixed-wing/access');const data=await r.json();connected=r.ok&&data.connected===true;}catch{connected=false;}
+    updateAccess();
+  }
+  checkAccess();
   for(const [key,model] of Object.entries(models)){
     const section=node('details'),title=node('summary',model.title),form=node('form'),grid=node('div',undefined,'calculation-fields'),fields=new Map();
     section.dataset.calculation=key;section.append(title,node('p',model.scope));
@@ -67,7 +58,7 @@ export function mountComponentCalculations(root) {
     form.append(grid,run);section.append(form,status,result);root.append(section);
     let serial=0,busy=false;
     function eligible(){return key!=='aero'||doc.querySelector('[data-aircraft="fixed-wing"]').getAttribute('aria-pressed')==='true';}
-    function update(){if(key==='aero')section.hidden=!eligible();run.disabled=!connected||busy||!eligible();if(!eligible())status.textContent='Choose Fixed-wing to use this fixed-wing model.';}
+    function update(){if(key==='aero')section.hidden=!eligible();run.disabled=key!=='aero'||!connected||busy||!eligible();if(key!=='aero')status.textContent='Unavailable in the retained backend version.';if(!eligible())status.textContent='Choose Fixed-wing to use this fixed-wing model.';}
     function clear(){++serial;busy=false;saved.delete(key);failures.delete(key);result.replaceChildren();result.hidden=true;status.textContent='Inputs changed or context reset. Run again for a current result.';update();}
     panels.set(key,{clear,update});update();
     form.addEventListener('input',clear);form.addEventListener('change',clear);
@@ -83,7 +74,7 @@ export function mountComponentCalculations(root) {
       return body;
     }
     form.addEventListener('submit',async e=>{
-      e.preventDefault();if(busy||!connected||!eligible())return;
+      e.preventDefault();if(key!=='aero'||busy||!connected||!eligible())return;
       const body=request();if(!body)return;
       clear();const id=serial,context=generation;busy=true;update();status.textContent='Calculating with the existing backend model…';
       const current=()=>id===serial&&context===generation&&connected&&eligible();

@@ -1,4 +1,4 @@
-import {mountComponentCalculations} from './simple-calculations.js?v=airspeed-independent';
+import {mountComponentCalculations} from './simple-calculations.js?v=token-free-local-20261124';
 import {createViewer} from './viewer3d.js?v=geometry-3';
 import {STLLoader} from '/web/vendor/STLLoader.js';
 

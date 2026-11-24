@@ -91,3 +91,13 @@ def test_web_assets_are_served_without_exposing_workspace(tmp_path):
     assert client.get("/web/js/app.js").status_code == 200
     assert client.get("/web/../plan.md").status_code == 404
     assert client.get("/web/%2e%2e/plan.md").status_code == 404
+
+
+def test_explicit_local_mode_needs_no_token(tmp_path):
+    settings = load_settings({'PHYSIMESH_DATA_ROOT': str(tmp_path), 'PHYSIMESH_LOCAL_NO_AUTH': '1'})
+    assert settings.local_no_auth and settings.api_token == ''
+
+
+def test_token_free_mode_rejects_network_binding(tmp_path):
+    with pytest.raises(ValueError, match='loopback'):
+        Settings(tmp_path, tmp_path / 'jobs.sqlite', '', None, bind_host='0.0.0.0', local_no_auth=True)

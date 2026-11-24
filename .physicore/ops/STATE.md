@@ -82,3 +82,11 @@
 - Fixed-wing-only Run simulation setup and existing coefficient-screening submit added. Mission defaults copied from the user's current tab: 300 kg, 1000 m, 70 m/s, 15 min. Verified real in-app screening with synthetic coefficients; no aircraft verdict or CFD claim. Original tab/STL untouched.
 
 - 2026-11-21: owner selected upstream backend rollback for hackathon publication. Integrated ab595ee without restoring backend/dependencies. Merged checks: 134 passed, 158 failed (removed hosted_mode/session API); JavaScript syntax and configured app construction passed. Earlier browser passes apply to pre-rollback code. See local QA record. Running server not restarted.
+
+- 2026-11-21: fixed-wing button reconnected to existing model via bearer-only backend; no physics changes. 73 tests passed and real Chrome flow passed. Restarted 8768 using separate rollback-v1 data directory to preserve newer database. Other component endpoints remain unavailable. Changes local, not published in this increment.
+
+## 24 November 2026: token-free local calculations
+
+- User requested removing token Connect and running google-hackathon without a token. Local launcher now explicitly enables PHYSIMESH_LOCAL_NO_AUTH=1 on loopback and no longer creates or reads credentials. The simple workflow automatically checks calculation availability; token, Connect and Disconnect controls were removed. Existing bearer mode remains available for other configurations.
+- Verified 16 targeted API/fixed-wing tests, JavaScript syntax, changed Python Ruff checks, and git diff --check. Headless Chrome passed a real token-free synthetic calculation (lift 7500 N), no Authorization header, input-change invalidation, model refusal, absence of credential controls, and automatic readiness after reload. No physics equations changed or scientific validation claimed.
+- Server running at http://127.0.0.1:8768/web/simple-workflow.html. Existing data and earlier local changes preserved. No GitHub push performed.

@@ -125,3 +125,31 @@ Actual merged checks:
 - git diff --cached origin/hackathon --check passed. A check against the old local parent reported whitespace in upstream PDF files; those files were preserved.
 - CI retains lint, unit/reference tests and a manual-only backend job; no CI success or solver execution claimed.
 - Existing running process was not restarted; its loaded backend is not evidence for the merged revision. No new end-to-end browser pass claimed.
+
+## 2026-11-21: fixed-wing button on retained backend
+
+Mounted only the existing fixed-wing router under existing bearer authentication.
+Added an authenticated access check and changed simple-workflow transport to keep
+the development bearer token in memory only, clearing on disconnect/auth failure.
+Other component panels explicitly remain unavailable with this backend rollback.
+No equations or physical acceptance criteria changed. This is supplied-coefficient
+aerodynamic screening, not trajectory integration or complete aircraft simulation.
+
+Restart uncovered incompatible pre-rollback projects.sqlite schema. Startup now
+uses .backend/local-hackathon/rollback-v1, preserving previous data and reusing the
+existing development token. Server restarted successfully on 127.0.0.1:8768.
+
+Validation:
+- pytest -q tests/drone/test_fixed_wing.py tests/drone/test_fixed_wing_local.py:
+  73 passed, 1 Starlette/httpx deprecation warning in 5.32 s.
+- Initial integration test: 72 passed, 1 failed due to the older store lacking
+  page(); corrected to its existing list_projects() interface.
+- scripts/qa/verify_fixed_wing_local.py: real Chrome PASS at 1440x1000,
+  fixed-wing setup/button, wrong and valid token, synthetic lift 7500 N,
+  response hashes, stale result clearing, model refusal, disconnect, no JS errors.
+  Initial browser attempts failed on the database startup mismatch and on hashing
+  Python float fixtures instead of the actual browser JSON integer representation;
+  corrected test independently hashes actual returned inputs and evaluation.
+- Ruff on changed Python source/tests/scripts, both JS syntax checks and diff check passed.
+- Full rolled-back application suite not rerun; earlier unrelated failures remain.
+- No CFD, grid independence, full-flight integration or aircraft validation run.

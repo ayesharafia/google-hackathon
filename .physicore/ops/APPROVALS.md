@@ -252,3 +252,13 @@ restoration. Commit local work first; do not overwrite the newer remote history.
 2026-11-21 follow-up: user said 'do the rollback we don''t need that' in response to the backend restoration choice. Preserve origin/hackathon backend rollback, integrate frontend work and publish to hackathon only. No backend restoration or force push.
 
 2026-11-21: user redirected publication to https://github.com/ayesharafia/google-hackathon. Authorized destination is hackathon on this repository, retaining the selected backend rollback. Remote advertised no refs before publication. No force push, deployment, or other branch changes authorized.
+
+## 2026-11-24: token-free local workflow publication
+
+The owner explicitly requested: “push this work without token in the branch”.
+Authorized scope: publish the local token-free google-hackathon workflow changes
+to the existing `hackathon` branch on `https://github.com/ayesharafia/google-hackathon`.
+Include the loopback-only token-free mode, calculation UI removal, script cache
+version updates, focused regression coverage and setup/evidence documentation.
+Preserve unrelated local changes and all other branches. No force-push, merge,
+deployment, or scientific acceptance is authorized.

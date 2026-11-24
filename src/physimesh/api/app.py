@@ -16,6 +16,7 @@ from ..projects.service import ProjectService
 from ..projects.sqlite import SQLiteProjects
 from ..projects.studies import LocalStudies
 from .contracts import router as contracts_router
+from .fixed_wing import router as fixed_wing_router
 from .projects import router as projects_router
 from .results import router as results_router
 from .screening import router as screening_router
@@ -30,6 +31,7 @@ def create_app(settings: Settings) -> FastAPI:
                                         ArtifactStore(settings.data_root / 'artifacts'))
     app.state.studies = LocalStudies(app.state.projects)
     app.include_router(drone_router)
+    app.include_router(fixed_wing_router)
     app.include_router(results_router)
     app.include_router(contracts_router)
     app.include_router(screening_router)
@@ -39,7 +41,15 @@ def create_app(settings: Settings) -> FastAPI:
     async def protect_drone_routes(request: Request, call_next):
         """Protect the whole drone namespace, including future routes [plan Task 1.5]."""
         path = request.url.path
-        if path == "/api/drone" or path.startswith("/api/drone/"):
+        if settings.local_no_auth and path.startswith("/api/"):
+            if request.url.hostname not in {"127.0.0.1", "localhost", "::1"}:
+                return JSONResponse({"detail": "Use the local workspace address"}, status_code=403)
+            origin = request.headers.get("origin")
+            if (origin is not None and origin != f"{request.url.scheme}://{request.url.netloc}") or (
+                request.headers.get("sec-fetch-site") == "cross-site"
+            ):
+                return JSONResponse({"detail": "Use this workspace's own page"}, status_code=403)
+        elif path == "/api/drone" or path.startswith("/api/drone/"):
             expected = f"Bearer {settings.api_token}"
             if not hmac.compare_digest(request.headers.get("authorization", "").encode(), expected.encode()):
                 return JSONResponse({"detail": "missing or invalid bearer token"}, status_code=401,
