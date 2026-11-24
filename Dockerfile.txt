@@ -1,0 +1,32 @@
+# PHYSIMESH Hackathon — Google Cloud Run
+# Build context: repository root
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    MPLCONFIGDIR=/tmp/matplotlib \
+    XDG_CACHE_HOME=/tmp/cache \
+    PHYSIMESH_DATA_ROOT=/tmp/physimesh-data \
+    PORT=8080
+
+WORKDIR /app
+
+# Dependencies first so subsequent source edits benefit from Docker layer caching.
+COPY requirements.lock pyproject.toml ./
+RUN python -m pip install --upgrade pip && \
+    python -m pip install -r requirements.lock && \
+    python -m pip install cryptography
+
+# The FastAPI app serves static assets from /app/web.
+COPY src/ ./src/
+COPY web/ ./web/
+RUN python -m pip install --no-deps -e .
+
+# The server writes only under /tmp. Run without root privileges.
+USER 10001:10001
+EXPOSE 8080
+
+# PHYSIMESH_API_TOKEN is intentionally NOT included here.
+# Supply it via Google Cloud Secret Manager / Cloud Run configuration.
+CMD ["sh", "-c", "exec python -m uvicorn physimesh.api.app:app_from_environment --factory --host 0.0.0.0 --port ${PORT:-8080}"]
